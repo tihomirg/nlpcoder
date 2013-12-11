@@ -1,5 +1,5 @@
 
-public class Terminal {
+public class Terminal extends Symbol {
 
 	private String token;
 	

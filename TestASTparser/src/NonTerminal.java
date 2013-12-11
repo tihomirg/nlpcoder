@@ -1,7 +1,7 @@
 import org.eclipse.jdt.core.dom.ASTNode;
 
 
-public class NonTerminal {
+public class NonTerminal extends Symbol {
 	private static int NAIVE = 0;
 	private static int WITH_PARENT= 1;
 	private static int WITH_GRANDAD = 2;

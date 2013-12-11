@@ -1,4 +1,4 @@
 
-public class Symbol {
+public abstract class Symbol {
 
 }
