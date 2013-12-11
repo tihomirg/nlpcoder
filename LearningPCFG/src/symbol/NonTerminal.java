@@ -1,3 +1,4 @@
+package symbol;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 

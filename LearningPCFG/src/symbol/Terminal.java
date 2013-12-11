@@ -1,3 +1,4 @@
+package symbol;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 public class Terminal extends Symbol {
@@ -23,6 +24,5 @@ public class Terminal extends Symbol {
 	protected String naive() {
 		return token;
 	}
-		
 	
 }

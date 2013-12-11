@@ -1,3 +1,4 @@
+package symbol;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 
@@ -32,8 +33,7 @@ public abstract class Symbol {
 	}
 	
 	private String withGrandad(){
-		ASTNode parent = getParent();
 		ASTNode grandad = getGrandad();
-		return naive()+(parent != null ? "^"+parent.getClass().getSimpleName(): "")+(grandad != null ? "^"+grandad.getClass().getSimpleName(): ""); 
+		return withParent()+(grandad != null ? "^"+grandad.getClass().getSimpleName(): ""); 
 	}
 }

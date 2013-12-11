@@ -31,8 +31,11 @@ import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+import rules.PackedRule;
+
 public class Main {
-	
+
+	//Change to Map<Rule -> Integer> 
 	private static Map<String, Map<String, Integer>> map = new HashMap<String, Map<String, Integer>>();
 	
 	private static final String NONE = "<None>";
@@ -203,9 +206,9 @@ public class Main {
 		});
 		
 		
-		List<Rule> rules = getRulesFromMap();
+		List<PackedRule> rules = getRulesFromMap();
 		
-		for(Rule rule: rules){
+		for(PackedRule rule: rules){
 		  out.println(rule);
 		}
 	}
@@ -232,21 +235,22 @@ public class Main {
 		frequencyMap.put(rightName, frequency+1);
 	}	
 	
+
 	
 	private static void addToMap(ASTNode node, List<String> children){
 		addToMap(node.getClass().getSimpleName(), children);
 	}
 	
-	private static List<Rule> getRulesFromMap(){
-	  List<Rule> rules = new ArrayList<Rule>();
+	private static List<PackedRule> getRulesFromMap(){
+	  List<PackedRule> rules = new ArrayList<PackedRule>();
 	  for(Map.Entry<String, Map<String, Integer>> entry: map.entrySet()){
 		rules.addAll(getRulesFromEntry(entry));
 	  }
 	  return rules;
 	}
 	
-	private static List<Rule> getRulesFromEntry(Map.Entry<String, Map<String, Integer>> entry){
-	  List<Rule> rules = new ArrayList<Rule>();
+	private static List<PackedRule> getRulesFromEntry(Map.Entry<String, Map<String, Integer>> entry){
+	  List<PackedRule> rules = new ArrayList<PackedRule>();
 	  String left = entry.getKey();
 	  Map<String, Integer> rightList = entry.getValue();
 	  
@@ -256,7 +260,7 @@ public class Main {
 	  }
 	  
 	  for(Map.Entry<String, Integer> entry2: rightList.entrySet()){
-		  rules.add(new Rule(left, entry2.getKey(), entry2.getValue(), totalFrequency));
+		  rules.add(new PackedRule(left, entry2.getKey(), entry2.getValue(), totalFrequency));
 	  }
 	  
 	  return rules;

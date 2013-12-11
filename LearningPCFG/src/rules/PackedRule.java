@@ -1,4 +1,7 @@
-public class Rule {
+//TODO: Should be removed
+
+package rules;
+public class PackedRule {
 	private String right;
 	private String left;
 	private int frequency;
@@ -6,7 +9,7 @@ public class Rule {
 	private double probability;
 	private double logProbability;
 	
-	public Rule(String right, String left, int frequency, int totalFrequency){
+	public PackedRule(String right, String left, int frequency, int totalFrequency){
 		this.right = right;
 		this.left = left;
 		this.frequency = frequency;
@@ -71,7 +74,6 @@ public class Rule {
 	private String toStringProbability(){
 	  return frequency+" ("+probability+") : "+right+ " -> "+left;	
 	}
-	
 	
 	private String toStringFrequency(){
 	  return frequency+" : "+right+ " -> "+left;	
