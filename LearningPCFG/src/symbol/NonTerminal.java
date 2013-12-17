@@ -7,10 +7,11 @@ public class NonTerminal extends Symbol {
 	private ASTNode node;
 	
 	public NonTerminal(ASTNode node){
+		assert node != null;		
 		this.node = node;
 	}	
 
-	protected String naive(){
+	protected String toStringNaive(){
 		return node.getClass().getSimpleName();
 	}
 

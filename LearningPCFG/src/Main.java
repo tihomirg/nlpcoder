@@ -31,7 +31,7 @@ import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
-import rules.PackedRule;
+import util.PackedRule;
 
 public class Main {
 

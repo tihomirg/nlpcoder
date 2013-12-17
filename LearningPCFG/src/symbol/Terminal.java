@@ -6,11 +6,8 @@ public class Terminal extends Symbol {
 	private String token;
 	private ASTNode parent;
 	
-	public Terminal(String token){
-		this.token = token;
-	}
-	
 	public Terminal(String token, ASTNode parent){
+		assert token != null;
 		this.token = token;
 		this.parent = parent;
 	}
@@ -21,7 +18,7 @@ public class Terminal extends Symbol {
 	}
 
 	@Override
-	protected String naive() {
+	protected String toStringNaive() {
 		return token;
 	}
 	

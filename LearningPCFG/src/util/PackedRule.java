@@ -1,6 +1,6 @@
 //TODO: Should be removed
 
-package rules;
+package util;
 public class PackedRule {
 	private String right;
 	private String left;

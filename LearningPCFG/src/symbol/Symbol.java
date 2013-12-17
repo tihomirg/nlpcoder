@@ -1,14 +1,8 @@
 package symbol;
 import org.eclipse.jdt.core.dom.ASTNode;
 
-
 public abstract class Symbol {
-	private static final int NAIVE = 0;
-	private static final int WITH_PARENT= 1;
-	private static final int WITH_GRANDAD = 2;
-	
-	private static int type = NAIVE;
-	
+
 	protected abstract ASTNode getParent();
 	
 	private ASTNode getGrandad() {
@@ -16,24 +10,40 @@ public abstract class Symbol {
 		return parent != null ? parent.getParent(): null;
 	}
 	
-	protected abstract String naive();
+	protected abstract String toStringNaive();
 	
 	public String toString(){
-	   switch(type){
-		 case NAIVE : return naive();
-		 case WITH_PARENT : return withParent();
-		 case WITH_GRANDAD: return withGrandad();
-		 default: return naive();
+	   switch(StateSplitterType.getType()){
+		 case StateSplitterType.NAIVE : return toStringNaive();
+		 case StateSplitterType.WITH_PARENT : return toStringWithParent();
+		 case StateSplitterType.WITH_GRANDAD: return toStringWithGrandad();
+		 default: return toStringNaive();
 	   }
 	}
 	
-	private String withParent(){
+	private String toStringWithParent(){
 		ASTNode parent = getParent();
-		return naive()+(parent != null ? "^"+parent.getClass().getSimpleName(): ""); 
+		return toStringNaive()+(parent != null ? "^"+parent.getClass().getSimpleName(): ""); 
 	}
 	
-	private String withGrandad(){
+	private String toStringWithGrandad(){
 		ASTNode grandad = getGrandad();
-		return withParent()+(grandad != null ? "^"+grandad.getClass().getSimpleName(): ""); 
+		return toStringWithParent()+(grandad != null ? "^"+grandad.getClass().getSimpleName(): ""); 
 	}
+
+	protected int naiveHashCode(){
+		return toStringNaive().hashCode()^348274982;
+	}	
+	
+	protected int withParentHashCode(){
+		ASTNode parent = getParent();
+		if (parent == null) return naiveHashCode();
+		else return (naiveHashCode()+parent.getClass().getSimpleName().hashCode())^487535932;		
+	}
+
+	protected int withGrandadHashCode(){
+		ASTNode grandad = getGrandad();
+		if(grandad == null) return withParentHashCode();
+		else return (withParentHashCode()+grandad.getClass().getSimpleName().hashCode())^95493943;	
+	}	
 }
