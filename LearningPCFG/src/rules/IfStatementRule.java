@@ -5,6 +5,7 @@ import org.eclipse.jdt.core.dom.IfStatement;
 
 import symbol.Symbol;
 import symbol.SymbolFactory;
+import symbol.Tokens;
 
 public class IfStatementRule extends Rule{
 
@@ -17,16 +18,19 @@ public class IfStatementRule extends Rule{
 	private Symbol thenStatement;
 	
 	public IfStatementRule(IfStatement node) {
-		super(SymbolFactory.getNonTerminal(node));
+		super(node);
 		this.expression = SymbolFactory.getNonTerminal(node.getExpression());
 		this.thenStatement = SymbolFactory.getNonTerminal(node.getThenStatement());
-		this.ifTerminal = SymbolFactory.getTerminal("if", node);
-		this.lParTerminal = SymbolFactory.getTerminal("(", node);
-		this.rParTerminal = SymbolFactory.getTerminal(")", node);
+		
+		this.ifTerminal = SymbolFactory.getTerminal(Tokens.IF, node);
+		this.lParTerminal = SymbolFactory.getTerminal(Tokens.L_PAR, node);
+		this.rParTerminal = SymbolFactory.getTerminal(Tokens.R_PAR, node);
+		
 		ASTNode elseNode = node.getElseStatement();
 		if (elseNode != null){
 		  this.elseStatement = SymbolFactory.getNonTerminal(elseNode);
-		  this.elseParTerminal = SymbolFactory.getTerminal("else", node);
+		  
+		  this.elseParTerminal = SymbolFactory.getTerminal(Tokens.ELSE, node);
 		}
 	}
 

@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.FieldAccess;
 
 import symbol.Symbol;
 import symbol.SymbolFactory;
+import symbol.Tokens;
 
 public class FieldAccessRule extends Rule{
 	private Symbol exp;
@@ -11,9 +12,9 @@ public class FieldAccessRule extends Rule{
 	private Symbol name;
 	
 	public FieldAccessRule(FieldAccess node){
-		super(SymbolFactory.getNonTerminal(node));
+		super(node);
 		this.exp = SymbolFactory.getNonTerminal(node.getExpression());
-		this.dotTerminal = SymbolFactory.getTerminal(".", node);
+		this.dotTerminal = SymbolFactory.getTerminal(Tokens.DOT, node);
 		this.name = SymbolFactory.getNonTerminal(node.getName());
 	}
 

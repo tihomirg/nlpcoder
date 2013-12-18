@@ -11,6 +11,10 @@ import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 
 import rules.FieldAccessRule;
+import rules.ForStatementRule;
+import rules.IfStatementRule;
+import rules.InfixExpressionRule;
+import rules.NumberLiteralRule;
 import statistics.RuleStatisticsBase;
 
 public class PCFGBuilder extends ASTVisitor {
@@ -18,14 +22,17 @@ public class PCFGBuilder extends ASTVisitor {
 	private RuleStatisticsBase statistics = new RuleStatisticsBase(); 
 	
 	public boolean visit(InfixExpression node){			
+		statistics.incCount(new InfixExpressionRule(node));
 		return true;
 	}
 	
 	public boolean visit(IfStatement node){
+		statistics.incCount(new IfStatementRule(node));
 		return true;
 	}
 	
 	public boolean visit(NumberLiteral node){
+		statistics.incCount(new NumberLiteralRule(node));
 		return true;
 	}
 	
@@ -35,9 +42,9 @@ public class PCFGBuilder extends ASTVisitor {
 	}
 
 	public boolean visit(ForStatement node){
+		statistics.incCount(new ForStatementRule(node));
 		return true;
 	}
-	
 	
 	public boolean visit(VariableDeclarationExpression node){
 		return true;

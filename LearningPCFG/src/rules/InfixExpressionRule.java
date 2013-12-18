@@ -17,27 +17,15 @@ public class InfixExpressionRule extends Rule{
 	private List<Symbol> extendedOperands;
 	
 	public InfixExpressionRule(InfixExpression node) {
-		super(SymbolFactory.getNonTerminal(node));
+		super(node);
 		this.operator = SymbolFactory.getTerminal(node.getOperator().toString(), node);		
 		this.leftOperand = SymbolFactory.getNonTerminal(node.getLeftOperand());
 		this.rightOperand = SymbolFactory.getNonTerminal(node.getRightOperand());		
-		this.extendedOperands = makeExtendedOperands(node.extendedOperands());
-	}
-	
-	private List<Symbol> makeExtendedOperands(List<ASTNode> operands){
-		List<Symbol> list = new LinkedList<Symbol>();
-		for(ASTNode operand: operands){
-		  list.add(SymbolFactory.getNonTerminal(operand));	
-		}
-		return list;
+		this.extendedOperands = makeNonTerminalList(node.extendedOperands());
 	}
 	
 	private String printExtendedOperands(){
-		String s ="";
-		for(Symbol operand: this.extendedOperands){
-			s += (" "+this.operator+" "+operand); 
-		}
-		return s;
+		return printPrefixList(this.extendedOperands, this.operator);
 	}	
 	
 	@Override
