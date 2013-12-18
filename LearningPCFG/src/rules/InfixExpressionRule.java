@@ -35,7 +35,7 @@ public class InfixExpressionRule extends Rule{
 	private String printExtendedOperands(){
 		String s ="";
 		for(Symbol operand: this.extendedOperands){
-			s += (" "+this.operator +" "+operand); 
+			s += (" "+this.operator+" "+operand); 
 		}
 		return s;
 	}	
