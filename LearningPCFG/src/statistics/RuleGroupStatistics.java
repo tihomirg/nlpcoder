@@ -25,7 +25,7 @@ public class RuleGroupStatistics {
 		return ruleToStatistics.get(rule);
 	}
 	
-	public void incCount(Rule rule){
+	public void inc(Rule rule){
 		RuleStatistics statistics = getRuleStatistics(rule);
 		statistics.incCount();
 		this.incCount();

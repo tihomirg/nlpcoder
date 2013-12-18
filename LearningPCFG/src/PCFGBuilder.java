@@ -27,52 +27,52 @@ public class PCFGBuilder extends ASTVisitor {
 	private RuleStatisticsBase statistics = new RuleStatisticsBase(); 
 	
 	public boolean visit(InfixExpression node){			
-		statistics.incCount(new InfixExpressionRule(node));
+		statistics.inc(new InfixExpressionRule(node));
 		return true;
 	}
 	
 	public boolean visit(IfStatement node){
-		statistics.incCount(new IfStatementRule(node));
+		statistics.inc(new IfStatementRule(node));
 		return true;
 	}
 	
 	public boolean visit(NumberLiteral node){
-		statistics.incCount(new NumberLiteralRule(node));
+		statistics.inc(new NumberLiteralRule(node));
 		return true;
 	}
 	
 	public boolean visit(FieldAccess node){
-		statistics.incCount(new FieldAccessRule(node));
+		statistics.inc(new FieldAccessRule(node));
 		return true;
 	}
 
 	public boolean visit(ForStatement node){
-		statistics.incCount(new ForStatementRule(node));
+		statistics.inc(new ForStatementRule(node));
 		return true;
 	}
 	
 	public boolean visit(VariableDeclarationExpression node){
-		statistics.incCount(new VariableDeclarationExpressionRule(node));
+		statistics.inc(new VariableDeclarationExpressionRule(node));
 		return true;
 	}
 	
 	public boolean visit(ThisExpression node){
-		statistics.incCount(new ThisExpressionRule(node));
+		statistics.inc(new ThisExpressionRule(node));
 		return true;				
 	}
 	
 	public boolean visit(NullLiteral node){
-		statistics.incCount(new NullLiteralRule(node));
+		statistics.inc(new NullLiteralRule(node));
 		return true;
 	}
 	
 	public boolean visit(SimpleName node){
-		statistics.incCount(new SimpleNameRule(node));
+		statistics.inc(new SimpleNameRule(node));
 		return true;
 	}
 	
 	public boolean visit(ConditionalExpression node){
-		statistics.incCount(new ConditionalExpressionRule(node));
+		statistics.inc(new ConditionalExpressionRule(node));
 		return true;
 	}
 

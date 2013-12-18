@@ -20,9 +20,9 @@ public class RuleStatisticsBase {
 		return headToRuleGroup.get(head);
 	}
 	
-	public void incCount(Rule rule){
+	public void inc(Rule rule){
 		RuleGroupStatistics group = getRuleGroupStatistics(rule);
-		group.incCount(rule);
+		group.inc(rule);
 	}
 	
 	//TODO: printToFile
