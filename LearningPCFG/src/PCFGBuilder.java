@@ -10,11 +10,16 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 
+import rules.ConditionalExpressionRule;
 import rules.FieldAccessRule;
 import rules.ForStatementRule;
 import rules.IfStatementRule;
 import rules.InfixExpressionRule;
+import rules.NullLiteralRule;
 import rules.NumberLiteralRule;
+import rules.SimpleNameRule;
+import rules.ThisExpressionRule;
+import rules.VariableDeclarationExpressionRule;
 import statistics.RuleStatisticsBase;
 
 public class PCFGBuilder extends ASTVisitor {
@@ -47,23 +52,27 @@ public class PCFGBuilder extends ASTVisitor {
 	}
 	
 	public boolean visit(VariableDeclarationExpression node){
+		statistics.incCount(new VariableDeclarationExpressionRule(node));
 		return true;
 	}
 	
 	public boolean visit(ThisExpression node){
+		statistics.incCount(new ThisExpressionRule(node));
 		return true;				
 	}
 	
 	public boolean visit(NullLiteral node){
+		statistics.incCount(new NullLiteralRule(node));
 		return true;
 	}
 	
-	public boolean visit(SimpleName node){				
+	public boolean visit(SimpleName node){
+		statistics.incCount(new SimpleNameRule(node));
 		return true;
 	}
 	
-	
-	public boolean visit(ConditionalExpression node){			
+	public boolean visit(ConditionalExpression node){
+		statistics.incCount(new ConditionalExpressionRule(node));
 		return true;
 	}
 

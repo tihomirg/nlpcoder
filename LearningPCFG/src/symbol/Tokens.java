@@ -10,6 +10,7 @@ public class Tokens {
 	public static final String COLON = ":";	
 	public static final String L_CURLY_BRACKET = "{";
 	public static final String R_CURLY_BRACKET = "}";
+	public static final String QUESTION_MARK = "?";
 	
 	//------------------------------ Keywords ----------------------------------//
 	public static final String FOR = "for";	
@@ -18,5 +19,8 @@ public class Tokens {
 	public static final String WHILE = "while";
 	public static final String CASE = "case";
 	public static final String SWITCH = "switch";
+	public static final String THIS = "this";
+	public static final String NULL = "null";
+	public static final String SUPER = "super";
 	
 }
