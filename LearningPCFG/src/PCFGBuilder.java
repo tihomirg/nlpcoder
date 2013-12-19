@@ -2,6 +2,9 @@ import org.eclipse.jdt.core.dom.*;
 
 import rules.ArrayAccessRule;
 import rules.ArrayCreationRule;
+import rules.ArrayInitializerRule;
+import rules.ArrayTypeRule;
+import rules.AssignmentRule;
 import rules.ConditionalExpressionRule;
 import rules.FieldAccessRule;
 import rules.ForStatementRule;
@@ -116,6 +119,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ArrayInitializer node) {
+		statistics.inc(new ArrayInitializerRule(node));
 		return true;
 	}
 
@@ -132,6 +136,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ArrayType node) {
+		statistics.inc(new ArrayTypeRule(node));
 		return true;
 	}
 
@@ -164,6 +169,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(Assignment node) {
+		statistics.inc(new AssignmentRule(node));
 		return true;
 	}
 
