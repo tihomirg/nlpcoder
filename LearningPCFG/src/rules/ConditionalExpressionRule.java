@@ -28,7 +28,7 @@ public class ConditionalExpressionRule extends Rule {
 	@Override
 	protected String rhs() {
 		// TODO Auto-generated method stub
-		return this.colonTerminal+" "+this.colonTerminal+" "+this.thenExpression+" "+this.colonTerminal+" "+this.elseExpression;
+		return this.condition+" "+this.questionTerminal+" "+this.thenExpression+" "+this.colonTerminal+" "+this.elseExpression;
 	}
 
 }
