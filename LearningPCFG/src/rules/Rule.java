@@ -16,7 +16,7 @@ public abstract class Rule {
 		this.head = SymbolFactory.getNonTerminal(node);
 	}
 	
-	protected abstract String rhs();
+	protected abstract List<Symbol> rhsAsList();	
 	
 	public Symbol getHead() {
 		return head;
@@ -41,39 +41,68 @@ public abstract class Rule {
 	}
 	
 	// e1 op e2 ... op en
-	protected static String printInfixList(List<Symbol> symbols, Symbol operator) {
-		String s = symbols.get(0).toString();
+	protected static List<Symbol> toInfixList(List<Symbol> symbols, Symbol operator) {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(symbols.get(0));
 		
 		int length = symbols.size();
 		for(int i=1; i< length; i++){
-			s+= (operator+" "+symbols.get(i));
+			list.add(operator);
+			list.add(symbols.get(i));
 		}
 		
-		return s;		
+		return list;		
 	}
 	
 	
 	// op e1 op e2 ... op en
-	protected static String printPrefixList(List<Symbol> symbols, Symbol operator) {
-		String s = "";
+	protected static List<Symbol> toPrefixList(List<Symbol> symbols, Symbol operator) {
+		List<Symbol> list = new LinkedList<Symbol>();
 		for(Symbol node: symbols){
-			s+= (" "+operator+" "+node);
+			list.add(operator);
+			list.add(node);
 		}
 		
-		return s;	
+		return list;	
+	}
+	
+	// op1 e1 op2 op1 e2 op2 ... op1 en op2
+	protected static List<Symbol> toIndexList(List<Symbol> symbols, Symbol operator1, Symbol operator2) {
+		List<Symbol> list = new LinkedList<Symbol>();
+		for(Symbol node: symbols){
+			list.add(operator1);
+			list.add(node);
+			list.add(operator2);
+		}
+		
+		return list;
 	}
 
+	// op1 op2 op1 op2 ... op1 op2
+	protected static List<Symbol> toIndexList(int length, Symbol operator1, Symbol operator2) {
+		List<Symbol> list = new LinkedList<Symbol>();
+		for(int i=0; i < length; i++){
+			list.add(operator1);
+			list.add(operator2);
+		}
+		return list;
+	}	
+
 	// e1 e2 ... en
-	protected static String printList(List<Symbol> symbols) {
+	protected static String printList(List<Symbol> list) {
 		String s = "";
-		for(Symbol node: symbols){
+		for(Symbol node: list){
 			s+= " "+node;
 		}
 		
-		return s;	
-	}
+		return s;
+	}	
+	
+	protected String rhs(){
+		return printList(rhsAsList());
+	}	
 	
     public String toString(){
-		return this.head +" -> "+this.rhs();
+		return this.head +" ->"+this.rhs();
 	}
 }

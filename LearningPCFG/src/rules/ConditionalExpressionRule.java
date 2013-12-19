@@ -1,5 +1,8 @@
 package rules;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 
 import symbol.Symbol;
@@ -26,9 +29,14 @@ public class ConditionalExpressionRule extends Rule {
 	}
 
 	@Override
-	protected String rhs() {
-		// TODO Auto-generated method stub
-		return this.condition+" "+this.questionTerminal+" "+this.thenExpression+" "+this.colonTerminal+" "+this.elseExpression;
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.condition);
+		list.add(this.questionTerminal);
+		list.add(this.thenExpression);
+		list.add(this.colonTerminal);
+		list.add(this.elseExpression);
+		return list;
 	}
 
 }

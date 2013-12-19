@@ -1,5 +1,8 @@
 package rules;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.NumberLiteral;
 
 import symbol.Symbol;
@@ -15,8 +18,10 @@ public class NumberLiteralRule extends Rule{
 	}
 
 	@Override
-	protected String rhs() {
-		return this.number.toString();
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.number);
+		return list;
 	}
 
 }

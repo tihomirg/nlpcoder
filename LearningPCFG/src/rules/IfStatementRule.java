@@ -1,5 +1,8 @@
 package rules;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.IfStatement;
 
@@ -35,7 +38,19 @@ public class IfStatementRule extends Rule{
 	}
 
 	@Override
-	protected String rhs() {
-		return this.ifTerminal +" "+this.lParTerminal+" "+this.expression+" "+this.rParTerminal+" "+this.thenStatement+(this.elseParTerminal != null ? " "+this.elseParTerminal+" "+this.elseStatement:"");
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.ifTerminal);
+		list.add(this.lParTerminal);
+		list.add(this.expression);
+		list.add(this.rParTerminal);
+		list.add(this.thenStatement);
+		
+		if(this.elseParTerminal != null){
+			list.add(this.elseParTerminal);
+			list.add(this.elseStatement);
+		}
+		
+		return list;
 	}
 }

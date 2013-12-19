@@ -1,5 +1,8 @@
 package rules;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ThisExpression;
 
@@ -26,9 +29,15 @@ public class ThisExpressionRule extends Rule {
 	}
 
 	@Override
-	protected String rhs() {
-		// TODO Auto-generated method stub
-		return (qualifier != null? this.qualifier+" "+this.dotTerminal+" ":"")+this.thisTerminal;
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		if(this.qualifier != null){
+			list.add(this.qualifier);
+			list.add(this.dotTerminal);
+		}
+		
+		list.add(this.thisTerminal);
+		return list;
 	}
 
 }

@@ -1,5 +1,8 @@
 package rules;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.SimpleName;
 
 import symbol.Symbol;
@@ -17,9 +20,10 @@ public class SimpleNameRule extends Rule {
 	}
 
 	@Override
-	protected String rhs() {
-		// TODO Auto-generated method stub
-		return this.name.toString();
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.name);
+		return list;
 	}
 
 }

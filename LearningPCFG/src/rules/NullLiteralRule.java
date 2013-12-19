@@ -1,5 +1,8 @@
 package rules;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.NullLiteral;
 
 import symbol.Symbol;
@@ -16,8 +19,10 @@ public class NullLiteralRule extends Rule {
 	}
 
 	@Override
-	protected String rhs() {
-		return this.nullTerminal.toString();
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.nullTerminal);
+		return list;
 	}
 
 }

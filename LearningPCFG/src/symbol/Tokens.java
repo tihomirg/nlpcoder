@@ -11,8 +11,11 @@ public class Tokens {
 	public static final String L_CURLY_BRACKET = "{";
 	public static final String R_CURLY_BRACKET = "}";
 	public static final String QUESTION_MARK = "?";
+	public static final String L_SQUARE_BRACKET = "[";
+	public static final String R_SQUARE_BRACKET = "]";	
 	
 	//------------------------------ Keywords ----------------------------------//
+	public static final String NEW = "new";
 	public static final String FOR = "for";	
 	public static final String IF = "if";
 	public static final String ELSE = "else";

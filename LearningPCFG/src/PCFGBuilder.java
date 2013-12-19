@@ -1,15 +1,7 @@
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
-import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
-import org.eclipse.jdt.core.dom.ArrayAccess;
-import org.eclipse.jdt.core.dom.ArrayCreation;
-import org.eclipse.jdt.core.dom.ArrayInitializer;
-import org.eclipse.jdt.core.dom.ArrayType;
-import org.eclipse.jdt.core.dom.AssertStatement;
-import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.*;
 
+import rules.ArrayAccessRule;
+import rules.ArrayCreationRule;
 import rules.ConditionalExpressionRule;
 import rules.FieldAccessRule;
 import rules.ForStatementRule;
@@ -90,6 +82,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ArrayAccess node) {
+		statistics.inc(new ArrayAccessRule(node));
 		return true;
 	}
 
@@ -106,6 +99,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ArrayCreation node) {
+		statistics.inc(new ArrayCreationRule(node));
 		return true;
 	}
 

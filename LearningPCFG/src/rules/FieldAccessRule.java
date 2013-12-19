@@ -1,5 +1,8 @@
 package rules;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.FieldAccess;
 
 import symbol.Symbol;
@@ -19,7 +22,11 @@ public class FieldAccessRule extends Rule{
 	}
 
 	@Override
-	protected String rhs() {
-		return this.exp +" "+this.dotTerminal+" "+this.name;
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.exp);
+		list.add(this.dotTerminal);
+		list.add(this.name);
+		return list;
 	}
 }

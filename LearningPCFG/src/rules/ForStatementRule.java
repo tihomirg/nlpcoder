@@ -39,18 +39,28 @@ public class ForStatementRule extends Rule {
 		// TODO Auto-generated constructor stub
 	}
 	
-	private String printUpdaters() {
-		return printInfixList(this.updaters, this.commaTerminal);
+	private List<Symbol> toUpdaters() {
+		return toInfixList(this.updaters, this.commaTerminal);
 	}
 
-	private String printInitializers() {
-		return printInfixList(this.initializers, this.commaTerminal);
+	private List<Symbol> toInitializers() {
+		return toInfixList(this.initializers, this.commaTerminal);
 	}
 
 	@Override
-	protected String rhs() {
-		// TODO Auto-generated method stub
-		return this.forTerminal+" "+this.lParTerminal+" "+printInitializers()+" "+this.semicolonTerminal+" "+this.expression+" "+this.semicolonTerminal+" "+printUpdaters()+" "+this.rParTerminal+" "+this.body;
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.forTerminal);
+		list.add(this.lParTerminal);
+		list.addAll(toInitializers());
+		list.add(this.semicolonTerminal);
+		list.add(this.expression);
+		list.add(this.semicolonTerminal);
+		list.addAll(toUpdaters());		
+		list.add(this.rParTerminal);
+		list.add(this.body);
+		
+		return list;
 	}
 
 }

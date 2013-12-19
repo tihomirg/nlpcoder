@@ -1,5 +1,6 @@
 package rules;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -24,14 +25,16 @@ public class VariableDeclarationExpressionRule extends Rule {
 		// TODO Auto-generated constructor stub
 	}
 
-	private String printFragments(){
-		return printInfixList(this.fragments, this.commaTerminal);
+	private List<Symbol> toFragments(){
+		return toInfixList(this.fragments, this.commaTerminal);
 	}
 	
 	@Override
-	protected String rhs() {
-		// TODO Auto-generated method stub
-		return this.type+" "+printFragments();
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.type);
+		list.addAll(toFragments());
+		return list;
 	}
 
 }

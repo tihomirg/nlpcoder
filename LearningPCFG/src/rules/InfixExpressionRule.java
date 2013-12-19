@@ -24,12 +24,17 @@ public class InfixExpressionRule extends Rule{
 		this.extendedOperands = makeNonTerminalList(node.extendedOperands());
 	}
 	
-	private String printExtendedOperands(){
-		return printPrefixList(this.extendedOperands, this.operator);
+	private List<Symbol> toExtendedOperands(){
+		return toPrefixList(this.extendedOperands, this.operator);
 	}	
 	
 	@Override
-	protected String rhs() {
-		return this.leftOperand+" "+this.operator+" "+this.rightOperand+printExtendedOperands();
+	protected List<Symbol> rhsAsList() {
+		List<Symbol> list = new LinkedList<Symbol>();
+		list.add(this.leftOperand);
+		list.add(this.operator);
+		list.add(this.rightOperand);
+		list.addAll(toExtendedOperands());
+		return list;
 	}
 }
