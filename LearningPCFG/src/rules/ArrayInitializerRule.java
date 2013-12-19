@@ -27,7 +27,7 @@ public class ArrayInitializerRule extends Rule {
 	}
 
 	private List<Symbol> toExpressions(){
-		return toInfixList(expressions, this.comma);
+		return toInfixList(this.expressions, this.comma);
 	}
 	
 	@Override
