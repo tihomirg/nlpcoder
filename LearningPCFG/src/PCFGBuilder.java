@@ -29,6 +29,7 @@ import rules.LabeledStatementRule;
 import rules.MethodInvocationRule;
 import rules.NullLiteralRule;
 import rules.NumberLiteralRule;
+import rules.ParameterizedTypeRule;
 import rules.Rule;
 import rules.SimpleNameRule;
 import rules.ThisExpressionRule;
@@ -925,6 +926,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(ParameterizedType node) {
+		statistics.inc(new ParameterizedTypeRule(node));
 		return true;
 	}
 
