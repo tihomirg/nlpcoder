@@ -1,13 +1,11 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ThisExpression;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
 import symbol.Tokens;
 
 public class ThisExpressionRule extends Rule {
@@ -31,11 +29,10 @@ public class ThisExpressionRule extends Rule {
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
 		if(this.qualifier != null){
-			list.add(this.qualifier);
-			list.add(this.dotTerminal);
+			list.f(this.qualifier).f(this.dotTerminal);
 		}
 		
-		list.add(this.thisTerminal);
+		list.f(this.thisTerminal);
 	}
 
 }

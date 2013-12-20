@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayInitializer;
@@ -32,9 +31,7 @@ public class ArrayInitializerRule extends Rule {
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.lcurley);
-		list.addAll(toExpressions());
-		list.add(this.rcurley);
+		list.f(this.lcurley).f(toExpressions()).f(this.rcurley);
 	}
 
 }

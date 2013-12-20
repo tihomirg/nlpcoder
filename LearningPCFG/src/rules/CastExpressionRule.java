@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.CastExpression;
 
@@ -28,10 +27,7 @@ public class CastExpressionRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.lparTerminal);
-		list.add(this.type);
-		list.add(this.rparTerminal);
-		list.add(this.expression);
+		list.f(this.lparTerminal).f(this.type).f(this.rparTerminal).f(this.expression);
 	}
 
 }

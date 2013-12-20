@@ -1,12 +1,10 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.NumberLiteral;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
 
 public class NumberLiteralRule extends Rule{
 
@@ -19,7 +17,7 @@ public class NumberLiteralRule extends Rule{
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.number);
+		list.f(this.number);
 	}
 
 }

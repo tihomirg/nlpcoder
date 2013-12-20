@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
@@ -33,8 +32,7 @@ public class ArrayTypeRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.elementType);
-		list.addAll(toDimensions());
+		list.f(this.elementType).f(toDimensions());
 	}
 
 }

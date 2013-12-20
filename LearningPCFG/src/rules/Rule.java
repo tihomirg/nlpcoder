@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 
@@ -17,7 +16,7 @@ public abstract class Rule {
 	}
 	
 	protected List<Symbol> rhsAsList(){
-		List<Symbol> list = new LinkedList<Symbol>();
+		List<Symbol> list = new List<Symbol>();
 		rhsAsList(list);
 		return list;
 	}
@@ -38,8 +37,8 @@ public abstract class Rule {
 		else return false;
 	}
 	
-	protected static List<Symbol> makeNonTerminalList(List<ASTNode> nodes) {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected static List<Symbol> makeNonTerminalList(java.util.List<ASTNode> nodes) {
+		List<Symbol> list = new List<Symbol>();
 		for(ASTNode node: nodes){
 			list.add(SymbolFactory.getNonTerminal(node));
 		}
@@ -48,7 +47,7 @@ public abstract class Rule {
 	
 	// e1 op e2 ... op en
 	protected static List<Symbol> toInfixList(List<Symbol> symbols, Symbol operator) {
-		List<Symbol> list = new LinkedList<Symbol>();
+		List<Symbol> list = new List<Symbol>();
 		list.add(symbols.get(0));
 		
 		int length = symbols.size();
@@ -63,7 +62,7 @@ public abstract class Rule {
 	
 	// op e1 op e2 ... op en
 	protected static List<Symbol> toPrefixList(List<Symbol> symbols, Symbol operator) {
-		List<Symbol> list = new LinkedList<Symbol>();
+		List<Symbol> list = new List<Symbol>();
 		for(Symbol node: symbols){
 			list.add(operator);
 			list.add(node);
@@ -74,7 +73,7 @@ public abstract class Rule {
 	
 	// op1 e1 op2 op1 e2 op2 ... op1 en op2
 	protected static List<Symbol> toIndexList(List<Symbol> symbols, Symbol operator1, Symbol operator2) {
-		List<Symbol> list = new LinkedList<Symbol>();
+		List<Symbol> list = new List<Symbol>();
 		for(Symbol node: symbols){
 			list.add(operator1);
 			list.add(node);
@@ -86,7 +85,7 @@ public abstract class Rule {
 
 	// op1 op2 op1 op2 ... op1 op2
 	protected static List<Symbol> toIndexList(int length, Symbol operator1, Symbol operator2) {
-		List<Symbol> list = new LinkedList<Symbol>();
+		List<Symbol> list = new List<Symbol>();
 		for(int i=0; i < length; i++){
 			list.add(operator1);
 			list.add(operator2);

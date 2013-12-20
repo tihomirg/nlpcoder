@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ArrayAccess;
 
@@ -28,10 +27,7 @@ public class ArrayAccessRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.array);
-		list.add(this.lsquare);
-		list.add(this.index);
-		list.add(this.rsquare);
+		list.f(this.array).f(this.lsquare).f(this.index).f(this.rsquare);
 	}
 
 }

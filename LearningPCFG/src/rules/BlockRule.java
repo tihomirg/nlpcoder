@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.Block;
 
@@ -26,9 +25,7 @@ public class BlockRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.lcurlyTerminal);
-		list.addAll(this.statements);
-		list.add(this.rcurlyTerminal);
+		list.f(this.lcurlyTerminal).f(this.statements).f(this.rcurlyTerminal);
 	}
 
 }

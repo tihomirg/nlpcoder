@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
@@ -24,9 +23,7 @@ public class AssignmentRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.left);
-		list.add(this.operator);
-		list.add(this.right);
+		list.f(this.left).f(this.operator).f(this.right);
 	}
 
 }

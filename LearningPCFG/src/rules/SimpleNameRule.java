@@ -1,12 +1,9 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.SimpleName;
-
 import symbol.Symbol;
-import symbol.SymbolFactory;
 
 //TODO: This one should keep more info, like, local, class, API decl, type and etc.
 public class SimpleNameRule extends Rule {
@@ -21,7 +18,7 @@ public class SimpleNameRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.name);
+		list.f(this.name);
 	}
 
 }

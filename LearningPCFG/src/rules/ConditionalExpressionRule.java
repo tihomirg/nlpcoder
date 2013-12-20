@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 
@@ -30,11 +29,7 @@ public class ConditionalExpressionRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.condition);
-		list.add(this.questionTerminal);
-		list.add(this.thenExpression);
-		list.add(this.colonTerminal);
-		list.add(this.elseExpression);
+		list.f(this.condition).f(this.questionTerminal).f(this.thenExpression).f(this.colonTerminal).f(this.elseExpression);
 	}
 
 }

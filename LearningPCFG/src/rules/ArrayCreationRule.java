@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayCreation;
@@ -50,13 +49,10 @@ public class ArrayCreationRule extends Rule {
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.newTerminal);
-		list.add(this.type);
-		list.addAll(toExpressionIndexes());
-		list.addAll(toEmptyIndexes());
+		list.f(this.newTerminal).f(this.type).f(toExpressionIndexes()).f(toEmptyIndexes());
 		
 		if(this.initializer != null){
-			list.add(this.initializer);
+			list.f(this.initializer);
 		}
 	}
 

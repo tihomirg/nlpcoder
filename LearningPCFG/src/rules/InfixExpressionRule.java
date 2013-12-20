@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.InfixExpression;
@@ -30,9 +29,6 @@ public class InfixExpressionRule extends Rule{
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.leftOperand);
-		list.add(this.operator);
-		list.add(this.rightOperand);
-		list.addAll(toExtendedOperands());
+		list.f(this.leftOperand).f(this.operator).f(this.rightOperand).f(toExtendedOperands());
 	}
 }

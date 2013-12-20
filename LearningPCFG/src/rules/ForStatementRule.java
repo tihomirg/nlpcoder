@@ -1,7 +1,6 @@
 package rules;
 
-import java.util.LinkedList;
-import java.util.List;
+import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ForStatement;
@@ -49,15 +48,8 @@ public class ForStatementRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.add(this.forTerminal);
-		list.add(this.lParTerminal);
-		list.addAll(toInitializers());
-		list.add(this.semicolonTerminal);
-		list.add(this.expression);
-		list.add(this.semicolonTerminal);
-		list.addAll(toUpdaters());		
-		list.add(this.rParTerminal);
-		list.add(this.body);
+		list.f(this.forTerminal).f(this.lParTerminal).f(toInitializers()).f(this.semicolonTerminal)
+		.f(this.expression).f(this.semicolonTerminal).f(toUpdaters()).f(this.rParTerminal).f(this.body);
 	}
 
 }
