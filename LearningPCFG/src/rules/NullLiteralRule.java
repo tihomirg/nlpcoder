@@ -15,14 +15,12 @@ public class NullLiteralRule extends Rule {
 	
 	public NullLiteralRule(NullLiteral node) {
 		super(node);
-		this.nullTerminal = SymbolFactory.getTerminal(Tokens.NULL, node);
+		this.nullTerminal = terminal(Tokens.NULL, node);
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.nullTerminal);
-		return list;
 	}
 
 }

@@ -24,17 +24,17 @@ public class ArrayCreationRule extends Rule {
 	public ArrayCreationRule(ArrayCreation node) {
 		super(node);
 		this.dimensions = makeNonTerminalList(node.dimensions());
-		this.type = SymbolFactory.getNonTerminal(node.getType());
+		this.type = nonTerminal(node.getType());
 		this.dimensionLength = node.getType().getDimensions();
 		
 		ASTNode initializer = node.getInitializer();
 		if (initializer != null){
-			this.initializer = SymbolFactory.getNonTerminal(initializer);
+			this.initializer = nonTerminal(initializer);
 		}
 		
-		this.newTerminal = SymbolFactory.getTerminal(Tokens.NEW, node);
-		this.lsquareTerminal = SymbolFactory.getTerminal(Tokens.L_SQUARE_BRACKET, node);
-		this.rsquareTerminal = SymbolFactory.getTerminal(Tokens.R_SQUARE_BRACKET, node);
+		this.newTerminal = terminal(Tokens.NEW, node);
+		this.lsquareTerminal = terminal(Tokens.L_SQUARE_BRACKET, node);
+		this.rsquareTerminal = terminal(Tokens.R_SQUARE_BRACKET, node);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -49,8 +49,7 @@ public class ArrayCreationRule extends Rule {
 	}		
 	
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.newTerminal);
 		list.add(this.type);
 		list.addAll(toExpressionIndexes());
@@ -59,8 +58,6 @@ public class ArrayCreationRule extends Rule {
 		if(this.initializer != null){
 			list.add(this.initializer);
 		}
-		
-		return list;
 	}
 
 }

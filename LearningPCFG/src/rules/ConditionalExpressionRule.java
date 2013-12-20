@@ -20,23 +20,21 @@ public class ConditionalExpressionRule extends Rule {
 	public ConditionalExpressionRule(ConditionalExpression node) {
 		super(node);
 		// TODO Auto-generated constructor stub
-		this.condition = SymbolFactory.getNonTerminal(node.getExpression());
-		this.thenExpression = SymbolFactory.getNonTerminal(node.getThenExpression());
-		this.elseExpression = SymbolFactory.getNonTerminal(node.getElseExpression());
+		this.condition = nonTerminal(node.getExpression());
+		this.thenExpression = nonTerminal(node.getThenExpression());
+		this.elseExpression = nonTerminal(node.getElseExpression());
 		
-		this.questionTerminal = SymbolFactory.getTerminal(Tokens.QUESTION_MARK, node);
-		this.colonTerminal = SymbolFactory.getTerminal(Tokens.COLON, node);
+		this.questionTerminal = terminal(Tokens.QUESTION_MARK, node);
+		this.colonTerminal = terminal(Tokens.COLON, node);
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.condition);
 		list.add(this.questionTerminal);
 		list.add(this.thenExpression);
 		list.add(this.colonTerminal);
 		list.add(this.elseExpression);
-		return list;
 	}
 
 }

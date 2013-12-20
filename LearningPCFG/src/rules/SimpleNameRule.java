@@ -15,15 +15,13 @@ public class SimpleNameRule extends Rule {
 
 	public SimpleNameRule(SimpleName node) {
 		super(node);
-		this.name = SymbolFactory.getTerminal(node.getIdentifier(), node);
+		this.name = terminal(node.getIdentifier(), node);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.name);
-		return list;
 	}
 
 }

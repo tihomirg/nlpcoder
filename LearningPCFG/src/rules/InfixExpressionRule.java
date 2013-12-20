@@ -18,9 +18,9 @@ public class InfixExpressionRule extends Rule{
 	
 	public InfixExpressionRule(InfixExpression node) {
 		super(node);
-		this.operator = SymbolFactory.getTerminal(node.getOperator().toString(), node);		
-		this.leftOperand = SymbolFactory.getNonTerminal(node.getLeftOperand());
-		this.rightOperand = SymbolFactory.getNonTerminal(node.getRightOperand());		
+		this.operator = terminal(node.getOperator().toString(), node);		
+		this.leftOperand = nonTerminal(node.getLeftOperand());
+		this.rightOperand = nonTerminal(node.getRightOperand());		
 		this.extendedOperands = makeNonTerminalList(node.extendedOperands());
 	}
 	
@@ -29,12 +29,10 @@ public class InfixExpressionRule extends Rule{
 	}	
 	
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.leftOperand);
 		list.add(this.operator);
 		list.add(this.rightOperand);
 		list.addAll(toExtendedOperands());
-		return list;
 	}
 }

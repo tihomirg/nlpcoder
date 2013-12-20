@@ -20,9 +20,9 @@ public class ArrayInitializerRule extends Rule {
 	public ArrayInitializerRule(ArrayInitializer node) {
 		super(node);
 		this.expressions = makeNonTerminalList(node.expressions());
-		this.rcurley = SymbolFactory.getTerminal(Tokens.R_CURLY_BRACKET, node);
-		this.lcurley = SymbolFactory.getTerminal(Tokens.L_CURLY_BRACKET, node);
-		this.comma = SymbolFactory.getTerminal(Tokens.COMMA, node);
+		this.rcurley = terminal(Tokens.R_CURLY_BRACKET, node);
+		this.lcurley = terminal(Tokens.L_CURLY_BRACKET, node);
+		this.comma = terminal(Tokens.COMMA, node);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -31,12 +31,10 @@ public class ArrayInitializerRule extends Rule {
 	}
 	
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.lcurley);
 		list.addAll(toExpressions());
 		list.add(this.rcurley);
-		return list;
 	}
 
 }

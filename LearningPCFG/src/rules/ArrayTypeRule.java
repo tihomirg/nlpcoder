@@ -20,10 +20,10 @@ public class ArrayTypeRule extends Rule {
 	public ArrayTypeRule(ArrayType node) {
 		super(node);
 		// TODO Auto-generated constructor stub
-		this.elementType = SymbolFactory.getNonTerminal(node.getElementType());
+		this.elementType = nonTerminal(node.getElementType());
 		this.dimentsions = node.getDimensions();
-		this.rcurley = SymbolFactory.getTerminal(Tokens.R_CURLY_BRACKET, node);
-		this.lcurley = SymbolFactory.getTerminal(Tokens.L_CURLY_BRACKET, node);		
+		this.rcurley = terminal(Tokens.R_CURLY_BRACKET, node);
+		this.lcurley = terminal(Tokens.L_CURLY_BRACKET, node);		
 		
 	}
 	
@@ -32,12 +32,9 @@ public class ArrayTypeRule extends Rule {
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.elementType);
 		list.addAll(toDimensions());
-
-		return list;
 	}
 
 }

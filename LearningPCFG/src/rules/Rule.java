@@ -16,7 +16,13 @@ public abstract class Rule {
 		this.head = SymbolFactory.getNonTerminal(node);
 	}
 	
-	protected abstract List<Symbol> rhsAsList();	
+	protected List<Symbol> rhsAsList(){
+		List<Symbol> list = new LinkedList<Symbol>();
+		rhsAsList(list);
+		return list;
+	}
+	
+	protected abstract void rhsAsList(List<Symbol> list);
 	
 	public Symbol getHead() {
 		return head;
@@ -98,6 +104,14 @@ public abstract class Rule {
 		return s;
 	}	
 	
+    protected static Symbol nonTerminal(ASTNode node){
+    	return SymbolFactory.getNonTerminal(node);
+    }
+ 
+    protected static Symbol terminal(String token, ASTNode node){
+    	return SymbolFactory.getTerminal(token, node);
+    }
+     
 	protected String rhs(){
 		return printList(rhsAsList());
 	}	

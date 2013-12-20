@@ -19,9 +19,9 @@ public class VariableDeclarationExpressionRule extends Rule {
 	public VariableDeclarationExpressionRule(VariableDeclarationExpression node) {
 		super(node);
 		
-		this.type = SymbolFactory.getNonTerminal(node.getType());
+		this.type = nonTerminal(node.getType());
 		this.fragments = makeNonTerminalList(node.fragments());
-		this.commaTerminal = SymbolFactory.getTerminal(Tokens.COMMA, node);
+		this.commaTerminal = terminal(Tokens.COMMA, node);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -30,11 +30,9 @@ public class VariableDeclarationExpressionRule extends Rule {
 	}
 	
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.type);
 		list.addAll(toFragments());
-		return list;
 	}
 
 }

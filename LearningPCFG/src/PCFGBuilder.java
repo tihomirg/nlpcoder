@@ -1,3 +1,5 @@
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.*;
 
 import rules.ArrayAccessRule;
@@ -5,6 +7,10 @@ import rules.ArrayCreationRule;
 import rules.ArrayInitializerRule;
 import rules.ArrayTypeRule;
 import rules.AssignmentRule;
+import rules.BlockRule;
+import rules.BooleanLiteralRule;
+import rules.BreakStatementRule;
+import rules.CastExpressionRule;
 import rules.ConditionalExpressionRule;
 import rules.FieldAccessRule;
 import rules.ForStatementRule;
@@ -12,10 +18,12 @@ import rules.IfStatementRule;
 import rules.InfixExpressionRule;
 import rules.NullLiteralRule;
 import rules.NumberLiteralRule;
+import rules.Rule;
 import rules.SimpleNameRule;
 import rules.ThisExpressionRule;
 import rules.VariableDeclarationExpressionRule;
 import statistics.RuleStatisticsBase;
+import symbol.Symbol;
 
 public class PCFGBuilder extends ASTVisitor {
 	
@@ -186,6 +194,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(Block node) {
+		statistics.inc(new BlockRule(node));
 		return true;
 	}
 
@@ -225,6 +234,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(BooleanLiteral node) {
+		statistics.inc(new BooleanLiteralRule(node));
 		return true;
 	}
 
@@ -241,6 +251,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(BreakStatement node) {
+		statistics.inc(new BreakStatementRule(node));
 		return true;
 	}
 
@@ -257,6 +268,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(CastExpression node) {
+		statistics.inc(new CastExpressionRule(node));
 		return true;
 	}
 

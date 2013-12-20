@@ -18,22 +18,20 @@ public class ArrayAccessRule extends Rule {
 
 	public ArrayAccessRule(ArrayAccess node) {
 		super(node);
-		this.array = SymbolFactory.getNonTerminal(node.getArray());
-		this.index = SymbolFactory.getNonTerminal(node.getIndex());
+		this.array = nonTerminal(node.getArray());
+		this.index = nonTerminal(node.getIndex());
 		
-		this.lsquare = SymbolFactory.getTerminal(Tokens.L_SQUARE_BRACKET, node);
-		this.rsquare = SymbolFactory.getTerminal(Tokens.R_SQUARE_BRACKET, node);
+		this.lsquare = terminal(Tokens.L_SQUARE_BRACKET, node);
+		this.rsquare = terminal(Tokens.R_SQUARE_BRACKET, node);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.array);
 		list.add(this.lsquare);
 		list.add(this.index);
 		list.add(this.rsquare);
-		return list;
 	}
 
 }

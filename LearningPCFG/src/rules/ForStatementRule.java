@@ -27,15 +27,15 @@ public class ForStatementRule extends Rule {
 		super(node);
 		
 		this.initializers = makeNonTerminalList(node.initializers());
-		this.expression = SymbolFactory.getNonTerminal(node.getExpression());
+		this.expression = nonTerminal(node.getExpression());
 		this.updaters = makeNonTerminalList(node.updaters());
-		this.body = SymbolFactory.getNonTerminal(node.getBody());
+		this.body = nonTerminal(node.getBody());
 
-		this.forTerminal = SymbolFactory.getTerminal(Tokens.FOR, node);
-	    this.lParTerminal = SymbolFactory.getTerminal(Tokens.L_PAR, node);
-	    this.rParTerminal = SymbolFactory.getTerminal(Tokens.R_PAR, node);
-	    this.commaTerminal = SymbolFactory.getTerminal(Tokens.COMMA, node);
-	    this.semicolonTerminal = SymbolFactory.getTerminal(Tokens.SEMICOLON, node);
+		this.forTerminal = terminal(Tokens.FOR, node);
+	    this.lParTerminal = terminal(Tokens.L_PAR, node);
+	    this.rParTerminal = terminal(Tokens.R_PAR, node);
+	    this.commaTerminal = terminal(Tokens.COMMA, node);
+	    this.semicolonTerminal = terminal(Tokens.SEMICOLON, node);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -48,8 +48,7 @@ public class ForStatementRule extends Rule {
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.forTerminal);
 		list.add(this.lParTerminal);
 		list.addAll(toInitializers());
@@ -59,8 +58,6 @@ public class ForStatementRule extends Rule {
 		list.addAll(toUpdaters());		
 		list.add(this.rParTerminal);
 		list.add(this.body);
-		
-		return list;
 	}
 
 }

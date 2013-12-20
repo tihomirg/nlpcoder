@@ -25,5 +25,6 @@ public class Tokens {
 	public static final String THIS = "this";
 	public static final String NULL = "null";
 	public static final String SUPER = "super";
+	public static final String BREAK = "break";
 	
 }

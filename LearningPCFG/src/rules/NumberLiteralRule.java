@@ -14,14 +14,12 @@ public class NumberLiteralRule extends Rule{
 	
 	public NumberLiteralRule(NumberLiteral node) {
 		super(node);
-		this.number = SymbolFactory.getTerminal(node.getToken(), node);
+		this.number = terminal(node.getToken(), node);
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.number);
-		return list;
 	}
 
 }

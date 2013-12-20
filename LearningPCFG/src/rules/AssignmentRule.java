@@ -17,18 +17,16 @@ public class AssignmentRule extends Rule {
 
 	public AssignmentRule(Assignment node) {
 		super(node);
-		this.left = SymbolFactory.getNonTerminal(node.getLeftHandSide());
-		this.right= SymbolFactory.getNonTerminal(node.getRightHandSide());
-		this.operator = SymbolFactory.getTerminal(node.getOperator().toString(), node);
+		this.left = nonTerminal(node.getLeftHandSide());
+		this.right= nonTerminal(node.getRightHandSide());
+		this.operator = terminal(node.getOperator().toString(), node);
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.left);
 		list.add(this.operator);
 		list.add(this.right);
-		return list;
 	}
 
 }

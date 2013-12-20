@@ -16,17 +16,15 @@ public class FieldAccessRule extends Rule{
 	
 	public FieldAccessRule(FieldAccess node){
 		super(node);
-		this.exp = SymbolFactory.getNonTerminal(node.getExpression());
-		this.dotTerminal = SymbolFactory.getTerminal(Tokens.DOT, node);
-		this.name = SymbolFactory.getNonTerminal(node.getName());
+		this.exp = nonTerminal(node.getExpression());
+		this.dotTerminal = terminal(Tokens.DOT, node);
+		this.name = nonTerminal(node.getName());
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.exp);
 		list.add(this.dotTerminal);
 		list.add(this.name);
-		return list;
 	}
 }

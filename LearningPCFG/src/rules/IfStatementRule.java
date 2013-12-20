@@ -22,24 +22,22 @@ public class IfStatementRule extends Rule{
 	
 	public IfStatementRule(IfStatement node) {
 		super(node);
-		this.expression = SymbolFactory.getNonTerminal(node.getExpression());
-		this.thenStatement = SymbolFactory.getNonTerminal(node.getThenStatement());
+		this.expression = nonTerminal(node.getExpression());
+		this.thenStatement = nonTerminal(node.getThenStatement());
 		
-		this.ifTerminal = SymbolFactory.getTerminal(Tokens.IF, node);
-		this.lParTerminal = SymbolFactory.getTerminal(Tokens.L_PAR, node);
-		this.rParTerminal = SymbolFactory.getTerminal(Tokens.R_PAR, node);
+		this.ifTerminal = terminal(Tokens.IF, node);
+		this.lParTerminal = terminal(Tokens.L_PAR, node);
+		this.rParTerminal = terminal(Tokens.R_PAR, node);
 		
 		ASTNode elseNode = node.getElseStatement();
 		if (elseNode != null){
-		  this.elseStatement = SymbolFactory.getNonTerminal(elseNode);
-		  
-		  this.elseParTerminal = SymbolFactory.getTerminal(Tokens.ELSE, node);
+		  this.elseStatement = nonTerminal(elseNode);
+		  this.elseParTerminal = terminal(Tokens.ELSE, node);
 		}
 	}
 
 	@Override
-	protected List<Symbol> rhsAsList() {
-		List<Symbol> list = new LinkedList<Symbol>();
+	protected void rhsAsList(List<Symbol> list) {
 		list.add(this.ifTerminal);
 		list.add(this.lParTerminal);
 		list.add(this.expression);
@@ -50,7 +48,5 @@ public class IfStatementRule extends Rule{
 			list.add(this.elseParTerminal);
 			list.add(this.elseStatement);
 		}
-		
-		return list;
 	}
 }
