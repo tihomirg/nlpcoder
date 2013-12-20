@@ -12,7 +12,9 @@ public class Tokens {
 	public static final String R_CURLY_BRACKET = "}";
 	public static final String QUESTION_MARK = "?";
 	public static final String L_SQUARE_BRACKET = "[";
-	public static final String R_SQUARE_BRACKET = "]";	
+	public static final String R_SQUARE_BRACKET = "]";
+	public static final String L_TARG = "<";
+	public static final String R_TARG = ">";	
 	
 	//------------------------------ Keywords ----------------------------------//
 	public static final String NEW = "new";
@@ -27,5 +29,8 @@ public class Tokens {
 	public static final String SUPER = "super";
 	public static final String BREAK = "break";
 	public static final String CATCH = "catch";
+	public static final String CONTINUE = "continue";
+	public static final String DO = "do";
+	public static final String INSTANCEOF = "instanceof";	
 	
 }

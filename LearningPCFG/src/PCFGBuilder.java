@@ -12,11 +12,19 @@ import rules.BooleanLiteralRule;
 import rules.BreakStatementRule;
 import rules.CastExpressionRule;
 import rules.CatchClauseRule;
+import rules.CharacterLiteralRule;
+import rules.ClassInstanceCreationRule;
 import rules.ConditionalExpressionRule;
+import rules.ContinueStatementRule;
+import rules.DoStatementRule;
+import rules.EnhancedForStatementRule;
+import rules.ExpressionStatementRule;
 import rules.FieldAccessRule;
 import rules.ForStatementRule;
 import rules.IfStatementRule;
 import rules.InfixExpressionRule;
+import rules.InitializerRule;
+import rules.InstanceofExpressionRule;
 import rules.NullLiteralRule;
 import rules.NumberLiteralRule;
 import rules.Rule;
@@ -303,6 +311,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(CharacterLiteral node) {
+		statistics.inc(new CharacterLiteralRule(node));
 		return true;
 	}
 
@@ -319,6 +328,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ClassInstanceCreation node) {
+		statistics.inc(new ClassInstanceCreationRule(node));
 		return true;
 	}
 
@@ -384,6 +394,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ContinueStatement node) {
+		statistics.inc(new ContinueStatementRule(node));
 		return true;
 	}
 
@@ -400,6 +411,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(DoStatement node) {
+		statistics.inc(new DoStatementRule(node));
 		return true;
 	}
 
@@ -433,6 +445,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(EnhancedForStatement node) {
+		statistics.inc(new EnhancedForStatementRule(node));
 		return true;
 	}
 
@@ -483,6 +496,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ExpressionStatement node) {
+		statistics.inc(new ExpressionStatementRule(node));
 		return true;
 	}
 
@@ -599,6 +613,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(InstanceofExpression node) {
+		statistics.inc(new InstanceofExpressionRule(node));
 		return true;
 	}
 
@@ -615,6 +630,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(Initializer node) {
+		statistics.inc(new InitializerRule(node));
 		return true;
 	}
 
