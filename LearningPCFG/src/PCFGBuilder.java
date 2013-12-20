@@ -25,6 +25,8 @@ import rules.IfStatementRule;
 import rules.InfixExpressionRule;
 import rules.InitializerRule;
 import rules.InstanceofExpressionRule;
+import rules.LabeledStatementRule;
+import rules.MethodInvocationRule;
 import rules.NullLiteralRule;
 import rules.NumberLiteralRule;
 import rules.Rule;
@@ -669,6 +671,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(LabeledStatement node) {
+		statistics.inc(new LabeledStatementRule(node));
 		return true;
 	}
 
@@ -817,6 +820,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(MethodInvocation node) {
+		statistics.inc(new MethodInvocationRule(node));
 		return true;
 	}
 
