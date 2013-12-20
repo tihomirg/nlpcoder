@@ -11,6 +11,7 @@ import rules.BlockRule;
 import rules.BooleanLiteralRule;
 import rules.BreakStatementRule;
 import rules.CastExpressionRule;
+import rules.CatchClauseRule;
 import rules.ConditionalExpressionRule;
 import rules.FieldAccessRule;
 import rules.ForStatementRule;
@@ -285,6 +286,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(CatchClause node) {
+		statistics.inc(new CatchClauseRule(node));
 		return true;
 	}
 
