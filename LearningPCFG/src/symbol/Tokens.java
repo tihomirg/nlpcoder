@@ -14,7 +14,10 @@ public class Tokens {
 	public static final String L_SQUARE_BRACKET = "[";
 	public static final String R_SQUARE_BRACKET = "]";
 	public static final String L_TARG = "<";
-	public static final String R_TARG = ">";	
+	public static final String R_TARG = ">";
+	public static final String EQ = "==";
+	public static final String ASSIGN = "=";
+	public static final String VARGS = "...";		
 	
 	//------------------------------ Keywords ----------------------------------//
 	public static final String NEW = "new";
@@ -31,6 +34,7 @@ public class Tokens {
 	public static final String CATCH = "catch";
 	public static final String CONTINUE = "continue";
 	public static final String DO = "do";
-	public static final String INSTANCEOF = "instanceof";	
-	
+	public static final String INSTANCEOF = "instanceof";
+	public static final String RETURN = "return";
+
 }

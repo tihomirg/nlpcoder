@@ -30,8 +30,18 @@ import rules.MethodInvocationRule;
 import rules.NullLiteralRule;
 import rules.NumberLiteralRule;
 import rules.ParameterizedTypeRule;
+import rules.ParenthesizedExpressionRule;
+import rules.PostfixExpressionRule;
+import rules.PrefixExpressionRule;
+import rules.PrimitiveTypeRule;
+import rules.QualifiedNameRule;
+import rules.QualifiedTypeRule;
+import rules.ReturnStatementRule;
 import rules.Rule;
 import rules.SimpleNameRule;
+import rules.SimpleTypeRule;
+import rules.SingleVariableDeclarationRule;
+import rules.StringLiteralRule;
 import rules.ThisExpressionRule;
 import rules.VariableDeclarationExpressionRule;
 import statistics.RuleStatisticsBase;
@@ -943,6 +953,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ParenthesizedExpression node) {
+		statistics.inc(new ParenthesizedExpressionRule(node));
 		return true;
 	}
 
@@ -959,6 +970,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(PostfixExpression node) {
+		statistics.inc(new PostfixExpressionRule(node));
 		return true;
 	}
 
@@ -975,6 +987,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(PrefixExpression node) {
+		statistics.inc(new PrefixExpressionRule(node));
 		return true;
 	}
 
@@ -991,6 +1004,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(PrimitiveType node) {
+		statistics.inc(new PrimitiveTypeRule(node));
 		return true;
 	}
 
@@ -1007,6 +1021,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(QualifiedName node) {
+		statistics.inc(new QualifiedNameRule(node));
 		return true;
 	}
 
@@ -1024,6 +1039,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(QualifiedType node) {
+		statistics.inc(new QualifiedTypeRule(node));
 		return true;
 	}
 
@@ -1040,6 +1056,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ReturnStatement node) {
+		statistics.inc(new ReturnStatementRule(node));
 		return true;
 	}
 
@@ -1073,6 +1090,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(SimpleType node) {
+		statistics.inc(new SimpleTypeRule(node));
 		return true;
 	}
 
@@ -1108,6 +1126,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(SingleVariableDeclaration node) {
+		statistics.inc(new SingleVariableDeclarationRule(node));
 		return true;
 	}
 
@@ -1124,6 +1143,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(StringLiteral node) {
+		statistics.inc(new StringLiteralRule(node));
 		return true;
 	}
 
