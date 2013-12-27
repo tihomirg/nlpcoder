@@ -42,6 +42,9 @@ import rules.SimpleNameRule;
 import rules.SimpleTypeRule;
 import rules.SingleVariableDeclarationRule;
 import rules.StringLiteralRule;
+import rules.SuperFieldAccessRule;
+import rules.SuperMethodInvocationRule;
+import rules.SwitchCaseRule;
 import rules.ThisExpressionRule;
 import rules.VariableDeclarationExpressionRule;
 import statistics.RuleStatisticsBase;
@@ -1176,6 +1179,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(SuperFieldAccess node) {
+		statistics.inc(new SuperFieldAccessRule(node));
 		return true;
 	}
 
@@ -1192,6 +1196,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(SuperMethodInvocation node) {
+		statistics.inc(new SuperMethodInvocationRule(node));
 		return true;
 	}
 
@@ -1208,6 +1213,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(SwitchCase node) {
+		statistics.inc(new SwitchCaseRule(node));
 		return true;
 	}
 

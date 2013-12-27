@@ -1,15 +1,15 @@
 package rules;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 
 import symbol.Symbol;
 import symbol.Tokens;
 import util.List;
 
-public class MethodInvocationRule extends Rule {
+public class SuperMethodInvocationRule extends Rule {
 
-	private Symbol expression;
+	private Symbol qualifier;
 	private Symbol name;
 	private List<Symbol> arguments;
 	private List<Symbol> typeArguments;
@@ -19,15 +19,18 @@ public class MethodInvocationRule extends Rule {
 	private Symbol rtarg;
 	private Symbol ltarg;
 	private Symbol dot;
-
-	public MethodInvocationRule(MethodInvocation node) {
+	private Symbol superTermianl;	
+	
+	public SuperMethodInvocationRule(SuperMethodInvocation node) {
 		super(node);
 		
-		ASTNode exp = node.getExpression();
-		if (exp != null){
-			this.expression = nonTerminal(exp);
-			this.dot = terminal(Tokens.DOT, node);
+		ASTNode qualifier = node.getQualifier();
+		if (qualifier != null){
+			this.qualifier = nonTerminal(qualifier);
 		}
+		
+		this.superTermianl = terminal(Tokens.SUPER, node);
+		this.dot = terminal(Tokens.DOT, node);		
 		
 		this.name = nonTerminal(node.getName());
 		this.arguments = makeNonTerminalList(node.arguments());
@@ -57,10 +60,12 @@ public class MethodInvocationRule extends Rule {
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		if (this.expression != null){
-			list.f(this.expression).f(this.dot);
+		if (this.qualifier != null){
+			list.f(this.qualifier).f(this.dot);
 		}
-
+		
+		list.f(this.superTermianl).f(this.dot);
+		
 		if(this.typeArguments != null){
 			list.f(this.ltarg).f(toTypeArguments()).f(this.rtarg);
 		}		

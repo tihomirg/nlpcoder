@@ -36,5 +36,6 @@ public class Tokens {
 	public static final String DO = "do";
 	public static final String INSTANCEOF = "instanceof";
 	public static final String RETURN = "return";
+	public static final String DEFAULT = "default";
 
 }
