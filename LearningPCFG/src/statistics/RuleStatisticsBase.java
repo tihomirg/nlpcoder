@@ -11,6 +11,10 @@ public class RuleStatisticsBase {
 	private static Map<Symbol, RuleGroupStatistics> headToRuleGroup = new HashMap<Symbol, RuleGroupStatistics>();
 
 	private RuleGroupStatistics getRuleGroupStatistics(Rule rule){
+		
+		//TODO: Maybe we should group all symbols based on primary head non-terminal, not only based on non-terminal^parent^grandparent.
+		//This way, we will have a better distribution.
+		//This can be delay this until collecting statistics.
 		Symbol head = rule.getHead();
 		
 		if (!headToRuleGroup.containsKey(head)){

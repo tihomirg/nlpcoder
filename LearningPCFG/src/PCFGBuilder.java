@@ -45,7 +45,12 @@ import rules.StringLiteralRule;
 import rules.SuperFieldAccessRule;
 import rules.SuperMethodInvocationRule;
 import rules.SwitchCaseRule;
+import rules.SwitchStatementRule;
+import rules.SynchronizedStatementRule;
 import rules.ThisExpressionRule;
+import rules.ThrowStatementRule;
+import rules.TryStatementRule;
+import rules.TypeDeclarationRule;
 import rules.VariableDeclarationExpressionRule;
 import statistics.RuleStatisticsBase;
 import symbol.Symbol;
@@ -1230,6 +1235,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(SwitchStatement node) {
+		statistics.inc(new SwitchStatementRule(node));
 		return true;
 	}
 
@@ -1246,6 +1252,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(SynchronizedStatement node) {
+		statistics.inc(new SynchronizedStatementRule(node));
 		return true;
 	}
 
@@ -1316,6 +1323,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(ThrowStatement node) {
+		statistics.inc(new ThrowStatementRule(node));
 		return true;
 	}
 
@@ -1332,6 +1340,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(TryStatement node) {
+		statistics.inc(new TryStatementRule(node));
 		return true;
 	}
 
@@ -1365,6 +1374,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * 
 	 */
 	public boolean visit(TypeDeclaration node) {
+		statistics.inc(new TypeDeclarationRule(node));
 		return true;
 	}
 

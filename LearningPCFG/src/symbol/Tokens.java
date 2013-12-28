@@ -37,5 +37,13 @@ public class Tokens {
 	public static final String INSTANCEOF = "instanceof";
 	public static final String RETURN = "return";
 	public static final String DEFAULT = "default";
+	public static final String SYNCHRONIZED = "synchronized";
+	public static final String THROWS = "throws";
+	public static final String TRY = "try";
+	public static final String FINALLY = "finally";
+	public static final String INTERFACE = "interface";
+	public static final String CLASS = "class";
+	public static final String EXTENDS = "extends";
+	public static final String IMPLEMENTS = "implements";
 
 }

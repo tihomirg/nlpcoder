@@ -3,6 +3,8 @@ package rules;
 import util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 
 import symbol.Symbol;
 import symbol.SymbolFactory;
@@ -38,6 +40,14 @@ public abstract class Rule {
 	}
 	
 	protected static List<Symbol> makeNonTerminalList(java.util.List<ASTNode> nodes) {
+		List<Symbol> list = new List<Symbol>();
+		for(ASTNode node: nodes){
+			list.add(SymbolFactory.getNonTerminal(node));
+		}
+		return list;
+	}
+	
+	protected static List<Symbol> makeNonTerminalList(ASTNode[] nodes) {
 		List<Symbol> list = new List<Symbol>();
 		for(ASTNode node: nodes){
 			list.add(SymbolFactory.getNonTerminal(node));
