@@ -51,6 +51,8 @@ import rules.ThisExpressionRule;
 import rules.ThrowStatementRule;
 import rules.TryStatementRule;
 import rules.TypeDeclarationRule;
+import rules.TypeDeclarationStatementRule;
+import rules.TypeLiteralRule;
 import rules.VariableDeclarationExpressionRule;
 import statistics.RuleStatisticsBase;
 import symbol.Symbol;
@@ -1391,6 +1393,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(TypeDeclarationStatement node) {
+		statistics.inc(new TypeDeclarationStatementRule(node));
 		return true;
 	}
 
@@ -1407,6 +1410,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(TypeLiteral node) {
+		statistics.inc(new TypeLiteralRule(node));
 		return true;
 	}
 

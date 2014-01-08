@@ -45,5 +45,6 @@ public class Tokens {
 	public static final String CLASS = "class";
 	public static final String EXTENDS = "extends";
 	public static final String IMPLEMENTS = "implements";
+	public static final String VOID = "void";
 
 }
