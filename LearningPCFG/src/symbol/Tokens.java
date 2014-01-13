@@ -17,7 +17,8 @@ public class Tokens {
 	public static final String R_TARG = ">";
 	public static final String EQ = "==";
 	public static final String ASSIGN = "=";
-	public static final String VARGS = "...";		
+	public static final String VARGS = "...";
+	public static final String AND = "&";
 	
 	//------------------------------ Keywords ----------------------------------//
 	public static final String NEW = "new";

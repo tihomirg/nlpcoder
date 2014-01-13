@@ -53,7 +53,11 @@ import rules.TryStatementRule;
 import rules.TypeDeclarationRule;
 import rules.TypeDeclarationStatementRule;
 import rules.TypeLiteralRule;
+import rules.TypeParameterRule;
 import rules.VariableDeclarationExpressionRule;
+import rules.VariableDeclarationFragmentRule;
+import rules.WhileStatementRules;
+import rules.WildcardTypeRule;
 import statistics.RuleStatisticsBase;
 import symbol.Symbol;
 
@@ -1428,6 +1432,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(TypeParameter node) {
+		statistics.inc(new TypeParameterRule(node));
 		return true;
 	}
 
@@ -1477,6 +1482,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(VariableDeclarationFragment node) {
+		statistics.inc(new VariableDeclarationFragmentRule(node));
 		return true;
 	}
 
@@ -1493,6 +1499,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(WhileStatement node) {
+		statistics.inc(new WhileStatementRules(node));
 		return true;
 	}
 
@@ -1510,6 +1517,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(WildcardType node) {
+		statistics.inc(new WildcardTypeRule(node));
 		return true;
 	}	
 }
