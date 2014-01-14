@@ -18,7 +18,12 @@ public class ArrayInitializerRule extends Rule {
 
 	public ArrayInitializerRule(ArrayInitializer node) {
 		super(node);
-		this.expressions = makeNonTerminalList(node.expressions());
+		
+		java.util.List exprs = node.expressions();
+		if (exprs != null && exprs.size() > 0)
+		this.expressions = makeNonTerminalList(exprs);
+		
+		
 		this.rcurley = terminal(Tokens.R_CURLY_BRACKET, node);
 		this.lcurley = terminal(Tokens.L_CURLY_BRACKET, node);
 		this.comma = terminal(Tokens.COMMA, node);
@@ -31,7 +36,12 @@ public class ArrayInitializerRule extends Rule {
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(this.lcurley).f(toExpressions()).f(this.rcurley);
+		list.f(this.lcurley);
+		
+		if (this.expressions != null)
+		  list.f(toExpressions());
+		
+		list.f(this.rcurley);
 	}
 
 }
