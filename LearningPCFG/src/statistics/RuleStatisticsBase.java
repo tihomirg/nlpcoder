@@ -1,5 +1,6 @@
 package statistics;
 
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,5 +31,11 @@ public class RuleStatisticsBase {
 	}
 	
 	//TODO: printToFile
+	
+	public void print(PrintStream out){
+		for(RuleGroupStatistics stat: this.headToRuleGroup.values()){
+			stat.print(out);
+		}
+	}
 	
 }

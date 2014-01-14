@@ -1,5 +1,6 @@
 package statistics;
 
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,5 +50,21 @@ public class RuleGroupStatistics {
 
 	public void setCount(int count) {
 		this.count = count;
-	}	
+	}
+	
+	public void print(PrintStream out){
+		StringBuffer sb = new StringBuffer();
+		out.println("----------------------------------------------------------------------------------------------------------------------");
+		out.println("Head: "+this.head);
+		out.println();
+		for(RuleStatistics stat: ruleToStatistics.values()){
+			Rule rule = stat.getRule();
+			int count = stat.getCount();
+			
+			out.println(count+"  "+(((double) count)/this.count)+"  "+rule);
+		}
+		out.println();
+		out.println();
+	}
+	
 }

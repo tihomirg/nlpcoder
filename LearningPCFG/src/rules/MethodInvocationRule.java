@@ -30,7 +30,10 @@ public class MethodInvocationRule extends Rule {
 		}
 		
 		this.name = nonTerminal(node.getName());
-		this.arguments = makeNonTerminalList(node.arguments());
+		
+		java.util.List<ASTNode> args = node.arguments();
+		if(args != null && args.size() > 0)
+		  this.arguments = makeNonTerminalList(args);
 		
 		java.util.List<ASTNode> targs = node.typeArguments();
 		
@@ -65,7 +68,12 @@ public class MethodInvocationRule extends Rule {
 			list.f(this.ltarg).f(toTypeArguments()).f(this.rtarg);
 		}		
 		
-		list.f(this.name).f(this.lpar).f(toArguments()).f(this.rpar);	
+		list.f(this.name).f(this.lpar);
+		
+		if(this.arguments != null){
+		  list.f(toArguments());
+		}
+		list.f(this.rpar);	
 	}
 
 }

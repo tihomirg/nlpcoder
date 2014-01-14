@@ -56,6 +56,7 @@ import rules.TypeLiteralRule;
 import rules.TypeParameterRule;
 import rules.VariableDeclarationExpressionRule;
 import rules.VariableDeclarationFragmentRule;
+import rules.VariableDeclarationStatementRule;
 import rules.WhileStatementRules;
 import rules.WildcardTypeRule;
 import statistics.RuleStatisticsBase;
@@ -827,7 +828,8 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(MethodDeclaration node){
-		node.getBody().accept(this);
+		ASTNode body = node.getBody();
+		if(body != null) body.accept(this);
 		
 		return false;
 	}
@@ -1466,6 +1468,7 @@ public class PCFGBuilder extends ASTVisitor {
 	 * be skipped
 	 */
 	public boolean visit(VariableDeclarationStatement node) {
+		statistics.inc(new VariableDeclarationStatementRule(node));
 		return true;
 	}
 

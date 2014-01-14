@@ -10,6 +10,8 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import symbol.StateSplitterType;
+
 
 public class NewMain {
 
@@ -25,7 +27,14 @@ public class NewMain {
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setStatementsRecovery(true);
  
-		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);		
+		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+		
+		AbstractPCFGBuilder builder = new AbstractPCFGBuilder();
+		StateSplitterType.setType(StateSplitterType.WITH_GRANDAD);
+		
+		cu.accept(builder);
+		
+		builder.getStatistics().print(System.out);
 	}
 
 	private static char[] readFile(String fileName){

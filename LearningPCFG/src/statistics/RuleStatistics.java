@@ -6,7 +6,6 @@ public class RuleStatistics {
 	
 	private Rule rule;
 	private int count;
-	private int totalCount;
 	
 	public RuleStatistics(Rule rule){
 		this.rule = rule;

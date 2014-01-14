@@ -1,6 +1,8 @@
 package symbol;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import rules.Rule;
+
 public abstract class Symbol {
 
 	protected abstract ASTNode getParent();
@@ -23,12 +25,12 @@ public abstract class Symbol {
 	
 	private String toStringWithParent(){
 		ASTNode parent = getParent();
-		return toStringNaive()+(parent != null ? "^"+parent.getClass().getSimpleName(): ""); 
+		return toStringNaive()+(parent != null ? "^"+parent.getClass().getSimpleName(): "^NULL"); 
 	}
 	
 	private String toStringWithGrandad(){
 		ASTNode grandad = getGrandad();
-		return toStringWithParent()+(grandad != null ? "^"+grandad.getClass().getSimpleName(): ""); 
+		return toStringWithParent()+(grandad != null ? "^"+grandad.getClass().getSimpleName(): "^NULL"); 
 	}
 
 	protected int naiveHashCode(){
@@ -45,5 +47,20 @@ public abstract class Symbol {
 		ASTNode grandad = getGrandad();
 		if(grandad == null) return withParentHashCode();
 		else return (withParentHashCode()+grandad.getClass().getSimpleName().hashCode())^95493943;	
-	}	
+	}
+	
+	public int hashCode(){
+		switch(StateSplitterType.getType()){
+		case StateSplitterType.NAIVE : return naiveHashCode();
+		case StateSplitterType.WITH_PARENT : return withParentHashCode();
+		case StateSplitterType.WITH_GRANDAD: return withGrandadHashCode();
+		default: return naiveHashCode();
+		}
+	}
+	
+	public boolean equals(Object obj){
+		if (obj == null) return false;
+		if (obj instanceof Symbol) return this.hashCode() == obj.hashCode();
+		else return false;
+	}
 }
