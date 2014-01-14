@@ -18,7 +18,7 @@ import symbol.StateSplitterType;
 
 public class N_PCFGFolderScanner {
 
-	private static int NUM_OF_FILES = 3000;
+	private static int NUM_OF_FILES = 10000;
 	private static int NUM_OF_INTERVALS = 10;
 	
 	private static int counter;
@@ -26,7 +26,7 @@ public class N_PCFGFolderScanner {
 	
 	public static void main(String[] args){
 		AbstractPCFGBuilder builder = new AbstractPCFGBuilder();
-		StateSplitterType.setType(StateSplitterType.NAIVE);	
+		StateSplitterType.setType(StateSplitterType.WITH_PARENT);	
 		
 		File folder = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 		
