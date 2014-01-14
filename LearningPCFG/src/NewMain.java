@@ -30,7 +30,7 @@ public class NewMain {
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		
 		AbstractPCFGBuilder builder = new AbstractPCFGBuilder();
-		StateSplitterType.setType(StateSplitterType.WITH_GRANDAD);
+		StateSplitterType.setType(StateSplitterType.NAIVE);//.WITH_GRANDAD);
 		
 		cu.accept(builder);
 		

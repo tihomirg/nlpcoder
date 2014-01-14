@@ -74,6 +74,7 @@ public class CityImpl implements City {
 	public void setName(final String name) {
 		//Comment under
 		this.name = name;
+		System.out.print("A");
 	}
 
 	/**
