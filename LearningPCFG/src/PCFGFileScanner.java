@@ -13,11 +13,21 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import symbol.StateSplitterType;
 
 
-public class NewMain {
+public class PCFGFileScanner {
 
 	public static void main(String[] args){
+		String fileName = "CityImpl.java";
+		AbstractPCFGBuilder builder = new AbstractPCFGBuilder();
+		StateSplitterType.setType(StateSplitterType.NAIVE);
+		
+		collect(fileName, builder);
+		
+		builder.getStatistics().print(System.out);
+	}
+
+	public static void collect(String fileName, AbstractPCFGBuilder builder) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
-		char[] fileContent = readFile("CityImpl.java");
+		char[] fileContent = readFile(fileName);
 		
 		parser.setSource(fileContent);
 		Map options = JavaCore.getOptions();
@@ -25,23 +35,11 @@ public class NewMain {
 		parser.setCompilerOptions(options);
 		
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		parser.setStatementsRecovery(true);
-		
-		parser.setResolveBindings(true);
-		parser.setBindingsRecovery(true);
-
-        parser.setEnvironment( // apply classpath
-                new String[] { "C:\\Program Files\\Java\\jdk1.6.0_22\\jre\\lib" }, //
-                null, null, true);		
+		parser.setStatementsRecovery(true);	
 		
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		
-		AbstractPCFGBuilder builder = new AbstractPCFGBuilder();
-		StateSplitterType.setType(StateSplitterType.NAIVE);//.WITH_GRANDAD);
-		
 		cu.accept(builder);
-		
-		builder.getStatistics().print(System.out);
 	}
 
 	private static char[] readFile(String fileName){

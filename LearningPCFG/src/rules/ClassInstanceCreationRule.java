@@ -33,7 +33,11 @@ public class ClassInstanceCreationRule extends Rule {
 		}
 		
 		this.type = nonTerminal(node.getType());
-		this.arguments = makeNonTerminalList(node.arguments());
+		
+		java.util.List<ASTNode> args = node.arguments();
+		if(args != null && args.size() > 0)
+		  this.arguments = makeNonTerminalList(args);
+		
 		
 		java.util.List<ASTNode> targs = node.typeArguments();
 		if (targs != null && targs.size() > 0){
@@ -76,7 +80,12 @@ public class ClassInstanceCreationRule extends Rule {
 			list.f(this.ltargTerminal).f(toTypeArguments()).f(this.rtargTerminal);
 		}
 		
-		list.f(this.lparTerminal).f(toArguments()).f(this.rparTerminal);
+		list.f(this.lparTerminal);
+		
+		if(this.arguments != null){
+		  list.f(toArguments());
+		}
+		list.f(this.rparTerminal);	
 		
 		if (this.annonimousClass != null){
 			list.f(this.annonimousClass);
