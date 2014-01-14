@@ -74,7 +74,11 @@ public class CityImpl implements City {
 	public void setName(final String name) {
 		//Comment under
 		this.name = name;
-		System.out.print("A");
+		//System.out.print("A"+this.name+"B"+"\n");
+		
+		for(int i= 0; i <10;i++){
+			System.out.print("A");
+		}
 	}
 
 	/**

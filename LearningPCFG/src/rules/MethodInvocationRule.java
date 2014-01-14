@@ -1,6 +1,7 @@
 package rules;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
 import symbol.Symbol;
@@ -19,6 +20,7 @@ public class MethodInvocationRule extends Rule {
 	private Symbol rtarg;
 	private Symbol ltarg;
 	private Symbol dot;
+	//private IMethodBinding binding;
 
 	public MethodInvocationRule(MethodInvocation node) {
 		super(node);
@@ -48,6 +50,7 @@ public class MethodInvocationRule extends Rule {
 		
 		this.comma = terminal(Tokens.COMMA, node);
 		// TODO Auto-generated constructor stub
+		//this.binding = node.resolveMethodBinding();
 	}
 
 	private List<Symbol> toTypeArguments(){
@@ -75,5 +78,10 @@ public class MethodInvocationRule extends Rule {
 		}
 		list.f(this.rpar);	
 	}
+	
+//	public String toString(){
+//		String s = super.toString();
+//		return s +"          "+(this.binding != null? this.binding.getName(): "No biniding");
+//	}
 
 }

@@ -14,7 +14,8 @@ public class StringLiteralRule extends Rule {
 	public StringLiteralRule(StringLiteral node) {
 		super(node);
 		
-		this.value = terminal(node.getLiteralValue(), node);
+		//this.value = terminal(node.getLiteralValue(), node);
+		this.value = terminal(node.getEscapedValue(), node);
 		// TODO Auto-generated constructor stub
 	}
 

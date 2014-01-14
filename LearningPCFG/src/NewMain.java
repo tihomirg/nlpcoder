@@ -26,7 +26,14 @@ public class NewMain {
 		
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setStatementsRecovery(true);
- 
+		
+		parser.setResolveBindings(true);
+		parser.setBindingsRecovery(true);
+
+        parser.setEnvironment( // apply classpath
+                new String[] { "C:\\Program Files\\Java\\jdk1.6.0_22\\jre\\lib" }, //
+                null, null, true);		
+		
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		
 		AbstractPCFGBuilder builder = new AbstractPCFGBuilder();

@@ -13,6 +13,8 @@ public class VariableDeclarationFragmentRule extends Rule {
 	private int dimensions;
 	private Symbol lsquareTerminal;
 	private Symbol rsquareTerminal;
+	private Symbol initializer;
+	private Symbol assignTerminal;
 
 	public VariableDeclarationFragmentRule(VariableDeclarationFragment node) {
 		super(node);
@@ -24,6 +26,14 @@ public class VariableDeclarationFragmentRule extends Rule {
 			this.lsquareTerminal = terminal(Tokens.L_SQUARE_BRACKET, node);
 			this.rsquareTerminal = terminal(Tokens.R_CURLY_BRACKET, node);
 		}
+		
+		ASTNode initializer = node.getInitializer();
+		
+		if(initializer != null){
+			this.initializer = nonTerminal(initializer);
+			this.assignTerminal = terminal(Tokens.ASSIGN, node);
+		}
+		
 		// TODO Auto-generated constructor stub
 	}
 
@@ -39,6 +49,11 @@ public class VariableDeclarationFragmentRule extends Rule {
 		
 		if (this.dimensions > 0){
 			list.f(toDimensions());
+		}
+		
+		if(this.initializer != null){
+			list.f(this.assignTerminal);
+			list.f(this.initializer);
 		}
 	}
 
