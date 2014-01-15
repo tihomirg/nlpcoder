@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import symbol.StateSplitterType;
@@ -25,7 +26,7 @@ public class PCFGFileScanner {
 		builder.getStatistics().print(System.out);
 	}
 
-	public static void collect(String fileName, AbstractPCFGBuilder builder) {
+	public static void collect(String fileName, ASTVisitor builder) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		char[] fileContent = readFile(fileName);
 		

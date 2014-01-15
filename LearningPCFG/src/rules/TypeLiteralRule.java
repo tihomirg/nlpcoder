@@ -12,6 +12,7 @@ public class TypeLiteralRule extends Rule {
 	private Symbol type;
 	private Symbol voidTerminal;
 	private Symbol classTermainal;
+	private Symbol dotTerminal;
 
 	public TypeLiteralRule(TypeLiteral node) {
 		super(node);
@@ -21,7 +22,8 @@ public class TypeLiteralRule extends Rule {
 		  this.type = nonTerminal(type);
 		else
 		  this.voidTerminal = terminal(Tokens.VOID, node);
-		
+
+		this.dotTerminal = terminal(Tokens.DOT, node);
 		this.classTermainal = terminal(Tokens.CLASS, node);
 	}
 
@@ -32,7 +34,7 @@ public class TypeLiteralRule extends Rule {
 			list.f(this.type);
 		} else list.f(this.voidTerminal);
 
-		list.f(this.classTermainal);
+		list.f(this.dotTerminal).f(this.classTermainal);
 	}
 
 }
