@@ -148,7 +148,7 @@ import statistics.RuleStatisticsBase;
 
 public class PCFGBuilder extends IBuilder {
 	
-	private RuleStatisticsBase statistics = new RuleStatisticsBase();
+	protected RuleStatisticsBase statistics = new RuleStatisticsBase();
 
 	@Override
 	public void print(PrintStream out) {

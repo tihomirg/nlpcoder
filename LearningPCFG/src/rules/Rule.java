@@ -10,8 +10,10 @@ import symbol.Symbol;
 import symbol.SymbolFactory;
 
 public abstract class Rule {
-	private Symbol head;
+	protected Symbol head;
 
+	protected Rule(){}
+	
 	public Rule(ASTNode node){
 		assert node != null;
 		this.head = SymbolFactory.getNonTerminal(node);

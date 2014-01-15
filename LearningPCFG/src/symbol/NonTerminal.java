@@ -12,10 +12,7 @@ public class NonTerminal extends Symbol {
 	}	
 
 	protected String toStringNaive(){
-		
-		Class c = node.getClass();
-		
-		return c.getSimpleName();
+		return node.getClass().getSimpleName();
 	}
 
 	@Override

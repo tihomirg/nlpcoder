@@ -1,0 +1,29 @@
+1) Split a single scanner into 3 different:
+  - for expressions
+  - for types
+  - for the rest (code structure)
+ 
+2) Encode as much as possible into expression trees:
+   - method invocations
+   - constructor invocations
+   - array constructions
+   - field access
+   - etc.
+   
+3) Build scopes and user definition collector to annotate the rules with the local variables, fields, and so on.
+Potentially rule them out.
+
+4) Remove state splitting in tokens.
+  
+5) Smooth and filter the irrelevant rules (with low frequency).
+6) Build a scanner that measures a method frequency in number of projects.
+7) Make declaration loader:
+  - define declaration representation
+  - types
+  
+8) Make a structure that indexes (connect) those declarations with words.
+9) Make the top algorithm:
+  - Takes the terminals and words of the declarations to find the appropriate ones
+  - Takes the position of the word in the source and the target (i.e., partial expression)
+  - Variation of EM algorithm
+10) Scan jar files, and extract 

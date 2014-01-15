@@ -17,7 +17,7 @@ public class N_PCFGScanner extends N_Scanner {
 		scan(builder, input, output, 20000);		
 	}
 	
-	private static File setTypeAndGetOutputFile(int type){
+	protected static File setTypeAndGetOutputFile(int type){
 		switch(type){
 		  case StateSplitterType.NAIVE : 
 			  StateSplitterType.setType(StateSplitterType.NAIVE);

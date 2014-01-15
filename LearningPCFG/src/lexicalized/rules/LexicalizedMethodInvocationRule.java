@@ -1,14 +1,16 @@
-package rules;
+package lexicalized.rules;
+
+import lexicalized.info.MethodInfo;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SimpleName;
 
 import symbol.Symbol;
 import symbol.Tokens;
 import util.List;
 
-public class MethodInvocationRule extends Rule {
+public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 
 	private Symbol expression;
 	private Symbol name;
@@ -22,7 +24,7 @@ public class MethodInvocationRule extends Rule {
 	private Symbol dot;
 	//private IMethodBinding binding;
 
-	public MethodInvocationRule(MethodInvocation node) {
+	public LexicalizedMethodInvocationRule(MethodInvocation node) {
 		super(node);
 		
 		ASTNode exp = node.getExpression();
@@ -30,12 +32,13 @@ public class MethodInvocationRule extends Rule {
 			this.expression = nonTerminal(exp);
 			this.dot = terminal(Tokens.DOT, node);
 		}
-		
-		this.name = nonTerminal(node.getName());
-		
+				
 		java.util.List<ASTNode> args = node.arguments();
 		if(args != null && args.size() > 0)
 		  this.arguments = makeNonTerminalList(args);
+		
+		SimpleName name = node.getName();
+		this.name = lexicalizedNonTerminal(name, new MethodInfo(name.getIdentifier(), args.size()));		
 		
 		java.util.List<ASTNode> targs = node.typeArguments();
 		
@@ -78,4 +81,5 @@ public class MethodInvocationRule extends Rule {
 		}
 		list.f(this.rpar);	
 	}
+
 }
