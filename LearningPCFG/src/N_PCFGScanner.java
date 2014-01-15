@@ -14,7 +14,7 @@ public class N_PCFGScanner extends N_Scanner {
 		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 		File output = setTypeAndGetOutputFile(StateSplitterType.NAIVE);
 		
-		scan(builder, input, output);		
+		scan(builder, input, output, 20000);		
 	}
 	
 	private static File setTypeAndGetOutputFile(int type){

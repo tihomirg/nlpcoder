@@ -27,6 +27,8 @@ public class N_Scanner {
 		N_Scanner.fileNum = fileNum;
 		N_Scanner.intervalNum = intervalNum;
 		
+		long startTime = System.currentTimeMillis();
+		
 		try{
 		  listFilesForFolder(folder, builder);
 		} catch(Throwable ex){
@@ -48,7 +50,7 @@ public class N_Scanner {
 			output.close();
 		}
 		
-		System.out.println("Scanned "+counter+" files.");
+		System.out.println("Scanned "+counter+" files in "+(System.currentTimeMillis() - startTime)+"ms");
 	}
 
 	public static void listFilesForFolder(final File folder, ASTVisitor builder)
@@ -65,7 +67,7 @@ public class N_Scanner {
 			            	   throw new Exception("TERMINATED.");
 			               } else {
 			            	   if (counter >= intervalCounter *(fileNum / intervalNum)){
-			            		   System.out.println("Processed "+counter+" files...");
+			            		   System.out.println("Processed "+counter+" files..."+intervalCounter *(100 / intervalNum)+"%");
 			            		   
 			            		   System.gc();
 			            		   
