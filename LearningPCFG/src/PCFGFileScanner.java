@@ -11,6 +11,8 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import builders.PCFGBuilder;
+
 import symbol.StateSplitterType;
 
 
@@ -18,15 +20,15 @@ public class PCFGFileScanner {
 
 	public static void main(String[] args){
 		String fileName = "CityImpl.java";
-		AbstractPCFGBuilder builder = new AbstractPCFGBuilder();
+		PCFGBuilder builder = new PCFGBuilder();
 		StateSplitterType.setType(StateSplitterType.NAIVE);
 		
-		collect(fileName, builder);
+		scan(fileName, builder);
 		
 		builder.getStatistics().print(System.out);
 	}
 
-	public static void collect(String fileName, ASTVisitor builder) {
+	public static void scan(String fileName, ASTVisitor builder) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		char[] fileContent = readFile(fileName);
 		
