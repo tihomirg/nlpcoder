@@ -26,4 +26,16 @@ Potentially rule them out.
   - Takes the terminals and words of the declarations to find the appropriate ones
   - Takes the position of the word in the source and the target (i.e., partial expression)
   - Variation of EM algorithm
-10) Scan jar files, and extract 
+10) Scan jar files.
+  - grepcode.com
+  - reflection
+  - method usage statistics from projects and in total (compare those two)
+  - use rules, i.e. all simple names that were collected to rule out a bunch of methods.
+  - use scopes to find user defind (local) declarations.
+  - insert those method informations back in rules (types and so on)
+  
+11) Scan source code and coments from greapcode.com
+  - here we can find even 
+  - in Java api doc, it seems that a first sentence is the most relevant, and reflects what the method do.
+  
+ 
