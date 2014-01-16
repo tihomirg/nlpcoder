@@ -1,15 +1,16 @@
 import java.io.File;
 
+import config.Config;
+
 import builders.PCFGBuilder;
 
-import symbol.StateSplitterType;
 
 
 public class PCFGScanner {
 
 	public static void main(String[] args){
 		PCFGBuilder builder = new PCFGBuilder();
-		StateSplitterType.setType(StateSplitterType.NAIVE);	
+		Config.setType(Config.NAIVE);	
 		
 		File folder = new File("C:\\Users\\gvero\\java_projects\\java_projects\\chombo");
 		

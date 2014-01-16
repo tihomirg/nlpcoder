@@ -4,15 +4,13 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.TypeLiteral;
 
 import symbol.Symbol;
-import symbol.Tokens;
+import symbol.Terminal;
+import symbol.Terminals;
 import util.List;
 
 public class TypeLiteralRule extends Rule {
 
 	private Symbol type;
-	private Symbol voidTerminal;
-	private Symbol classTermainal;
-	private Symbol dotTerminal;
 
 	public TypeLiteralRule(TypeLiteral node) {
 		super(node);
@@ -20,11 +18,6 @@ public class TypeLiteralRule extends Rule {
 		ASTNode type = node.getType();
 		if(type != null)
 		  this.type = nonTerminal(type);
-		else
-		  this.voidTerminal = terminal(Tokens.VOID, node);
-
-		this.dotTerminal = terminal(Tokens.DOT, node);
-		this.classTermainal = terminal(Tokens.CLASS, node);
 	}
 
 	@Override
@@ -32,9 +25,9 @@ public class TypeLiteralRule extends Rule {
 		// TODO Auto-generated method stub
 		if(this.type != null){
 			list.f(this.type);
-		} else list.f(this.voidTerminal);
+		} else list.f(Terminals.VOID);
 
-		list.f(this.dotTerminal).f(this.classTermainal);
+		list.f(Terminals.DOT).f(Terminals.CLASS);
 	}
 
 }

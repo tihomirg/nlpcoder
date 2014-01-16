@@ -4,7 +4,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import symbol.Symbol;
-import symbol.Tokens;
+import symbol.Terminals;
 import util.List;
 
 public class StringLiteralRule extends Rule {
@@ -15,7 +15,7 @@ public class StringLiteralRule extends Rule {
 		super(node);
 		
 		//this.value = terminal(node.getLiteralValue(), node);
-		this.value = terminal(node.getEscapedValue(), node);
+		this.value = terminal(node.getEscapedValue());
 		// TODO Auto-generated constructor stub
 	}
 

@@ -5,25 +5,22 @@ import util.List;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 
 import symbol.Symbol;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class VariableDeclarationExpressionRule extends Rule {
 
 	private Symbol type;
 	private List<Symbol> fragments;
-	private Symbol commaTerminal;
 	
 	public VariableDeclarationExpressionRule(VariableDeclarationExpression node) {
 		super(node);
 		
 		this.type = nonTerminal(node.getType());
 		this.fragments = makeNonTerminalList(node.fragments());
-		this.commaTerminal = terminal(Tokens.COMMA, node);
-		// TODO Auto-generated constructor stub
 	}
 
 	private List<Symbol> toFragments(){
-		return toInfixList(this.fragments, this.commaTerminal);
+		return toInfixList(this.fragments, Terminals.COMMA);
 	}
 	
 	@Override

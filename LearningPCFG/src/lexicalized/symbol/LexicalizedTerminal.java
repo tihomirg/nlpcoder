@@ -7,7 +7,7 @@ import symbol.Terminal;
 public class LexicalizedTerminal extends Terminal{
 
 	public LexicalizedTerminal(String token, ASTNode parent) {
-		super(token, parent);
+		super(token);
 		// TODO Auto-generated constructor stub
 	}
 

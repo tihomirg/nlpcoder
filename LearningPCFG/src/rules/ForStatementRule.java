@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.dom.ForStatement;
 
 import symbol.Symbol;
 import symbol.SymbolFactory;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class ForStatementRule extends Rule {
 
@@ -15,12 +15,6 @@ public class ForStatementRule extends Rule {
 	private Symbol expression;
 	private List<Symbol> updaters;
 	private Symbol body;
-
-	private Symbol forTerminal;
-	private Symbol lParTerminal;
-	private Symbol rParTerminal;
-	private Symbol commaTerminal;
-	private Symbol semicolonTerminal;
 	
 	public ForStatementRule(ForStatement node) {
 		super(node);
@@ -38,39 +32,32 @@ public class ForStatementRule extends Rule {
 		  this.updaters = makeNonTerminalList(updaters);
 		
 		this.body = nonTerminal(node.getBody());
-
-		this.forTerminal = terminal(Tokens.FOR, node);
-	    this.lParTerminal = terminal(Tokens.L_PAR, node);
-	    this.rParTerminal = terminal(Tokens.R_PAR, node);
-	    this.commaTerminal = terminal(Tokens.COMMA, node);
-	    this.semicolonTerminal = terminal(Tokens.SEMICOLON, node);
-		// TODO Auto-generated constructor stub
 	}
 	
 	private List<Symbol> toUpdaters() {
-		return toInfixList(this.updaters, this.commaTerminal);
+		return toInfixList(this.updaters, Terminals.COMMA);
 	}
 
 	private List<Symbol> toInitializers() {
-		return toInfixList(this.initializers, this.commaTerminal);
+		return toInfixList(this.initializers, Terminals.COMMA);
 	}
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(this.forTerminal).f(this.lParTerminal);
+		list.f(Terminals.FOR).f(Terminals.L_PAR);
 		
 		if(this.initializers != null)
 		  list.f(toInitializers());
 		
-		list.f(this.semicolonTerminal);
+		list.f(Terminals.SEMICOLON);
 		
 		if(this.expression != null) list.f(this.expression);
 		
-		list.f(this.semicolonTerminal);
+		list.f(Terminals.SEMICOLON);
 		
 		if(this.updaters != null) list.f(toUpdaters());
 		
-		list.f(this.rParTerminal).f(this.body);
+		list.f(Terminals.R_PAR).f(this.body);
 	}
 
 }

@@ -12,7 +12,7 @@ public class NumberLiteralRule extends Rule{
 	
 	public NumberLiteralRule(NumberLiteral node) {
 		super(node);
-		this.number = terminal(node.getToken(), node);
+		this.number = terminal(node.getToken());
 	}
 
 	@Override

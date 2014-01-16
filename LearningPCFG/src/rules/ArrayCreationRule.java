@@ -7,16 +7,13 @@ import org.eclipse.jdt.core.dom.ArrayCreation;
 
 import symbol.Symbol;
 import symbol.SymbolFactory;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class ArrayCreationRule extends Rule {
 
 	private List<Symbol> dimensions;
 	private Symbol type;
 	
-	private Symbol newTerminal;
-	private Symbol rsquareTerminal;
-	private Symbol lsquareTerminal;
 	private int dimensionLength;
 	private Symbol initializer;
 
@@ -30,26 +27,21 @@ public class ArrayCreationRule extends Rule {
 		if (initializer != null){
 			this.initializer = nonTerminal(initializer);
 		}
-		
-		this.newTerminal = terminal(Tokens.NEW, node);
-		this.lsquareTerminal = terminal(Tokens.L_SQUARE_BRACKET, node);
-		this.rsquareTerminal = terminal(Tokens.R_SQUARE_BRACKET, node);
-		// TODO Auto-generated constructor stub
 	}
 
 
 	private List<Symbol> toExpressionIndexes(){
-		return toIndexList(this.dimensions, this.lsquareTerminal, this.rsquareTerminal);
+		return toIndexList(this.dimensions, Terminals.L_SQUARE_BRACKET, Terminals.R_SQUARE_BRACKET);
 	}
 	
 	
 	private List<Symbol> toEmptyIndexes(){
-		return toIndexList(this.dimensionLength - this.dimensions.size(), this.lsquareTerminal, this.rsquareTerminal);
+		return toIndexList(this.dimensionLength - this.dimensions.size(), Terminals.L_SQUARE_BRACKET, Terminals.R_SQUARE_BRACKET);
 	}		
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(this.newTerminal).f(this.type).f(toExpressionIndexes()).f(toEmptyIndexes());
+		list.f(Terminals.NEW).f(this.type).f(toExpressionIndexes()).f(toEmptyIndexes());
 		
 		if(this.initializer != null){
 			list.f(this.initializer);

@@ -18,7 +18,7 @@ public class AssignmentRule extends Rule {
 		super(node);
 		this.left = nonTerminal(node.getLeftHandSide());
 		this.right= nonTerminal(node.getRightHandSide());
-		this.operator = terminal(node.getOperator().toString(), node);
+		this.operator = terminal(node.getOperator().toString());
 	}
 
 	@Override

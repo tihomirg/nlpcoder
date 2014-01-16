@@ -2,52 +2,52 @@ package lexicalized.rules;
 
 import lexicalized.info.LexicalizedInfo;
 import lexicalized.info.MethodInfo;
-import lexicalized.symbol.LexicalizedSymbolFactory;
-
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
 
+import config.Config;
+
 import rules.Rule;
+import scopes.Scopes;
 import symbol.Symbol;
-import symbol.SymbolFactory;
 import util.List;
 
 public abstract class LexicalizedRule extends Rule {
 
-	public LexicalizedRule(ASTNode node) {
+	protected Scopes scopes;
+	
+	public LexicalizedRule(ASTNode node, Scopes scopes) {
 		super(node);
+		this.scopes = scopes;
 	}
 	
 	public LexicalizedRule(ASTNode node, LexicalizedInfo info) {
 		assert node != null && info != null;
-		this.head = LexicalizedSymbolFactory.getLexicalizedNonTerminal(node, info);
+		this.head = Config.getFactory().getLexicalizedNonTerminal(node, info);
 	}
 	
-    protected static Symbol lexicalizedNonTerminal(ASTNode node, LexicalizedInfo info){
-    	return LexicalizedSymbolFactory.getLexicalizedNonTerminal(node, info);
-    }	
+    protected Symbol lexicalizedNonTerminal(ASTNode node, LexicalizedInfo info){
+    	if (this.scopes != null){
+    		if(this.scopes.contains(info.getName())){
+    			info.setUserDef(true);
+    		}
+    	}
+    	return Config.getFactory().getLexicalizedNonTerminal(node, info);
+    }
     
-	protected static List<Symbol> makeNonTerminalList(java.util.List<ASTNode> nodes) {
-		List<Symbol> list = new List<Symbol>();
-		for(ASTNode node: nodes){
-			if (node instanceof MethodInvocation){
-				MethodInvocation method = (MethodInvocation) node;
-				SimpleName name = method.getName();
-				list.add(LexicalizedSymbolFactory.getLexicalizedNonTerminal(node, new MethodInfo(name.getIdentifier(), method.arguments().size())));
-			} else list.add(SymbolFactory.getNonTerminal(node));
-		}
-		return list;
+	protected List<Symbol> makeNonTerminalList(java.util.List<ASTNode> nodes) {
+		return makeNonTerminalList(nodes.toArray(new ASTNode[0]));
 	}
 	
-	protected static List<Symbol> makeNonTerminalList(ASTNode[] nodes) {
+	protected List<Symbol> makeNonTerminalList(ASTNode[] nodes) {
 		List<Symbol> list = new List<Symbol>();
 		for(ASTNode node: nodes){
 			if (node instanceof MethodInvocation){
 				MethodInvocation method = (MethodInvocation) node;
 				SimpleName name = method.getName();
-				list.add(LexicalizedSymbolFactory.getLexicalizedNonTerminal(node, new MethodInfo(name.getIdentifier(), method.arguments().size())));
-			} else list.add(SymbolFactory.getNonTerminal(node));
+				list.add(lexicalizedNonTerminal(node, new MethodInfo(name.getIdentifier(), method.arguments().size())));
+			} else list.add(Config.getFactory().getNonTerminal(node));
 		}
 		return list;
 	}    

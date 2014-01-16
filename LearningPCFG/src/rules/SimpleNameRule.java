@@ -12,7 +12,7 @@ public class SimpleNameRule extends Rule {
 
 	public SimpleNameRule(SimpleName node) {
 		super(node);
-		this.name = terminal(node.getIdentifier(), node);
+		this.name = terminal(node.getIdentifier());
 		// TODO Auto-generated constructor stub
 	}
 

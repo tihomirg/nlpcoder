@@ -5,7 +5,7 @@ import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
 import symbol.Symbol;
-import symbol.Tokens;
+import symbol.Terminals;
 import util.List;
 
 public class MethodInvocationRule extends Rule {
@@ -14,13 +14,6 @@ public class MethodInvocationRule extends Rule {
 	private Symbol name;
 	private List<Symbol> arguments;
 	private List<Symbol> typeArguments;
-	private Symbol lpar;
-	private Symbol rpar;
-	private Symbol comma;
-	private Symbol rtarg;
-	private Symbol ltarg;
-	private Symbol dot;
-	//private IMethodBinding binding;
 
 	public MethodInvocationRule(MethodInvocation node) {
 		super(node);
@@ -28,7 +21,6 @@ public class MethodInvocationRule extends Rule {
 		ASTNode exp = node.getExpression();
 		if (exp != null){
 			this.expression = nonTerminal(exp);
-			this.dot = terminal(Tokens.DOT, node);
 		}
 		
 		this.name = nonTerminal(node.getName());
@@ -41,41 +33,32 @@ public class MethodInvocationRule extends Rule {
 		
 		if (targs != null && targs.size() > 0){
 			this.typeArguments = makeNonTerminalList(targs);
-			this.ltarg = terminal(Tokens.L_TARG, node);
-			this.rtarg = terminal(Tokens.R_TARG, node);
 		}
-		
-		this.lpar = terminal(Tokens.L_PAR, node);
-		this.rpar = terminal(Tokens.R_PAR, node);
-		
-		this.comma = terminal(Tokens.COMMA, node);
-		// TODO Auto-generated constructor stub
-		//this.binding = node.resolveMethodBinding();
 	}
 
 	private List<Symbol> toTypeArguments(){
-		return toInfixList(this.typeArguments, this.comma);
+		return toInfixList(this.typeArguments, Terminals.COLON);
 	}	
 	
 	private List<Symbol> toArguments(){
-		return toInfixList(this.arguments, this.comma);
+		return toInfixList(this.arguments, Terminals.COLON);
 	}	
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
 		if (this.expression != null){
-			list.f(this.expression).f(this.dot);
+			list.f(this.expression).f(Terminals.DOT);
 		}
 
 		if(this.typeArguments != null){
-			list.f(this.ltarg).f(toTypeArguments()).f(this.rtarg);
+			list.f(Terminals.L_TARG).f(toTypeArguments()).f(Terminals.R_TARG);
 		}		
 		
-		list.f(this.name).f(this.lpar);
+		list.f(this.name).f(Terminals.L_PAR);
 		
 		if(this.arguments != null){
 		  list.f(toArguments());
 		}
-		list.f(this.rpar);	
+		list.f(Terminals.R_PAR);	
 	}
 }

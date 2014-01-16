@@ -1,9 +1,10 @@
 import java.io.File;
 
+import config.Config;
+
 import builders.IBuilder;
 import builders.PCFGBuilder;
 
-import symbol.StateSplitterType;
 
 
 public class N_PCFGScanner extends N_Scanner {
@@ -12,24 +13,24 @@ public class N_PCFGScanner extends N_Scanner {
 		IBuilder builder = new PCFGBuilder();
 			
 		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
-		File output = setTypeAndGetOutputFile(StateSplitterType.NAIVE);
+		File output = setTypeAndGetOutputFile(Config.NAIVE);
 		
-		scan(builder, input, output, 20000);		
+		scan(builder, input, output, 100);		
 	}
 	
 	protected static File setTypeAndGetOutputFile(int type){
 		switch(type){
-		  case StateSplitterType.NAIVE : 
-			  StateSplitterType.setType(StateSplitterType.NAIVE);
+		  case Config.NAIVE : 
+			  Config.setType(Config.NAIVE);
 			  return new File("naive.txt");
-		  case StateSplitterType.WITH_PARENT: 
-			  StateSplitterType.setType(StateSplitterType.WITH_PARENT);	
+		  case Config.WITH_PARENT: 
+			  Config.setType(Config.WITH_PARENT);	
 			  return new File("with_parent.txt");
-		  case StateSplitterType.WITH_GRANDAD: 
-			  StateSplitterType.setType(StateSplitterType.WITH_GRANDAD);	
+		  case Config.WITH_GRANDAD: 
+			  Config.setType(Config.WITH_GRANDAD);	
 			  return new File("with_parent.txt");
 		  default: 
-			  StateSplitterType.setType(StateSplitterType.NAIVE);	
+			  Config.setType(Config.NAIVE);	
 			  return new File("naive.txt");
 		}
 	}

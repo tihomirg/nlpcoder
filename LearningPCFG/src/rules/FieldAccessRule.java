@@ -6,22 +6,20 @@ import org.eclipse.jdt.core.dom.FieldAccess;
 
 import symbol.Symbol;
 import symbol.SymbolFactory;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class FieldAccessRule extends Rule{
 	private Symbol exp;
-	private Symbol dotTerminal;	
 	private Symbol name;
 	
 	public FieldAccessRule(FieldAccess node){
 		super(node);
 		this.exp = nonTerminal(node.getExpression());
-		this.dotTerminal = terminal(Tokens.DOT, node);
 		this.name = nonTerminal(node.getName());
 	}
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(this.exp).f(this.dotTerminal).f(this.name);
+		list.f(this.exp).f(Terminals.DO).f(this.name);
 	}
 }

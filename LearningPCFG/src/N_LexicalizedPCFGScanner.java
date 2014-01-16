@@ -1,8 +1,9 @@
 import java.io.File;
 
+import config.Config;
+
 import lexicalized.builders.LexilizedPCFGBuilder;
 
-import symbol.StateSplitterType;
 import builders.IBuilder;
 
 
@@ -12,7 +13,7 @@ public class N_LexicalizedPCFGScanner extends N_PCFGScanner {
 		IBuilder builder = new LexilizedPCFGBuilder();
 			
 		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
-		File output = setTypeAndGetOutputFile(StateSplitterType.NAIVE);
+		File output = setTypeAndGetOutputFile(Config.NAIVE);
 		
 		scan(builder, input, output);		
 	}

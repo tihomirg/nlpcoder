@@ -4,22 +4,18 @@ import org.eclipse.jdt.core.dom.ASTNode;
 public class Terminal extends Symbol {
 
 	private String token;
-	private ASTNode parent;
 	
-	public Terminal(String token, ASTNode parent){
+	public Terminal(String token){
 		assert token != null;
 		this.token = token;
-		this.parent = parent;
 	}
 
-	@Override
-	protected ASTNode getParent() {
-		return parent;
-	}
-
-	@Override
-	protected String toStringNaive() {
+	public String toString(){
 		return token;
 	}
 	
+	public int hashCode(){
+		return token.hashCode()^348274982;
+	}
+
 }

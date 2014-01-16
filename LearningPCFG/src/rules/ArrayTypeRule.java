@@ -7,7 +7,7 @@ import org.eclipse.jdt.core.dom.ArrayType;
 
 import symbol.Symbol;
 import symbol.SymbolFactory;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class ArrayTypeRule extends Rule {
 
@@ -21,13 +21,10 @@ public class ArrayTypeRule extends Rule {
 		// TODO Auto-generated constructor stub
 		this.elementType = nonTerminal(node.getElementType());
 		this.dimentsions = node.getDimensions();
-		this.rcurley = terminal(Tokens.R_CURLY_BRACKET, node);
-		this.lcurley = terminal(Tokens.L_CURLY_BRACKET, node);		
-		
 	}
 	
 	private List<Symbol> toDimensions(){
-		return toIndexList(this.dimentsions, this.lcurley, this.rcurley);
+		return toIndexList(this.dimentsions, Terminals.L_CURLY_BRACKET, Terminals.R_CURLY_BRACKET);
 	}
 
 	@Override

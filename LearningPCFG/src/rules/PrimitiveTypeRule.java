@@ -13,7 +13,7 @@ public class PrimitiveTypeRule extends Rule {
 	public PrimitiveTypeRule(PrimitiveType node) {
 		super(node);
 		
-		this.type = terminal(node.getPrimitiveTypeCode().toString(), node);
+		this.type = terminal(node.getPrimitiveTypeCode().toString());
 		// TODO Auto-generated constructor stub
 	}
 

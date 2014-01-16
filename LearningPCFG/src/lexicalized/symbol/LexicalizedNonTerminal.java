@@ -17,6 +17,6 @@ public class LexicalizedNonTerminal extends NonTerminal {
 	}
 
 	protected String toStringNaive(){
-		return "L"+super.toStringNaive()+this.info;
+		return "L"+super.toString()+this.info;
 	}	
 }

@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import builders.PCFGBuilder;
 
 import rules.MethodInvocationRule;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class LexilizedPCFGBuilder extends PCFGBuilder {
 	
@@ -33,7 +33,7 @@ public class LexilizedPCFGBuilder extends PCFGBuilder {
 		
 		return false;
 	}
-	
+		
 	public void visit(SimpleName node, LexicalizedInfo info){
 		//statistics.inc(new LexicalizedSimpleNameRule(node, info));
 	}

@@ -7,14 +7,11 @@ import org.eclipse.jdt.core.dom.ArrayInitializer;
 
 import symbol.Symbol;
 import symbol.SymbolFactory;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class ArrayInitializerRule extends Rule {
 
 	private List<Symbol> expressions;
-	private Symbol rcurley;
-	private Symbol lcurley;
-	private Symbol comma;
 
 	public ArrayInitializerRule(ArrayInitializer node) {
 		super(node);
@@ -22,26 +19,20 @@ public class ArrayInitializerRule extends Rule {
 		java.util.List exprs = node.expressions();
 		if (exprs != null && exprs.size() > 0)
 		this.expressions = makeNonTerminalList(exprs);
-		
-		
-		this.rcurley = terminal(Tokens.R_CURLY_BRACKET, node);
-		this.lcurley = terminal(Tokens.L_CURLY_BRACKET, node);
-		this.comma = terminal(Tokens.COMMA, node);
-		// TODO Auto-generated constructor stub
 	}
 
 	private List<Symbol> toExpressions(){
-		return toInfixList(this.expressions, this.comma);
+		return toInfixList(this.expressions, Terminals.COMMA);
 	}
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(this.lcurley);
+		list.f(Terminals.L_CURLY_BRACKET);
 		
 		if (this.expressions != null)
 		  list.f(toExpressions());
 		
-		list.f(this.rcurley);
+		list.f(Terminals.R_CURLY_BRACKET);
 	}
 
 }

@@ -6,6 +6,8 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
+import config.Config;
+
 import symbol.Symbol;
 import symbol.SymbolFactory;
 
@@ -16,7 +18,7 @@ public abstract class Rule {
 	
 	public Rule(ASTNode node){
 		assert node != null;
-		this.head = SymbolFactory.getNonTerminal(node);
+		this.head = Config.getFactory().getNonTerminal(node);
 	}
 	
 	protected List<Symbol> rhsAsList(){
@@ -41,18 +43,14 @@ public abstract class Rule {
 		else return false;
 	}
 	
-	protected static List<Symbol> makeNonTerminalList(java.util.List<ASTNode> nodes) {
-		List<Symbol> list = new List<Symbol>();
-		for(ASTNode node: nodes){
-			list.add(SymbolFactory.getNonTerminal(node));
-		}
-		return list;
+	protected List<Symbol> makeNonTerminalList(java.util.List<ASTNode> nodes) {
+		return makeNonTerminalList(nodes.toArray(new ASTNode[0]));
 	}
 	
-	protected static List<Symbol> makeNonTerminalList(ASTNode[] nodes) {
+	protected List<Symbol> makeNonTerminalList(ASTNode[] nodes) {
 		List<Symbol> list = new List<Symbol>();
 		for(ASTNode node: nodes){
-			list.add(SymbolFactory.getNonTerminal(node));
+			list.add(Config.getFactory().getNonTerminal(node));
 		}
 		return list;
 	}
@@ -115,12 +113,12 @@ public abstract class Rule {
 		return s;
 	}	
 	
-    protected static Symbol nonTerminal(ASTNode node){
-    	return SymbolFactory.getNonTerminal(node);
+    protected Symbol nonTerminal(ASTNode node){
+    	return Config.getFactory().getNonTerminal(node);
     }
  
-    protected static Symbol terminal(String token, ASTNode node){
-    	return SymbolFactory.getTerminal(token, node);
+    protected Symbol terminal(String token){
+    	return Config.getFactory().getTerminal(token);
     }
      
 	protected String rhs(){

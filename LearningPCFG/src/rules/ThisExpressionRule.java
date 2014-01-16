@@ -6,14 +6,11 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ThisExpression;
 
 import symbol.Symbol;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class ThisExpressionRule extends Rule {
 
 	private Symbol qualifier;
-	
-	private Symbol dotTerminal;
-	private Symbol thisTerminal;
 	
 	public ThisExpressionRule(ThisExpression node) {
 		super(node);
@@ -21,18 +18,16 @@ public class ThisExpressionRule extends Rule {
 		ASTNode qualifier = node.getQualifier();
 		if (qualifier != null){
 			this.qualifier = nonTerminal(qualifier);
-			this.dotTerminal = terminal(Tokens.DOT, node);
 		}
-		this.thisTerminal = terminal(Tokens.THIS, node);
 	}
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
 		if(this.qualifier != null){
-			list.f(this.qualifier).f(this.dotTerminal);
+			list.f(this.qualifier).f(Terminals.DOT);
 		}
 		
-		list.f(this.thisTerminal);
+		list.f(Terminals.THIS);
 	}
 
 }

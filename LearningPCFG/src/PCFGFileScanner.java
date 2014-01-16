@@ -11,9 +11,10 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import config.Config;
+
 import builders.PCFGBuilder;
 
-import symbol.StateSplitterType;
 
 
 public class PCFGFileScanner {
@@ -21,7 +22,7 @@ public class PCFGFileScanner {
 	public static void main(String[] args){
 		String fileName = "CityImpl.java";
 		PCFGBuilder builder = new PCFGBuilder();
-		StateSplitterType.setType(StateSplitterType.NAIVE);
+		Config.setType(Config.NAIVE);
 		
 		scan(fileName, builder);
 		

@@ -13,8 +13,7 @@ public class LexicalizedSimpleNameRule extends LexicalizedRule {
 
 	public LexicalizedSimpleNameRule(SimpleName node, LexicalizedInfo info) {
 		super(node, info);
-		this.name = terminal(node.getIdentifier(), node); //TODO: to fix this we need to make terminals without parent that implies that we need to change Symbol as well!
-		// TODO Auto-generated constructor stub
+		this.name = terminal(node.getIdentifier());
 	}
 
 	@Override

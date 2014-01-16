@@ -17,7 +17,7 @@ public class InfixExpressionRule extends Rule{
 	
 	public InfixExpressionRule(InfixExpression node) {
 		super(node);
-		this.operator = terminal(node.getOperator().toString(), node);		
+		this.operator = terminal(node.getOperator().toString());		
 		this.leftOperand = nonTerminal(node.getLeftOperand());
 		this.rightOperand = nonTerminal(node.getRightOperand());		
 		this.extendedOperands = makeNonTerminalList(node.extendedOperands());

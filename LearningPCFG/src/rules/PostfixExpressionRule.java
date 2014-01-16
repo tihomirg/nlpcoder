@@ -15,7 +15,7 @@ public class PostfixExpressionRule extends Rule {
 		super(node);
 		
 		this.operand = nonTerminal(node.getOperand());
-		this.operator = terminal(node.getOperator().toString(), node);
+		this.operator = terminal(node.getOperator().toString());
 		// TODO Auto-generated constructor stub
 	}
 

@@ -5,7 +5,7 @@ import util.List;
 import org.eclipse.jdt.core.dom.NullLiteral;
 
 import symbol.Symbol;
-import symbol.Tokens;
+import symbol.Terminals;
 
 public class NullLiteralRule extends Rule {
 
@@ -13,12 +13,11 @@ public class NullLiteralRule extends Rule {
 	
 	public NullLiteralRule(NullLiteral node) {
 		super(node);
-		this.nullTerminal = terminal(Tokens.NULL, node);
 	}
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(this.nullTerminal);
+		list.f(Terminals.NULL);
 	}
 
 }

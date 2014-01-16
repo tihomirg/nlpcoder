@@ -14,7 +14,7 @@ public class BooleanLiteralRule extends Rule {
 
 	public BooleanLiteralRule(BooleanLiteral node) {
 		super(node);
-		this.value = terminal(Boolean.toString(node.booleanValue()), node);
+		this.value = terminal(Boolean.toString(node.booleanValue()));
 		// TODO Auto-generated constructor stub
 	}
 
