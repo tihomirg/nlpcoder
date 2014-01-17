@@ -37,5 +37,10 @@ public class RuleStatisticsBase {
 			stat.print(out);
 		}
 	}
+
+	public void incCounter(Rule rule) {
+		RuleGroupStatistics group = getRuleGroupStatistics(rule);
+		group.incCount();
+	}
 	
 }

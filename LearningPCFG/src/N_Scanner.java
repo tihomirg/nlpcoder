@@ -22,12 +22,16 @@ public class N_Scanner {
 		scan(builder, folder, file, fileNum, 10);
 	}
 	
+	private static long startTime;
+	
 	protected static void scan(IBuilder builder, File folder, File file, int fileNum, int intervalNum) {
 		
 		N_Scanner.fileNum = fileNum;
 		N_Scanner.intervalNum = intervalNum;
 		
-		long startTime = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
+		
+		long fstartTime = startTime;
 		
 		try{
 		  listFilesForFolder(folder, builder);
@@ -52,7 +56,7 @@ public class N_Scanner {
 			output.close();
 		}
 		
-		System.out.println("Scanned "+counter+" files in "+(System.currentTimeMillis() - startTime)+"ms");
+		System.out.println("Scanned "+counter+" files in "+(System.currentTimeMillis() - fstartTime)+"ms");
 	}
 
 	public static void listFilesForFolder(final File folder, ASTVisitor builder)
@@ -62,7 +66,7 @@ public class N_Scanner {
 			            listFilesForFolder(fileEntry, builder);
 			        } else {
 			        	if (fileEntry.isFile() && fileEntry.getName().endsWith(".java")){
-			        	   System.out.println(fileEntry.getAbsolutePath());
+			        	   //System.out.println(fileEntry.getAbsolutePath());
 			        	   PCFGFileScanner.scan(fileEntry.getAbsolutePath(), builder);
 			               counter++;
 			               
@@ -70,9 +74,13 @@ public class N_Scanner {
 			            	   throw new ScannerException("TERMINATED.");
 			               } else {
 			            	   if (counter >= intervalCounter *(fileNum / intervalNum)){
-			            		   System.out.println("Processed "+counter+" files..."+intervalCounter *(100 / intervalNum)+"%");
+			            		   System.out.println("Processed "+counter+" files..."+intervalCounter *(100 / intervalNum)+"%   in "
+			            	           +(System.currentTimeMillis() - startTime)+"ms       "+Runtime.getRuntime().freeMemory()+"  free mem");
 			            		   
-			            		   System.gc();
+			            		   startTime = System.currentTimeMillis();
+			            		   
+			            		   //System.gc();
+			            		   //Runtime.getRuntime().runFinalization();
 			            		   
 			            		   intervalCounter++;
 			            	   }

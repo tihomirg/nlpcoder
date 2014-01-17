@@ -1,5 +1,7 @@
 package lexicalized.rules;
 
+import lexicalized.symbol.LexicalizedNonTerminal;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
@@ -12,7 +14,7 @@ import util.List;
 public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 
 	private Symbol expression;
-	private Symbol name;
+	private LexicalizedNonTerminal name;
 	private List<Symbol> arguments;
 	private List<Symbol> typeArguments;
 
@@ -30,10 +32,10 @@ public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 				
 		java.util.List<ASTNode> args = node.arguments();
 		if(args != null && args.size() > 0)
-		  this.arguments = makeLNonTerminalList(args);
+		  this.arguments =  makeLNonTerminalList(args);
 		
 		SimpleName name = node.getName();
-		this.name = lMethodNonTerminal(node);
+		this.name = (LexicalizedNonTerminal) lMethodNonTerminal(node);
 		
 		java.util.List<ASTNode> targs = node.typeArguments();
 		
@@ -48,7 +50,11 @@ public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 	
 	private List<Symbol> toArguments(){
 		return toInfixList(this.arguments, Terminals.COMMA);
-	}	
+	}
+	
+	public boolean isUserDef(){
+		return this.name.isUserDef();
+	}
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {

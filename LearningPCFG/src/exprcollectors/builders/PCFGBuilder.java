@@ -211,7 +211,13 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(MethodInvocation node) {
-		statistics.inc(new LexicalizedMethodInvocationRule(node, scopes));
+		LexicalizedMethodInvocationRule rule = new LexicalizedMethodInvocationRule(node, scopes);
+		
+		if(rule.isUserDef()){
+		  statistics.incCounter(rule);	
+		} else{
+		  statistics.inc(rule);
+		}
 		
 		ASTNode exp = node.getExpression();
 		if(exp != null) exp.accept(this);
@@ -530,7 +536,7 @@ public class PCFGBuilder extends IBuilder {
 		return true;
 	}
 	
-	public void endVisit(){
+	public void endVisit(TypeDeclaration node){
 		scopes.pop();
 	}
 

@@ -1,6 +1,10 @@
 1) Split a single scanner into 3 different:
   - for expressions
+    - keep to levels of abstraction
+    - variable binding is important as well. Associate variable name and the expression.
+    - Think of including types at some places.
   - for types
+    - Parent/Grandparent encoding
   - for the rest (code structure)
  
 2) Encode as much as possible into expression trees:
@@ -9,6 +13,7 @@
    - array constructions
    - field access
    - etc.
+   - TODO: Do this for "for statement", and the variables that appear inside, like "i"!
    
 3) Build scopes and user definition collector to annotate the rules with the local variables, fields, and so on.
 Potentially rule them out.

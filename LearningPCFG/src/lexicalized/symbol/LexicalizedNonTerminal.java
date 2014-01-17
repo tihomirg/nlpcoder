@@ -16,6 +16,11 @@ public class LexicalizedNonTerminal extends NonTerminal {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	public boolean isUserDef(){
+		return info.isUserDef();
+	}
+	
 	protected String toStringNaive(){
 		return "L"+super.toStringNaive()+this.info;
 	}	

@@ -14,7 +14,7 @@ public class N_ExprScanner extends N_PCFGScanner {
 			File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 			File output = setTypeAndGetOutputFile(Config.NAIVE);
 			
-			scan(builder, input, output, 1, 1);		
+			scan(builder, input, output);		
 		}
 		
 }
