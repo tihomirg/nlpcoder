@@ -9,7 +9,7 @@ public class MethodInfo extends LexicalizedInfo {
 		this.argNum = argNum;
 	}
 	
-	public String toString(){
-		return "("+this.getName()+","+this.argNum+")";
+	public String toNaiveString(){
+		return super.toNaiveString()+","+this.argNum;
 	}
 }

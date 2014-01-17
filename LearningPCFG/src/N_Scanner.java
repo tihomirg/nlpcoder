@@ -31,6 +31,8 @@ public class N_Scanner {
 		
 		try{
 		  listFilesForFolder(folder, builder);
+		} catch(ScannerException ex){
+			System.out.println(ex);
 		} catch(Throwable ex){
 		  //System.out.println(ex);
 		  ex.printStackTrace();
@@ -60,11 +62,12 @@ public class N_Scanner {
 			            listFilesForFolder(fileEntry, builder);
 			        } else {
 			        	if (fileEntry.isFile() && fileEntry.getName().endsWith(".java")){
-			               PCFGFileScanner.scan(fileEntry.getAbsolutePath(), builder);
+			        	   System.out.println(fileEntry.getAbsolutePath());
+			        	   PCFGFileScanner.scan(fileEntry.getAbsolutePath(), builder);
 			               counter++;
 			               
 			               if(counter >= fileNum){
-			            	   throw new Exception("TERMINATED.");
+			            	   throw new ScannerException("TERMINATED.");
 			               } else {
 			            	   if (counter >= intervalCounter *(fileNum / intervalNum)){
 			            		   System.out.println("Processed "+counter+" files..."+intervalCounter *(100 / intervalNum)+"%");

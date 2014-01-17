@@ -24,18 +24,11 @@ public class LexilizedPCFGBuilder extends PCFGBuilder {
 		if(exp != null) exp.accept(this);
 		
 		java.util.List args = node.arguments();
-		visit(args);
-		
-		SimpleName name = node.getName();
-		visit(name, new MethodInfo(name.getIdentifier(), args.size()));		
+		visit(args);	
 		
 		visit(node.typeArguments());	
 		
 		return false;
-	}
-		
-	public void visit(SimpleName node, LexicalizedInfo info){
-		//statistics.inc(new LexicalizedSimpleNameRule(node, info));
 	}
 	
 	public void visit(java.util.List<ASTNode> nodes){

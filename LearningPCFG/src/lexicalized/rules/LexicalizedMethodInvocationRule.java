@@ -1,7 +1,5 @@
 package lexicalized.rules;
 
-import lexicalized.info.MethodInfo;
-
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
@@ -27,15 +25,15 @@ public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 		
 		ASTNode exp = node.getExpression();
 		if (exp != null){
-			this.expression = nonTerminal(exp);
+			this.expression = lNonTerminal(exp);
 		}
 				
 		java.util.List<ASTNode> args = node.arguments();
 		if(args != null && args.size() > 0)
-		  this.arguments = makeNonTerminalList(args);
+		  this.arguments = makeLNonTerminalList(args);
 		
 		SimpleName name = node.getName();
-		this.name = lexicalizedNonTerminal(name, new MethodInfo(name.getIdentifier(), args.size()));		
+		this.name = lMethodNonTerminal(node);
 		
 		java.util.List<ASTNode> targs = node.typeArguments();
 		

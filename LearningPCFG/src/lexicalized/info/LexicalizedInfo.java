@@ -1,9 +1,9 @@
 package lexicalized.info;
 
 public abstract class LexicalizedInfo {
-	private String name;
+	protected String name;
 	
-	private boolean isUserDef;
+	protected boolean isUserDef;
 	
 	public LexicalizedInfo(String name){
 		this.name = name;
@@ -20,4 +20,12 @@ public abstract class LexicalizedInfo {
 	public void setUserDef(boolean isUserDef) {
 		this.isUserDef = isUserDef;
 	}
+	
+	protected String toNaiveString(){
+		return (this.isUserDef? "User,":"API,")+this.name;
+	}
+	
+	public String toString(){
+		return "("+toNaiveString()+")";
+	}	
 }

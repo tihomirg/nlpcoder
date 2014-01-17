@@ -31,7 +31,7 @@ public class NonTerminal extends Symbol {
 		}
 	}
 
-	private String toStringNaive() {
+	protected String toStringNaive() {
 		return node.getClass().getSimpleName();
 	}
 

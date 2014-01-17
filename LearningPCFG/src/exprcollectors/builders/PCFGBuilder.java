@@ -2,6 +2,8 @@ package exprcollectors.builders;
 
 import java.io.PrintStream;
 
+import lexicalized.rules.LexicalizedMethodInvocationRule;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
@@ -209,8 +211,25 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(MethodInvocation node) {
-		statistics.inc(new MethodInvocationRule(node));
-		return true;
+		statistics.inc(new LexicalizedMethodInvocationRule(node, scopes));
+		
+		ASTNode exp = node.getExpression();
+		if(exp != null) exp.accept(this);
+		
+		java.util.List args = node.arguments();
+		visit(args);	
+		
+		visit(node.typeArguments());	
+		
+		return false;
+	}
+	
+	public void visit(java.util.List<ASTNode> nodes){
+	  if (nodes != null){
+		  for(ASTNode node: nodes){
+			  node.accept(this);
+		  }
+	  }
 	}
 	
 	public boolean visit(ParenthesizedExpression node) {

@@ -15,7 +15,7 @@ public class N_LexicalizedPCFGScanner extends N_PCFGScanner {
 		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 		File output = setTypeAndGetOutputFile(Config.NAIVE);
 		
-		scan(builder, input, output);		
+		scan(builder, input, output, 10, 1);		
 	}
 	
 }
