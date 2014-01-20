@@ -3,12 +3,17 @@ package statistics;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 import rules.Rule;
 import symbol.Symbol;
 
 public class RuleGroupStatistics {
 
+	private static final EntryComparator comparator = new EntryComparator();
+	
 	private Symbol head;
 	private int count; 
 	
@@ -67,4 +72,34 @@ public class RuleGroupStatistics {
 		out.println();
 	}
 	
+	//TODO: Improve this version.
+	//This one will only remove statistic respect to the overall count, not to the count respect to the current count. 
+	public int releaseUnder(int percentage){
+		PriorityQueue<Entry<Rule, RuleStatistics>> pq = new PriorityQueue<Map.Entry<Rule,RuleStatistics>>(100, comparator);
+		pq.addAll(ruleToStatistics.entrySet());
+		
+		int count = Math.round(((float) this.count) * percentage /100);
+		
+		int length = ruleToStatistics.size();
+		
+		int totalCount = 0;
+		int released = 0;
+		
+		for(int i=0; i< length; i++){
+			//Take the smallest and remove it from the queue
+			Entry<Rule, RuleStatistics> curr = pq.remove();
+			
+			int currCount = curr.getValue().getCount();
+			totalCount += currCount;
+			
+			if(totalCount <= count){
+				ruleToStatistics.remove(curr.getKey());
+				released++;
+			} else {
+				break;
+			}
+		}
+		return released;
+		
+	}
 }

@@ -2,7 +2,10 @@ package exprcollectors.builders;
 
 import java.io.PrintStream;
 
+import lexicalized.rules.LexicalizedClassInstanceCreationRule;
+import lexicalized.rules.LexicalizedFieldAccessRule;
 import lexicalized.rules.LexicalizedMethodInvocationRule;
+import lexicalized.rules.LexicalizedRule;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -181,8 +184,22 @@ public class PCFGBuilder extends IBuilder {
 	}	
 
 	public boolean visit(ClassInstanceCreation node) {
-		statistics.inc(new ClassInstanceCreationRule(node));
-		return true;
+		LexicalizedClassInstanceCreationRule rule = new LexicalizedClassInstanceCreationRule(node, scopes);
+	
+		ruleIsUserDef(rule);
+		
+		ASTNode exp = node.getExpression();
+		if(exp != null) exp.accept(this);
+		
+		visit(node.arguments());
+		visit(node.typeArguments());	
+		
+		ASTNode annon = node.getAnonymousClassDeclaration();
+		if (annon != null){
+		  annon.accept(this);
+		}		
+		
+		return false;
 	}
 	
 	public boolean visit(ConditionalExpression node){
@@ -196,9 +213,14 @@ public class PCFGBuilder extends IBuilder {
 	}
 	
 	public boolean visit(FieldAccess node){
-		statistics.inc(new FieldAccessRule(node));
-		return true;
-	}	
+		LexicalizedFieldAccessRule rule = new LexicalizedFieldAccessRule(node, scopes);
+		ruleIsUserDef(rule);
+		
+		ASTNode exp = node.getExpression();
+		if(exp != null) exp.accept(this);		
+		
+		return false;
+	}
 	
 	public boolean visit(InfixExpression node){		
 		statistics.inc(new InfixExpressionRule(node));
@@ -213,22 +235,24 @@ public class PCFGBuilder extends IBuilder {
 	public boolean visit(MethodInvocation node) {
 		LexicalizedMethodInvocationRule rule = new LexicalizedMethodInvocationRule(node, scopes);
 		
+		ruleIsUserDef(rule);
+		
+		ASTNode exp = node.getExpression();
+		if(exp != null) exp.accept(this);
+		
+		visit(node.arguments());
+		visit(node.typeArguments());	
+		
+		return false;
+	}
+
+	private void ruleIsUserDef(LexicalizedRule rule) {
 		if(rule.isUserDef()){
 		  statistics.incCounter(rule);	
 		} else{
 		  statistics.inc(rule);
 		}
-		
-		ASTNode exp = node.getExpression();
-		if(exp != null) exp.accept(this);
-		
-		java.util.List args = node.arguments();
-		visit(args);	
-		
-		visit(node.typeArguments());	
-		
-		return false;
-	}
+	}	
 	
 	public void visit(java.util.List<ASTNode> nodes){
 	  if (nodes != null){
@@ -406,6 +430,9 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(CompilationUnit node) {
+		if (scopes.size() > 0){
+			System.out.println("Scopes: "+scopes.size());
+		}
 		return true;
 	}
 
@@ -542,6 +569,11 @@ public class PCFGBuilder extends IBuilder {
 
 	public boolean visit(TypeDeclarationStatement node) {
 		return true;
+	}
+
+	@Override
+	public void releaseUnder(int percentage) {
+		statistics.releaseUnder(percentage);
 	}
 		
 

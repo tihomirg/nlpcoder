@@ -559,4 +559,10 @@ public class PCFGBuilder extends IBuilder {
 		return true;
 	}
 
+	@Override
+	public void releaseUnder(int percent) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

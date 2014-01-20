@@ -43,4 +43,12 @@ public class RuleStatisticsBase {
 		group.incCount();
 	}
 	
+	public void releaseUnder(int percentage){
+		int released = 0;
+		for(RuleGroupStatistics group: headToRuleGroup.values()){
+			released += group.releaseUnder(percentage);
+		}
+		
+		System.out.println("Released "+released+" rules");
+	}
 }

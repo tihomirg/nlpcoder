@@ -40,4 +40,7 @@ public class Scopes {
 	public boolean contains(String name){
 		return contains(Config.getFactory().getScopeSymbol(name));
 	}
+	
+	public int size() {return scopes.size();}
+	
 }

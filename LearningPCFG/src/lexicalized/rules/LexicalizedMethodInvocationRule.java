@@ -35,7 +35,7 @@ public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 		  this.arguments =  makeLNonTerminalList(args);
 		
 		SimpleName name = node.getName();
-		this.name = (LexicalizedNonTerminal) lMethodNonTerminal(node);
+		this.name = lMethodNonTerminal(node);
 		
 		java.util.List<ASTNode> targs = node.typeArguments();
 		

@@ -9,6 +9,7 @@ import lexicalized.info.MethodInfo;
 import lexicalized.info.PostfixExpressionInfo;
 import lexicalized.info.PrefixExpressionInfo;
 import lexicalized.info.SimpleNameInfo;
+import lexicalized.symbol.LexicalizedNonTerminal;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayAccess;
@@ -40,11 +41,6 @@ public abstract class LexicalizedRule extends Rule {
 		this.scopes = scopes;
 	}
 	
-	public LexicalizedRule(ASTNode node, LexicalizedInfo info) {
-		assert node != null && info != null;
-		this.head = Config.getFactory().getLexicalizedNonTerminal(node, info);
-	}
-	
     protected Symbol lNonTerminal(ASTNode node){
 		if (node instanceof MethodInvocation){
 			return lMethodNonTerminal((MethodInvocation) node);
@@ -53,8 +49,8 @@ public abstract class LexicalizedRule extends Rule {
 			return lFieldNonTerminal((FieldAccess) node);				
 		} else
 		if (node instanceof SimpleName){
-			return lSimpleNameNonTerminal((SimpleName) node);					
-		} else
+			return lSimpleNameNonTerminal((SimpleName) node);			
+		} else					
 		if (node instanceof ArrayCreation){
 			return lArrayCreationNonTerminal((ArrayCreation) node);
 		} else
@@ -80,51 +76,51 @@ public abstract class LexicalizedRule extends Rule {
 		return nonTerminal(node);
     }
 
-	private Symbol lSuperFieldNonTerminal(SuperFieldAccess field) {
+    protected LexicalizedNonTerminal lSuperFieldNonTerminal(SuperFieldAccess field) {
 		SimpleName name = field.getName();
 		return lNonTerminal0(field, new FieldInfo(name.getIdentifier()));
 	}
 
-	private Symbol lSuperMethodNonTerminal(SuperMethodInvocation method) {
+	protected LexicalizedNonTerminal lSuperMethodNonTerminal(SuperMethodInvocation method) {
 		SimpleName name = method.getName();
 		return lNonTerminal0(method, new MethodInfo(name.getIdentifier(), method.arguments().size()));
 	}
 
-	private Symbol lPrefixExpressionNonTerminal(PrefixExpression node) {
+	protected LexicalizedNonTerminal lPrefixExpressionNonTerminal(PrefixExpression node) {
 		return lNonTerminal0(node, new PrefixExpressionInfo(node.getOperator().toString()));
 	}
 
-	private Symbol lPostfixExpressionNonTerminal(PostfixExpression node) {
+	protected LexicalizedNonTerminal lPostfixExpressionNonTerminal(PostfixExpression node) {
 		return lNonTerminal0(node, new PostfixExpressionInfo(node.getOperator().toString()));
 	}
 
-	private Symbol lClassInstanceCreationNonTerminal(ClassInstanceCreation node) {
-		return lNonTerminal0(node, new ClassInstanceCreationInfo(node.getType().toString()));
+	protected LexicalizedNonTerminal lClassInstanceCreationNonTerminal(ClassInstanceCreation node) {
+		return lNonTerminal0(node, new ClassInstanceCreationInfo(node.getType().toString(), node.typeArguments(), node.arguments().size()));
 	}
 
-	private Symbol lInfixExpressionNonTerminal(InfixExpression node) {
+	protected LexicalizedNonTerminal lInfixExpressionNonTerminal(InfixExpression node) {
 		return lNonTerminal0(node, new InfixExpressionInfo(node.getOperator().toString()));
 	}
 
-	private Symbol lArrayCreationNonTerminal(ArrayCreation node) {
+	protected LexicalizedNonTerminal lArrayCreationNonTerminal(ArrayCreation node) {
 		return lNonTerminal0(node, new ArrayCreationInfo(node.getType().toString(), node.dimensions().size()));
 	}
 
-	protected Symbol lSimpleNameNonTerminal(SimpleName name) {
+	protected LexicalizedNonTerminal lSimpleNameNonTerminal(SimpleName name) {
 		return lNonTerminal0(name, new SimpleNameInfo(name.getIdentifier()));
 	}
 
-	protected Symbol lFieldNonTerminal(FieldAccess field) {
+	protected LexicalizedNonTerminal lFieldNonTerminal(FieldAccess field) {
 		SimpleName name = field.getName();
 		return lNonTerminal0(field, new FieldInfo(name.getIdentifier()));
 	}
 
-	protected Symbol lMethodNonTerminal(MethodInvocation method) {
+	protected LexicalizedNonTerminal lMethodNonTerminal(MethodInvocation method) {
 		SimpleName name = method.getName();
 		return lNonTerminal0(method, new MethodInfo(name.getIdentifier(), method.arguments().size()));
 	}
     
-    private Symbol lNonTerminal0(ASTNode node, LexicalizedInfo info){
+    private LexicalizedNonTerminal lNonTerminal0(ASTNode node, LexicalizedInfo info){
     	if (this.scopes != null){
     		if(this.scopes.contains(info.getName())){
     			info.setUserDef(true);
@@ -157,6 +153,8 @@ public abstract class LexicalizedRule extends Rule {
 			list.add(lNonTerminal(node));
 		}
 		return list;
-	}    
+	}
+	
+	public abstract boolean isUserDef();
 	
 }

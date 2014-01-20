@@ -14,6 +14,8 @@ public class SymbolFactory {
 	
 	//maps some linearized representation of each termina/nonterminal to appropriate symbol
 	private Map<Integer, Symbol> symbols = new HashMap<Integer, Symbol>();
+
+	private Map<Integer, LexicalizedNonTerminal> lsymbols = new HashMap<Integer, LexicalizedNonTerminal>();	
 	
 	public Symbol getNonTerminal(ASTNode node){
 		return getSymbol(new NonTerminal(node));
@@ -27,8 +29,8 @@ public class SymbolFactory {
 		return getSymbol(new ScopeSymbol(token));
 	}
 	
-	public Symbol getLexicalizedNonTerminal(ASTNode node, LexicalizedInfo info){
-		return getSymbol(new LexicalizedNonTerminal(node, info));
+	public LexicalizedNonTerminal getLexicalizedNonTerminal(ASTNode node, LexicalizedInfo info){
+		return getLSymbol(new LexicalizedNonTerminal(node, info));
 	}	
 	
     public Symbol getSymbol(Symbol symbol){
@@ -38,4 +40,23 @@ public class SymbolFactory {
     	}
         return symbols.get(index);
     }
+    
+    public LexicalizedNonTerminal getLSymbol(LexicalizedNonTerminal symbol){
+    	int index = symbol.hashCode();
+    	if (!lsymbols.containsKey(index)){
+    		lsymbols.put(index, symbol);
+    	}
+        return lsymbols.get(index);
+    }
+
+	@Override
+	public String toString() {
+		return "Symbols: "+symbols.size() + "    LSymbols: " + lsymbols.size();
+	}
+	
+	public void clear(){
+		symbols.clear();
+		lsymbols.clear();
+	}
+    
 }

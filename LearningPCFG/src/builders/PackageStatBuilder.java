@@ -63,5 +63,11 @@ public class PackageStatBuilder extends IBuilder {
 			out.println(frequency+"  "+name);
 		}
 	}
+
+	@Override
+	public void releaseUnder(int percent) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

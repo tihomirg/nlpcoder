@@ -4,7 +4,7 @@ import lexicalized.ast.LexicalizedSimpleName;
 import lexicalized.info.LexicalizedInfo;
 import lexicalized.info.MethodInfo;
 import lexicalized.rules.LexicalizedMethodInvocationRule;
-import lexicalized.rules.LexicalizedSimpleNameRule;
+
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodInvocation;

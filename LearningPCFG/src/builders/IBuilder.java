@@ -8,4 +8,6 @@ public abstract class IBuilder extends ASTVisitor {
 
 	public abstract void print(PrintStream out);
 	
+	public abstract void releaseUnder(int percent);
+	
 }

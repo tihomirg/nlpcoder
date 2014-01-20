@@ -20,6 +20,6 @@ public class FieldAccessRule extends Rule{
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(this.exp).f(Terminals.DO).f(this.name);
+		list.f(this.exp).f(Terminals.DOT).f(this.name);
 	}
 }
