@@ -13,15 +13,15 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import config.Config;
 
-import builders.PCFGBuilder;
+import builders.BasicBuilder;
 
 
 
-public class PCFGFileScanner {
+public class FileScanner {
 
 	public static void main(String[] args){
 		String fileName = "CityImpl.java";
-		PCFGBuilder builder = new PCFGBuilder();
+		BasicBuilder builder = new BasicBuilder();
 		Config.setType(Config.NAIVE);
 		
 		scan(fileName, builder);

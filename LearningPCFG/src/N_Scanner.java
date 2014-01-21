@@ -88,13 +88,10 @@ public class N_Scanner {
 			        } else {
 			        	if (fileEntry.isFile() && fileEntry.getName().endsWith(".java")){
 			        	   //System.out.println(fileEntry.getAbsolutePath());
-			        	   PCFGFileScanner.scan(fileEntry.getAbsolutePath(), builder);
+			        	   FileScanner.scan(fileEntry.getAbsolutePath(), builder);
 			               counter++;
 			               
-			               if(counter >= fileNum){
-			            	   throw new ScannerException("TERMINATED.");
-			               } else {
-			            	   if (counter >= intervalCounter *(fileNum / intervalNum)){
+			               if (counter == intervalCounter *(fileNum / intervalNum)){
 			            		   System.out.println("Processed "+counter+" files..."+intervalCounter *(100 / intervalNum)+"%   in "
 			            	           +(System.currentTimeMillis() - startTime)/1000 +"s");
 			            		   
@@ -119,7 +116,7 @@ public class N_Scanner {
 			            		   
 			            		   startTime = System.currentTimeMillis();
 			            		   
-			            		   builder.releaseUnder(0);
+			            		   builder.releaseUnder(10);
 			            		   
 			            		   
 			            		   System.out.println(Config.getFactory());
@@ -133,7 +130,10 @@ public class N_Scanner {
 			            		   Runtime.getRuntime().runFinalization();
 			            		   
 			            		   intervalCounter++;
-			            	   }
+			               }
+			               
+			               if(counter == fileNum){
+			            	   throw new ScannerException("TERMINATED.");
 			               }
 			        	}
 			        }

@@ -146,7 +146,7 @@ import rules.WildcardTypeRule;
 import statistics.RuleStatisticsBase;
 
 
-public class PCFGBuilder extends IBuilder {
+public class BasicBuilder extends IBuilder {
 	
 	protected RuleStatisticsBase statistics = new RuleStatisticsBase();
 

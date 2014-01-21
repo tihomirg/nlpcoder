@@ -60,7 +60,7 @@ import rules.WhileStatementRules;
 import rules.WildcardTypeRule;
 import statistics.RuleStatisticsBase;
 
-public class FullPCFGBuilder extends ASTVisitor {
+public class FullBuilder extends ASTVisitor {
 	
 	private RuleStatisticsBase statistics = new RuleStatisticsBase();
 

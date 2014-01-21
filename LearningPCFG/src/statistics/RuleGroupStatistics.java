@@ -9,15 +9,18 @@ import java.util.Set;
 
 import rules.Rule;
 import symbol.Symbol;
+import util.Pair;
 
 public class RuleGroupStatistics {
 
 	private static final EntryComparator comparator = new EntryComparator();
 	
 	private Symbol head;
-	private int count; 
+	private int totalCount; 
 	
 	private Map<Rule, RuleStatistics> ruleToStatistics = new HashMap<Rule, RuleStatistics>();
+
+	private int realCount;
 	
 	public RuleGroupStatistics(Symbol head) {
 		this.head = head;
@@ -46,21 +49,22 @@ public class RuleGroupStatistics {
 	}
 
 	public void incCount(){
-		count++;
+		totalCount++;
+		realCount++;
 	}
 	
-	public int getCount() {
-		return count;
+	public int getTotalCount() {
+		return totalCount;
 	}
-
-	public void setCount(int count) {
-		this.count = count;
+	
+	public int getRealCount() {
+		return this.realCount;
 	}
 	
 	public void print(PrintStream out){
 		StringBuffer sb = new StringBuffer();
 		out.println("----------------------------------------------------------------------------------------------------------------------");
-		out.println("Head: "+this.count+"  "+this.head);
+		out.println("Head: "+this.realCount +" out of "+this.totalCount+"  "+this.head);
 		out.println();
 		for(RuleStatistics stat: ruleToStatistics.values()){
 			Rule rule = stat.getRule();
@@ -74,22 +78,23 @@ public class RuleGroupStatistics {
 	
 	//TODO: Improve this version.
 	//This one will only remove statistic respect to the overall count, not to the count respect to the current count. 
-	public int releaseUnder(int percentage){
+	public Pair<Integer, Integer> releaseUnder(int percentage){
 		PriorityQueue<Entry<Rule, RuleStatistics>> pq = new PriorityQueue<Map.Entry<Rule,RuleStatistics>>(100, comparator);
 		pq.addAll(ruleToStatistics.entrySet());
 		
-		int count = Math.round(((float) this.count) * percentage /100);
+		int count = Math.round(((float) this.realCount) * percentage /100);
 		
 		int length = ruleToStatistics.size();
 		
 		int totalCount = 0;
 		int released = 0;
 		
+		int currCount = 0;
 		for(int i=0; i< length; i++){
 			//Take the smallest and remove it from the queue
 			Entry<Rule, RuleStatistics> curr = pq.remove();
 			
-			int currCount = curr.getValue().getCount();
+			currCount = curr.getValue().getCount();
 			totalCount += currCount;
 			
 			if(totalCount <= count){
@@ -99,7 +104,13 @@ public class RuleGroupStatistics {
 				break;
 			}
 		}
-		return released;
+	
+		if (totalCount > count) this.realCount -= (totalCount - currCount);
+		else this.realCount -= totalCount;
+		
+		assert realCount > 0; 
+		
+		return new Pair(released, ruleToStatistics.size());
 		
 	}
 }

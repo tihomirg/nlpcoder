@@ -1,4 +1,4 @@
-package lexicalized.builders;
+package builders;
 
 import lexicalized.ast.LexicalizedSimpleName;
 import lexicalized.info.LexicalizedInfo;
@@ -10,12 +10,11 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
 
-import builders.PCFGBuilder;
 
 import rules.MethodInvocationRule;
 import symbol.Terminals;
 
-public class LexilizedPCFGBuilder extends PCFGBuilder {
+public class LexilizedBuilder extends BasicBuilder {
 	
 	public boolean visit(MethodInvocation node) {
 		statistics.inc(new LexicalizedMethodInvocationRule(node));

@@ -1,4 +1,4 @@
-package exprcollectors.builders;
+package builders;
 
 import java.io.PrintStream;
 
@@ -146,9 +146,8 @@ import rules.WildcardTypeRule;
 import scopes.Scopes;
 import statistics.RuleStatisticsBase;
 
-import builders.IBuilder;
 
-public class PCFGBuilder extends IBuilder {
+public class ExprBuilder extends IBuilder {
 
 	protected RuleStatisticsBase statistics = new RuleStatisticsBase();
 

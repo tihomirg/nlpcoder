@@ -2,14 +2,14 @@ import java.io.File;
 
 import config.Config;
 
-import builders.PCFGBuilder;
+import builders.BasicBuilder;
 
 
 
-public class PCFGScanner {
+public class Scanner {
 
 	public static void main(String[] args){
-		PCFGBuilder builder = new PCFGBuilder();
+		BasicBuilder builder = new BasicBuilder();
 		Config.setType(Config.NAIVE);	
 		
 		File folder = new File("C:\\Users\\gvero\\java_projects\\java_projects\\chombo");
@@ -19,13 +19,13 @@ public class PCFGScanner {
 		builder.getStatistics().print(System.out);		
 	}
 	
-	public static void listFilesForFolder(final File folder, PCFGBuilder builder) {
+	public static void listFilesForFolder(final File folder, BasicBuilder builder) {
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
 	            listFilesForFolder(fileEntry, builder);
 	        } else {
 	        	if (fileEntry.isFile() && fileEntry.getName().endsWith(".java")){
-	               PCFGFileScanner.scan(fileEntry.getAbsolutePath(), builder);
+	               FileScanner.scan(fileEntry.getAbsolutePath(), builder);
 	        	}
 	        }
 	    }

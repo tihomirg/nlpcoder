@@ -11,7 +11,7 @@ public class CharacterLiteralRule extends Rule {
 
 	public CharacterLiteralRule(CharacterLiteral node) {
 		super(node);
-		this.value = terminal(Character.toString(node.charValue()));
+		this.value = terminal(node.getEscapedValue());
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import rules.Rule;
 import symbol.Symbol;
+import util.Pair;
 
 public class RuleStatisticsBase {
 
@@ -45,10 +46,13 @@ public class RuleStatisticsBase {
 	
 	public void releaseUnder(int percentage){
 		int released = 0;
+		int remaining = 0;
 		for(RuleGroupStatistics group: headToRuleGroup.values()){
-			released += group.releaseUnder(percentage);
+			Pair<Integer, Integer> pair = group.releaseUnder(percentage);
+			released += pair.getFirst();
+			remaining += pair.getSecond();
 		}
 		
-		System.out.println("Released "+released+" rules");
+		System.out.println("Released: "+released+" ruels.  Remaining: "+remaining+" rules");
 	}
 }
