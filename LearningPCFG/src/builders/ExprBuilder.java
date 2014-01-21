@@ -144,6 +144,7 @@ import rules.VariableDeclarationStatementRule;
 import rules.WhileStatementRules;
 import rules.WildcardTypeRule;
 import scopes.Scopes;
+import scopes.SimpleScopes;
 import statistics.RuleStatisticsBase;
 
 
@@ -151,7 +152,7 @@ public class ExprBuilder extends IBuilder {
 
 	protected RuleStatisticsBase statistics = new RuleStatisticsBase();
 
-	protected Scopes scopes = new Scopes();
+	protected SimpleScopes scopes = new SimpleScopes();
 	
 	@Override
 	public void print(PrintStream out) {
@@ -306,7 +307,24 @@ public class ExprBuilder extends IBuilder {
 	public void endVisit(Block node) {
 		scopes.pop();
 	}
-
+	
+	public boolean visit(EnhancedForStatement node) {
+		scopes.push();		
+		return true;
+	}
+	
+	public void endVisit(EnhancedForStatement node) {
+		scopes.pop();
+	}
+	
+	public boolean visit(ForStatement node){
+		scopes.push();
+		return true;
+	}
+	
+	public void endVisit(ForStatement node){
+		scopes.pop();
+	}
 	
 	//------------------------------------------------------ Literals ------------------------------------------------------	
 

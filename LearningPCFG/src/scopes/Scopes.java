@@ -5,15 +5,15 @@ import java.util.Stack;
 import config.Config;
 import symbol.Symbol;
 
-public class Scopes {
+public class Scopes<T> {
 
-	private Stack<Scope> scopes = new Stack<Scope>();
+	private Stack<Scope<T>> scopes = new Stack<Scope<T>>();
 	
 	public void push(){
-		scopes.push(new Scope());
+		scopes.push(new Scope<T>());
 	}
 	
-	public Scope peek(){
+	public Scope<T> peek(){
 		return scopes.peek();
 	}
 	
@@ -21,26 +21,17 @@ public class Scopes {
 		scopes.pop();
 	}
 	
-	public void add(Symbol symbol){
+	public void add(T symbol){
 		peek().add(symbol);
 	}
 	
-	public boolean contains(Symbol symbol){
-		for(Scope scope: scopes){
+	public boolean contains(T symbol){
+		for(Scope<T> scope: scopes){
 			if (scope.contains(symbol)) return true;
 		}
 		return false;
 	}
-	
-	
-	public void add(String name){
-		add(Config.getFactory().getScopeSymbol(name));
-	}
-	
-	public boolean contains(String name){
-		return contains(Config.getFactory().getScopeSymbol(name));
-	}
-	
+		
 	public int size() {return scopes.size();}
 	
 }

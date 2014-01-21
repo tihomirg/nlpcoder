@@ -8,7 +8,6 @@ import lexicalized.symbol.LexicalizedNonTerminal;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 
-import scopes.ScopeSymbol;
 
 public class SymbolFactory {
 	

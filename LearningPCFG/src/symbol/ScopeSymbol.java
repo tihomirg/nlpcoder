@@ -1,6 +1,5 @@
-package scopes;
+package symbol;
 
-import symbol.Symbol;
 
 public class ScopeSymbol extends Symbol {
 
