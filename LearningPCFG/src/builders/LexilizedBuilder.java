@@ -1,18 +1,8 @@
 package builders;
 
-import lexicalized.ast.LexicalizedSimpleName;
-import lexicalized.info.LexicalizedInfo;
-import lexicalized.info.MethodInfo;
 import lexicalized.rules.LexicalizedMethodInvocationRule;
-
-
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.SimpleName;
-
-
-import rules.MethodInvocationRule;
-import symbol.Terminals;
 
 public class LexilizedBuilder extends BasicBuilder {
 	
