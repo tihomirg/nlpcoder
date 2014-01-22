@@ -5,6 +5,7 @@ import lexicalized.symbol.LexicalizedNonTerminal;
 import org.eclipse.jdt.core.dom.FieldAccess;
 
 import scopes.Scopes;
+import scopes.SimpleScopes;
 import symbol.Symbol;
 import symbol.Terminals;
 import util.List;
@@ -14,7 +15,7 @@ public class LexicalizedFieldAccessRule extends LexicalizedRule {
 	private Symbol exp;
 	private LexicalizedNonTerminal name;
 
-	public LexicalizedFieldAccessRule(FieldAccess node, Scopes scopes) {
+	public LexicalizedFieldAccessRule(FieldAccess node, SimpleScopes scopes) {
 		super(node, scopes);
 		this.exp = lNonTerminal(node.getExpression());
 		this.name = lFieldNonTerminal(node);

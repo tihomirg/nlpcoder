@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 
 import scopes.Scopes;
+import scopes.SimpleScopes;
 import symbol.Symbol;
 import symbol.Terminals;
 import util.List;
@@ -16,7 +17,7 @@ public class LexicalizedClassInstanceCreationRule extends LexicalizedRule {
 	//private List<Symbol> typeArguments;
 	private Symbol annonimousClass;
 
-	public LexicalizedClassInstanceCreationRule(ClassInstanceCreation node, Scopes scopes) {
+	public LexicalizedClassInstanceCreationRule(ClassInstanceCreation node, SimpleScopes scopes) {
 		super(node, scopes);
 		// TODO Auto-generated constructor stub
 		

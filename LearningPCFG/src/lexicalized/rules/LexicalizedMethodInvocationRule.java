@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
 
 import scopes.Scopes;
+import scopes.SimpleScopes;
 import symbol.Symbol;
 import symbol.Terminals;
 import util.List;
@@ -22,7 +23,7 @@ public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 		this(node, null);
 	}
 	
-	public LexicalizedMethodInvocationRule(MethodInvocation node, Scopes scopes) {
+	public LexicalizedMethodInvocationRule(MethodInvocation node, SimpleScopes scopes) {
 		super(node, scopes);
 		
 		ASTNode exp = node.getExpression();
@@ -32,7 +33,7 @@ public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 				
 		java.util.List<ASTNode> args = node.arguments();
 		if(args != null && args.size() > 0)
-		  this.arguments =  makeLNonTerminalList(args);
+		  this.arguments = makeLNonTerminalList(args);
 		
 		SimpleName name = node.getName();
 		this.name = lMethodNonTerminal(node);

@@ -12,16 +12,26 @@ public class LexicalizedNonTerminal extends NonTerminal {
 	
 	public LexicalizedNonTerminal(ASTNode node, LexicalizedInfo info) {
 		super(node);
-		this.info = info;
+		this.setInfo(info);
 		// TODO Auto-generated constructor stub
 	}
 
 	
 	public boolean isUserDef(){
-		return info.isUserDef();
+		return getInfo().isUserDef();
 	}
 	
 	protected String toStringNaive(){
-		return "L"+super.toStringNaive()+this.info;
+		return "L"+super.toStringNaive()+this.getInfo();
+	}
+
+
+	public LexicalizedInfo getInfo() {
+		return info;
+	}
+
+
+	public void setInfo(LexicalizedInfo info) {
+		this.info = info;
 	}	
 }

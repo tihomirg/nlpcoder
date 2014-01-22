@@ -29,14 +29,15 @@ import config.Config;
 
 import rules.Rule;
 import scopes.Scopes;
+import scopes.SimpleScopes;
 import symbol.Symbol;
 import util.List;
 
 public abstract class LexicalizedRule extends Rule {
 
-	protected Scopes scopes;
+	protected SimpleScopes scopes;
 	
-	public LexicalizedRule(ASTNode node, Scopes scopes) {
+	public LexicalizedRule(ASTNode node, SimpleScopes scopes) {
 		super(node);
 		this.scopes = scopes;
 	}
@@ -75,6 +76,35 @@ public abstract class LexicalizedRule extends Rule {
 		
 		return nonTerminal(node);
     }
+    
+    protected LexicalizedNonTerminal lNonTerminal2(LexicalizedNonTerminal nt){
+		if (nt.isUserDef()){
+			String name = nt.getInfo().getName();
+			ASTNode node = scopes.getValue(name);
+			
+    	  if (node instanceof MethodInvocation){
+			return lMethodNonTerminal((MethodInvocation) node);
+		  } else				
+		  if (node instanceof ArrayCreation){
+			return lArrayCreationNonTerminal((ArrayCreation) node);
+		  } else
+		  if (node instanceof ClassInstanceCreation){
+			return lClassInstanceCreationNonTerminal((ClassInstanceCreation) node);
+		  } else
+		  if (node instanceof InfixExpression){
+			return lInfixExpressionNonTerminal((InfixExpression) node);
+		  } else 
+		  if (node instanceof PostfixExpression){
+			return lPostfixExpressionNonTerminal((PostfixExpression) node);	
+		  } else
+		  if (node instanceof PrefixExpression){
+			return lPrefixExpressionNonTerminal((PrefixExpression) node);	
+		  }
+		}
+		
+		return nt; //Should abstract here!
+    }    
+    
 
     protected LexicalizedNonTerminal lSuperFieldNonTerminal(SuperFieldAccess field) {
 		SimpleName name = field.getName();
@@ -107,7 +137,8 @@ public abstract class LexicalizedRule extends Rule {
 	}
 
 	protected LexicalizedNonTerminal lSimpleNameNonTerminal(SimpleName name) {
-		return lNonTerminal0(name, new SimpleNameInfo(name.getIdentifier()));
+		LexicalizedNonTerminal nt = lNonTerminal0(name, new SimpleNameInfo(name.getIdentifier()));
+		return lNonTerminal2(nt);
 	}
 
 	protected LexicalizedNonTerminal lFieldNonTerminal(FieldAccess field) {
@@ -121,7 +152,7 @@ public abstract class LexicalizedRule extends Rule {
 	}
     
     private LexicalizedNonTerminal lNonTerminal0(ASTNode node, LexicalizedInfo info){
-    	if (this.scopes != null){
+    	if (this.scopes != null){   		
     		if(this.scopes.contains(info.getName())){
     			info.setUserDef(true);
     		}    		
@@ -133,12 +164,17 @@ public abstract class LexicalizedRule extends Rule {
 			info.setUserDef(method.getExpression() == null 
 					     || method.getExpression() instanceof ThisExpression);
 		} else
+		if (node instanceof FieldAccess){
+			FieldAccess field = (FieldAccess) node;
+				info.setUserDef(field.getExpression() == null 
+						     || field.getExpression() instanceof ThisExpression);
+		} else
 		if (node instanceof SuperMethodInvocation){
 			info.setUserDef(true);
 		} else
 		if (node instanceof SuperFieldAccess){
 			info.setUserDef(true);		
-		}    	
+		}
     	
     	return Config.getFactory().getLexicalizedNonTerminal(node, info);
     }

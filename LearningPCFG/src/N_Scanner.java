@@ -116,7 +116,7 @@ public class N_Scanner {
 			            		   
 			            		   startTime = System.currentTimeMillis();
 			            		   
-			            		   builder.releaseUnder(10);
+			            		   builder.releaseUnder(0);
 			            		   
 			            		   
 			            		   System.out.println(Config.getFactory());

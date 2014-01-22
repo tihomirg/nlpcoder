@@ -10,9 +10,9 @@ import java.io.*;
  */
 public class CityImpl implements City {
 
-	protected String id;  //My File
+	protected String id = "ovde";
 
-	protected String name;
+	protected String name = id;
 
 	protected State state;
 

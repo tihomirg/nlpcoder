@@ -4,6 +4,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayCreation;
 
 import scopes.Scopes;
+import scopes.SimpleScopes;
 import symbol.Symbol;
 import symbol.Terminals;
 import util.List;
@@ -15,7 +16,7 @@ public class LexicalizedArrayCreationRule extends LexicalizedRule {
 	private int dimensionLength;
 	private Symbol initializer;
 
-	public LexicalizedArrayCreationRule(ArrayCreation node, Scopes scopes) {
+	public LexicalizedArrayCreationRule(ArrayCreation node, SimpleScopes scopes) {
 		super(node, scopes);
 		this.dimensions = makeLNonTerminalList(node.dimensions());
 		this.type = lArrayCreationNonTerminal(node);

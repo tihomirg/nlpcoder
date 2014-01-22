@@ -1,7 +1,4 @@
 package symbol;
-import org.eclipse.jdt.core.dom.ASTNode;
-
-import rules.Rule;
 
 public abstract class Symbol {
 	

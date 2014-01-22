@@ -2,10 +2,12 @@ package builders;
 
 import java.io.PrintStream;
 
+import lexicalized.rules.LexicalizedAssignmentRule;
 import lexicalized.rules.LexicalizedClassInstanceCreationRule;
 import lexicalized.rules.LexicalizedFieldAccessRule;
 import lexicalized.rules.LexicalizedMethodInvocationRule;
 import lexicalized.rules.LexicalizedRule;
+import lexicalized.rules.LexicalizedVariableDeclarationFragmentRule;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -35,6 +37,7 @@ import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -179,9 +182,38 @@ public class ExprBuilder extends IBuilder {
 	}
 	
 	public boolean visit(Assignment node) {
-		statistics.inc(new AssignmentRule(node));
+		statistics.inc(new LexicalizedAssignmentRule(node, scopes));
 		return true;
-	}	
+	}
+	
+	public void endVisit(Assignment node) {
+		if(node.getOperator().equals(Assignment.Operator.ASSIGN)){
+		  Expression lhs = node.getLeftHandSide();
+		
+		  if (lhs instanceof SimpleName){
+			SimpleName variable = (SimpleName) lhs;
+			scopes.changeValue(variable.getIdentifier(), tunnel(node.getRightHandSide()));
+		  } else 
+		  if(lhs instanceof FieldAccess){
+			FieldAccess variable = (FieldAccess) lhs;
+			scopes.changeValue(variable.getName().getIdentifier(), tunnel(node.getRightHandSide()));			 
+	      }
+		}
+	}
+	
+	private ASTNode tunnel(ASTNode exp){
+		if (exp instanceof SimpleName){
+			SimpleName variable = (SimpleName) exp;
+			ASTNode value = scopes.getValue(variable.getIdentifier());
+			return value;
+		} else
+		if (exp instanceof FieldAccess){
+			FieldAccess variable = (FieldAccess) exp;
+			return scopes.getTDValue(variable.getName().getIdentifier());			
+		}
+		
+		return exp;
+	}
 
 	public boolean visit(ClassInstanceCreation node) {
 		LexicalizedClassInstanceCreationRule rule = new LexicalizedClassInstanceCreationRule(node, scopes);
@@ -416,9 +448,15 @@ public class ExprBuilder extends IBuilder {
 	}	
 	
 	public boolean visit(VariableDeclarationFragment node) {
-		scopes.add(node.getName().toString());
+		statistics.inc(new LexicalizedVariableDeclarationFragmentRule(node, scopes));
+		
+		String name = node.getName().toString();
+		Expression exp = node.getInitializer();
+		if (exp != null) scopes.add(name, exp);
+		else scopes.add(name);		
+		
 		return true;
-	}	
+	}
 	
 	//-------------------------------------------------------  Rest --------------------------------------------------------
 	
@@ -564,12 +602,15 @@ public class ExprBuilder extends IBuilder {
 	}
 
 	public boolean visit(TypeDeclaration node) {
-	    scopes.push();
+	    scopes.pushTD();
 	    
 		for(FieldDeclaration field: node.getFields()){
 			for(Object frag1: field.fragments()){
 				VariableDeclarationFragment frag = (VariableDeclarationFragment) frag1;
-				frag.accept(this);
+				String name = frag.getName().getIdentifier();
+				ASTNode exp = frag.getInitializer();
+				if (exp != null) scopes.add(name, tunnel(exp));
+				else scopes.add(name);
 			}
 		}
 		
@@ -577,13 +618,27 @@ public class ExprBuilder extends IBuilder {
 			scopes.add(method.getName().toString());
 		}
 		
-		return true;
+		for(FieldDeclaration field: node.getFields()){
+			for(Object frag1: field.fragments()){
+				VariableDeclarationFragment frag = (VariableDeclarationFragment) frag1;
+				statistics.inc(new LexicalizedVariableDeclarationFragmentRule(frag, scopes));
+			}
+		}
+		
+		System.out.println(scopes);
+		
+		for(MethodDeclaration method: node.getMethods()){
+			method.accept(this);
+		}
+		
+		for(TypeDeclaration td: node.getTypes()){
+			td.accept(this);
+		}
+	
+		scopes.pop();		
+		return false;
 	}
 	
-	public void endVisit(TypeDeclaration node){
-		scopes.pop();
-	}
-
 	public boolean visit(TypeDeclarationStatement node) {
 		return true;
 	}

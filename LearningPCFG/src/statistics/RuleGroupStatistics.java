@@ -12,8 +12,6 @@ import symbol.Symbol;
 import util.Pair;
 
 public class RuleGroupStatistics {
-
-	private static final EntryComparator comparator = new EntryComparator();
 	
 	private Symbol head;
 	private int totalCount; 
@@ -62,11 +60,17 @@ public class RuleGroupStatistics {
 	}
 	
 	public void print(PrintStream out){
-		StringBuffer sb = new StringBuffer();
 		out.println("----------------------------------------------------------------------------------------------------------------------");
 		out.println("Head: "+this.realCount +" out of "+this.totalCount+"  "+this.head);
 		out.println();
-		for(RuleStatistics stat: ruleToStatistics.values()){
+		
+		PriorityQueue<Entry<Rule, RuleStatistics>> pq = new PriorityQueue<Map.Entry<Rule,RuleStatistics>>(100, EntryComparator.DESC);
+		pq.addAll(ruleToStatistics.entrySet());		
+		
+		int length = ruleToStatistics.size();
+		
+		for(int i=0; i< length; i++){
+			RuleStatistics stat = pq.remove().getValue();
 			Rule rule = stat.getRule();
 			int count = stat.getCount();
 			
@@ -79,7 +83,7 @@ public class RuleGroupStatistics {
 	//TODO: Improve this version.
 	//This one will only remove statistic respect to the overall count, not to the count respect to the current count. 
 	public Pair<Integer, Integer> releaseUnder(int percentage){
-		PriorityQueue<Entry<Rule, RuleStatistics>> pq = new PriorityQueue<Map.Entry<Rule,RuleStatistics>>(100, comparator);
+		PriorityQueue<Entry<Rule, RuleStatistics>> pq = new PriorityQueue<Map.Entry<Rule,RuleStatistics>>(100, EntryComparator.ASC);
 		pq.addAll(ruleToStatistics.entrySet());
 		
 		int count = Math.round(((float) this.realCount) * percentage /100);
