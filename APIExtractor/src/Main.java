@@ -1,8 +1,13 @@
 import java.beans.XMLDecoder;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.URLConnection;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.apache.commons.io.IOUtils;
 
@@ -18,41 +23,32 @@ public class Main {
 
 	public static void main(String[] args){
 		try {
-	
-			URL url = new URL("http://download.java.net/maven/2/activecluster/activecluster/4.0.2/");
-			URLConnection con = url.openConnection();
-			InputStream in = con.getInputStream();
-			String encoding = con.getContentEncoding();
-			encoding = encoding == null ? "UTF-8" : encoding;
-			String body = org.apache.commons.io.IOUtils.toString(in, encoding);
-			System.out.println(body);
+			URLScanner urlscan = new URLScanner();
 			
-			String[] splits = body.split("<A HREF=\"");
-			
-			//TODO: Make XML parser look nicer, this is a dirty trick.
-			if(splits.length > 1){
-				
-				for(int i=1; i<splits.length; i++){
-					String s = splits[i].substring(0, splits[i].indexOf("\""));
-					System.out.println(s);
-				}
+			try {
+				urlscan.scan("http://download.java.net/maven/2/");
+
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
 			}
 			
+			JarTrie trie = urlscan.processJars();
+			
+			System.out.println();
+			System.out.println();
+			System.out.println("-------------------------------------------------------------------------------------------");
+			System.out.println();
+			System.out.println();				
+			
+			trie.print();
 			
 			
+			//org.apache.commons.io.FileUtils.copyURLToFile(new URL("http://download.java.net/maven/2/activecluster/activecluster/4.0.2/activecluster-4.0.2.jar"), new File("C:\\Users\\gvero\\Downloads\\activecluster-4.0.2.jar"));
 			
-//			File folder = new File("http://download.java.net/maven/2/activecluster/activecluster/4.0.2/");
-//	
-//		    for (final File fileEntry : folder.listFiles()) {
-//		        if (fileEntry.isDirectory()) {
-//		            System.out.print(fileEntry.getName());
-//		        } else {
-//		        	System.out.print(fileEntry.getName());
-//		        }
-//		    }
-			
-			
-//			String pathToJar = "C:\\Users\\gvero\\Downloads\\accumulo-core-1.5.0.jar";
+//			String pathToJar = "http://download.java.net/maven/2/activecluster/activecluster/4.0.2/activecluster-4.0.2.jar";
+//			
+//			//"C:\\Users\\gvero\\Downloads\\accumulo-core-1.5.0.jar";
 //			
 //            JarFile jarFile = new JarFile(pathToJar);
 //            Enumeration<JarEntry> e = jarFile.entries();
@@ -66,6 +62,8 @@ public class Main {
 //                    continue;
 //                }
 //                // -6 because of .class
+//                je.getName();
+//                
 //                //String className = je.getName().substring(0,je.getName().length()-6);
 //                //className = className.replace('/', '.');
 //                //Class c = cl.loadClass(className);
@@ -95,13 +93,6 @@ public class Main {
 //		} catch(IOException e){
 //			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} //catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
- catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
