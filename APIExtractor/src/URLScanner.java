@@ -19,7 +19,7 @@ public class URLScanner {
 
 	private LinkedList<JarPair> jars = new LinkedList<JarPair>();	
 	
-	private static final int MAX_JARS = 20;
+	private static final int MAX_JARS = 500;
 	
 	private int jar_count = 0;
 	
@@ -284,7 +284,7 @@ class JarTrie extends Trie<String, JarPair>{
 
 	@Override
 	public LinkedList<String> split(String key) {
-		String[] splits = key.split("[-.]\\d[-.]");
+		String[] splits = key.split("[-._](\\d)+[-._]");
 		
 		String prefix = splits[0];
 		
@@ -293,9 +293,13 @@ class JarTrie extends Trie<String, JarPair>{
 		list.add(prefix);
 		
 		if (splits.length > 1){
-		  splits = key.substring(prefix.length()+1).split("[-.]");
-		  for(String split : splits){
-		    list.add(split);
+		  splits = key.substring(prefix.length()+1).split("[-._]");
+		  int length = splits.length - 1;
+		  for(int i=0; i<length; i++){
+			String split = splits[i];
+			int number = checkIfNumber(split);
+			if (number == -1) list.add(split);
+			else list.add(Integer.toString(number));
 		   }			
 		}
 		
