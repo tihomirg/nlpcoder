@@ -2,14 +2,14 @@ package definitions;
 
 public abstract class Declaration {
 	
-	private String name;
+	private ClassInfo name;
 	private Type type;
 	
 	private boolean method;
 	private boolean constructor;
 	private boolean field;
 
-	public Declaration(String name, Type type, boolean method,
+	public Declaration(ClassInfo name, Type type, boolean method,
 			boolean constructor, boolean field) {
 		this.name = name;
 		this.type = type;
@@ -18,10 +18,10 @@ public abstract class Declaration {
 		this.field = field;
 	}
 	
-	public String getName() {
+	public ClassInfo getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public void setName(ClassInfo name) {
 		this.name = name;
 	}
 	public Type getType() {
@@ -54,7 +54,7 @@ abstract class AMethod extends Declaration {
 	private Type[] args;
 	private Type retType;
 	
-	public AMethod(String name, Type type, boolean method, boolean constructor,
+	public AMethod(ClassInfo name, Type type, boolean method, boolean constructor,
 			boolean field, Type[] args, Type retType) {
 		super(name, type, method, constructor, field);
 		this.args = args;
@@ -82,7 +82,7 @@ abstract class AMethod extends Declaration {
 class Method extends AMethod {
 	private TypeParameter[] typeArgs;
 
-	public Method(String name, Type type, boolean method, boolean constructor,
+	public Method(ClassInfo name, Type type, boolean method, boolean constructor,
 			boolean field, Type[] args, Type retType, TypeParameter[] typeArgs) {
 		super(name, type, method, constructor, field, args, retType);
 		this.typeArgs = typeArgs;
@@ -99,7 +99,7 @@ class Method extends AMethod {
 
 class Field extends Declaration {
 
-	public Field(String name, Type type, boolean method, boolean constructor,
+	public Field(ClassInfo name, Type type, boolean method, boolean constructor,
 			boolean field) {
 		super(name, type, method, constructor, field);
 		// TODO Auto-generated constructor stub
@@ -109,7 +109,7 @@ class Field extends Declaration {
 
 class Constructor extends AMethod {
 
-	public Constructor(String name, Type type, boolean method,
+	public Constructor(ClassInfo name, Type type, boolean method,
 			boolean constructor, boolean field, Type[] args, Type retType) {
 		super(name, type, method, constructor, field, args, retType);
 		// TODO Auto-generated constructor stub

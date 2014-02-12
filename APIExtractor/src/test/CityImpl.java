@@ -11,16 +11,20 @@ import java.util.Map;
  * @author Eric F. Savage <code@efsavage.com>
  */
 
-interface City{}
+interface City<T>{}
 
 class State{
 	
 	public Country getCountry(){return null;}
 }
 
-class Country{}
+class Country<B>{}
 
-public class CityImpl implements City {
+abstract class ACity{}
+
+abstract class ACity2<K,V>{}
+
+public class CityImpl<A extends Country<A>> extends ACity2<String,Boolean> implements City<A> {
 
 	protected String id = "ovde";
 
@@ -28,7 +32,7 @@ public class CityImpl implements City {
 
 	protected State state;
 
-	protected static final Country country = null;
+	protected final Country<A> country = null;
 
 	/**
 	 * If state is set, will return state.getCountry(), otherwise will return
@@ -37,7 +41,7 @@ public class CityImpl implements City {
 	 * @see State#getCountry()
 	 * @return Country object as set via setCountry or from state, may be null.
 	 */
-	public Country getCountry() {
+	public Country<? extends A> getCountry() {
 		if (this.state == null) {
 			return this.country;
 		}

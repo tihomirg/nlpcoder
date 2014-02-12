@@ -1,16 +1,28 @@
 package definitions;
 
+import java.util.Arrays;
+
 public class ClassInfo {
 
 	private String name;
 	private Declaration[] declarations;
 	private TypeParameter[] typeArgs;
 	
-	private ClassInfo superclass;
+	@Override
+	public String toString() {
+		return "ClassInfo [name=" + name + ", declarations="
+				+ Arrays.toString(declarations) + ", typeArgs="
+				+ Arrays.toString(typeArgs) + ", superclass=" + superclass
+				+ ", superTypeArgs=" + Arrays.toString(superTypeArgs) + "]";
+	}
+
+	private String superclass;
 	private TypeParameter[] superTypeArgs;
 
+	public ClassInfo(){}
+	
 	public ClassInfo(String name, Declaration[] declarations,
-			TypeParameter[] typeArgs, ClassInfo superclass) {
+			TypeParameter[] typeArgs, String superclass) {
 		this.name = name;
 		this.declarations = declarations;
 		this.typeArgs = typeArgs;
@@ -35,10 +47,18 @@ public class ClassInfo {
 	public void setTypeArgs(TypeParameter[] typeArgs) {
 		this.typeArgs = typeArgs;
 	}
-	public ClassInfo getSuperclass() {
+	public String getSuperclass() {
 		return superclass;
 	}
-	public void setSuperclass(ClassInfo superclass) {
+	public void setSuperclass(String superclass) {
 		this.superclass = superclass;
+	}
+
+	public TypeParameter[] getSuperTypeArgs() {
+		return superTypeArgs;
+	}
+
+	public void setSuperTypeArgs(TypeParameter[] superTypeArgs) {
+		this.superTypeArgs = superTypeArgs;
 	}	
 }

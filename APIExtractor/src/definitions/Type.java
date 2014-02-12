@@ -3,25 +3,25 @@ package definitions;
 import java.util.List;
 
 public abstract class Type {
-	private String name;
+	private ClassInfo name;
 
-	public Type(String name) {
+	public Type(ClassInfo name) {
 		super();
 		this.setName(name);
 	}
 
-	public String getName() {
+	public ClassInfo getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(ClassInfo name) {
 		this.name = name;
 	}
 }
 
 class SimpleType extends Type {
 
-	public SimpleType(String name) {
+	public SimpleType(ClassInfo name) {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
@@ -32,7 +32,7 @@ class ComplexType extends Type {
 
 	private List<Type> args;
 
-	public ComplexType(String name, List<Type> args) {
+	public ComplexType(ClassInfo name, List<Type> args) {
 		super(name);
 		this.args = args;
 	}
@@ -50,7 +50,7 @@ class ComplexType extends Type {
 class TypeParameter extends Type {
 	private Type bounds;
 
-	public TypeParameter(String name, Type bounds) {
+	public TypeParameter(ClassInfo name, Type bounds) {
 		super(name);
 		this.bounds = bounds;
 	}

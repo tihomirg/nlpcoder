@@ -17,10 +17,14 @@ public class DeclarationScanner {
 		
 		List<String> content = onlyPublic(scanClassfile(fileName));
 		
-		
-		
+		Parser parser = new Parser();
 		
 		print(content);
+		
+		System.out.println();
+		
+		parser.parse(content);
+		
 	}
 	
 	private static void print(List<String> content) {
@@ -34,7 +38,9 @@ public class DeclarationScanner {
 		List<String> nContent = new LinkedList<String>();
 		
 		for(String line: content){
-			if (line.contains("public")){
+			if ((line.contains("public") 
+				|| line.contains("class")) 
+				&& !line.contains("interface")){
 				nContent.add(line);
 			}
 		}
