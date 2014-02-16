@@ -11,7 +11,11 @@ import java.util.Map;
  * @author Eric F. Savage <code@efsavage.com>
  */
 
-interface City<T>{}
+interface City1<T>{}
+
+interface City2<T>{}
+
+interface City3<T>{}
 
 class State{
 	
@@ -24,7 +28,7 @@ abstract class ACity{}
 
 abstract class ACity2<K,V>{}
 
-public class CityImpl<A extends Country<A>> extends ACity2<String,Boolean> implements City<A> {
+public class CityImpl<A extends Country<A>> extends ACity2<String,Boolean> implements City1<A>, City2<A>, City3<A> {
 
 	protected String id = "ovde";
 
@@ -113,11 +117,11 @@ public class CityImpl<A extends Country<A>> extends ACity2<String,Boolean> imple
 		return false;
 	}
 	
-	synchronized final public <K, V extends City> boolean is4(Map<K, V> list){
+	synchronized final public <K, V> boolean is4(Map<K, V> list){
 		return false;
 	}
 	
-	public boolean is2(List<String> list, boolean... b){
+	public boolean is2(List<String> list, boolean[] b){
 		return false;
 	}
 	

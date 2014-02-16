@@ -1,117 +1,113 @@
 package definitions;
 
-public abstract class Declaration {
+import java.io.Serializable;
+
+public class Declaration implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	private ClassInfo name;
-	private Type type;
+	private String name;
+	private int argNum;
+	private boolean isStatic;
+	
+	private String retType;
+	private String[] argType;
+	private String[] typeParams;
 	
 	private boolean method;
 	private boolean constructor;
 	private boolean field;
 
-	public Declaration(ClassInfo name, Type type, boolean method,
-			boolean constructor, boolean field) {
-		this.name = name;
-		this.type = type;
-		this.method = method;
-		this.constructor = constructor;
-		this.field = field;
-	}
+	private String clazz;
 	
-	public ClassInfo getName() {
+	public Declaration(){}	
+
+	public String getName() {
 		return name;
 	}
-	public void setName(ClassInfo name) {
+
+	public void setName(String name) {
 		this.name = name;
 	}
-	public Type getType() {
-		return type;
-	}
-	public void setType(Type type) {
-		this.type = type;
-	}
-	public boolean isMethod() {
-		return method;
-	}
-	public void setMethod(boolean method) {
-		this.method = method;
-	}
-	public boolean isConstructor() {
-		return constructor;
-	}
-	public void setConstructor(boolean constructor) {
-		this.constructor = constructor;
-	}
-	public boolean isField() {
-		return field;
-	}
-	public void setField(boolean field) {
-		this.field = field;
-	}	
-}
 
-abstract class AMethod extends Declaration {
-	private Type[] args;
-	private Type retType;
-	
-	public AMethod(ClassInfo name, Type type, boolean method, boolean constructor,
-			boolean field, Type[] args, Type retType) {
-		super(name, type, method, constructor, field);
-		this.args = args;
-		this.retType = retType;
+	public int getArgNum() {
+		return argNum;
 	}
 
-	public Type[] getArgs() {
-		return args;
+	public void setArgNum(int argNum) {
+		this.argNum = argNum;
 	}
 
-	public void setArgs(Type[] args) {
-		this.args = args;
+	public boolean isStatic() {
+		return isStatic;
 	}
 
-	public Type getRetType() {
+	public void setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
+	}
+
+	public String getRetType() {
 		return retType;
 	}
 
-	public void setRetType(Type retType) {
+	public void setRetType(String retType) {
 		this.retType = retType;
 	}
-}
 
-
-class Method extends AMethod {
-	private TypeParameter[] typeArgs;
-
-	public Method(ClassInfo name, Type type, boolean method, boolean constructor,
-			boolean field, Type[] args, Type retType, TypeParameter[] typeArgs) {
-		super(name, type, method, constructor, field, args, retType);
-		this.typeArgs = typeArgs;
+	public String[] getArgType() {
+		return argType;
 	}
 
-	public TypeParameter[] getTypeArgs() {
-		return typeArgs;
+	public void setArgType(String[] argType) {
+		this.argType = argType;
 	}
 
-	public void setTypeArgs(TypeParameter[] typeArgs) {
-		this.typeArgs = typeArgs;
+	public String[] getTypeParams() {
+		return typeParams;
 	}
-}
 
-class Field extends Declaration {
-
-	public Field(ClassInfo name, Type type, boolean method, boolean constructor,
-			boolean field) {
-		super(name, type, method, constructor, field);
-		// TODO Auto-generated constructor stub
+	public void setTypeParams(String[] typeParams) {
+		this.typeParams = typeParams;
 	}
-	
-}
 
-class Constructor extends AMethod {
+	public boolean isMethod() {
+		return method;
+	}
 
-	public Constructor(ClassInfo name, Type type, boolean method,
-			boolean constructor, boolean field, Type[] args, Type retType) {
-		super(name, type, method, constructor, field, args, retType);
-		// TODO Auto-generated constructor stub
+	public void setMethod(boolean method) {
+		this.method = method;
+	}
+
+	public boolean isConstructor() {
+		return constructor;
+	}
+
+	public void setConstructor(boolean constructor) {
+		this.constructor = constructor;
+	}
+
+	public boolean isField() {
+		return field;
+	}
+
+	public void setField(boolean field) {
+		this.field = field;
+	}
+
+	public String getClazz() {
+		return clazz;
+	}
+
+	public void setClazz(String clazz) {
+		this.clazz = clazz;
+	}
+
+	@Override
+	public String toString() {
+		return "Declaration [name=" + name + ", clazz=" + clazz + ", isStatic="
+				+ isStatic + ", argNum=" + argNum + ", method=" + method + "]\n";
 	}
 }
