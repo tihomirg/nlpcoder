@@ -13,20 +13,69 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.serializers.CollectionSerializer;
+import com.esotericsoftware.kryo.serializers.DefaultSerializers;
+import com.esotericsoftware.kryo.serializers.MapSerializer;
+
 import definitions.Declaration;
 
 
 public class JarFileScanner {
 
-	private static Map<String, Set<Declaration>> map = new HashMap<String, Set<Declaration>>();
+	private static Map<String, Set<Integer>> map = new HashMap<String, Set<Integer>>();
+	private static ArrayList<Declaration> array = new ArrayList<Declaration>();
+	
 	
 	public static void main(String[] args) {
 		File jars = new File("C:/Users/gvero/git/jars");
 		scanAll(jars);
 		
-		File output = new File("jars.txt");
-		print(output);		
+		String out = "jars.txt";
+		serialize(out);
+		//ArrayList<Declaration> array = (ArrayList<Declaration>) deserializeArray(out);
+		
+		 Map<String, Set<Integer>> map = (Map<String, Set<Integer>>) deserializeMap(out);
+		
+		 for (int i : map.get("or")){
+			 System.out.println(array.get(i)); 
+		 }
+		 
+		 
+		 
+		 
+		//System.out.println(Arrays.toString(array.toArray()));
 	}
+	
+	private static void serialize(String file){
+//		Class type = ArrayList.class;
+//		CollectionSerializer serializer = new CollectionSerializer(Declaration.class, null);
+//		KryoMain.writeObject(file, array, serializer, type);
+		
+		Class type2 = HashMap.class;
+		MapSerializer serializer2 = new MapSerializer();
+		serializer2.setKeyClass(String.class, null);
+		CollectionSerializer serializer3 = new CollectionSerializer(Integer.class, null); 
+		serializer2.setValueClass(HashSet.class, serializer3);
+		
+		KryoMain.writeObject(file, map, serializer2, type2);	
+	}
+	
+	private static Object deserializeArray(String file){
+		Class type = ArrayList.class;
+		CollectionSerializer serializer = new CollectionSerializer(Declaration.class, null);
+		return KryoMain.readObject(file, serializer, type);
+	}
+	
+	private static Object deserializeMap(String file){
+		Class type2 = HashMap.class;
+		MapSerializer serializer2 = new MapSerializer();
+		serializer2.setKeyClass(String.class, null);
+		CollectionSerializer serializer3 = new CollectionSerializer(Integer.class, null); 
+		serializer2.setValueClass(HashSet.class, serializer3);
+		return KryoMain.readObject(file, serializer2, type2);
+	}	
 	
 	private static void print(File file) {
 		// TODO Auto-generated method stub
@@ -83,9 +132,9 @@ public class JarFileScanner {
 	}
 
 	private static void print(PrintStream out) {
-		for(Entry<String, Set<Declaration>> entry: map.entrySet()){
+		for(Entry<String, Set<Integer>> entry: map.entrySet()){
 			String word = entry.getKey();
-			Set<Declaration> set = entry.getValue();
+			Set<Integer> set = entry.getValue();
 			out.println();
 			out.println();
 			out.println("Word: "+word);
@@ -96,26 +145,27 @@ public class JarFileScanner {
 
 	private static void put(Declaration[] decls) {
 		for(Declaration decl: decls){
-			put(decl);
+			array.add(decl);
+			put(decl, array.size()-1);
 		}
 		
 	}
 
-	private static void put(Declaration decl) {
+	private static void put(Declaration decl, int declIndex) {
 		Set<String> words = getWords(decl);
 		for(String word: words){
-			put(word, decl);
+			put(word, declIndex);
 		}
 		
 	}
 
-	private static void put(String word, Declaration decl) {
+	private static void put(String word, int decl) {
 		if (!map.containsKey(word)){
-			Set<Declaration> set = new HashSet<Declaration>();
+			Set<Integer> set = new HashSet<Integer>();
 			set.add(decl);
 			map.put(word, set);
 		} else {
-			Set<Declaration> set = map.get(word);
+			Set<Integer> set = map.get(word);
 			set.add(decl);
 		}
 		

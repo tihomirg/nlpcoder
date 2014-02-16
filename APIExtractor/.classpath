@@ -10,5 +10,9 @@
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/bcel-5.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/gson-2.2.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/kryo-2.23.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/asm-4.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/minlog-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/objenesis-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/reflectasm-1.07.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
