@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/minlog-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/objenesis-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/reflectasm-1.07.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/edu.mit.jwi_2.3.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
