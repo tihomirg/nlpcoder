@@ -1,3 +1,5 @@
+package tests;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -22,12 +24,6 @@ public class BcelMain {
 			String output = "file.json";
 			
 			Declaration[] decls = getDeclarations(fileName);
-			
-			GsonMain.write(decls, output);
-			
-			Declaration[] decls1 = GsonMain.read(Declaration[].class, output);
-			
-			System.out.println(Arrays.toString(decls1));
 	
 			
 		} catch (IOException e) {

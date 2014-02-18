@@ -46,7 +46,7 @@ public class WordNetMain {
 	public List<String> getFirstMeaningSynonyms(String rWord, POS pos){
 		List<String> syn = new LinkedList<String>();
 		// look up first sense of the word "dog "
-		IIndexWord idxWord = dict.getIndexWord (rWord, pos);
+		IIndexWord idxWord = dict.getIndexWord(rWord, pos);
 		if (idxWord != null){
 			IWordID wordID = idxWord.getWordIDs().get(0);
 		    if (wordID != null)
@@ -58,7 +58,7 @@ public class WordNetMain {
 	public List<String> getSynonyms(String rWord, POS pos){
 		List<String> syn = new LinkedList<String>();
 		// look up first sense of the word "dog "
-		IIndexWord idxWord = dict.getIndexWord (rWord, pos);
+		IIndexWord idxWord = dict.getIndexWord(rWord, pos);
 		if (idxWord != null){
 			for(IWordID wordID : idxWord.getWordIDs()){
 				syn.addAll(getSynonyms(wordID));
@@ -69,11 +69,11 @@ public class WordNetMain {
 
 	private List<String> getSynonyms(IWordID wordID) {
 		List<String> syn = new LinkedList<String>();
-		IWord word = dict.getWord( wordID );
+		IWord word = dict.getWord(wordID);
 		ISynset synset = word.getSynset();
 
 		// iterate over words associated with the synset
-		for( IWord w : synset.getWords ())
+		for(IWord w : synset.getWords())
 			syn.add(w.getLemma());
 		return syn;
 	}
@@ -81,19 +81,19 @@ public class WordNetMain {
 	public List<String> getFirstMeaningHypernyms (String rWord, POS pos){
 		List<String> hyper = new LinkedList<String>();
 		
-		IIndexWord idxWord = dict . getIndexWord (rWord, pos);
-		IWordID wordID = idxWord . getWordIDs ().get (0) ; // 1st meaning
-		IWord word = dict . getWord ( wordID );
-		ISynset synset = word . getSynset ();
+		IIndexWord idxWord = dict.getIndexWord(rWord, pos);
+		IWordID wordID = idxWord.getWordIDs().get(0) ; // 1st meaning
+		IWord word = dict.getWord(wordID);
+		ISynset synset = word.getSynset();
 
 		// get the hypernyms
-		List < ISynsetID > hypernyms = synset.getRelatedSynsets(Pointer.HYPERNYM);
+		List<ISynsetID> hypernyms = synset.getRelatedSynsets(Pointer.HYPERNYM);
 
 		// print out each h y p e r n y m s id and synonyms
-		List <IWord > words ;
+		List<IWord> words;
 		for( ISynsetID sid : hypernyms ){
-			words = dict . getSynset (sid). getWords ();
-			for( Iterator<IWord > i = words.iterator(); i.hasNext () ;){
+			words = dict.getSynset(sid).getWords();
+			for(Iterator<IWord> i = words.iterator(); i.hasNext();){
 				hyper.add(i.next().getLemma());
 			}
 		}
