@@ -27,6 +27,7 @@ import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.ISynset;
+import edu.mit.jwi.item.ISynsetID;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.IWordID;
 import edu.mit.jwi.item.POS;
@@ -34,9 +35,12 @@ import edu.mit.jwi.morph.WordnetStemmer;
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 public class SynsetWordSearchMain {
-
+	
 	private static final int THRESHOLD = 10;
-	private Map<String, Set<Integer>> map = new HashMap<String, Set<Integer>>();
+	private Map<BigSet, Set<Integer>> map = new HashMap<BigSet, Set<Integer>>();
+	
+	private BigSetMap wordbs;
+	
 	private ArrayList<Declaration> array = new ArrayList<Declaration>();
 
 	private IDictionary dict;
@@ -53,6 +57,7 @@ public class SynsetWordSearchMain {
 			dict = new Dictionary(new URL("file", null , "C:/Program Files/WordNet/2.1/dict"));
 			dict.open();
 			stemmer = new WordnetStemmer(dict);
+			wordbs = new BigSetMap(dict);
 			
 			tagger = new MaxentTagger("C:/Users/gvero/git/lib/stanford-postagger-2011-04-20/models/left3words-wsj-0-18.tagger");
 			
@@ -72,40 +77,53 @@ public class SynsetWordSearchMain {
 	}
 
 
+	public BigSetMap getWordbs() {
+		return wordbs;
+	}
+
+
+	public void setWordbs(BigSetMap wordbs) {
+		this.wordbs = wordbs;
+	}
+
+
 	public static void main(String[] args) {
 		SynsetWordSearchMain synSearch = new SynsetWordSearchMain();
 		File jars = new File("C:/Users/gvero/git/jars");
 		
-		//synSearch.scanAll(jars);
+		synSearch.scanAll(jars);
 		
-		List<WordPOS> taggedWords = synSearch.getTaggedWords(synSearch.makeRowSentence("west()"));
-		
-		List<Integer> synsets = new ArrayList<Integer>();
-		
-		for(WordPOS wp: taggedWords){
-		  String word = wp.getWord();
-		  POS pos = wp.getPos();
-		  
-		  System.out.println(word+"   "+pos);
-		  
-		  List<String> steams = synSearch.getSteams(word, pos);
-		  
-		  if (steams.size() > 0){
-			  System.out.println(steams.get(0));
-			  
-			  synsets.addAll(synSearch.getSynsets(steams.get(0), pos));
-		  }
-		}
+		String name = "west sells me";
 		
 		
 		
-//		List<Integer> synonyms = synSearch.getSynsets("write", POS.VERB);
+//		List<WordPOS> taggedWords = synSearch.getTaggedWords(synSearch.makeRowSentence(name));
+//		List<BigSet> bsets = new ArrayList<BigSet>();
 //		
-		System.out.println(Arrays.toString(synsets.toArray()));
+//		for(WordPOS wp: taggedWords){
+//		  String word = wp.getWord();
+//		  POS pos = wp.getPos();
+//		  
+//		  System.out.println(word+"   "+pos);
+//		  
+//		  List<String> steams = synSearch.getSteams(word, pos);
+//		  
+//		  if (steams.size() > 0){
+//			  System.out.println(steams.get(0));
+//			  
+//			  Set<ISynsetID> synsets = synSearch.getSynsets(steams.get(0), pos);
+//			  
+//			  if (!synsets.isEmpty()){
+//				  BigSet bigSet = new BigSet(synsets);		 		  
+//				  synSearch.getWordbs().add(bigSet);
+//				  bsets.add(bigSet);
+//			  }
+//		  }
+//		}
+		
 		
 	}
 	
-
 	public void scanAll(File folder) {
 	    for (File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
@@ -142,8 +160,8 @@ public class SynsetWordSearchMain {
 	}
 
 	private void print(PrintStream out) {
-		for(Entry<String, Set<Integer>> entry: map.entrySet()){
-			String word = entry.getKey();
+		for(Entry<BigSet, Set<Integer>> entry: map.entrySet()){
+			BigSet word = entry.getKey();
 			Set<Integer> set = entry.getValue();
 			out.println();
 			out.println();
@@ -162,14 +180,14 @@ public class SynsetWordSearchMain {
 	}
 
 	private void put(Declaration decl, int declIndex) {
-		List<String> words = getWords(decl);
-		for(String word: words){
-			put(word, declIndex);
+		List<BigSet> bsets = getBsets(decl);
+		for(BigSet bset: bsets){
+			put(bset, declIndex);
 		}
 		
 	}
 
-	private void put(String word, int decl) {
+	private void put(BigSet word, int decl) {
 		if (!map.containsKey(word)){
 			Set<Integer> set = new HashSet<Integer>();
 			set.add(decl);
@@ -182,11 +200,40 @@ public class SynsetWordSearchMain {
 
 	//TODO improve this with wordnet.
 	//Find only lemmas for words and synonyms.
-	private List<String> getWords(Declaration decl) {
+	private List<BigSet> getBsets(Declaration decl) {
 		String name = decl.getName();
-		return getWords(name);
+		return getBsets(name);
 	}
 	
+	private List<BigSet> getBsets(String name) {
+		List<WordPOS> taggedWords = getTaggedWords(makeRowSentence(name));
+		List<BigSet> bsets = new ArrayList<BigSet>();
+		
+		for(WordPOS wp: taggedWords){
+		  String word = wp.getWord();
+		  POS pos = wp.getPos();
+		  
+		  System.out.println(word+"   "+pos);
+		  
+		  List<String> steams = getSteams(word, pos);
+		  
+		  if (steams.size() > 0){
+			  System.out.println(steams.get(0));
+			  
+			  Set<ISynsetID> synsets = getSynsets(steams.get(0), pos);
+			  
+			  if (!synsets.isEmpty()){
+				  BigSet bigSet = new BigSet(synsets);		 		  
+				  wordbs.add(bigSet);
+				  bsets.add(bigSet);
+			  }
+		  }
+		}
+		
+		return bsets;
+	}
+
+
 	private String makeRowSentence(String sentence){
 		List<String> words = getWords(sentence);
 		String s = "";
@@ -238,22 +285,25 @@ public class SynsetWordSearchMain {
 		return words;
 	}
 	
-	public List<Integer> getSynsets(String rWord, POS pos){
-		List<Integer> syn = new LinkedList<Integer>();
+	public Set<ISynsetID> getSynsets(String rWord, POS pos){
+		
+		Set<ISynsetID> syn = new HashSet<ISynsetID>();
 		IIndexWord idxWord = dict.getIndexWord(rWord, pos);
 		if (idxWord != null) {
 			for(IWordID wordID : idxWord.getWordIDs()) {
-				syn.add(getSynsets(wordID));
+				syn.addAll(getSynsets(wordID));
 			}
 		}
 		return syn;
 	}
 
-	private int getSynsets(IWordID wordID) {
-		List<String> syn = new LinkedList<String>();
+	//TODO: Include nearby synsets as well.
+	private Set<ISynsetID> getSynsets(IWordID wordID) {
+		Set<ISynsetID> set = new HashSet<ISynsetID>();
 		IWord word = dict.getWord(wordID);
 		ISynset synset = word.getSynset();
-		return synset.getOffset();
+		set.add(synset.getID());
+		return set;
 	}
 	
 	public List<String> getSteams(String word, POS pos){
@@ -271,26 +321,6 @@ public class SynsetWordSearchMain {
 			} else return null;
 		}
     }
-	
-	public static class WordPOS {
-		
-		private String word;
-		private POS pos;
-
-		public WordPOS(String word, POS pos){
-			this.word = word;
-			this.pos = pos;
-		}
-		
-		public String getWord() {
-			return word;
-		}
-
-		public POS getPos() {
-			return pos;
-		}		
-		
-	}
 	
 	public List<WordPOS> getTaggedWords(String sentence){
 		String[] wordTags = tagSentence(sentence);
@@ -312,8 +342,8 @@ public class SynsetWordSearchMain {
 				} else if(oldPos.startsWith("J")){
 					pos = POS.ADJECTIVE;
 				} else if(oldPos.startsWith("R")){
-					pos = pos.ADVERB;
-				}
+					pos = POS.ADVERB;
+				} else pos = POS.NOUN;
 				
 				tagged.add(new WordPOS(splits[0], pos));
 			}
