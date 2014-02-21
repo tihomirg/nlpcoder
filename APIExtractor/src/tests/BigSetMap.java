@@ -1,10 +1,15 @@
 package tests;
 
+import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+
+import javax.naming.directory.DirContext;
 
 import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.item.ISynset;
@@ -43,6 +48,26 @@ public class BigSetMap {
 			map.put(wid, setb);
 		}
 		setb.add(set);
+	}
+	
+	public void print(PrintStream out){
+		for(Entry<IWordID, Set<BigSet>> entry: map.entrySet()){	
+			IWord word2 = dict.getWord(entry.getKey());
+			out.print("["+word2.getLemma()+" "+word2.getLexicalID()+"] ");
+			for(BigSet set: entry.getValue()){
+				Set<ISynsetID> synsets = set.getSynsets();
+				for(ISynsetID synset: synsets){
+					ISynset synset2 = dict.getSynset(synset);
+					out.print("[");
+					for(IWord word:synset2.getWords()){
+						out.print(" "+word.getLemma()+" "+word.getLexicalID());
+					}
+					out.print("] ");
+				}
+				//out.print(Arrays.toString(set.getSynsets().toArray()));
+			}
+			out.println();
+		}
 	}
 	
 }

@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import edu.mit.jwi.item.ISynsetID;

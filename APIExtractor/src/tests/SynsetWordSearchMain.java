@@ -1,6 +1,7 @@
 package tests;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -81,7 +82,6 @@ public class SynsetWordSearchMain {
 		return wordbs;
 	}
 
-
 	public void setWordbs(BigSetMap wordbs) {
 		this.wordbs = wordbs;
 	}
@@ -91,12 +91,38 @@ public class SynsetWordSearchMain {
 		SynsetWordSearchMain synSearch = new SynsetWordSearchMain();
 		File jars = new File("C:/Users/gvero/git/jars");
 		
-		synSearch.scanAll(jars);
+		//synSearch.scanAll(jars);
 		
-		String name = "west sells me";
+		try {
+			synSearch.scanFirst(jars);	
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
+		PrintStream ps;
+		try {
+			ps = new PrintStream(new File("jars.txt"));
+			synSearch.print(ps);
+			ps.close();				
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		PrintStream ps2;
+		try {
+			ps2 = new PrintStream(new File("jars-big-set.txt"));
+			synSearch.getWordbs().print(ps2);
+			ps2.close();				
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	
+		
+//      String name = "west sells me";
 //		List<WordPOS> taggedWords = synSearch.getTaggedWords(synSearch.makeRowSentence(name));
 //		List<BigSet> bsets = new ArrayList<BigSet>();
 //		
@@ -124,6 +150,22 @@ public class SynsetWordSearchMain {
 		
 	}
 	
+	
+	private static final int MAX_TO_SCANE = 1000;
+	private int scanned = 0;
+	
+	public void scanFirst(File folder) throws Exception {
+	    for (File fileEntry : folder.listFiles()) {
+	        if (fileEntry.isDirectory()) {
+	            scanFirst(fileEntry);
+	        } else {
+	        	if (fileEntry.isFile() && fileEntry.getName().endsWith(".jar")){
+	               scanFirst(fileEntry.getAbsolutePath());
+	        	}
+	        }
+	    }
+	}	
+	
 	public void scanAll(File folder) {
 	    for (File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
@@ -136,6 +178,34 @@ public class SynsetWordSearchMain {
 	    }
 	}	
 
+	private void scanFirst(String jarFile) throws Exception {
+		try {
+			JarFile jar = new JarFile(jarFile);
+
+			Enumeration<JarEntry> entries = jar.entries();
+			while (entries.hasMoreElements()) {
+				JarEntry file = entries.nextElement();
+
+				file.isDirectory();
+				if (!file.isDirectory() && file.getName().endsWith(".class")){
+					InputStream in = jar.getInputStream(file);
+					Declaration[] decls = BcelMain.getDeclarations(in);
+
+					put(decls);
+					
+				    scanned++;
+				    if(scanned >= MAX_TO_SCANE){
+				 	   throw new Exception("Scanned: "+scanned+" declarations.");
+				    }					
+										
+				}
+			}			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}    
+    
 	private void scan(String jarFile) {
 		try {
 			JarFile jar = new JarFile(jarFile);
@@ -161,15 +231,40 @@ public class SynsetWordSearchMain {
 
 	private void print(PrintStream out) {
 		for(Entry<BigSet, Set<Integer>> entry: map.entrySet()){
-			BigSet word = entry.getKey();
-			Set<Integer> set = entry.getValue();
+			BigSet bset = entry.getKey();
+			Set<Integer> decls = entry.getValue();
 			out.println();
 			out.println();
-			out.println("Word: "+word);
-			out.println(Arrays.toString(set.toArray()));
+			List<String> words = getWords(bset);
+			out.println("Words: "+Arrays.toString(words.toArray()));
+			out.println(Arrays.toString(findDecls(decls).toArray()));
 		}
 		
 	}
+	
+	public List<String> findDecls(Set<Integer> indexes){
+		List<String> decls = new LinkedList<String>();
+		
+		for(int index: indexes){
+			decls.add(array.get(index).toString());
+		}
+		
+		return decls;
+	}
+	
+	public List<String> getWords(BigSet bset) {
+		List<String> words = new LinkedList<String>();
+		
+		for(ISynsetID sid: bset.getSynsets()){
+			ISynset synset = dict.getSynset(sid);
+			List<IWord> words2 = synset.getWords();
+			for(IWord word: words2){
+				words.add(word.getLemma());
+			}
+		}
+		
+		return words;
+	}	
 
 	private void put(Declaration[] decls) {
 		for(Declaration decl: decls){
@@ -202,6 +297,7 @@ public class SynsetWordSearchMain {
 	//Find only lemmas for words and synonyms.
 	private List<BigSet> getBsets(Declaration decl) {
 		String name = decl.getName();
+		System.out.println("Name: "+name);
 		return getBsets(name);
 	}
 	
@@ -328,9 +424,14 @@ public class SynsetWordSearchMain {
 		
 		for(String wordTag: wordTags){
 			String[] splits = wordTag.split("/");
-			System.out.println(Arrays.toString(splits));
 			if (splits[0].equals("string")){
 				tagged.add(new WordPOS(splits[0], POS.NOUN));
+			} if (splits[0].equals("close")){
+				tagged.add(new WordPOS(splits[0], POS.VERB));
+			} if (splits[0].equals("println")){
+				tagged.add(new WordPOS("print", POS.VERB));
+			} if (splits[0].equals("key")){
+				tagged.add(new WordPOS("key", POS.VERB));
 			} else {
 				String oldPos = splits[1];
 				POS pos = null;

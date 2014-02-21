@@ -1,71 +1,54 @@
-package tests;
+package selection;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 
-
 import definitions.Declaration;
 
-public class BcelMain {
+public class ClassLoader {
+
+	private JavaClass clazz;
+	private List<Declaration> methods;
+	private List<Declaration> fields;
 	
-	public static void main(String[] args){
+	public ClassLoader(String fileName) throws IOException {
+		this(new ClassParser(fileName));
+	}	
+	
+	public ClassLoader(InputStream in){
+		this(new ClassParser(in, null));
+	}
+	
+	public ClassLoader(ClassParser parser) {
 		try {
+			this.clazz = parser.parse();
+			this.methods = initMethods();
+			this.fields = initFields();
 			
-			String fileName = "C:/users/gvero/git/nlpcoder/APIExtractor/bin/test/CityImpl.class";
-			
-			String output = "file.json";
-			
-			Declaration[] decls = getDeclarations(fileName);
-	
-			
+		} catch (ClassFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
-	public static Declaration[] getDeclarations(InputStream in)
-			throws IOException {
-		ClassParser parser = new ClassParser(in, null);
-		
-        return getDeclarations(parser);
+	public List<Declaration> getDeclarations() throws IOException {		
+		List<Declaration> decls = getMethods();
+		decls.addAll(getFields());
+		return decls;
 	}
 
-	private static Declaration[] getDeclarations(ClassParser parser)
-			throws IOException {
-		JavaClass clazz = parser.parse();
-		
-		//System.out.println(clazz);
-		
-		List<Declaration> decls = getMethods(clazz);
-		decls.addAll(getFields(clazz));
-		
-		Declaration[] declArr = new Declaration[decls.size()];
-		
-		for(int i=0; i< declArr.length; i++){
-			declArr[i] = decls.get(i);
-		}
-		return declArr;
-	}	
-	
-	
-	private static Declaration[] getDeclarations(String fileName)
-			throws IOException {
-		ClassParser parser = new ClassParser(fileName);
-		
-		return getDeclarations(parser);
-	}
-
-	private static List<Declaration> getMethods(JavaClass clazz) {
+	private List<Declaration> initMethods() {
 		Method[] methods = clazz.getMethods();
 		
 		List<Declaration> decls = new ArrayList<Declaration>();
@@ -94,7 +77,7 @@ public class BcelMain {
 		return decls;
 	}
 	
-	private static List<Declaration> getFields(JavaClass clazz) {
+	private List<Declaration> initFields() {
 		Field[] fields = clazz.getFields();
 		
 		List<Declaration> decls = new ArrayList<Declaration>();
@@ -109,6 +92,17 @@ public class BcelMain {
 			}
 		}
 		return decls;
-	}	
+	}
 	
+	public JavaClass getClazz() {
+		return clazz;
+	}
+
+	public List<Declaration> getMethods() {
+		return methods;
+	}
+
+	public List<Declaration> getFields() {
+		return fields;
+	}	
 }
