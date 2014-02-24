@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class JarLoder implements IJarLoader{
+public class JarLoder implements IJarLoader {
 
 	@Override
 	public List<ClassLoader> getClassFiles(List<String> jarFiles) {

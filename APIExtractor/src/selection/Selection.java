@@ -9,7 +9,7 @@ public class Selection {
 	private IWordExtractor extractor;
 	
 	public Selection(){	
-		this(new WordExtractorFromName(new WordProcessor(new WordCorrector())));
+		this(new WordExtractorFromName(new WordProcessor()));
 	}
 	
 	public Selection(IWordExtractor extractor){

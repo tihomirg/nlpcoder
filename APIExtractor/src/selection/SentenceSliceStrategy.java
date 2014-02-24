@@ -1,62 +1,77 @@
 package selection;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import edu.mit.jwi.item.POS;
-import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 public class SentenceSliceStrategy implements ISentenceSliceStrategy {
 
+	private static final int DEFAULT_GROUP_INDEX = 0;
 	private WordProcessor processor;
-	private WordFactory factory;
-	private MaxentTagger tagger;
 
 	public SentenceSliceStrategy(WordProcessor processor) {
 		this.processor = processor;
-		try {
-			this.tagger = new MaxentTagger("C:/Users/gvero/git/lib/stanford-postagger-2011-04-20/models/left3words-wsj-0-18.tagger");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
-
+	
 	@Override
 	public List<Words> slice(String sentence) {
 		List<Words> groups = new ArrayList<Words>();
 
-		String[] splits = trim(sentence);
-
-		for(int i = 0; i< splits.length; i++) {
-			String split = splits[i];
-			TaggedString tagged = TaggedString.create(split);
-
-			groups.add(getWords(tagged, i));
+		List<String> splits = tag(sentence);
+		for(int i = 0; i < splits.size(); i++) {
+			groups.add(getWords(TaggedLemma.create(splits.get(i)), i));
 		}
 
 		return groups;
 	}
 
-	private Words getWords(TaggedString tagged, int i) {
-		return factory.getWords(processor.sliceComplexWord(tagged.getWord()), tagged.getTag(), i, 0);
+	private Words getWords(TaggedLemma subsentence, int wordIndex) {
+		WordFactory factory = processor.getFactory();
+		POS subsentencePos = subsentence.getTag();
+		List<String> splits = tag(processor.decompose(subsentence.getWord()));
+		
+		List<Word> words = new ArrayList<Word>();
+		for(int i = 0; i < splits.size(); i++){
+			TaggedLemma lemma = TaggedLemma.create(splits.get(i));
+			
+			POS pos = lemma.getTag();
+			String word = lemma.getWord();
+			
+			String name = processor.steam(word, pos);
+			if (name != null) words.add(factory.getWord(name, pos, wordIndex, DEFAULT_GROUP_INDEX));
+		}
+		
+		return factory.getWords(words, subsentencePos, wordIndex);
 	}
 
-	private String[] trim(String sentence) {
-		String[] splits = tagSentence(sentence);
+	private List<String> tag(List<String> decomposedSentence) {
+	  String s="";
+	  for(String dec: decomposedSentence){
+		  s+=dec+" ";
+	  }
+	  return tag(s);
+    }
 
-		if (splits[splits.length-1].equals(".")){
-			splits = Arrays.copyOf(splits, splits.length-1);
+	private List<String> tag(String sentence) {
+		String[] splits = tagSentence(sentence);
+		List<String> list = new ArrayList<String>();
+		
+		for(String split: splits){
+			System.out.println(split);
+			
+			if(!split.isEmpty()
+				&& !split.equals("")
+				&& Character.isJavaIdentifierPart(split.charAt(0))){
+				list.add(split);
+			}
 		}
-		return splits;
+		
+		return list;
 	}
 
 	public String[] tagSentence(String sentence){
-		return tagger.tagString(sentence).split(" ");
+		System.out.println(processor.getTagger().tagString(sentence));
+		
+		return processor.getTagger().tagString(sentence).split(" ");
 	}
 }

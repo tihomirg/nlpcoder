@@ -3,15 +3,31 @@ package selection;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.mit.jwi.item.POS;
+import edu.stanford.nlp.tagger.maxent.MaxentTagger;
+
 public class WordProcessor {
 	
 	private WordCorrector corrector;
+	private WordFactory factory;
+	private WordTagger tagger;
+	private WordNet wordNet;
 	
-	public WordProcessor(WordCorrector checker) {
-		this.corrector = checker;
+	public WordProcessor(){
+		this.setCorrector(new WordCorrector());
+		this.factory = new WordFactory();
+		this.tagger = new WordTagger();
+		this.wordNet = new WordNet();
+	}
+	
+	public WordProcessor(WordCorrector checker, WordFactory factory, WordTagger tagger, WordNet wordNet){
+		this.setCorrector(checker);
+		this.factory = factory;
+		this.tagger = tagger;
+		this.wordNet = wordNet;
 	}
 
-	public List<String> sliceComplexWord(String cWord){
+	public List<String> decompose(String cWord){
 		List<String> words = new ArrayList<String>();
 		for(String word: slice(cWord)){
 			String s = corrector.correct(word);
@@ -59,5 +75,29 @@ public class WordProcessor {
 		if (!lastAdded) words.add(word);
 		
 		return words;
+	}
+
+	public WordFactory getFactory() {
+		return factory;
+	}
+
+	public MaxentTagger getTagger() {
+		return tagger.getTagger();
+	}
+	
+	public String steam(String word, POS pos){
+		return wordNet.getSteam(word, pos);
+	}
+
+	public WordNet getWordNet() {
+		return wordNet;
+	}
+
+	public WordCorrector getCorrector() {
+		return corrector;
+	}
+
+	public void setCorrector(WordCorrector corrector) {
+		this.corrector = corrector;
 	}
 }

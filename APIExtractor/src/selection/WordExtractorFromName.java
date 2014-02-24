@@ -16,7 +16,7 @@ public class WordExtractorFromName implements IWordExtractor {
 	@Override
 	public List<WordIndex> get(Declaration decl) {
 		List<WordIndex> words = new ArrayList<WordIndex>();
-		List<String> sWords = wp.sliceComplexWord(decl.getName());
+		List<String> sWords = wp.decompose(decl.getName());
 		for (String sWord: sWords){
 			words.add(new WordIndex(sWord));
 		}

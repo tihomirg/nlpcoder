@@ -3,7 +3,7 @@ package selection;
 public class WordIndex {
 	private String lemma;
 	private int groupIndex;
-	
+
 	public WordIndex(String lemma) {
 		this.lemma = lemma;
 	}
@@ -25,5 +25,10 @@ public class WordIndex {
 	public void setGroupIndex(int groupIndex) {
 		this.groupIndex = groupIndex;
 	}
+	
+	@Override
+	public String toString() {
+		return "WordIndex [lemma=" + lemma + ", groupIndex=" + groupIndex + "]";
+	}	
 
 }

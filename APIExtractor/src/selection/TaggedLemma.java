@@ -3,11 +3,11 @@ package selection;
 import tests.WordPOS;
 import edu.mit.jwi.item.POS;
 
-public class TaggedString {
+public class TaggedLemma {
 	private String word;
 	private POS tag;
 	
-	public TaggedString(String word, POS tag) {
+	public TaggedLemma(String word, POS tag) {
 		super();
 		this.word = word;
 		this.tag = tag;
@@ -29,9 +29,9 @@ public class TaggedString {
 		this.tag = tag;
 	}
 
-	public static TaggedString create(String taggedString) {
+	public static TaggedLemma create(String taggedString) {
 		String[] splits = taggedString.split("/");
-		return new TaggedString(findWord(splits[0]), findTag(splits[0], splits[1]));
+		return new TaggedLemma(findWord(splits[0]), findTag(splits[0], splits[1]));
 	}
 	
 	private static POS findTag(String word, String tag){
