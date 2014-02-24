@@ -9,15 +9,6 @@ public class SynonymInflator extends WordsInflator {
 
 	@Override
 	public Words inflate(Words words) {
-		Words syns = new Words();
-		
-		
-		
-		for(Word word: words.getWords()){
-			wordNet.getSynonyms(word.getLemma(), word.getPos())
-		    	
-		}
-		
 		return null;
 	}
 
