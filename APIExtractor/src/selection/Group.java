@@ -3,6 +3,8 @@ package selection;
 import java.util.HashMap;
 import java.util.Map;
 
+import selection.trees.Word;
+
 public class Group {
 	private Map<String, RichDeclarations> map = new HashMap<String, RichDeclarations>();
 	

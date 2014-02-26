@@ -3,6 +3,8 @@ package selection;
 import java.util.HashSet;
 import java.util.Set;
 
+import selection.trees.Word;
+
 public class RichDeclarations {
 	
 	private Set<RichDeclaration> set = new HashSet<RichDeclaration>();

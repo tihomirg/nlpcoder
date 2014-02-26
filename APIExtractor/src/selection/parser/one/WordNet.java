@@ -1,4 +1,4 @@
-package selection;
+package selection.parser.one;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import selection.Config;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;

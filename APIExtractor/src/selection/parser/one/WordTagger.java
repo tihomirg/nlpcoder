@@ -1,6 +1,8 @@
-package selection;
+package selection.parser.one;
 
 import java.io.IOException;
+
+import selection.Config;
 
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 

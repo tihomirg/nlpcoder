@@ -1,4 +1,4 @@
-package selection;
+package selection.loaders;
 
 import java.io.IOException;
 import java.util.Enumeration;

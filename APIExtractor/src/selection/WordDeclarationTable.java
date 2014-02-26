@@ -1,5 +1,7 @@
 package selection;
 
+import selection.trees.Word;
+
 public class WordDeclarationTable {
 	private Group[] groups;
 
@@ -15,7 +17,7 @@ public class WordDeclarationTable {
 		groups[word.getGroupIndex()].tryInc(word);
 	}
 
-	public void addRichDeclaration(WordIndex wordIndex, RichDeclaration rd) {
-		groups[wordIndex.getGroupIndex()].add(wordIndex.getLemma(), rd);
+	public void addRichDeclaration(Word word, RichDeclaration rd) {
+		groups[word.getGroupIndex()].add(word.getLemma(), rd);
 	}
 }

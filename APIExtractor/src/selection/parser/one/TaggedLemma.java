@@ -1,4 +1,4 @@
-package selection;
+package selection.parser.one;
 
 import tests.WordPOS;
 import edu.mit.jwi.item.POS;

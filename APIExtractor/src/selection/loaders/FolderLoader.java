@@ -1,4 +1,4 @@
-package selection;
+package selection.loaders;
 
 import java.io.File;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package selection;
+package selection.loaders;
 
 import java.util.List;
 

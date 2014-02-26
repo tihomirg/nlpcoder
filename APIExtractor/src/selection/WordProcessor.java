@@ -3,6 +3,10 @@ package selection;
 import java.util.ArrayList;
 import java.util.List;
 
+import selection.parser.one.WordCorrector;
+import selection.parser.one.WordNet;
+import selection.parser.one.WordTagger;
+
 import edu.mit.jwi.item.POS;
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 

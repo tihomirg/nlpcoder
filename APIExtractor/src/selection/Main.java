@@ -1,18 +1,19 @@
 package selection;
 
-import java.util.Arrays;
-import java.util.List;
+import selection.parser.one.ParserOne;
+import selection.parser.one.SentenceZero;
 
 public class Main {
 
 	public static void main(String[] args) {
 		WordProcessor wordProcessor = new WordProcessor();
-		SentenceParser parser = new SentenceParser(new SentenceSliceStrategy(wordProcessor));
+		ParserPipeline parser = new ParserPipeline(new IParser[]{new ParserOne(wordProcessor)});
 		
-		List<Words> slice = parser.slice("Buffer Input-Stream.");
+		SentenceZero zero = new SentenceZero("Buffer Input-Stream.");
 		
-		System.out.println(Arrays.toString(slice.toArray()));
+		ISentence one = parser.parse(zero);
 		
+		System.out.print(one);
 		
 		
 		//Selection selection = new Selection(new WordExtractorFromName(wordProcessor));

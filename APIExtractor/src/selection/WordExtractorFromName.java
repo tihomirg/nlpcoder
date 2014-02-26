@@ -3,24 +3,22 @@ package selection;
 import java.util.ArrayList;
 import java.util.List;
 
+import selection.trees.Constituent;
+import selection.trees.Word;
+
 import definitions.Declaration;
 
 public class WordExtractorFromName implements IWordExtractor {
 
-	private WordProcessor wp;
+	private IParser strategy;
 	
-	public WordExtractorFromName(WordProcessor wp) {
-		this.wp = wp;
+	public WordExtractorFromName(IParser strategy) {
+		this.strategy = strategy;
 	}
 
 	@Override
-	public List<WordIndex> get(Declaration decl) {
-		List<WordIndex> words = new ArrayList<WordIndex>();
-		List<String> sWords = wp.decompose(decl.getName());
-		for (String sWord: sWords){
-			words.add(new WordIndex(sWord));
-		}
-		return words;
+	public List<List<Word>> get(Declaration decl) {
+		return null;//strategy.slice(decl.getName());
 	}
 
 	@Override

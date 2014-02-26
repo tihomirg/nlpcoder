@@ -1,21 +1,24 @@
-package selection;
+package selection.trees;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+
+import selection.shares.IShare;
 
 import edu.mit.jwi.item.POS;
 
-public class Words {
+public class Constituent {
 
 	private int index;
 
+	private IShare share;
+	
 	private List<Word> words;
 
 	private POS pos;
 	
-	public Words(){
+	public Constituent(){
 		this.words = new ArrayList<Word>();
 	}
 	
@@ -33,7 +36,7 @@ public class Words {
 	
 	public void addAll(List<Word> words) {
 		this.words.addAll(words);
-	}	
+	}
 	
 	public void setPos(POS pos) {
 		this.pos = pos;
@@ -46,5 +49,33 @@ public class Words {
 	@Override
 	public String toString() {
 		return "Words [index=" + index + ", pos=" + pos+ ", words=" + Arrays.toString(words.toArray()) + "]\n";
+	}
+
+	public IShare getShare() {
+		return share;
+	}
+
+	public void setShare(IShare share) {
+		this.share = share;
+	}
+	
+	public boolean contains(Word key){
+		String keyLemma = key.getLemma();
+		for(Word word: words){
+			if (keyLemma.equals(word.getLemma())){
+				return true;
+			}
+		}
+		return false;	
+	}
+	
+	public Word find(Word key){
+		String keyLemma = key.getLemma();
+		for(Word word: words){
+			if (keyLemma.equals(word.getLemma())){
+				return word;
+			}
+		}
+		return null;
 	}
 }
