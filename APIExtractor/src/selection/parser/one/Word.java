@@ -2,14 +2,17 @@ package selection.parser.one;
 
 import edu.mit.jwi.item.POS;
 
-public class Word {
-
+public class Word implements Cloneable {
 	private String lemma;
 	private POS pos;
 	private int index;
 	private int constIndex;
 	private double probability;
-
+	
+	public Word(String lemma, POS pos) {
+		this(lemma, pos, 0);
+	}
+	
 	public Word(String lemma, POS pos, int constIndex) {
 		this(lemma, pos, constIndex, 0);
 	}	
@@ -61,6 +64,12 @@ public class Word {
 		this.probability = probability;
 	}
 
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}	
+	
 	@Override
 	public String toString() {
 		return "Word [lemma=" + lemma + ", pos=" + pos + ", index=" + index

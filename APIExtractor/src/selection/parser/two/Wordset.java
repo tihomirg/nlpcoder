@@ -1,6 +1,7 @@
 package selection.parser.two;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import selection.parser.one.Word;
@@ -9,6 +10,15 @@ public class Wordset {
 	private double probability;
 	private Level[] levels;
 
+	public Wordset(Level[] levels){
+		this(levels, 0.0);
+	}
+	
+	public Wordset(Level[] levels, double probability) {
+		this.probability = probability;
+		this.levels = levels;
+	}
+	
 	public double getProbability() {
 		return probability;
 	}
@@ -30,4 +40,10 @@ public class Wordset {
 		}
 		return words;
 	}
+	
+	@Override
+	public String toString() {
+		return "Wordset [probability=" + probability + ", levels="
+				+ Arrays.toString(levels) + "]\n";
+	}	
 }

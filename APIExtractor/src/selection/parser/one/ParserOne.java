@@ -5,7 +5,6 @@ import java.util.List;
 
 import selection.IParser;
 import selection.ISentence;
-import selection.WordFactory;
 import selection.WordProcessor;
 import selection.parser.one.trees.SentenceOne;
 import edu.mit.jwi.item.POS;
@@ -30,7 +29,6 @@ public class ParserOne extends IParser {
 	}
 
 	private List<Word> getWords(TaggedLemma constituent, int consIndex) {
-		WordFactory factory = processor.getFactory();
 		List<String> splits = tag(processor.decompose(constituent.getWord()));
 		
 		List<Word> words = new ArrayList<Word>();
@@ -41,7 +39,7 @@ public class ParserOne extends IParser {
 			String word = lemma.getWord();
 			
 			String name = processor.steam(word, pos);
-			if (name != null) words.add(factory.createWordOne(name, pos, consIndex));
+			if (name != null) words.add(new Word(name, pos, consIndex));
 		}
 		
 		return words;
@@ -79,19 +77,25 @@ public class ParserOne extends IParser {
 	public ISentence parse(SentenceZero curr) { 
 		List<List<Word>> wordss = this.slice(curr.getRep());
 		Word[] words = getWords(wordss);
+		setIndexes(words);
 		ConstituentOne[] cons = getConstituents(wordss);
 		
 		return new SentenceOne(cons, words);
 	}
 
+	private void setIndexes(Word[] words) {
+		for (int i = 0; i < words.length; i++) {
+			words[i].setIndex(i);
+		}
+	}
+
 	private ConstituentOne[] getConstituents(List<List<Word>> wordss) {
-		WordFactory factory = processor.getFactory();
 		int length = wordss.size();
 		ConstituentOne[] cons = new ConstituentOne[length];
 		
 		for(int i = 0; i< length; i++){
 		  List<Word> list = wordss.get(i);
-		  cons[i] = factory.getWords(list.toArray(new Word[list.size()]), i);
+		  cons[i] = new ConstituentOne(list.toArray(new Word[list.size()]), i);
 		}
 		
 		return cons;

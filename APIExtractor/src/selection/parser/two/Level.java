@@ -1,16 +1,19 @@
 package selection.parser.two;
 
-import java.util.Arrays;
 import java.util.List;
 
 import selection.parser.one.Word;
 
 public class Level {
 	private double probability;
-	private double depth;
+	private int depth;
 	private List<Word> words;
+
+	public Level(List<Word> words, int depth) {
+		this(words, depth, 0.0);
+	}
 	
-	public Level(double depth, List<Word> words, double probability) {
+	public Level(List<Word> words, int depth, double probability) {
 		this.probability = probability;
 		this.depth = depth;
 		this.words = words;
@@ -28,10 +31,16 @@ public class Level {
 	public void setWords(List<Word> words) {
 		this.words = words;
 	}
-	public double getDepth() {
+	public int getDepth() {
 		return depth;
 	}
-	public void setDepth(double depth) {
+	public void setDepth(int depth) {
 		this.depth = depth;
 	}	
+
+	@Override
+	public String toString() {
+		return "Level [probability=" + probability + ", depth=" + depth
+				+ ", words=" + words + "]";
+	}
 }

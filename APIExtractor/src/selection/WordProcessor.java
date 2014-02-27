@@ -13,20 +13,17 @@ import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 public class WordProcessor {
 	
 	private WordCorrector corrector;
-	private WordFactory factory;
 	private WordTagger tagger;
 	private WordNet wordNet;
 	
 	public WordProcessor(){
 		this.setCorrector(new WordCorrector());
-		this.factory = new WordFactory();
 		this.tagger = new WordTagger();
 		this.wordNet = new WordNet();
 	}
 	
-	public WordProcessor(WordCorrector checker, WordFactory factory, WordTagger tagger, WordNet wordNet){
+	public WordProcessor(WordCorrector checker, WordTagger tagger, WordNet wordNet){
 		this.setCorrector(checker);
-		this.factory = factory;
 		this.tagger = tagger;
 		this.wordNet = wordNet;
 	}
@@ -79,10 +76,6 @@ public class WordProcessor {
 		if (!lastAdded) words.add(word);
 		
 		return words;
-	}
-
-	public WordFactory getFactory() {
-		return factory;
 	}
 
 	public MaxentTagger getTagger() {
