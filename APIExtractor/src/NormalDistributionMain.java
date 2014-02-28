@@ -3,7 +3,7 @@ import java.util.Arrays;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 
-public class NormalFormMain {
+public class NormalDistributionMain {
 
 	public static void main(String[] args){
 		NormalDistribution nd = new NormalDistribution();
