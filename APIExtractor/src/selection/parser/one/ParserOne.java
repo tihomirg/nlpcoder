@@ -30,16 +30,19 @@ public class ParserOne extends IParser {
 
 	private List<Word> getWords(TaggedLemma constituent, int consIndex) {
 		List<String> splits = tag(processor.decompose(constituent.getWord()));
-		
+		POS tag = constituent.getTag();
 		List<Word> words = new ArrayList<Word>();
-		for(int i = 0; i < splits.size(); i++){
+		
+		int size = splits.size();
+		
+		for(int i = 0; i < size; i++){
 			TaggedLemma lemma = TaggedLemma.create(splits.get(i));
 			
 			POS pos = lemma.getTag();
 			String word = lemma.getWord();
 			
 			String name = processor.steam(word, pos);
-			if (name != null) words.add(new Word(name, pos, consIndex));
+			if (name != null) words.add(new Word(name, size == 1? tag: pos, consIndex));
 		}
 		
 		return words;

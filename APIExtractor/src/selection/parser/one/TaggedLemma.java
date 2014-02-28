@@ -35,9 +35,13 @@ public class TaggedLemma {
 	}
 	
 	private static POS findTag(String word, String tag){
-		if (tag.startsWith("N") || word.equals("string")){
+		if (word.equals("string")){
 			return POS.NOUN;
-		} else if (tag.startsWith("V") || word.equals("close") || word.equals("println") || word.equals("key")){
+		} else if (word.equals("close") || word.equals("println") || word.equals("key")){
+			return POS.VERB;
+		} else if(tag.startsWith("N")){
+			return POS.NOUN;
+		} else if(tag.startsWith("V")){
 			return POS.VERB;
 		} else if(tag.startsWith("J")){
 				return POS.ADJECTIVE;
