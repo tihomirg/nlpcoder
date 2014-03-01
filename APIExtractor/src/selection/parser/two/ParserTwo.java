@@ -64,7 +64,7 @@ public class ParserTwo extends IParser {
 			wordsets[i] = getWordset(word2, index, wordIndex);
 		}
 
-		return new ConstituentTwo(wordsets, index, firstImportantIndex, lastImportantIndex);
+		return new ConstituentTwo(wordsets, index, firstImportantIndex - leftIndex, lastImportantIndex - leftIndex);
 	}
 
 	private List<Word> prepareWords(LinkedList<Word> words, int constituentIndex, int wordIndex, Set<String> visited) {

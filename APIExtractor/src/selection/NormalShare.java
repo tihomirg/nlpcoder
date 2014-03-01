@@ -4,7 +4,7 @@ public class NormalShare {
 	private double[] left;
 	private double[] right;
 	private double center;
-		
+	
 	public NormalShare(double[] left, double[] right, double center) {
 		this.left = left;
 		this.right = right;
@@ -40,7 +40,7 @@ public class NormalShare {
 		a[left.length] = center;
 		
 		for (int i = left.length+1; i < right.length+left.length+1; i++) {
-			a[i] = right[i];
+			a[i] = right[i-left.length-1];
 		}
 		
 		return a;

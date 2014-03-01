@@ -43,7 +43,7 @@ public class Wordset {
 	
 	@Override
 	public String toString() {
-		return "Wordset [probability=" + probability + ", levels="
+		return "Wordset [probability=" + probability + ",\n levels="
 				+ Arrays.toString(levels) + "]\n";
 	}	
 }

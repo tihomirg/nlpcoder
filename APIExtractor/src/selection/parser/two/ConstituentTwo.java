@@ -56,11 +56,15 @@ public class ConstituentTwo {
 		this.index = index;
 	}
 
+	public int getImportantLength(){
+		return lastImportantIndex - firstImporatantIndex+1;
+	}	
+	
 	@Override
 	public String toString() {
 		return "ConstituentTwo [index=" + index + ", firstImporatantIndex="
 				+ firstImporatantIndex + ", lastImportantIndex="
-				+ lastImportantIndex + ", wordsets="
+				+ lastImportantIndex + "\n, wordsets="
 				+ Arrays.toString(wordsets) + "]\n";
 	}
 }

@@ -6,7 +6,7 @@ import selection.IParser;
 import selection.ISentence;
 import selection.parser.one.Word;
 
-public class SentenceTwo implements ISentence{
+public class SentenceTwo implements ISentence {
 
 	private ConstituentTwo[] constituents;
 	private Word[] words;
@@ -37,6 +37,6 @@ public class SentenceTwo implements ISentence{
 	@Override
 	public String toString() {
 		return "SentenceTwo [constituents=" + Arrays.toString(constituents)
-				+ ", words=" + Arrays.toString(words) + "]";
+				+ ",\n words=" + Arrays.toString(words) + "]\n";
 	}
 }
