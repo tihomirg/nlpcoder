@@ -3,7 +3,7 @@ package selection;
 import java.util.HashSet;
 import java.util.Set;
 
-import selection.trees.Word;
+import selection.parser.one.Word;
 
 public class RichDeclarations {
 	

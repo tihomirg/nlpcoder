@@ -3,9 +3,9 @@ package selection;
 import java.util.HashMap;
 import java.util.Map;
 
-import selection.trees.Word;
+import selection.parser.one.Word;
 
-public class Group {
+public class TagGroup {
 	private Map<String, RichDeclarations> map = new HashMap<String, RichDeclarations>();
 	
 	public void add(String word, RichDeclaration decl) {

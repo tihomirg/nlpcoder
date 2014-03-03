@@ -9,8 +9,6 @@ import definitions.Declaration;
 
 public interface IWordExtractor {
 
-	List<List<Word>> get(Declaration decl);
-
-	int getGroupNum();
+	Indexes get(Declaration decl);
 
 }

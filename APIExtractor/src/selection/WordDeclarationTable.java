@@ -1,23 +1,23 @@
 package selection;
 
-import selection.trees.Word;
+import selection.parser.one.Word;
 
 public class WordDeclarationTable {
-	private Group[] groups;
+	private TagGroup[] groups;
 
 	public WordDeclarationTable(int groupNum) {
-		this.groups = new Group[groupNum];
+		this.groups = new TagGroup[Config.getNumOfTags()];
 		
 		for(int i=0; i<groupNum; i++){
-			this.groups[i] = new Group();
+			this.groups[i] = new TagGroup();
 		}
 	}
 
 	public void tryInc(Word word) {
-		groups[word.getGroupIndex()].tryInc(word);
+		groups[word.getIndex()].tryInc(word);
 	}
 
 	public void addRichDeclaration(Word word, RichDeclaration rd) {
-		groups[word.getGroupIndex()].add(word.getLemma(), rd);
+		groups[word.getIndex()].add(word.getLemma(), rd);
 	}
 }

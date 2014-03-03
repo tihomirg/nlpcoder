@@ -1,10 +1,7 @@
 package selection;
 
-import java.util.List;
-
 import selection.parser.one.ParserOne;
-import selection.trees.Constituent;
-import selection.trees.Word;
+import selection.parser.one.Word;
 
 import definitions.Declaration;
 
@@ -13,19 +10,18 @@ public class Selection {
 	private IWordExtractor extractor;
 	
 	public Selection(){	
-		this(new WordExtractorFromName(new ParserOne(new WordProcessor())));
+		this(new WordExtractorFromName(new ParserPipeline(new IParser[]{new ParserOne(new WordProcessor())})));
 	}
 	
 	public Selection(IWordExtractor extractor){
-		this.table = new WordDeclarationTable(extractor.getGroupNum());
+		this.table = new WordDeclarationTable(Config.getNumOfTags());
 		this.extractor = extractor;
 	}
 	
 	public void add(Declaration decl){
-		List<List<Word>> wordsList = extractor.get(decl);
-		RichDeclaration rd = new RichDeclaration(decl, wordsList);
-		for(List<Word> words:  wordsList)
-		  for(Word word: words)
+		Indexes indexes = extractor.get(decl);
+		RichDeclaration rd = new RichDeclaration(decl, indexes);
+		  for(Word word: indexes.getWords())
 			table.addRichDeclaration(word, rd);
 	}
 	

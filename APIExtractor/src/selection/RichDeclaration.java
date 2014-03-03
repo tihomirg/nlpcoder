@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import selection.trees.Constituent;
-import selection.trees.Word;
+import selection.parser.one.Word;
 
 import definitions.Declaration;
 
@@ -13,20 +13,19 @@ public class RichDeclaration {
 
 	private Declaration decl;	
 	private double initVal;
-	private Map<Integer, Double> indexToVal;
+	private Map<Integer, Double> probabilities;
 
-	//We assume that each lemma appears exactly once in all words!
-	//Should be 
-	private List<Constituent> words;
+	private Indexes indexes;
 
-	public RichDeclaration(Declaration decl, List<List<Word>> wordsList){
-		this(decl, 0.0);
+	public RichDeclaration(Declaration decl, Indexes indexes){
+		this(decl, 0.0, indexes);
 	}
 
-	public RichDeclaration(Declaration decl, double initVal) {
+	public RichDeclaration(Declaration decl, double initVal, Indexes indexes) {
 		this.decl = decl;
 		this.initVal = initVal;
-		this.indexToVal = new HashMap<Integer, Double>();
+		this.indexes = indexes;
+		this.probabilities = new HashMap<Integer, Double>();
 	}
 
 	public Declaration getDecl() {
@@ -46,46 +45,20 @@ public class RichDeclaration {
 	}	
 
 	public void inc(Word key){
-		Word word = find(key);
-		if (word != null){
-			incMap(key.getWordIndex(), calcWeight(key, word));
-		}
-	}
-
-	private double calcWeight(Word key, Word word) {
-		// TODO Include word number!
-		return key.getProbability() * word.getProbability();
-	}
-
-	private Word find(Word key){
-		for(Constituent words1: words){
-			Word word = words1.find(key);
-			if (word != null){
-				return word;
-			}
-		}
-		return null;
+	   incMap(key.getIndex(), indexes.getProbability(key));
 	}
 
 	private void incMap(int index, double addProb) {
-		if(!indexToVal.containsKey(index)){
-			indexToVal.put(index, addProb);
+		if(!probabilities.containsKey(index)){
+			probabilities.put(index, addProb);
 		} else {
-			double val = indexToVal.get(index);
-			indexToVal.put(index, val + addProb);
+			double val = probabilities.get(index);
+			probabilities.put(index, val + addProb);
 		}
 	}
 
 	public void clear(){
-		indexToVal.clear();
-	}
-
-	public List<Constituent> getWords() {
-		return words;
-	}
-
-	public void setWords(List<Constituent> words) {
-		this.words = words;
+		probabilities.clear();
 	}
 
 }
