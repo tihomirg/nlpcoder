@@ -2,6 +2,8 @@ package selection.loaders;
 
 import java.util.List;
 
+import selection.WordExtractorFromName;
+
 public interface IJarLoader {
-	 List<ClassLoader> getClassFiles(List<String> jarFiles);
+	 ClassLoader[] getClassFiles(List<String> jarFiles, WordExtractorFromName extractor);
 }

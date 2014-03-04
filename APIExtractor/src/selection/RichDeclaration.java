@@ -1,10 +1,8 @@
 package selection;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import selection.trees.Constituent;
 import selection.parser.one.Word;
 
 import definitions.Declaration;
@@ -59,6 +57,11 @@ public class RichDeclaration {
 
 	public void clear(){
 		probabilities.clear();
+	}
+
+	@Override
+	public String toString() {
+		return decl.toString();
 	}
 
 }

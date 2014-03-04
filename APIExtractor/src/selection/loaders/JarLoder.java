@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import selection.WordExtractorFromName;
+
 public class JarLoder implements IJarLoader {
 
 	@Override
-	public List<ClassLoader> getClassFiles(List<String> jarFiles) {
+	public ClassLoader[] getClassFiles(List<String> jarFiles, WordExtractorFromName extractor) {
 		List<ClassLoader> files = new LinkedList<ClassLoader>();
 
 		for(String jarFile: jarFiles){
@@ -22,9 +24,8 @@ public class JarLoder implements IJarLoader {
 				while (entries.hasMoreElements()) {
 					JarEntry file = entries.nextElement();
 
-					file.isDirectory();
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						files.add(new ClassLoader(jar.getInputStream(file)));
+						files.add(new ClassLoader(jar.getInputStream(file), extractor));
 					}
 				}
 			} catch (IOException e) {
@@ -32,6 +33,6 @@ public class JarLoder implements IJarLoader {
 				e.printStackTrace();
 			}
 		}
-		return files;
+		return files.toArray(new ClassLoader[files.size()]);
 	}
 }

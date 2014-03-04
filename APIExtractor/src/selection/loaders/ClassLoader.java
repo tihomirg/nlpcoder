@@ -2,7 +2,9 @@ package selection.loaders;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.bcel.classfile.ClassFormatException;
@@ -11,27 +13,36 @@ import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 
+import selection.ParserPipeline;
+import selection.WordExtractorFromName;
+import selection.parser.one.SentenceZero;
+
 import definitions.Declaration;
 
-public class ClassLoader {
+public class ClassLoader implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2259468326063857573L;
 
-	private JavaClass clazz;
-	private List<Declaration> methods;
-	private List<Declaration> fields;
+	private Declaration[] methods;
+	private Declaration[] fields;
 	
-	public ClassLoader(String fileName) throws IOException {
-		this(new ClassParser(fileName));
+	public ClassLoader(){}
+	
+	public ClassLoader(String fileName, WordExtractorFromName extractor) throws IOException {
+		this(new ClassParser(fileName), extractor);
 	}	
 	
-	public ClassLoader(InputStream in){
-		this(new ClassParser(in, null));
+	public ClassLoader(InputStream in, WordExtractorFromName extractor){
+		this(new ClassParser(in, null), extractor);
 	}
 	
-	public ClassLoader(ClassParser parser) {
+	public ClassLoader(ClassParser parser, WordExtractorFromName extractor) {
 		try {
-			this.clazz = parser.parse();
-			this.methods = initMethods();
-			this.fields = initFields();
+			JavaClass clazz = parser.parse();
+			this.methods = initMethods(clazz, extractor);
+			this.fields = initFields(clazz, extractor);
 			
 		} catch (ClassFormatException e) {
 			// TODO Auto-generated catch block
@@ -42,13 +53,17 @@ public class ClassLoader {
 		}
 	}
 
-	public List<Declaration> getDeclarations() throws IOException {		
-		List<Declaration> decls = getMethods();
-		decls.addAll(getFields());
+	public Declaration[] getDeclarations(){
+		int length = this.methods.length + this.fields.length;
+		Declaration[] decls = new Declaration[length];
+	
+		System.arraycopy(this.methods, 0, decls, 0, this.methods.length);
+		System.arraycopy(this.fields, 0, decls, this.methods.length, this.fields.length);	
+		
 		return decls;
 	}
 
-	private List<Declaration> initMethods() {
+	private Declaration[] initMethods(JavaClass clazz, WordExtractorFromName extractor) {
 		Method[] methods = clazz.getMethods();
 		
 		List<Declaration> decls = new ArrayList<Declaration>();
@@ -70,14 +85,17 @@ public class ClassLoader {
 				
 				decl.setArgNum(method.getArgumentTypes().length);
 				decl.setStatic(method.isStatic());
-				decls.add(decl);
+				
+				decl.setWords(extractor.getWords(decl));
+				
+				decls.add(decl);				
 			}
 		}
 		
-		return decls;
+		return decls.toArray(new Declaration[decls.size()]);
 	}
 	
-	private List<Declaration> initFields() {
+	private Declaration[] initFields(JavaClass clazz, WordExtractorFromName extractor) {
 		Field[] fields = clazz.getFields();
 		
 		List<Declaration> decls = new ArrayList<Declaration>();
@@ -88,21 +106,38 @@ public class ClassLoader {
 				decl.setName(field.getName());
 				decl.setField(true);
 				decl.setStatic(field.isStatic());
+				
+				decl.setWords(extractor.getWords(decl));
+				
 				decls.add(decl);
 			}
 		}
-		return decls;
+		return decls.toArray(new Declaration[decls.size()]);
 	}
 	
-	public JavaClass getClazz() {
-		return clazz;
-	}
+//	public JavaClass getClazz() {
+//		return clazz;
+//	}
 
-	public List<Declaration> getMethods() {
+	public Declaration[] getMethods() {
 		return methods;
 	}
 
-	public List<Declaration> getFields() {
+	public void setMethods(Declaration[] methods) {
+		this.methods = methods;
+	}
+
+	public Declaration[] getFields() {
 		return fields;
-	}	
+	}
+
+	public void setFields(Declaration[] fields) {
+		this.fields = fields;
+	}
+
+	@Override
+	public String toString() {
+		return "ClassLoader [methods=" + Arrays.toString(methods) + ", fields="
+				+ Arrays.toString(fields) + "]\n";
+	}
 }

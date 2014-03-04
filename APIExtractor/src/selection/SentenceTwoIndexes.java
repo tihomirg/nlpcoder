@@ -1,7 +1,5 @@
 package selection;
 
-import java.util.List;
-
 import selection.parser.one.Word;
 
 public class SentenceTwoIndexes implements ISentence {

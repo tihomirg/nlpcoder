@@ -1,10 +1,7 @@
 package selection;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import selection.trees.Constituent;
-import selection.trees.Word;
+import selection.parser.one.SentenceZero;
+import selection.parser.one.Word;
 
 import definitions.Declaration;
 
@@ -18,7 +15,11 @@ public class WordExtractorFromName implements IWordExtractor {
 
 	@Override
 	public Indexes get(Declaration decl) {
-		
-		return null;//strategy.slice(decl.getName());
+		return ((SentenceTwoIndexes) this.strategy.parse(new SentenceZero(decl.getName()))).getIndexes();
+	}
+
+	@Override
+	public Word[] getWords(Declaration decl) {
+		return ((SentenceTwoIndexes) this.strategy.parse(new SentenceZero(decl.getName()))).getWords();
 	}
 }

@@ -1,13 +1,16 @@
 package definitions;
 
 import java.io.Serializable;
+import java.util.Arrays;
+
+import selection.parser.one.Word;
 
 public class Declaration implements Serializable {
-
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6849217608815581633L;
 	
 	private String name;
 	private int argNum;
@@ -22,6 +25,8 @@ public class Declaration implements Serializable {
 	private boolean field;
 
 	private String clazz;
+	
+	private Word[] words;
 	
 	public Declaration(){}	
 
@@ -105,9 +110,17 @@ public class Declaration implements Serializable {
 		this.clazz = clazz;
 	}
 
+	public Word[] getWords() {
+		return words;
+	}
+
+	public void setWords(Word[] words) {
+		this.words = words;
+	}
+
 	@Override
 	public String toString() {
 		return "Declaration [name=" + name + ", clazz=" + clazz + ", isStatic="
-				+ isStatic + ", argNum=" + argNum + ", method=" + method + "]\n";
+				+ isStatic + ", argNum=" + argNum + ", method=" + method +", words="+Arrays.toString(words)+"]\n";
 	}
 }

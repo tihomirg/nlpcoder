@@ -1,13 +1,24 @@
 package selection.parser.one;
 
+import java.io.Serializable;
+
 import edu.mit.jwi.item.POS;
 
-public class Word implements Cloneable {
+public class Word implements Cloneable, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4177358907937741991L;
+	
 	private String lemma;
 	private POS pos;
 	private int index;
 	private int constIndex;
 	private double probability;
+	
+	public Word(){
+		
+	}
 	
 	public Word(String lemma, POS pos) {
 		this(lemma, pos, 0);
@@ -27,8 +38,8 @@ public class Word implements Cloneable {
 		this.pos = pos;
 		this.constIndex = constIndex;
 		this.probability = probability;
-	}	
-	
+	}
+
 	public String getLemma() {
 		return lemma;
 	}
@@ -68,7 +79,7 @@ public class Word implements Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
-	}	
+	}
 	
 	@Override
 	public String toString() {

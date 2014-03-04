@@ -61,7 +61,7 @@ public class ParserOne extends IParser {
 		List<String> list = new ArrayList<String>();
 		
 		for(String split: splits){
-			System.out.println(split);
+			//System.out.println(split);
 			
 			if(!split.isEmpty()
 				&& !split.equals("")

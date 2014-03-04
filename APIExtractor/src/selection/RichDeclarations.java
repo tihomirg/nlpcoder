@@ -19,5 +19,16 @@ public class RichDeclarations {
 			rd.inc(word);
 		}	
 	}
+	
+	public void clear(){
+		for (RichDeclaration rd : set) {
+			rd.clear();
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "RichDeclarations [set=" + set + "]";
+	}
 
 }
