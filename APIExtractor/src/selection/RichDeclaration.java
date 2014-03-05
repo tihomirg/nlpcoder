@@ -42,17 +42,19 @@ public class RichDeclaration {
 		this.initVal = initVal;
 	}	
 
-	public void inc(Word key){
-	   incMap(key.getIndex(), indexes.getProbability(key));
+	public void inc(Word key, TopList top){
+		top.put(decl, incMap(key.getIndex(), indexes.getProbability(key)));
 	}
 
-	private void incMap(int index, double addProb) {
+	private double incMap(int index, double addProb) {
+		double prob;
 		if(!probabilities.containsKey(index)){
-			probabilities.put(index, addProb);
+			probabilities.put(index, prob = addProb);
 		} else {
 			double val = probabilities.get(index);
-			probabilities.put(index, val + addProb);
+			probabilities.put(index, prob = val + addProb);
 		}
+		return prob;
 	}
 
 	public void clear(){

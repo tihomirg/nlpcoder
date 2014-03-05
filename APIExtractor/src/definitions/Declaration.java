@@ -123,4 +123,21 @@ public class Declaration implements Serializable {
 		return "Declaration [name=" + name + ", clazz=" + clazz + ", isStatic="
 				+ isStatic + ", argNum=" + argNum + ", method=" + method +", words="+Arrays.toString(words)+"]\n";
 	}
+
+	public String getSignature() {
+		// TODO Auto-generated method stub
+
+		String signature = this.name+(this.retType != null? " "+shortType(this.retType):"");
+
+		if (this.argType != null)
+			for (String argType : this.argType) {
+				signature += (argType != null? " "+shortType(argType):"");
+			}
+		
+		return signature;
+	}
+
+	private String shortType(String type) {
+		return type.substring(type.lastIndexOf(".")+1);
+	}
 }

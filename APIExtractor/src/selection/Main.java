@@ -1,68 +1,37 @@
 package selection;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import edu.mit.jwi.item.POS;
-
-import selection.loaders.BoundedJarLoader;
-import selection.loaders.ClassLoader;
-import selection.loaders.FolderLoader;
-import selection.loaders.IJarLoader;
-import selection.loaders.JarLoder;
+import java.util.Scanner;
 import selection.parser.one.ParserOne;
 import selection.parser.one.SentenceZero;
-import selection.parser.one.Word;
 import selection.parser.three.ParserThree;
+import selection.parser.two.ConstituentTwo;
 import selection.parser.two.ParserTwo;
+import selection.parser.two.SentenceTwo;
 
 public class Main {
 
 	public static void main(String[] args) {
-
-		FolderLoader fLoader = new FolderLoader();
+		DeclarationLoader loader = new DeclarationLoader();
+		Selection selection = new Selection(Config.topSelectedLength());
+		selection.add(loader.deserialize(Config.getStorageLocation()));
 		
-		File folder = new File(Config.getJarfolder());
-		
-		try {
-			
-			WordProcessor wordProcessor = new WordProcessor();
-			List<String> jars = fLoader.getJars(folder);
-			IJarLoader jLoder = new BoundedJarLoader(Config.getMaxFilesToScan());
-			
-			WordExtractorFromName extractor = new WordExtractorFromName(new ParserPipeline(new IParser[]{new ParserOne(wordProcessor), new ParserTwoIndexes()}));
-			
-			ClassLoader[] classes = jLoder.getClassFiles(jars, extractor);
-			
-			DataSerializer serializer = new DataSerializer();
-			
-			serializer.writeObject(Config.getStorageLocation(),classes, classes.getClass());
-			
-			ClassLoader[] classes2 = (ClassLoader[]) serializer.readObject(Config.getStorageLocation(), ClassLoader[].class);
-			
-			//System.out.println(Arrays.toString(classes2));
-			
-			Selection selection = new Selection();
-			
-			selection.add(classes2);
-			
-			System.out.println(selection.select(new Word("bit", POS.NOUN)));
-			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Scanner scanner = new Scanner(System.in);
+		WordProcessor wordProcessor = new WordProcessor();
+		String line = null;
+		while((line = scanner.nextLine()) != null){
+			if (line.equals("exit")) break;
+			else {
+				SentenceTwo sentence = parse(line, wordProcessor);
+				for (ConstituentTwo cons : sentence.getConstituents()) {
+					TopList top = selection.tryInc(cons);
+					System.out.println(top);
+				}
+				selection.clear();
+			}
 		}
-		
-//		String sentence = "Make Buffer-printer read.";
-//		parse(sentence);
-		
-		
-		//Selection selection = new Selection(new WordExtractorFromName(wordProcessor));
 	}
 
-	private static void parse(String sentence, WordProcessor wordProcessor) {
+	private static SentenceTwo parse(String sentence, WordProcessor wordProcessor) {
 		int intervalDiameter = 2;
 		ParserPipeline parser = new ParserPipeline(new IParser[]{
 				new ParserOne(wordProcessor), 
@@ -70,10 +39,6 @@ public class Main {
 				new ParserThree(intervalDiameter)
 		});
 
-		SentenceZero zero = new SentenceZero(sentence);
-		
-		ISentence one = parser.parse(zero);
-		
-		System.out.print(one);
+		return (SentenceTwo) parser.parse(new SentenceZero(sentence));
 	}
 }

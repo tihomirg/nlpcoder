@@ -26,10 +26,10 @@ public class Group {
 		}
 	}
 
-	public void tryInc(Word word) {
+	public void tryInc(Word word, TopList top) {
 		RichDeclarations rd = map.get(word.getLemma());
 		if (rd != null) {
-			rd.inc(word);
+			rd.inc(word, top);
 			changed.add(rd);
 		}
 	}

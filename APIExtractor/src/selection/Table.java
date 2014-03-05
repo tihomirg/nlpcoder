@@ -12,7 +12,7 @@ import selection.parser.one.Word;
 
 public class Table {
 	private Map<POS,Group> groups;
-
+	
 	public Table(int groupNum) {
 		this.groups = new HashMap<POS, Group>();
 		this.groups.put(POS.NOUN, new Group());		
@@ -22,8 +22,8 @@ public class Table {
 		this.groups.put(null, new Group());
 	}
 
-	public void tryInc(Word word) {
-		groups.get(word.getPos()).tryInc(word);
+	public void tryInc(Word word, TopList top) {
+		groups.get(word.getPos()).tryInc(word, top);
 	}
 
 	public void addRichDeclaration(Word word, RichDeclaration rd) {
@@ -32,5 +32,11 @@ public class Table {
 
 	public RichDeclarations select(Word word) {
 		return groups.get(word.getPos()).select(word);
+	}
+	
+	public void clear() {
+		for (Group group : groups.values()) {
+			group.clear();
+		}
 	}
 }

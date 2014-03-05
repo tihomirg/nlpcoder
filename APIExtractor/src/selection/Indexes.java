@@ -31,6 +31,7 @@ public class Indexes {
 		return lemmaToWord.get(key.getLemma());
 	}
 
+	//TODO: Change the way we calculate probabilities.
 	public double getProbability(Word key) {
 		Word word = lemmaToWord.get(key.getLemma());
 		assert word != null;

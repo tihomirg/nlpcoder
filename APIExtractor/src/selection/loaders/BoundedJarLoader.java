@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import selection.IWordExtractor;
 import selection.WordExtractorFromName;
 
 public class BoundedJarLoader implements IJarLoader {
@@ -19,7 +20,7 @@ public class BoundedJarLoader implements IJarLoader {
 	}
 
 	@Override
-	public ClassLoader[] getClassFiles(List<String> jarFiles, WordExtractorFromName extractor) {
+	public ClassLoader[] getClassFiles(List<String> jarFiles, IWordExtractor extractor) {
 		List<ClassLoader> files = new LinkedList<ClassLoader>();
 
 		exit: for(String jarFile: jarFiles){

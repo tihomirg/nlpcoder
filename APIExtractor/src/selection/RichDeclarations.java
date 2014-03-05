@@ -14,9 +14,9 @@ public class RichDeclarations {
 		set.add(decl);
 	}
 
-	public void inc(Word word) {
+	public void inc(Word word, TopList top) {
 		for(RichDeclaration rd: set){
-			rd.inc(word);
+			rd.inc(word, top);
 		}	
 	}
 	

@@ -12,7 +12,9 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.Type;
 
+import selection.IWordExtractor;
 import selection.ParserPipeline;
 import selection.WordExtractorFromName;
 import selection.parser.one.SentenceZero;
@@ -30,15 +32,15 @@ public class ClassLoader implements Serializable {
 	
 	public ClassLoader(){}
 	
-	public ClassLoader(String fileName, WordExtractorFromName extractor) throws IOException {
+	public ClassLoader(String fileName, IWordExtractor extractor) throws IOException {
 		this(new ClassParser(fileName), extractor);
 	}	
 	
-	public ClassLoader(InputStream in, WordExtractorFromName extractor){
+	public ClassLoader(InputStream in, IWordExtractor extractor){
 		this(new ClassParser(in, null), extractor);
 	}
 	
-	public ClassLoader(ClassParser parser, WordExtractorFromName extractor) {
+	public ClassLoader(ClassParser parser, IWordExtractor extractor) {
 		try {
 			JavaClass clazz = parser.parse();
 			this.methods = initMethods(clazz, extractor);
@@ -63,7 +65,7 @@ public class ClassLoader implements Serializable {
 		return decls;
 	}
 
-	private Declaration[] initMethods(JavaClass clazz, WordExtractorFromName extractor) {
+	private Declaration[] initMethods(JavaClass clazz, IWordExtractor extractor) {
 		Method[] methods = clazz.getMethods();
 		
 		List<Declaration> decls = new ArrayList<Declaration>();
@@ -84,6 +86,11 @@ public class ClassLoader implements Serializable {
 				}
 				
 				decl.setArgNum(method.getArgumentTypes().length);
+				
+				setArgTypes(method, decl);
+				
+				decl.setRetType(method.getReturnType().toString());
+				
 				decl.setStatic(method.isStatic());
 				
 				decl.setWords(extractor.getWords(decl));
@@ -94,8 +101,21 @@ public class ClassLoader implements Serializable {
 		
 		return decls.toArray(new Declaration[decls.size()]);
 	}
+
+	private void setArgTypes(Method method, Declaration decl) {
+		String[] argTypes = new String[decl.getArgNum()];
+		
+		Type[] argumentTypes = method.getArgumentTypes();
+		
+		for (int i = 0; i < argTypes.length; i++) {
+			Type type = argumentTypes[i];
+			argTypes[i] = type.toString();
+		}
+		
+		decl.setArgType(argTypes);
+	}
 	
-	private Declaration[] initFields(JavaClass clazz, WordExtractorFromName extractor) {
+	private Declaration[] initFields(JavaClass clazz, IWordExtractor extractor) {
 		Field[] fields = clazz.getFields();
 		
 		List<Declaration> decls = new ArrayList<Declaration>();
@@ -106,6 +126,7 @@ public class ClassLoader implements Serializable {
 				decl.setName(field.getName());
 				decl.setField(true);
 				decl.setStatic(field.isStatic());
+				decl.setRetType(field.getType().toString());
 				
 				decl.setWords(extractor.getWords(decl));
 				
