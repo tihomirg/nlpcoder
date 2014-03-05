@@ -43,7 +43,7 @@ public class RichDeclaration {
 	}	
 
 	public void inc(Word key, TopList top){
-		top.put(decl, incMap(key.getIndex(), indexes.getProbability(key)));
+		top.put(this, incMap(key.getConstIndex(), indexes.getProbability(key)));
 	}
 
 	private double incMap(int index, double addProb) {
@@ -52,7 +52,7 @@ public class RichDeclaration {
 			probabilities.put(index, prob = addProb);
 		} else {
 			double val = probabilities.get(index);
-			probabilities.put(index, prob = val + addProb);
+			probabilities.put(index, prob = (val + addProb));
 		}
 		return prob;
 	}

@@ -52,6 +52,7 @@ public class Selection {
 	public TopList tryInc(ConstituentTwo cons) {
 		TopList top = new TopList(this.topListSize);
 		for (Word word: cons.getWords()) {
+			System.out.println(word);
 			tryInc(word, top);
 		}
 		return top;

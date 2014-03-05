@@ -16,15 +16,15 @@ import selection.parser.two.Wordset;
 public class ParserThree extends IParser {
 	
 	private NormalProbabilityDesigner nd;
-	private int intervalDiameter;
+	private int intervalRadius;
 
 	public ParserThree(int intervalDiameter) {
 		this(new NormalProbabilityDesigner(), intervalDiameter);
 	}
 
-	public ParserThree(NormalProbabilityDesigner nd, int intervalDiameter) {
+	public ParserThree(NormalProbabilityDesigner nd, int intervalRadius) {
 		this.nd = nd;
-		this.intervalDiameter = intervalDiameter;
+		this.intervalRadius = intervalRadius;
 	}
 
 	public ISentence parse(SentenceTwo curr) {
@@ -88,8 +88,8 @@ public class ParserThree extends IParser {
 
 	private void setInterval(int i, double[] probs) {
 		int lenght = probs.length;
-		int left = Math.max(0, i-intervalDiameter);
-	    int right = Math.min(i+intervalDiameter, lenght-1);
+		int left = Math.max(0, i-intervalRadius);
+	    int right = Math.min(i+intervalRadius, lenght-1);
 	    
 	    System.out.println("Left="+left+" Right="+right);
 	    

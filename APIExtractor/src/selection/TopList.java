@@ -16,9 +16,9 @@ public class TopList {
 		this.size = size;
 	}
 
-	public void put(Declaration decl, double probability) {
+	public void put(RichDeclaration richDeclaration, double probability) {
 		// TODO Auto-generated method stub
-		top.add(new Pair(decl, probability));
+		top.add(new Pair(richDeclaration, probability));
 		if(top.size() > this.size){
 			top.remove(); //first is the smallest one.
 		}
@@ -32,15 +32,15 @@ public class TopList {
 }
 
 class Pair {
-	private Declaration decl;
+	private RichDeclaration decl;
 	private double probability;
 
-	public Pair(Declaration decl, double probability) {
-		this.decl = decl;
+	public Pair(RichDeclaration richDeclaration, double probability) {
+		this.decl = richDeclaration;
 		this.probability = probability;
 	}
 
-	public Declaration getDecl() {
+	public RichDeclaration getDecl() {
 		return decl;
 	}
 

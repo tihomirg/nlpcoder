@@ -9,7 +9,16 @@ import selection.parser.two.ParserTwo;
 import selection.parser.two.SentenceTwo;
 
 public class Main {
+	private static SentenceTwo parse(String sentence, WordProcessor wordProcessor) {
+		ParserPipeline parser = new ParserPipeline(new IParser[]{
+				new ParserOne(wordProcessor), 
+				new ParserTwo(wordProcessor.getWordNet(), Config.getNumOfLevels(), Config.getIntervalRadius()),
+				new ParserThree(Config.getIntervalRadius())
+		});
 
+		return (SentenceTwo) parser.parse(new SentenceZero(sentence));
+	}
+	
 	public static void main(String[] args) {
 		DeclarationLoader loader = new DeclarationLoader();
 		Selection selection = new Selection(Config.topSelectedLength());
@@ -29,16 +38,5 @@ public class Main {
 				selection.clear();
 			}
 		}
-	}
-
-	private static SentenceTwo parse(String sentence, WordProcessor wordProcessor) {
-		int intervalDiameter = 2;
-		ParserPipeline parser = new ParserPipeline(new IParser[]{
-				new ParserOne(wordProcessor), 
-				new ParserTwo(wordProcessor.getWordNet(), 3, intervalDiameter),
-				new ParserThree(intervalDiameter)
-		});
-
-		return (SentenceTwo) parser.parse(new SentenceZero(sentence));
-	}
+	}	
 }

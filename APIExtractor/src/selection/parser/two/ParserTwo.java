@@ -22,13 +22,13 @@ public class ParserTwo extends IParser {
 
 	private WordNet wordnet;	
 	private int maxLevelDepth;
-	private int intervalDiameter;
+	private int intervalRadius;
 
-	public ParserTwo(WordNet wordnet, int maxLevelDepth, int intervalDiameter) {
+	public ParserTwo(WordNet wordnet, int maxLevelDepth, int intervalRadius) {
 		assert maxLevelDepth > 0;
 		this.wordnet = wordnet;
 		this.maxLevelDepth = maxLevelDepth;
-		this.intervalDiameter = intervalDiameter;
+		this.intervalRadius = intervalRadius;
 	}
 
 	public ISentence parse(SentenceOne curr) {
@@ -119,11 +119,11 @@ public class ParserTwo extends IParser {
 	}
 
 	private int getLargestIndex(int largestIndex, int sentenceLength) {
-		return Math.min(largestIndex + intervalDiameter, sentenceLength-1);
+		return Math.min(largestIndex + intervalRadius, sentenceLength-1);
 	}
 
 	private int getSmallestIndex(int smallestIndex) {
-		return Math.max(smallestIndex - intervalDiameter, 0);
+		return Math.max(smallestIndex - intervalRadius, 0);
 	}
 
 }
