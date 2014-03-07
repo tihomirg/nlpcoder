@@ -76,9 +76,9 @@ public class Word implements Cloneable, Serializable {
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Word clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
-		return super.clone();
+		return (Word) super.clone();
 	}
 	
 	@Override

@@ -5,25 +5,21 @@ import java.util.List;
 
 import selection.IParser;
 import selection.ISentence;
-import selection.NormalProbabilityDesigner;
-import selection.NormalShare;
+import selection.CentralizedShare;
 import selection.parser.one.Word;
 import selection.parser.two.ConstituentTwo;
 import selection.parser.two.Level;
 import selection.parser.two.SentenceTwo;
 import selection.parser.two.Wordset;
+import selection.probability.designers.ProbabilityDesigner;
 
 public class ParserThree extends IParser {
 	
-	private NormalProbabilityDesigner nd;
+	private ProbabilityDesigner pd;
 	private int intervalRadius;
 
-	public ParserThree(int intervalDiameter) {
-		this(new NormalProbabilityDesigner(), intervalDiameter);
-	}
-
-	public ParserThree(NormalProbabilityDesigner nd, int intervalRadius) {
-		this.nd = nd;
+	public ParserThree(ProbabilityDesigner nd, int intervalRadius) {
+		this.pd = nd;
 		this.intervalRadius = intervalRadius;
 	}
 
@@ -41,7 +37,7 @@ public class ParserThree extends IParser {
 	private void setConstituent(ConstituentTwo constituentTwo) {
 		int first = constituentTwo.getFirstImporatantIndex();
 		int last = constituentTwo.getLastImportantIndex();
-		nd.setFactor(1.0/constituentTwo.getImportantLength());
+		pd.setFactor(1.0/constituentTwo.getImportantLength());
 		
 		Wordset[] wordsets = constituentTwo.getWordsets();
 		
@@ -63,10 +59,9 @@ public class ParserThree extends IParser {
 		Level[] levels = wordset.getLevels();
 		int right = levels.length - 1;
 		
-		nd.setFactor(wordset.getProbability());
-		System.out.println("Factor"+nd.getFactor());
+		pd.setFactor(wordset.getProbability());
 		
-		NormalShare share = nd.getOneSideShare(right);
+		CentralizedShare share = pd.getOneSideShare(right);
 		double[] probs = share.toArray();
 		
 		for (int i = 0; i < probs.length; i++) {
@@ -93,7 +88,7 @@ public class ParserThree extends IParser {
 	    
 	    System.out.println("Left="+left+" Right="+right);
 	    
-	    NormalShare share = nd.getDoubleSideCenterShare(i-left, right-i);
+	    CentralizedShare share = pd.getDoubleSideCenterShare(i-left, right-i);
 	    double[] newProbs = share.toArray();
 	    System.out.println(Arrays.toString(newProbs));
 	    for (int j = left; j <= right; j++) {

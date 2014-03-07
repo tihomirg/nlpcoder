@@ -1,13 +1,14 @@
-package selection;
+package selection.probability.designers;
 
 import java.util.Arrays;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-public class NormalProbabilityDesigner {
+import selection.CentralizedShare;
+
+public class NormalProbabilityDesigner extends ProbabilityDesigner {
 	
-	private double k;
-	private double factor;
+	double k;
 	private NormalDistribution nd = new NormalDistribution();
 	
 	public NormalProbabilityDesigner(){
@@ -18,19 +19,18 @@ public class NormalProbabilityDesigner {
 		this.k = k;
 	}
 	
-	public double getFactor() {
-		return factor;
-	}
-
-	public void setFactor(double factor) {
-		this.factor = factor;
-	}	
-
-	private double probability(double x0, double x1){
+	double probability(double x0, double x1){
 	   return factor * nd.probability(x0, x1);	
 	}
 	
-	public NormalShare getOneSideShare(int rightLength){
+	void normalize(double[] a, double f) {
+		for (int i = 0; i < a.length; i++) {
+			a[i] = f*a[i];
+		}
+	}
+	
+
+	public CentralizedShare getOneSideShare(int rightLength) {
 		double interval = k / (rightLength + 1);
 		
 		double[] a = new double[rightLength];
@@ -43,10 +43,10 @@ public class NormalProbabilityDesigner {
 			a[i] = 2*probability(x0, x1);
 		}
 		
-		return new NormalShare(new double[0], a, center);
+		return new CentralizedShare(a, center);
 	}
-	
-	public NormalShare getDoubleSideCenterShare(int leftLength, int rightLength) {
+
+	public CentralizedShare getDoubleSideCenterShare(int leftLength, int rightLength) {
 	    int max = Math.max(leftLength, rightLength);
 	    
 		double interval = k / (2*max +1);
@@ -80,16 +80,10 @@ public class NormalProbabilityDesigner {
 			leftArray[leftArray.length-1-i] = temp;
 		}
 		
-		return new NormalShare(leftArray, rightArray, center);
-	}
+		return new CentralizedShare(leftArray, rightArray, center);
+	}	
 
-	private void normalize(double[] a, double f) {
-		for (int i = 0; i < a.length; i++) {
-			a[i] = f*a[i];
-		}
-	}
-
-	private double normalizationFactor(int min, double interval) {		
+	double normalizationFactor(int min, double interval) {		
 		return 1.0 / nd.probability(-k, (2*min+1)*interval);
 	}
 }

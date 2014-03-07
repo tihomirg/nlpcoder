@@ -30,8 +30,11 @@ public class TaggedLemma {
 	}
 
 	public static TaggedLemma create(String taggedString) {
-		String[] splits = taggedString.split("/");
-		return new TaggedLemma(findWord(splits[0]), findTag(splits[0], splits[1]));
+		int splitter = taggedString.lastIndexOf("_");
+		String rWord = taggedString.substring(0, splitter);
+		String rTag = taggedString.substring(splitter+1);
+		
+		return new TaggedLemma(findWord(rWord), findTag(rWord, rTag));
 	}
 	
 	private static POS findTag(String word, String tag){

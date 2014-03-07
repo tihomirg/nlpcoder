@@ -27,7 +27,7 @@ public class WordNetMain {
 	public WordNetMain(){		
 		// construct the dictionary object and open it
 		try {
-			dict = new Dictionary(new URL("file", null , "C:/Program Files/WordNet/2.1/dict"));
+			dict = new Dictionary(new URL("file", null , "C:/Program Files/WordNet/3.1/dict"));
 			dict.open();
 			stemmer = new WordnetStemmer(dict);
 		} catch (MalformedURLException e) {
@@ -108,9 +108,8 @@ public class WordNetMain {
 		
 		List<String> words = new LinkedList<String>();
 		
-		for(String steam: wn.getSteams(word, pos)){
-			words.addAll(wn.getFirstMeaningSynonyms(steam, pos));
-			words.addAll(wn.getFirstMeaningHypernyms(steam, pos));
+		for(String steam: wn.getSteams(word, null)){
+			if(steam != null) words.addAll(wn.getSynonyms(steam, POS.NOUN));
 		}
 		
 		System.out.println(Arrays.toString(words.toArray()));

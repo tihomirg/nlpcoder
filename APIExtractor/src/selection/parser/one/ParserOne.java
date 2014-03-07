@@ -21,7 +21,9 @@ public class ParserOne extends IParser {
 		List<List<Word>> wordss = new ArrayList<List<Word>>();
 		
 		List<String> splits = tag(sentence);
+		
 		for(int i = 0; i < splits.size(); i++) {
+			//System.out.println("Split in 'slice': "+splits.get(i));
 			wordss.add(getWords(TaggedLemma.create(splits.get(i)), i));
 		}
 
@@ -30,18 +32,22 @@ public class ParserOne extends IParser {
 
 	private List<Word> getWords(TaggedLemma constituent, int consIndex) {
 		List<String> splits = tag(processor.decompose(constituent.getWord()));
+		
 		POS tag = constituent.getTag();
 		List<Word> words = new ArrayList<Word>();
 		
 		int size = splits.size();
 		
 		for(int i = 0; i < size; i++){
+			//System.out.println("Split in 'getWords': "+splits.get(i));
+			
 			TaggedLemma lemma = TaggedLemma.create(splits.get(i));
 			
 			POS pos = lemma.getTag();
 			String word = lemma.getWord();
 			
 			String name = processor.steam(word, pos);
+			
 			if (name != null) words.add(new Word(name, size == 1? tag: pos, consIndex));
 		}
 		
@@ -61,7 +67,6 @@ public class ParserOne extends IParser {
 		List<String> list = new ArrayList<String>();
 		
 		for(String split: splits){
-			//System.out.println(split);
 			
 			if(!split.isEmpty()
 				&& !split.equals("")

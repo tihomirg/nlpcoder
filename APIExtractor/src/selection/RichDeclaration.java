@@ -11,8 +11,10 @@ public class RichDeclaration {
 
 	private Declaration decl;	
 	private double initVal;
-	private Map<Integer, Double> probabilities;
+	//private Map<Integer, Double> probabilities;
 
+	private RichProbability probabilities;
+	
 	private Indexes indexes;
 
 	public RichDeclaration(Declaration decl, Indexes indexes){
@@ -23,7 +25,7 @@ public class RichDeclaration {
 		this.decl = decl;
 		this.initVal = initVal;
 		this.indexes = indexes;
-		this.probabilities = new HashMap<Integer, Double>();
+		this.probabilities = new RichProbability();
 	}
 
 	public Declaration getDecl() {
@@ -42,19 +44,15 @@ public class RichDeclaration {
 		this.initVal = initVal;
 	}	
 
-	public void inc(Word key, TopList top){
-		top.put(this, incMap(key.getConstIndex(), indexes.getProbability(key)));
+	public void inc(Word key, TopList top, int consLength){
+		double prob = incMap(key.getConstIndex(), key.getIndex(), indexes.getProbability(key, consLength));
+		if (prob != -1){
+		  top.put(this, prob);		  
+		}
 	}
 
-	private double incMap(int index, double addProb) {
-		double prob;
-		if(!probabilities.containsKey(index)){
-			probabilities.put(index, prob = addProb);
-		} else {
-			double val = probabilities.get(index);
-			probabilities.put(index, prob = (val + addProb));
-		}
-		return prob;
+	private double incMap(int consIndex, int wordIndex, double addProb) {
+		return probabilities.inc(consIndex, wordIndex, addProb);
 	}
 
 	public void clear(){
@@ -63,7 +61,7 @@ public class RichDeclaration {
 
 	@Override
 	public String toString() {
-		return decl.toString();
+		return decl.toString()+" "+this.probabilities.getStat();
 	}
 
 }

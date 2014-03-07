@@ -125,9 +125,26 @@ public class Declaration implements Serializable {
 	}
 
 	public String getSignature() {
-		// TODO Auto-generated method stub
-
 		String signature = this.name+(this.retType != null? " "+shortType(this.retType):"");
+
+        if(clazz != null && (!constructor || isStatic)) {
+            signature += " "+shortType(clazz);
+         }		
+		
+		if (this.argType != null)
+			for (String argType : this.argType) {
+				signature += (argType != null? " "+shortType(argType):"");
+			}
+		
+		return signature;
+	}
+	
+	private String groupTwo(){
+		String signature = (this.retType != null? shortType(this.retType):"");		
+		
+        if(clazz != null && (!constructor || isStatic)) {
+           signature += " "+shortType(clazz);
+        }
 
 		if (this.argType != null)
 			for (String argType : this.argType) {
@@ -136,8 +153,13 @@ public class Declaration implements Serializable {
 		
 		return signature;
 	}
+	
+	public String[] getGroups(){
+		return new String[]{this.name, groupTwo()};
+	}
 
 	private String shortType(String type) {
-		return type.substring(type.lastIndexOf(".")+1);
+		String shorter = type.substring(type.lastIndexOf(".")+1);
+		return shorter.substring(type.lastIndexOf("$")+1);
 	}
 }

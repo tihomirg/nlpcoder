@@ -7,9 +7,9 @@ public class SentenceTwoIndexes implements ISentence {
 	private Word[] words;
 	private Indexes indexes;
 	
-	public SentenceTwoIndexes(Word[] words) {
+	public SentenceTwoIndexes(Word[] words, double nullProbs) {
 		this.words = words;
-		this.indexes = new Indexes(words);
+		this.indexes = new Indexes(words, nullProbs);
 	}
 	
 	public Word[] getWords() {

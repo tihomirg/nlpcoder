@@ -9,10 +9,12 @@ public class Indexes {
 
 	public Map<String, Word> lemmaToWord;
 	public Word[] words;
-
-	public Indexes(Word[] words){
+	private double nullProb;
+	
+	public Indexes(Word[] words, double nullProb){
 		this.lemmaToWord = make(words);
 		this.words = words;
+		this.nullProb = nullProb; 
 	}
 	
 	private Map<String, Word> make(Word[] words2) {
@@ -31,11 +33,16 @@ public class Indexes {
 		return lemmaToWord.get(key.getLemma());
 	}
 
-	//TODO: Change the way we calculate probabilities.
-	public double getProbability(Word key) {
-		Word word = lemmaToWord.get(key.getLemma());
-		assert word != null;
-	    return key.getProbability();
+	//TODO: Change the way we calculate probabilities, such that a probability of a containig wor is taken into account.
+	public double getProbability(Word key, int constLength) {
+//		Word word = lemmaToWord.get(key.getLemma());
+//		assert word != null;
+		
+		return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) / constLength;
+		
+		//return key.getProbability() * (1 - Math.max(0, constLength - words.length)*nullProb) / Math.max(words.length, constLength);
+		
+	    //return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) / words.length;
 	}
 
 	public Word[] getWords() {

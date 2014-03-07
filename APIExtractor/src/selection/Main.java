@@ -7,13 +7,16 @@ import selection.parser.three.ParserThree;
 import selection.parser.two.ConstituentTwo;
 import selection.parser.two.ParserTwo;
 import selection.parser.two.SentenceTwo;
+import selection.probability.designers.ConeProbabilityDesigner;
+import selection.probability.designers.MixedProbabilityDesigner;
+import selection.probability.designers.UniformProbabilityDesigner;
 
 public class Main {
 	private static SentenceTwo parse(String sentence, WordProcessor wordProcessor) {
 		ParserPipeline parser = new ParserPipeline(new IParser[]{
 				new ParserOne(wordProcessor), 
 				new ParserTwo(wordProcessor.getWordNet(), Config.getNumOfLevels(), Config.getIntervalRadius()),
-				new ParserThree(Config.getIntervalRadius())
+				new ParserThree(new MixedProbabilityDesigner(0.5), Config.getIntervalRadius())
 		});
 
 		return (SentenceTwo) parser.parse(new SentenceZero(sentence));
@@ -22,7 +25,7 @@ public class Main {
 	public static void main(String[] args) {
 		DeclarationLoader loader = new DeclarationLoader();
 		Selection selection = new Selection(Config.topSelectedLength());
-		selection.add(loader.deserialize(Config.getStorageLocation()));
+		selection.add(loader.deserialize(Config.getStorageLocation()), Config.getMaxWords(), Config.getNullProbability());
 		
 		Scanner scanner = new Scanner(System.in);
 		WordProcessor wordProcessor = new WordProcessor();

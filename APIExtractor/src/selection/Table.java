@@ -15,15 +15,15 @@ public class Table {
 	
 	public Table(int groupNum) {
 		this.groups = new HashMap<POS, Group>();
-		this.groups.put(POS.NOUN, new Group());		
-		this.groups.put(POS.VERB, new Group());		
-		this.groups.put(POS.ADVERB, new Group());		
+		this.groups.put(POS.NOUN, new Group());
+		this.groups.put(POS.VERB, new Group());
+		this.groups.put(POS.ADVERB, new Group());
 		this.groups.put(POS.ADJECTIVE, new Group());
 		this.groups.put(null, new Group());
 	}
 
-	public void tryInc(Word word, TopList top) {
-		groups.get(word.getPos()).tryInc(word, top);
+	public void tryInc(Word word, TopList top, int consLength) {
+		groups.get(word.getPos()).tryInc(word, top, consLength);
 	}
 
 	public void addRichDeclaration(Word word, RichDeclaration rd) {

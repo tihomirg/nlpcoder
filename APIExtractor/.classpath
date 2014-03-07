@@ -13,8 +13,8 @@
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/objenesis-1.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/reflectasm-1.07.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/edu.mit.jwi_2.3.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/stanford-postagger-2011-04-20/stanford-postagger.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/jazzy-core.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/commons-math3-3.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/stanford-postagger-full-2014-01-04/stanford-postagger-3.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

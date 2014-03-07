@@ -1,11 +1,23 @@
 package selection;
 
-public class NormalShare {
+public class CentralizedShare {
 	private double[] left;
 	private double[] right;
 	private double center;
+
+	public CentralizedShare() {
+		this(1.0);
+	}
 	
-	public NormalShare(double[] left, double[] right, double center) {
+	public CentralizedShare(double center) {
+		this(new double[0], center);
+	}	
+	
+	public CentralizedShare(double[] right, double center) {
+		this(new double[0], right, center);
+	}	
+	
+	public CentralizedShare(double[] left, double[] right, double center) {
 		this.left = left;
 		this.right = right;
 		this.center = center;

@@ -3,17 +3,25 @@ package selection;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import selection.parser.one.Word;
+
 import definitions.Declaration;
 
 public class TopList {
 
 	private int size;
 	private PriorityQueue<Pair> top;
-	
+	private Word word;
+
 	public TopList(int size) {
+		this(null, size);
+	}
+
+	public TopList(Word word, int size) {
 		Comparator<Pair> comparator = new PairComparator();
 		this.top = new PriorityQueue<Pair>(size+1, comparator);
 		this.size = size;
+		this.word = word;
 	}
 
 	public void put(RichDeclaration richDeclaration, double probability) {
@@ -23,6 +31,10 @@ public class TopList {
 			top.remove(); //first is the smallest one.
 		}
 	}
+	
+	public Word getWord() {
+		return word;
+	}	
 
 	@Override
 	public String toString() {
@@ -32,16 +44,16 @@ public class TopList {
 }
 
 class Pair {
-	private RichDeclaration decl;
+	private RichDeclaration rd;
 	private double probability;
 
-	public Pair(RichDeclaration richDeclaration, double probability) {
-		this.decl = richDeclaration;
+	public Pair(RichDeclaration rd, double probability) {
+		this.rd = rd;
 		this.probability = probability;
 	}
 
-	public RichDeclaration getDecl() {
-		return decl;
+	public RichDeclaration getRichDeclaration() {
+		return rd;
 	}
 
 	public double getProbability() {
@@ -50,8 +62,8 @@ class Pair {
 	
 	@Override
 	public String toString() {
-		return "Pair [p=" + probability + "decl=" + decl + "]\n";
-	}	
+		return "Pair [p=" + probability + ", rd=" + rd + "]\n";
+	}
 }
 
 class PairComparator implements Comparator<Pair> {

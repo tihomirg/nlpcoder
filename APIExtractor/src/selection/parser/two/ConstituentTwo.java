@@ -25,9 +25,11 @@ public class ConstituentTwo {
 	public void setWordsets(Wordset[] wordsets) {
 		this.wordsets = wordsets;
 	}
+	
 	public int getFirstImporatantIndex() {
 		return firstImporatantIndex;
 	}
+	
 	public void setFirstImporatantIndex(int firstImporatantIndex) {
 		this.firstImporatantIndex = firstImporatantIndex;
 	}
@@ -36,6 +38,10 @@ public class ConstituentTwo {
 	}
 	public void setLastImportantIndex(int lastImportantIndex) {
 		this.lastImportantIndex = lastImportantIndex;
+	}
+	
+	public Word getFirstImportantWord(){
+		return wordsets[this.firstImporatantIndex].getLevels()[0].getWords().get(0);
 	}
 	
 	public List<Word> getWords(){
@@ -66,5 +72,9 @@ public class ConstituentTwo {
 				+ firstImporatantIndex + ", lastImportantIndex="
 				+ lastImportantIndex + "\n, wordsets="
 				+ Arrays.toString(wordsets) + "]\n";
+	}
+
+	public int getLength() {
+		return wordsets.length;
 	}
 }

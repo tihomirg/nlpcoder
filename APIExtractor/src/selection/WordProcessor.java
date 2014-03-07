@@ -30,7 +30,11 @@ public class WordProcessor {
 
 	public List<String> decompose(String cWord){
 		List<String> words = new ArrayList<String>();
+		//System.out.println("In decompose (1): "+cWord);
+		
 		for(String word: slice(cWord)){
+			//System.out.println("In decompose (2): "+word);
+			
 			String s = corrector.correct(word);
 			if (s != null) words.add(s);
 		}

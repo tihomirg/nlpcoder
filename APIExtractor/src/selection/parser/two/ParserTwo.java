@@ -70,15 +70,20 @@ public class ParserTwo extends IParser {
 	private List<Word> prepareWords(LinkedList<Word> words, int constituentIndex, int wordIndex, Set<String> visited) {
 		List<Word> words2 = new LinkedList<Word>();
 		for (Word word : words) {
-			String name = word.getLemma();
-			if (!name.contains("_") && !visited.contains(name)){
-				visited.add(name);
-				word.setConstIndex(constituentIndex);
-				word.setIndex(wordIndex);
-				words2.add(word);
-			}
+			prepareWord(constituentIndex, wordIndex, visited, words2, word);
 		}
 		return words2;
+	}
+
+	private void prepareWord(int constituentIndex, int wordIndex,
+			Set<String> visited, List<Word> words2, Word word) {
+		String name = word.getLemma();
+		if (!name.contains("_") && !visited.contains(name)){
+			visited.add(name);
+			word.setConstIndex(constituentIndex);
+			word.setIndex(wordIndex);
+			words2.add(word);
+		}
 	}
 
 	private Wordset getWordset(Word word, int constituentIndex, int wordIndex) {
@@ -86,7 +91,7 @@ public class ParserTwo extends IParser {
 		Level[] levels = new Level[maxLevelDepth];
 
 		List<ISynset> synsets = getSynonyms(word);
-		levels[0] = new Level(getWords(synsets, constituentIndex, wordIndex, visited), 0);
+		levels[0] = new Level(levelZero(word, constituentIndex, wordIndex, visited, synsets), 0);
 
 		for (int i = 1; i < maxLevelDepth; i++) {
 			synsets = getNeighbours(synsets);
@@ -94,6 +99,18 @@ public class ParserTwo extends IParser {
 		}
 
 		return new Wordset(levels);
+	}
+
+	private List<Word> levelZero(Word word, int constituentIndex, int wordIndex, Set<String> visited, List<ISynset> synsets) {
+		List<Word> zeroLevelWords = new LinkedList<Word>();
+		try {
+			prepareWord(constituentIndex, wordIndex, visited, zeroLevelWords, word.clone());
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		zeroLevelWords.addAll(getWords(synsets, constituentIndex, wordIndex, visited));
+		return zeroLevelWords;
 	}
 
 	private List<ISynset> getNeighbours(List<ISynset> synsets) {
