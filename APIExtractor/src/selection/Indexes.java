@@ -35,10 +35,12 @@ public class Indexes {
 
 	//TODO: Change the way we calculate probabilities, such that a probability of a containig wor is taken into account.
 	public double getProbability(Word key, int constLength) {
-//		Word word = lemmaToWord.get(key.getLemma());
-//		assert word != null;
+		Word word = lemmaToWord.get(key.getLemma());
+		assert word != null;
 		
-		return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) / constLength;
+		return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) * word.getProbability();		
+		
+		//return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) / constLength;
 		
 		//return key.getProbability() * (1 - Math.max(0, constLength - words.length)*nullProb) / Math.max(words.length, constLength);
 		

@@ -40,9 +40,9 @@ public class DeclarationLoader {
 		DeclarationLoader loader = new DeclarationLoader();
 		
 		WordProcessor wordProcessor = new WordProcessor();
-		IWordExtractor extractor = new WordExtractorFromSignature(new ParserPipeline(new IParser[]{new ParserOne(wordProcessor), new ParserTwoIndexes()}));
+		//IWordExtractor extractor = new WordExtractorFromSignature(new ParserPipeline(new IParser[]{new ParserOne(wordProcessor), new ParserTwoIndexes()}));
 		
-		IWordExtractor extractor2 = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.2)}));
+		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.2)}));
 		
 		
 		loader.serialize(Config.getJarfolder(), Config.getStorageLocation(), extractor);
