@@ -159,7 +159,6 @@ public class Declaration implements Serializable {
 	}
 
 	private String shortType(String type) {
-		String shorter = type.substring(type.lastIndexOf(".")+1);
-		return shorter.substring(type.lastIndexOf("$")+1);
+		return type.substring(type.lastIndexOf(".")+1);
 	}
 }

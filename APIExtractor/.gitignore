@@ -2,3 +2,5 @@
 /jars.txt
 /jars.kryo
 /jars-big-set.txt
+/declarations.kryo
+/word.kryo

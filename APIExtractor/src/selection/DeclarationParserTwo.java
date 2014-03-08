@@ -1,5 +1,6 @@
 package selection;
 
+import java.util.Arrays;
 import java.util.List;
 
 import selection.parser.one.Word;
@@ -10,10 +11,14 @@ public class DeclarationParserTwo extends IDeclarationParser {
 
 	private double lowLevel;
 	private UniformProbabilityDesigner designer;
+	private int[] avgWordLength;
+	private double nullProb;
 	
-	public DeclarationParserTwo(double lowLevel) {
+	public DeclarationParserTwo(double lowLevel, int[] avgWordLength, double nullProb) {
 		this.lowLevel = lowLevel;
 		this.designer = new UniformProbabilityDesigner();
+		this.avgWordLength = avgWordLength;
+		this.nullProb = nullProb;
 	}
 
 	public IDeclarationSentence parse(DeclarationSentenceOne curr) { 
@@ -25,13 +30,17 @@ public class DeclarationParserTwo extends IDeclarationParser {
 		for(int i=0; i< size; i++){
 			SentenceOne sentenceOne = result.get(i);
 			Word[] words = sentenceOne.getWords();
-			designer.setFactor(shares[i]);
 			int length = words.length;
+			
+			if (length == 0) continue;
+			
+			designer.setFactor(shares[i] * (1.0 - Math.max(0, avgWordLength[i] - length) * nullProb));
 			assert length > 0;
-			CentralizedShare oneSideShare = designer.getOneSideShare(length -1);
+			CentralizedShare oneSideShare = designer.getOneSideShare(length - 1);			
+			
 			double[] probs = oneSideShare.toArray();
 			for(int j=0; j < length; j++){
-				words[i].setProbability(probs[i]);
+				words[j].setProbability(probs[j]);
 			}
 		}
 		return curr;
@@ -42,7 +51,7 @@ public class DeclarationParserTwo extends IDeclarationParser {
 		if (size == 1) return new double[]{1.0};
 		
 		double lowLevelDelta = lowLevel / size;
-		double rest = 1.0 - lowLevelDelta;
+		double rest = 1.0 - lowLevel;
 		
 		double delta = 2*rest /((size-1) *size);
 		double[] a = new double[size];

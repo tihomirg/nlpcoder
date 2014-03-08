@@ -1,6 +1,7 @@
 package selection;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import selection.loaders.BoundedJarLoader;
@@ -22,6 +23,8 @@ public class DeclarationLoader {
 			IJarLoader jLoder = new BoundedJarLoader(Config.getMaxFilesToScan());
 			ClassLoader[] classes = jLoder.getClassFiles(jars, extractor);
 			
+			//System.out.println(Arrays.toString(classes));
+			
 			DataSerializer serializer = new DataSerializer();
 			serializer.writeObject(storageLocation,classes, classes.getClass());
 			
@@ -42,13 +45,10 @@ public class DeclarationLoader {
 		WordProcessor wordProcessor = new WordProcessor();
 		//IWordExtractor extractor = new WordExtractorFromSignature(new ParserPipeline(new IParser[]{new ParserOne(wordProcessor), new ParserTwoIndexes()}));
 		
-		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.2)}));
+		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.4, new int[]{2,5}, Config.getNullProbability())}));
 		
 		
 		loader.serialize(Config.getJarfolder(), Config.getStorageLocation(), extractor);
-
-	
-	
 	
 	}
 }

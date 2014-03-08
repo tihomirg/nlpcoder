@@ -1,11 +1,8 @@
 package selection;
 
-import java.util.List;
-
 import selection.loaders.ClassLoader;
 import selection.parser.one.Word;
 import selection.parser.two.ConstituentTwo;
-import selection.parser.two.SentenceTwo;
 
 import definitions.Declaration;
 

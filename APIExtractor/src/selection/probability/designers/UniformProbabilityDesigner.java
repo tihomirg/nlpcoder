@@ -12,7 +12,7 @@ public class UniformProbabilityDesigner extends ProbabilityDesigner {
 
 	@Override
 	public CentralizedShare getDoubleSideCenterShare(int leftLength, int rightLength) {
-		double prob = ((double) factor) / (leftLength+ rightLength + 1);
+		double prob = ((double) factor) / (leftLength + rightLength + 1);
 		return new CentralizedShare(setArrayElements(leftLength, prob), setArrayElements(rightLength, prob), prob);
 	}
 	
