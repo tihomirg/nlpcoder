@@ -153,6 +153,14 @@ public class Declaration implements Serializable {
 		
 		return signature;
 	}
+
+	public String getFullName(){
+		String prefix = "";
+		if (clazz != null && !clazz.equals("")){
+			prefix += clazz+".";
+		}
+		return prefix + name;
+	}
 	
 	public String[] getGroups(){
 		return new String[]{this.name, groupTwo()};

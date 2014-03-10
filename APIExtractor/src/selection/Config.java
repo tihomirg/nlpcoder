@@ -2,13 +2,14 @@ package selection;
 
 public class Config {
 
+	private static final String oldcorpus = "oldcorpus.txt";
 	private static final String wordNetDictionary = "C:/Program Files/WordNet/3.1/dict";
 	private static final String tagger = "C:/Users/gvero/git/lib/stanford-postagger-full-2014-01-04/models/english-bidirectional-distsim.tagger"; 
 	private static final int tagNumber = 5;
 	
 	//Folder where we keep corpus
 	private static final String jarFolder = "C:/Users/gvero/git/jars";
-	private static final int maxFilesToScan = 1000;
+	private static final int maxFilesToScan = 5000;
 	
 	//serialization
 	private static final String storageLocation = "declarations.kryo";
@@ -67,6 +68,10 @@ public class Config {
 
 	public static double getNullProbability() {
 		return nullProb;
+	}
+
+	public static String getOldCorpusLocation() {
+		return oldcorpus;
 	}
 	
 }

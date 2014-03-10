@@ -10,6 +10,7 @@ public class Indexes {
 	public Map<String, Word> lemmaToWord;
 	public Word[] words;
 	private double nullProb;
+	private double prbability;
 	
 	public Indexes(Word[] words, double nullProb){
 		this.lemmaToWord = make(words);
@@ -38,7 +39,7 @@ public class Indexes {
 		Word word = lemmaToWord.get(key.getLemma());
 		assert word != null;
 		
-		return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) * word.getProbability();		
+		return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) * word.getProbability() * this.prbability;		
 		
 		//return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) / constLength;
 		
@@ -49,5 +50,9 @@ public class Indexes {
 
 	public Word[] getWords() {
 		return words;
+	}
+
+	public void setProbability(double d) {
+		this.prbability = d;
 	}
 }

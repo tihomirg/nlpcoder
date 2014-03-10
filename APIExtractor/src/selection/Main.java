@@ -1,6 +1,8 @@
 package selection;
 
 import java.util.Scanner;
+
+import oldcorpus.LoadOldCorpus;
 import selection.parser.one.ParserOne;
 import selection.parser.one.SentenceZero;
 import selection.parser.three.ParserThree;
@@ -24,7 +26,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		DeclarationLoader loader = new DeclarationLoader();
-		Selection selection = new Selection(Config.topSelectedLength());
+		Selection selection = new Selection(Config.topSelectedLength(), new LoadOldCorpus(Config.getOldCorpusLocation()));
 		selection.add(loader.deserialize(Config.getStorageLocation()), Config.getMaxWords(), Config.getNullProbability());
 		
 		Scanner scanner = new Scanner(System.in);

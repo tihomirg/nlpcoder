@@ -64,4 +64,8 @@ public class RichDeclaration {
 		return decl.toString()+" "+this.probabilities.getStat();
 	}
 
+	public void setProbability(double d) {
+		indexes.setProbability(d);
+	}
+
 }

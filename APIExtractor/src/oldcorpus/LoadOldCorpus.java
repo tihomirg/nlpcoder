@@ -9,9 +9,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import definitions.Declaration;
+
+import selection.Config;
+import selection.RichDeclaration;
+
 public class LoadOldCorpus {
 	
-	private static final int FACTOR = 10;
+	private static final int FACTOR = 1000;
+	
+	private Map<String, Map<Integer, Double>> map;
+
+	public LoadOldCorpus(String filename) {
+		this.map = makeTable(filename);
+	}
 
 	public static class Decl {
 
@@ -71,21 +82,17 @@ public class LoadOldCorpus {
 
 	}
 
-	public static void main(String[] args) {
-    	List<Decl> decls = makeDecls(filter(readFile("oldcorpus.txt")));
-    	
+	public Map<String, Map<Integer, Double>> makeTable(String filename) {
+		List<Decl> decls = makeDecls(filter(readFile(filename)));
+ 
     	int count = totalCount(decls);   	
     	assignProbs(decls, count);
-    	
-    	//System.out.println(decls);
 
     	Map<String, Map<Integer, Double>> map = makeMap(decls);
-    	
-    	System.out.println(map);
-	
+		return map;
 	}
 
-	private static Map<String, Map<Integer, Double>> makeMap(List<Decl> decls) {
+	private Map<String, Map<Integer, Double>> makeMap(List<Decl> decls) {
 		Map<String, Map<Integer, Double>>  map = new HashMap<String, Map<Integer,Double>>();
 		for (Decl decl : decls) {
 			if (!map.containsKey(decl.getName())){
@@ -101,13 +108,13 @@ public class LoadOldCorpus {
 		return map;
 	}
 
-	private static void assignProbs(List<Decl> makeDecls, int count) {
+	private void assignProbs(List<Decl> makeDecls, int count) {
 		for (Decl decl : makeDecls) {
 			decl.setProb(((double) FACTOR * decl.getCount()) /count);
 		}
 	}
 
-	private static int totalCount(List<Decl> makeDecls) {
+	private int totalCount(List<Decl> makeDecls) {
 		int count = 0;
     	for (Decl decl : makeDecls) {
 			count += decl.getCount();
@@ -115,7 +122,7 @@ public class LoadOldCorpus {
 		return count;
 	}
 
-	private static List<Decl> makeDecls(List<String> textdels) {
+	private List<Decl> makeDecls(List<String> textdels) {
 		List<Decl> decls = new LinkedList<Decl>();
 		
 		for (String textdecl : textdels) {
@@ -124,7 +131,7 @@ public class LoadOldCorpus {
 		return decls;
 	}
 
-	private static Decl parseDecl(String textdecl) {
+	private Decl parseDecl(String textdecl) {
 		String[] splits = textdecl.split(";");
 		
 		String nameArgs = splits[0];
@@ -134,11 +141,11 @@ public class LoadOldCorpus {
 		return new Decl(getName(name), getArgNum(args), getNum(splits[1]));
 	}
 
-	private static int getNum(String string) {
+	private int getNum(String string) {
 		return Integer.parseInt(string);
 	}
 
-	private static String getName(String textdecl) {
+	private String getName(String textdecl) {
 		if (textdecl.endsWith("<init>")){
 			String firstName = textdecl.substring(0, textdecl.lastIndexOf("."));
 			String lastName = firstName.substring(firstName.lastIndexOf(".")+1, firstName.length());
@@ -146,7 +153,7 @@ public class LoadOldCorpus {
 		} else return textdecl;
 	}
 
-	private static int getArgNum(String textdecl) {
+	private int getArgNum(String textdecl) {
 		if (textdecl.equals(" ")){
 			return 0;
 		} else {
@@ -154,7 +161,7 @@ public class LoadOldCorpus {
 		}
 	}
 
-	private static List<String> filter(List<String> readFile) {
+	private List<String> filter(List<String> readFile) {
 		List<String> list = new LinkedList<String>();
 		for (String string : readFile) {
 			if (!string.startsWith("scala.")){
@@ -164,7 +171,7 @@ public class LoadOldCorpus {
 		return list;
 	}
 
-	private static List<String> readFile(String filename) {
+	private List<String> readFile(String filename) {
 		BufferedReader br = null;
 		List<String> list = new LinkedList<String>();
 		try {
@@ -190,5 +197,22 @@ public class LoadOldCorpus {
 		}
 		
 		return list;
+	}
+
+	public void setProb(RichDeclaration rd) {
+		Declaration decl = rd.getDecl();
+		String fullName = decl.getFullName();
+		if(map.containsKey(fullName)){
+			Map<Integer, Double> map2 = map.get(fullName);
+			int argNum = decl.getArgNum();
+			if (map2.containsKey(argNum)){
+				double prob = map2.get(argNum);
+				System.out.println(fullName+"  p = "+prob);
+				rd.setProbability(prob);
+				
+			} else rd.setProbability(0.0);
+		} else {
+			rd.setProbability(0.0);
+		}
 	}
 }

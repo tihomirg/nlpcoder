@@ -1,5 +1,6 @@
 package selection;
 
+import oldcorpus.LoadOldCorpus;
 import selection.loaders.ClassLoader;
 import selection.parser.one.Word;
 import selection.parser.two.ConstituentTwo;
@@ -9,10 +10,12 @@ import definitions.Declaration;
 public class Selection {
 	private Table table;
 	private int topListSize;
+	private LoadOldCorpus loc;
 	
-	public Selection(int size){
+	public Selection(int size, LoadOldCorpus loc){
 		this.table = new Table(Config.getNumOfTags());
 		this.topListSize = size;
+		this.loc = loc;
 	}
 
 	public void add(ClassLoader[] classes, int maxWords, double nullProbs){
@@ -34,6 +37,12 @@ public class Selection {
 	public void add(Declaration decl, double nullProbs){
 		Indexes indexes = new Indexes(decl.getWords(), nullProbs);
 		RichDeclaration rd = new RichDeclaration(decl, indexes);
+
+		//TODO: Should be replaced with a real prob. assignment.
+		if (loc != null){
+			loc.setProb(rd);
+		}
+		
 		  for(Word word: indexes.getWords())
 			table.addRichDeclaration(word, rd);
 	}
