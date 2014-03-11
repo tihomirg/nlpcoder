@@ -1,10 +1,10 @@
 package selection;
 
 import oldcorpus.LoadOldCorpus;
-import selection.loaders.ClassLoader;
 import selection.parser.one.Word;
 import selection.parser.two.ConstituentTwo;
 
+import definitions.ClassInfo;
 import definitions.Declaration;
 
 public class Selection {
@@ -18,13 +18,13 @@ public class Selection {
 		this.loc = loc;
 	}
 
-	public void add(ClassLoader[] classes, int maxWords, double nullProbs){
-		for (ClassLoader clazz : classes) {
+	public void add(ClassInfo[] classes, int maxWords, double nullProbs){
+		for (ClassInfo clazz : classes) {
 			add(clazz, maxWords, nullProbs);
 		}
 	}	
 	
-	public void add(ClassLoader clazz, int maxWords, double nullProbs){
+	public void add(ClassInfo clazz, int maxWords, double nullProbs){
 		addAll(clazz.getDeclarations(), nullProbs);
 	}
 	

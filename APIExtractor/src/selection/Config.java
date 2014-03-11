@@ -9,7 +9,7 @@ public class Config {
 	
 	//Folder where we keep corpus
 	private static final String jarFolder = "C:/Users/gvero/git/jars";
-	private static final int maxFilesToScan = 5000;
+	private static final int maxFilesToScan = 10;
 	
 	//serialization
 	private static final String storageLocation = "declarations.kryo";

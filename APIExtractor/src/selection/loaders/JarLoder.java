@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import org.apache.bcel.classfile.ClassParser;
+
+import definitions.ClassInfo;
 
 import selection.IWordExtractor;
 import selection.WordExtractorFromName;
@@ -13,9 +18,7 @@ import selection.WordExtractorFromName;
 public class JarLoder implements IJarLoader {
 
 	@Override
-	public ClassLoader[] getClassFiles(List<String> jarFiles, IWordExtractor extractor) {
-		List<ClassLoader> files = new LinkedList<ClassLoader>();
-
+	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor) {
 		for(String jarFile: jarFiles){
 
 			JarFile jar;
@@ -26,7 +29,7 @@ public class JarLoder implements IJarLoader {
 					JarEntry file = entries.nextElement();
 
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						files.add(new ClassLoader(jar.getInputStream(file), extractor));
+						new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor);
 					}
 				}
 			} catch (IOException e) {
@@ -34,6 +37,6 @@ public class JarLoder implements IJarLoader {
 				e.printStackTrace();
 			}
 		}
-		return files.toArray(new ClassLoader[files.size()]);
+		return ClassInfo.getClasses();
 	}
 }

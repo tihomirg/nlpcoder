@@ -1,16 +1,25 @@
-package selection;
+package selection.loaders;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-import selection.loaders.BoundedJarLoader;
-import selection.loaders.ClassLoader;
-import selection.loaders.FolderLoader;
-import selection.loaders.IJarLoader;
+import definitions.ClassInfo;
+
+import selection.Config;
+import selection.DataSerializer;
+import selection.DeclarationParserOne;
+import selection.DeclarationParserPipeline;
+import selection.DeclarationParserTwo;
+import selection.GroupWordExtractor;
+import selection.IDeclarationParser;
+import selection.IWordExtractor;
+import selection.WordProcessor;
 import selection.parser.one.ParserOne;
 
-public class DeclarationLoader {
+public class DeclarationSerializer {
 
 	public void serialize(String folderName, String storageLocation,
 			IWordExtractor extractor) {
@@ -21,12 +30,17 @@ public class DeclarationLoader {
 			FolderLoader fLoader = new FolderLoader();
 			List<String> jars = fLoader.getJars(folder);
 			IJarLoader jLoder = new BoundedJarLoader(Config.getMaxFilesToScan());
-			ClassLoader[] classes = jLoder.getClassFiles(jars, extractor);
+			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor);
+			
+			Collection<ClassInfo> values = classFiles.values();
+			
+			ClassInfo[] values2 = values.toArray(new ClassInfo[values.size()]);
 			
 			//System.out.println(Arrays.toString(classes));
 			
 			DataSerializer serializer = new DataSerializer();
-			serializer.writeObject(storageLocation,classes, classes.getClass());
+			
+			serializer.writeObject(storageLocation, values2, values2.getClass());
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -34,13 +48,8 @@ public class DeclarationLoader {
 		}
 	}
 	
-	public ClassLoader[] deserialize(String storageLocation) {
-		DataSerializer serializer = new DataSerializer();
-		return (ClassLoader[]) serializer.readObject(storageLocation, ClassLoader[].class);
-	}
-	
 	public static void main(String[] args) {
-		DeclarationLoader loader = new DeclarationLoader();
+		DeclarationSerializer loader = new DeclarationSerializer();
 		
 		WordProcessor wordProcessor = new WordProcessor();
 		//IWordExtractor extractor = new WordExtractorFromSignature(new ParserPipeline(new IParser[]{new ParserOne(wordProcessor), new ParserTwoIndexes()}));

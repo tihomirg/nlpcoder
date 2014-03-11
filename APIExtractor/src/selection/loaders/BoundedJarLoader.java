@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import org.apache.bcel.classfile.ClassParser;
+
+import definitions.ClassInfo;
 
 import selection.IWordExtractor;
 import selection.WordExtractorFromName;
@@ -20,9 +25,7 @@ public class BoundedJarLoader implements IJarLoader {
 	}
 
 	@Override
-	public ClassLoader[] getClassFiles(List<String> jarFiles, IWordExtractor extractor) {
-		List<ClassLoader> files = new LinkedList<ClassLoader>();
-
+	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor) {
 		exit: for(String jarFile: jarFiles){
 
 			JarFile jar;
@@ -34,7 +37,7 @@ public class BoundedJarLoader implements IJarLoader {
 
 					file.isDirectory();
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						files.add(new ClassLoader(jar.getInputStream(file), extractor));
+						new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor);
 
 						scanned++;
 						if(scanned >= maxToScan){
@@ -47,6 +50,7 @@ public class BoundedJarLoader implements IJarLoader {
 				e.printStackTrace();
 			}
 		}
-		return files.toArray(new ClassLoader[files.size()]);
+		
+		return ClassInfo.getClasses();
 	}
 }

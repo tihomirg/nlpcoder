@@ -1,10 +1,13 @@
 package selection.loaders;
 
 import java.util.List;
+import java.util.Map;
+
+import definitions.ClassInfo;
 
 import selection.IWordExtractor;
 import selection.WordExtractorFromName;
 
 public interface IJarLoader {
-	 ClassLoader[] getClassFiles(List<String> jarFiles, IWordExtractor extractor);
+	Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor);
 }
