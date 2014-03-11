@@ -1,5 +1,7 @@
 package lexicalized.rules;
 
+import interpreter.ENonTerminalFactory;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
@@ -9,29 +11,29 @@ import symbol.Symbol;
 import symbol.Terminals;
 import util.List;
 
-public class LexicalizedVariableDeclarationFragmentRule extends LexicalizedRule {
+public class EVariableDeclarationFragmentRule extends ERule {
 
 	private Symbol name;
 	private int dimensions;
 	private Symbol initializer;
 
-	public LexicalizedVariableDeclarationFragmentRule(VariableDeclarationFragment node, SimpleScopes scopes) {
-		super(node, scopes);
+	public EVariableDeclarationFragmentRule(VariableDeclarationFragment node, ENonTerminalFactory factory) {
+		super(node, factory);
 
-		this.name = lNonTerminal(node.getName());		
+		this.name = eNonTerminal(node.getName());		
 		
 		this.dimensions = node.getExtraDimensions();
 		
 		ASTNode initializer = node.getInitializer();
 		
 		if(initializer != null){
-			this.initializer = lNonTerminal(initializer);
+			this.initializer = eNonTerminal(initializer);
 		}
 	
 	}
 
 	@Override
-	public boolean isUserDef() {
+	public boolean ommit() {
 		// TODO Auto-generated method stub
 		return false;
 	}

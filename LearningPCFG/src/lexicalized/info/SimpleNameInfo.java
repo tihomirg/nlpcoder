@@ -6,5 +6,9 @@ public class SimpleNameInfo extends LexicalizedInfo {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
+	
+	protected String toNaiveString(){
+		return this.isUserDef? "User":"API"; //Variables have names, but we use them only for the propagation.
+	}
 
 }

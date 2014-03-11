@@ -1,13 +1,13 @@
 package builders;
 
-import lexicalized.rules.LexicalizedMethodInvocationRule;
+import lexicalized.rules.EMethodInvocationRule;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
 public class LexilizedBuilder extends BasicBuilder {
 	
 	public boolean visit(MethodInvocation node) {
-		statistics.inc(new LexicalizedMethodInvocationRule(node));
+		statistics.inc(new EMethodInvocationRule(node));
 		
 		ASTNode exp = node.getExpression();
 		if(exp != null) exp.accept(this);

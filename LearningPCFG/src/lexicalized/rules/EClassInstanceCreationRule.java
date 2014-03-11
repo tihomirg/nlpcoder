@@ -1,5 +1,7 @@
 package lexicalized.rules;
 
+import interpreter.ENonTerminalFactory;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 
@@ -9,7 +11,7 @@ import symbol.Symbol;
 import symbol.Terminals;
 import util.List;
 
-public class LexicalizedClassInstanceCreationRule extends LexicalizedRule {
+public class EClassInstanceCreationRule extends ERule {
 
 	private Symbol expression;
 	private Symbol type;
@@ -17,16 +19,16 @@ public class LexicalizedClassInstanceCreationRule extends LexicalizedRule {
 	//private List<Symbol> typeArguments;
 	private Symbol annonimousClass;
 
-	public LexicalizedClassInstanceCreationRule(ClassInstanceCreation node, SimpleScopes scopes) {
-		super(node, scopes);
+	public EClassInstanceCreationRule(ClassInstanceCreation node, ENonTerminalFactory factory) {
+		super(node, factory);
 		// TODO Auto-generated constructor stub
 		
 		ASTNode exp = node.getExpression();
 		if (exp != null){
-		  this.expression = lNonTerminal(exp);		  
+		  this.expression = eNonTerminal(exp);		  
 		}
 		
-		this.type = lClassInstanceCreationNonTerminal(node);
+		this.type = eNonTerminal(node);
 		
 		java.util.List<ASTNode> args = node.arguments();
 		if(args != null && args.size() > 0)
@@ -76,7 +78,7 @@ public class LexicalizedClassInstanceCreationRule extends LexicalizedRule {
 	}
 
 	@Override
-	public boolean isUserDef() {
+	public boolean ommit() {
 		// TODO Auto-generated method stub
 		return false;
 	}

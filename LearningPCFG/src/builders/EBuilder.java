@@ -1,14 +1,18 @@
 package builders;
 
+import interpreter.ENonTerminalFactory;
+
 import java.io.PrintStream;
 
-import lexicalized.rules.LexicalizedClassInstanceCreationRule;
-import lexicalized.rules.LexicalizedFieldAccessRule;
-import lexicalized.rules.LexicalizedMethodInvocationRule;
-import lexicalized.rules.LexicalizedRule;
-import lexicalized.rules.LexicalizedVariableDeclarationFragmentRule;
+import lexicalized.rules.EAssignmentRule;
+import lexicalized.rules.EClassInstanceCreationRule;
+import lexicalized.rules.EFieldAccessRule;
+import lexicalized.rules.EMethodInvocationRule;
+import lexicalized.rules.ERule;
+import lexicalized.rules.EVariableDeclarationFragmentRule;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -21,6 +25,7 @@ import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
+import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
@@ -28,19 +33,24 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.ContinueStatement;
+import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.Javadoc;
+import org.eclipse.jdt.core.dom.LabeledStatement;
 import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MemberRef;
@@ -61,6 +71,7 @@ import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.QualifiedType;
+import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
@@ -69,6 +80,8 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import org.eclipse.jdt.core.dom.SwitchCase;
+import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.eclipse.jdt.core.dom.SynchronizedStatement;
 import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TextElement;
@@ -81,42 +94,78 @@ import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
 import rules.ArrayAccessRule;
 import rules.ArrayCreationRule;
 import rules.ArrayInitializerRule;
+import rules.ArrayTypeRule;
 import rules.AssignmentRule;
+import rules.BlockRule;
 import rules.BooleanLiteralRule;
+import rules.BreakStatementRule;
 import rules.CastExpressionRule;
 import rules.CharacterLiteralRule;
+import rules.ClassInstanceCreationRule;
 import rules.ConditionalExpressionRule;
+import rules.ContinueStatementRule;
+import rules.DoStatementRule;
+import rules.EnhancedForStatementRule;
 import rules.ExpressionStatementRule;
+import rules.FieldAccessRule;
+import rules.ForStatementRule;
+import rules.IfStatementRule;
 import rules.InfixExpressionRule;
 import rules.InstanceofExpressionRule;
+import rules.LabeledStatementRule;
+import rules.MethodInvocationRule;
 import rules.NullLiteralRule;
 import rules.NumberLiteralRule;
+import rules.ParameterizedTypeRule;
 import rules.ParenthesizedExpressionRule;
 import rules.PostfixExpressionRule;
 import rules.PrefixExpressionRule;
+import rules.PrimitiveTypeRule;
 import rules.QualifiedNameRule;
+import rules.QualifiedTypeRule;
+import rules.ReturnStatementRule;
 import rules.SimpleNameRule;
+import rules.SimpleTypeRule;
 import rules.StringLiteralRule;
 import rules.SuperFieldAccessRule;
 import rules.SuperMethodInvocationRule;
+import rules.SwitchCaseRule;
+import rules.SwitchStatementRule;
 import rules.ThisExpressionRule;
 import rules.ThrowStatementRule;
 import rules.TryStatementRule;
 import rules.TypeLiteralRule;
+import rules.TypeParameterRule;
 import rules.VariableDeclarationExpressionRule;
+import rules.VariableDeclarationFragmentRule;
+import rules.VariableDeclarationStatementRule;
+import rules.WhileStatementRules;
+import rules.WildcardTypeRule;
+import scopes.Scopes;
 import scopes.SimpleScopes;
 import statistics.RuleStatisticsBase;
 
-public class VariableBuilder extends IBuilder {
 
-	protected RuleStatisticsBase statistics = new RuleStatisticsBase();
+public class EBuilder extends IBuilder {
 
-	protected SimpleScopes scopes = new SimpleScopes();
+	protected RuleStatisticsBase statistics;
+
+	protected SimpleScopes scopes;
+
+	private ENonTerminalFactory factory;
+	
+	public EBuilder() {
+		this.statistics  = new RuleStatisticsBase();
+		this.scopes = new SimpleScopes();
+		this.factory = new ENonTerminalFactory(scopes);
+	}
 	
 	@Override
 	public void print(PrintStream out) {
@@ -143,12 +192,19 @@ public class VariableBuilder extends IBuilder {
 	}
 	
 	public boolean visit(Assignment node) {
-		statistics.inc(new AssignmentRule(node));
+		EAssignmentRule assignment = new EAssignmentRule(node, factory);
+		
+		
+		
+		statistics.inc(assignment);
+
+		//TODO
+		
 		return true;
-	}	
+	}
 
 	public boolean visit(ClassInstanceCreation node) {
-		LexicalizedClassInstanceCreationRule rule = new LexicalizedClassInstanceCreationRule(node, scopes);
+		EClassInstanceCreationRule rule = new EClassInstanceCreationRule(node, factory);
 	
 		ruleIsUserDef(rule);
 		
@@ -177,7 +233,7 @@ public class VariableBuilder extends IBuilder {
 	}
 	
 	public boolean visit(FieldAccess node){
-		LexicalizedFieldAccessRule rule = new LexicalizedFieldAccessRule(node, scopes);
+		EFieldAccessRule rule = new EFieldAccessRule(node, factory);
 		ruleIsUserDef(rule);
 		
 		ASTNode exp = node.getExpression();
@@ -197,21 +253,21 @@ public class VariableBuilder extends IBuilder {
 	}
 
 	public boolean visit(MethodInvocation node) {
-		LexicalizedMethodInvocationRule rule = new LexicalizedMethodInvocationRule(node, scopes);
+		EMethodInvocationRule rule = new EMethodInvocationRule(node, factory);
 		
-		ruleIsUserDef(rule);
-		
-		ASTNode exp = node.getExpression();
-		if(exp != null) exp.accept(this);
-		
-		visit(node.arguments());
-		visit(node.typeArguments());	
+//		ruleIsUserDef(rule);
+//		
+//		ASTNode exp = node.getExpression();
+//		if(exp != null) exp.accept(this);
+//		
+//		visit(node.arguments());
+//		visit(node.typeArguments());	
 		
 		return false;
 	}
 
-	private void ruleIsUserDef(LexicalizedRule rule) {
-		if(rule.isUserDef()){
+	private void ruleIsUserDef(ERule rule) {
+		if(rule.ommit()){
 		  statistics.incCounter(rule);	
 		} else{
 		  statistics.inc(rule);
@@ -380,12 +436,14 @@ public class VariableBuilder extends IBuilder {
 	}	
 	
 	public boolean visit(VariableDeclarationFragment node) {
-		statistics.inc(new LexicalizedVariableDeclarationFragmentRule(node, scopes));
+		statistics.inc(new EVariableDeclarationFragmentRule(node, factory));
+		
+//		String name = node.getName().toString();
+//		Expression exp = node.getInitializer();
+//		if (exp != null) scopes.add(name, exp);
+//		else scopes.add(name);		
+		
 		return true;
-	}
-	
-	public void endVisit(VariableDeclarationFragment node){
-		scopes.add(node.getName().toString());
 	}
 	
 	//-------------------------------------------------------  Rest --------------------------------------------------------
@@ -415,9 +473,6 @@ public class VariableBuilder extends IBuilder {
 	}
 
 	public boolean visit(CompilationUnit node) {
-		if (scopes.size() > 0){
-			System.out.println("Scopes: "+scopes.size());
-		}
 		return true;
 	}
 
@@ -476,7 +531,8 @@ public class VariableBuilder extends IBuilder {
 	public boolean visit(MethodRefParameter node) {
 		return false;
 	}
-	
+
+	//TODO: See what to do with parameters.
 	public boolean visit(MethodDeclaration node){
 		
 		scopes.push();
@@ -531,12 +587,13 @@ public class VariableBuilder extends IBuilder {
 	}
 
 	public boolean visit(TypeDeclaration node) {
-	    scopes.push();
+	    scopes.pushTD();
 	    
 		for(FieldDeclaration field: node.getFields()){
 			for(Object frag1: field.fragments()){
 				VariableDeclarationFragment frag = (VariableDeclarationFragment) frag1;
-				frag.accept(this);
+				String name = frag.getName().getIdentifier();
+				scopes.add(name);
 			}
 		}
 		
@@ -544,13 +601,18 @@ public class VariableBuilder extends IBuilder {
 			scopes.add(method.getName().toString());
 		}
 		
-		return true;
+		for(MethodDeclaration method: node.getMethods()){
+			method.accept(this);
+		}
+		
+		for(TypeDeclaration td: node.getTypes()){
+			td.accept(this);
+		}
+	
+		scopes.pop();		
+		return false;
 	}
 	
-	public void endVisit(TypeDeclaration node){
-		scopes.pop();
-	}
-
 	public boolean visit(TypeDeclarationStatement node) {
 		return true;
 	}

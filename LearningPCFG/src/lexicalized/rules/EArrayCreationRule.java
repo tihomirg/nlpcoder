@@ -1,5 +1,7 @@
 package lexicalized.rules;
 
+import interpreter.ENonTerminalFactory;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayCreation;
 
@@ -9,17 +11,17 @@ import symbol.Symbol;
 import symbol.Terminals;
 import util.List;
 
-public class LexicalizedArrayCreationRule extends LexicalizedRule {
+public class EArrayCreationRule extends ERule {
 
 	private List<Symbol> dimensions;
 	private Symbol type;
 	private int dimensionLength;
 	private Symbol initializer;
 
-	public LexicalizedArrayCreationRule(ArrayCreation node, SimpleScopes scopes) {
-		super(node, scopes);
+	public EArrayCreationRule(ArrayCreation node, ENonTerminalFactory factory) {
+		super(node, factory);
 		this.dimensions = makeLNonTerminalList(node.dimensions());
-		this.type = lArrayCreationNonTerminal(node);
+		this.type = eNonTerminal(node);
 		this.dimensionLength = node.getType().getDimensions();
 		
 		ASTNode initializer = node.getInitializer();
@@ -48,7 +50,7 @@ public class LexicalizedArrayCreationRule extends LexicalizedRule {
 	}
 
 	@Override
-	public boolean isUserDef() {
+	public boolean ommit() {
 		// TODO Auto-generated method stub
 		return false;
 	}

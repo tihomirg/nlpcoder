@@ -1,5 +1,6 @@
 package lexicalized.rules;
 
+import interpreter.ENonTerminalFactory;
 import lexicalized.symbol.LexicalizedNonTerminal;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -12,23 +13,23 @@ import symbol.Symbol;
 import symbol.Terminals;
 import util.List;
 
-public class LexicalizedMethodInvocationRule extends LexicalizedRule {
+public class EMethodInvocationRule extends ERule {
 
 	private Symbol expression;
-	private LexicalizedNonTerminal name;
+	private Symbol name;
 	private List<Symbol> arguments;
 	private List<Symbol> typeArguments;
 
-	public LexicalizedMethodInvocationRule(MethodInvocation node) {
+	public EMethodInvocationRule(MethodInvocation node) {
 		this(node, null);
 	}
 	
-	public LexicalizedMethodInvocationRule(MethodInvocation node, SimpleScopes scopes) {
-		super(node, scopes);
+	public EMethodInvocationRule(MethodInvocation node, ENonTerminalFactory factory) {
+		super(node, factory);
 		
 		ASTNode exp = node.getExpression();
 		if (exp != null){
-			this.expression = lNonTerminal(exp);
+			this.expression = eNonTerminal(exp);
 		}
 				
 		java.util.List<ASTNode> args = node.arguments();
@@ -36,7 +37,7 @@ public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 		  this.arguments = makeLNonTerminalList(args);
 		
 		SimpleName name = node.getName();
-		this.name = lMethodNonTerminal(node);
+		this.name = eNonTerminal(node);
 		
 		java.util.List<ASTNode> targs = node.typeArguments();
 		
@@ -53,8 +54,8 @@ public class LexicalizedMethodInvocationRule extends LexicalizedRule {
 		return toInfixList(this.arguments, Terminals.COMMA);
 	}
 	
-	public boolean isUserDef(){
-		return this.name.isUserDef();
+	public boolean ommit(){
+		return ((LexicalizedNonTerminal)  this.name).isUserDef();
 	}
 	
 	@Override

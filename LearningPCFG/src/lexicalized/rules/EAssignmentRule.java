@@ -1,5 +1,7 @@
 package lexicalized.rules;
 
+import interpreter.ENonTerminalFactory;
+
 import org.eclipse.jdt.core.dom.Assignment;
 
 import scopes.Scopes;
@@ -7,23 +9,23 @@ import scopes.SimpleScopes;
 import symbol.Symbol;
 import util.List;
 
-public class LexicalizedAssignmentRule extends LexicalizedRule {
+public class EAssignmentRule extends ERule {
 
 	private Symbol left;
 	private Symbol right;
 	private Symbol operator;
 
-	public LexicalizedAssignmentRule(Assignment node, SimpleScopes scopes) {
-		super(node, scopes);
+	public EAssignmentRule(Assignment node, ENonTerminalFactory factory) {
+		super(node, factory);
 		
-		this.left = lNonTerminal(node.getLeftHandSide());
-		this.right= lNonTerminal(node.getRightHandSide());
+		this.left = eNonTerminal(node.getLeftHandSide());
+		this.right= eNonTerminal(node.getRightHandSide());
 		this.operator = terminal(node.getOperator().toString());
 	}
 
 	@Override
-	public boolean isUserDef() {
-		// TODO Auto-generated method stub
+	public boolean ommit() {
+		//TODO: If "operator" is "=", "lhs" is a variable, we omit the assignment, and add it to the e-table.
 		return false;
 	}
 
