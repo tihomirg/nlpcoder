@@ -5,7 +5,7 @@ import util.List;
 import org.eclipse.jdt.core.dom.FieldAccess;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
+import symbol.Factory;
 import symbol.Terminals;
 
 public class FieldAccessRule extends Rule{
@@ -20,6 +20,6 @@ public class FieldAccessRule extends Rule{
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(this.exp).f(Terminals.DOT).f(this.name);
+		//list.f(this.exp).f(Terminals.DOT).f(this.name);
 	}
 }

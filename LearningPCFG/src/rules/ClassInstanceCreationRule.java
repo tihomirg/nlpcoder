@@ -43,31 +43,31 @@ public class ClassInstanceCreationRule extends Rule {
 	}
 
 	private List<Symbol> toTypeArguments(){
-		return toInfixList(this.typeArguments, Terminals.COMMA);
+		return null;//toInfixList(this.typeArguments, Terminals.COMMA);
 	}	
 	
 	private List<Symbol> toArguments(){
-		return toInfixList(this.arguments, Terminals.COMMA);
+		return null;//toInfixList(this.arguments, Terminals.COMMA);
 	}
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
 		if (this.expression != null){
-			list.f(this.expression).f(Terminals.DOT);
+			//list.f(this.expression).f(Terminals.DOT);
 		}
 		
-		list.f(Terminals.NEW).f(this.type);
+		//list.f(Terminals.NEW).f(this.type);
 		
 		if(this.typeArguments != null){
-			list.f(Terminals.L_TARG).f(toTypeArguments()).f(Terminals.R_TARG);
+			//list.f(Terminals.L_TARG).f(toTypeArguments()).f(Terminals.R_TARG);
 		}
 		
-		list.f(Terminals.L_PAR);
+		//list.f(Terminals.L_PAR);
 		
 		if(this.arguments != null){
 		  list.f(toArguments());
 		}
-		list.f(Terminals.R_PAR);	
+		//list.f(Terminals.R_PAR);	
 		
 		if (this.annonimousClass != null){
 			list.f(this.annonimousClass);

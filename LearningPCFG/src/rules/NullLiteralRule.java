@@ -17,7 +17,7 @@ public class NullLiteralRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(Terminals.NULL);
+		//list.f(Terminals.NULL);
 	}
 
 }

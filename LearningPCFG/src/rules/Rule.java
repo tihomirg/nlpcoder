@@ -9,7 +9,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import config.Config;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
+import symbol.Factory;
 
 public abstract class Rule {
 	protected Symbol head;
@@ -18,7 +18,7 @@ public abstract class Rule {
 	
 	public Rule(ASTNode node){
 		assert node != null;
-		this.head = Config.getFactory().getNonTerminal(node);
+		//this.head = Config.getFactory().getNonTerminal(node);
 	}
 	
 	protected List<Symbol> rhsAsList(){
@@ -50,7 +50,7 @@ public abstract class Rule {
 	protected List<Symbol> makeNonTerminalList(ASTNode[] nodes) {
 		List<Symbol> list = new List<Symbol>();
 		for(ASTNode node: nodes){
-			list.add(Config.getFactory().getNonTerminal(node));
+			//list.add(Config.getFactory().getNonTerminal(node));
 		}
 		return list;
 	}
@@ -114,11 +114,11 @@ public abstract class Rule {
 	}	
 	
     protected Symbol nonTerminal(ASTNode node){
-    	return Config.getFactory().getNonTerminal(node);
+    	return null;//Config.getFactory().getNonTerminal(node);
     }
  
     protected Symbol terminal(String token){
-    	return Config.getFactory().getTerminal(token);
+    	return null;//Config.getFactory().getTerminal(token);
     }
      
 	protected String rhs(){

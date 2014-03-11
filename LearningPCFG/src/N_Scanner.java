@@ -121,7 +121,6 @@ public class N_Scanner {
 			            		   
 			            		   System.out.println(Config.getFactory());
 			            		   
-			            		   Config.getFactory().clear();
 			            		   
 			            		   System.out.println();
 			            		   System.out.println();

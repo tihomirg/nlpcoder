@@ -1,18 +1,9 @@
 package builders;
 
-import interpreter.ENonTerminalFactory;
-
 import java.io.PrintStream;
-
-import lexicalized.rules.EAssignmentRule;
-import lexicalized.rules.EClassInstanceCreationRule;
-import lexicalized.rules.EFieldAccessRule;
-import lexicalized.rules.EMethodInvocationRule;
-import lexicalized.rules.ERule;
-import lexicalized.rules.EVariableDeclarationFragmentRule;
+import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -25,7 +16,6 @@ import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
-import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
@@ -33,24 +23,19 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
-import org.eclipse.jdt.core.dom.ContinueStatement;
-import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
-import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.Javadoc;
-import org.eclipse.jdt.core.dom.LabeledStatement;
 import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MemberRef;
@@ -71,7 +56,6 @@ import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.QualifiedType;
-import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
@@ -80,8 +64,6 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
-import org.eclipse.jdt.core.dom.SwitchCase;
-import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.eclipse.jdt.core.dom.SynchronizedStatement;
 import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TextElement;
@@ -94,77 +76,25 @@ import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
-import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
-import rules.ArrayAccessRule;
-import rules.ArrayCreationRule;
-import rules.ArrayInitializerRule;
-import rules.ArrayTypeRule;
-import rules.AssignmentRule;
-import rules.BlockRule;
-import rules.BooleanLiteralRule;
-import rules.BreakStatementRule;
-import rules.CastExpressionRule;
-import rules.CharacterLiteralRule;
-import rules.ClassInstanceCreationRule;
-import rules.ConditionalExpressionRule;
-import rules.ContinueStatementRule;
-import rules.DoStatementRule;
-import rules.EnhancedForStatementRule;
-import rules.ExpressionStatementRule;
-import rules.FieldAccessRule;
-import rules.ForStatementRule;
-import rules.IfStatementRule;
-import rules.InfixExpressionRule;
-import rules.InstanceofExpressionRule;
-import rules.LabeledStatementRule;
-import rules.MethodInvocationRule;
-import rules.NullLiteralRule;
-import rules.NumberLiteralRule;
-import rules.ParameterizedTypeRule;
-import rules.ParenthesizedExpressionRule;
-import rules.PostfixExpressionRule;
-import rules.PrefixExpressionRule;
-import rules.PrimitiveTypeRule;
-import rules.QualifiedNameRule;
-import rules.QualifiedTypeRule;
-import rules.ReturnStatementRule;
-import rules.SimpleNameRule;
-import rules.SimpleTypeRule;
-import rules.StringLiteralRule;
-import rules.SuperFieldAccessRule;
-import rules.SuperMethodInvocationRule;
-import rules.SwitchCaseRule;
-import rules.SwitchStatementRule;
-import rules.ThisExpressionRule;
-import rules.ThrowStatementRule;
-import rules.TryStatementRule;
-import rules.TypeLiteralRule;
-import rules.TypeParameterRule;
-import rules.VariableDeclarationExpressionRule;
-import rules.VariableDeclarationFragmentRule;
-import rules.VariableDeclarationStatementRule;
-import rules.WhileStatementRules;
-import rules.WildcardTypeRule;
-import scopes.Scopes;
 import scopes.SimpleScopes;
-import statistics.RuleStatisticsBase;
+import statistics.Statistics;
+import symbol.Factory;
+import symbol.Symbol;
 
 
 public class EBuilder extends IBuilder {
 
-	protected RuleStatisticsBase statistics;
+	protected Statistics statistics;
 
 	protected SimpleScopes scopes;
 
-	private ENonTerminalFactory factory;
+	private Factory factory;
 	
 	public EBuilder() {
-		this.statistics  = new RuleStatisticsBase();
+		this.statistics  = new Statistics();
 		this.scopes = new SimpleScopes();
-		this.factory = new ENonTerminalFactory(scopes);
 	}
 	
 	@Override
@@ -172,148 +102,98 @@ public class EBuilder extends IBuilder {
 		statistics.print(out);
 	}
 	
-	public RuleStatisticsBase getStatistics() {
+	public Statistics getStatistics() {
 		return statistics;
 	}
 	
-	public boolean visit(ArrayAccess node) {
-		statistics.inc(new ArrayAccessRule(node));
-		return true;
-	}
-	
-	public boolean visit(ArrayCreation node) {
-		statistics.inc(new ArrayCreationRule(node));
-		return true;
-	}
-	
-	public boolean visit(ArrayInitializer node) {
-		statistics.inc(new ArrayInitializerRule(node));
-		return true;
-	}
-	
+	//TODO: Important for variable propagation.
 	public boolean visit(Assignment node) {
-		EAssignmentRule assignment = new EAssignmentRule(node, factory);
-		
-		
-		
-		statistics.inc(assignment);
-
-		//TODO
-		
 		return true;
 	}
 
 	public boolean visit(ClassInstanceCreation node) {
-		EClassInstanceCreationRule rule = new EClassInstanceCreationRule(node, factory);
-	
-		ruleIsUserDef(rule);
+		String type = node.getType().toString();
+		Symbol receiver = getSymbol(node.getExpression());
+		Symbol[] arguments = getSymbols(node.arguments());
 		
-		ASTNode exp = node.getExpression();
-		if(exp != null) exp.accept(this);
+		statistics.inc(factory.createConstructor(type, receiver, arguments));
 		
-		visit(node.arguments());
-		visit(node.typeArguments());	
-		
-		ASTNode annon = node.getAnonymousClassDeclaration();
-		if (annon != null){
-		  annon.accept(this);
-		}		
-		
-		return false;
+		return true;
 	}
 	
 	public boolean visit(ConditionalExpression node){
-		statistics.inc(new ConditionalExpressionRule(node));
 		return true;
 	}	
 	
 	public boolean visit(ExpressionStatement node) {
-		statistics.inc(new ExpressionStatementRule(node));
 		return true;
 	}
 	
 	public boolean visit(FieldAccess node){
-		EFieldAccessRule rule = new EFieldAccessRule(node, factory);
-		ruleIsUserDef(rule);
+		String name = node.getName().getIdentifier();
+		Symbol receiver = getSymbol(node.getExpression());
+		statistics.inc(factory.createField(name, receiver));
 		
-		ASTNode exp = node.getExpression();
-		if(exp != null) exp.accept(this);		
-		
-		return false;
+		return true;
 	}
 	
 	public boolean visit(InfixExpression node){		
-		statistics.inc(new InfixExpressionRule(node));
+		//statistics.inc(new InfixExpressionRule(node));
 		return true;
 	}
 	
-	public boolean visit(InstanceofExpression node) {
-		statistics.inc(new InstanceofExpressionRule(node));
-		return true;
-	}
-
-	public boolean visit(MethodInvocation node) {
-		EMethodInvocationRule rule = new EMethodInvocationRule(node, factory);
-		
-//		ruleIsUserDef(rule);
-//		
-//		ASTNode exp = node.getExpression();
-//		if(exp != null) exp.accept(this);
-//		
-//		visit(node.arguments());
-//		visit(node.typeArguments());	
-		
-		return false;
-	}
-
-	private void ruleIsUserDef(ERule rule) {
-		if(rule.ommit()){
-		  statistics.incCounter(rule);	
-		} else{
-		  statistics.inc(rule);
-		}
-	}	
-	
-	public void visit(java.util.List<ASTNode> nodes){
-	  if (nodes != null){
-		  for(ASTNode node: nodes){
-			  node.accept(this);
-		  }
-	  }
-	}
-	
-	public boolean visit(ParenthesizedExpression node) {
-		statistics.inc(new ParenthesizedExpressionRule(node));
-		return true;
-	}
-
 	public boolean visit(PostfixExpression node) {
-		statistics.inc(new PostfixExpressionRule(node));
+		//statistics.inc(new PostfixExpressionRule(node));
 		return true;
 	}
 	
 	public boolean visit(PrefixExpression node) {
-		statistics.inc(new PrefixExpressionRule(node));
+		//statistics.inc(new PrefixExpressionRule(node));
+		return true;
+	}
+
+	public boolean visit(MethodInvocation node) {
+		
+		String name = node.getName().getIdentifier();
+		Symbol receiver = getSymbol(node.getExpression());
+		Symbol[] arguments = getSymbols(node.arguments());
+		
+		statistics.inc(factory.createMethod(name, receiver, arguments));
+		
+		return true;
+	}
+
+	private Symbol[] getSymbols(List<ASTNode> args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Symbol getSymbol(ASTNode exp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean visit(InstanceofExpression node) {
+		return true;
+	}	
+	
+	public boolean visit(ParenthesizedExpression node) {
 		return true;
 	}
 
 	public boolean visit(SuperFieldAccess node) {
-		statistics.inc(new SuperFieldAccessRule(node));
 		return true;
 	}	
 
 	public boolean visit(SuperMethodInvocation node) {
-		statistics.inc(new SuperMethodInvocationRule(node));
 		return true;
 	}	
 	
 	public boolean visit(VariableDeclarationExpression node){
-		statistics.inc(new VariableDeclarationExpressionRule(node));
 		return true;
 	}
 
 	public boolean visit(CastExpression node) {
-		statistics.inc(new CastExpressionRule(node));
 		return true;
 	}
 	
@@ -321,11 +201,16 @@ public class EBuilder extends IBuilder {
 
 	public boolean visit(Block node) {
 		scopes.push();
-		return true;
-	}
-	
-	public void endVisit(Block node) {
+		
+		List<ASTNode> statements = node.statements();
+		
+		for (ASTNode node2 : statements) {
+			node2.accept(this);
+		}
+		
 		scopes.pop();
+		
+		return false;
 	}
 	
 	public boolean visit(EnhancedForStatement node) {
@@ -346,50 +231,46 @@ public class EBuilder extends IBuilder {
 		scopes.pop();
 	}
 	
-	//------------------------------------------------------ Literals ------------------------------------------------------	
-
-	public boolean visit(BooleanLiteral node) {
-		statistics.inc(new BooleanLiteralRule(node));
-		return true;
-	}
-	
-	public boolean visit(CharacterLiteral node) {
-		statistics.inc(new CharacterLiteralRule(node));
-		return true;
-	}	
-	
-	public boolean visit(NullLiteral node){
-		statistics.inc(new NullLiteralRule(node));
-		return true;
-	}
-
-	public boolean visit(NumberLiteral node){
-		statistics.inc(new NumberLiteralRule(node));
-		return true;
-	}
-	
-	public boolean visit(StringLiteral node) {
-		statistics.inc(new StringLiteralRule(node));
-		return true;
-	}
-	
 	public boolean visit(ThisExpression node){
-		statistics.inc(new ThisExpressionRule(node));
 		return true;				
 	}
 	
 	public boolean visit(ThrowStatement node) {
-		statistics.inc(new ThrowStatementRule(node));
 		return true;
 	}
 	
 	public boolean visit(TryStatement node) {
-		statistics.inc(new TryStatementRule(node));
 		return true;
 	}
 	
 	public boolean visit(TypeLiteral node) {
-		statistics.inc(new TypeLiteralRule(node));
+		return true;
+	}	
+	
+	//------------------------------------------------------ Literals ------------------------------------------------------	
+
+	public boolean visit(BooleanLiteral node) {
+		//statistics.inc(new BooleanLiteralRule(node));
+		return true;
+	}
+	
+	public boolean visit(CharacterLiteral node) {
+		//statistics.inc(new CharacterLiteralRule(node));
+		return true;
+	}	
+	
+	public boolean visit(NullLiteral node){
+		//statistics.inc(new NullLiteralRule(node));
+		return true;
+	}
+
+	public boolean visit(NumberLiteral node){
+		//statistics.inc(new NumberLiteralRule(node));
+		return true;
+	}
+	
+	public boolean visit(StringLiteral node) {
+		//statistics.inc(new StringLiteralRule(node));
 		return true;
 	}
 	
@@ -426,27 +307,24 @@ public class EBuilder extends IBuilder {
 	//------------------------------------------------------ Special ------------------------------------------------------	
 	
 	public boolean visit(SimpleName node){
-		statistics.inc(new SimpleNameRule(node));
-		return true;
+		return false;
 	}
 
 	public boolean visit(QualifiedName node) {
-		statistics.inc(new QualifiedNameRule(node));
-		return true;
+		return false;
 	}	
 	
+	//This is where variables are born
 	public boolean visit(VariableDeclarationFragment node) {
-		statistics.inc(new EVariableDeclarationFragmentRule(node, factory));
 		
-//		String name = node.getName().toString();
-//		Expression exp = node.getInitializer();
-//		if (exp != null) scopes.add(name, exp);
-//		else scopes.add(name);		
+		String name = node.getName().getIdentifier();
+		Symbol exp = getSymbol(node.getInitializer());
+		scopes.put(name, exp);
 		
 		return true;
 	}
 	
-	//-------------------------------------------------------  Rest --------------------------------------------------------
+	//-------------------------------------------------------  Rest --------------------------------------------------------	
 	
 	public boolean visit(AnnotationTypeDeclaration node) {
 		return false;
@@ -493,8 +371,13 @@ public class EBuilder extends IBuilder {
 	}
 
 	public boolean visit(FieldDeclaration node) {
-		return false;
+		scopes.push();
+		return true;
 	}
+	
+	public void endVisit(FieldDeclaration node) {
+		scopes.pop();
+	}	
 
 	public boolean visit(ImportDeclaration node) {
 		return false;
@@ -534,13 +417,7 @@ public class EBuilder extends IBuilder {
 
 	//TODO: See what to do with parameters.
 	public boolean visit(MethodDeclaration node){
-		
 		scopes.push();
-		
-		for(Object param : node.parameters()){
-			SingleVariableDeclaration svd = (SingleVariableDeclaration) param;
-			scopes.add(svd.getName().toString());
-		}
 		
 		ASTNode body = node.getBody();
 		if(body != null) body.accept(this);
@@ -587,40 +464,32 @@ public class EBuilder extends IBuilder {
 	}
 
 	public boolean visit(TypeDeclaration node) {
-	    scopes.pushTD();
-	    
-		for(FieldDeclaration field: node.getFields()){
-			for(Object frag1: field.fragments()){
-				VariableDeclarationFragment frag = (VariableDeclarationFragment) frag1;
-				String name = frag.getName().getIdentifier();
-				scopes.add(name);
-			}
-		}
-		
-		for(MethodDeclaration method: node.getMethods()){
-			scopes.add(method.getName().toString());
-		}
-		
-		for(MethodDeclaration method: node.getMethods()){
-			method.accept(this);
-		}
-		
-		for(TypeDeclaration td: node.getTypes()){
-			td.accept(this);
-		}
+	    scopes.push();
+		return true;
+	}
 	
+	public void endVisit(TypeDeclaration node) {
 		scopes.pop();		
-		return false;
 	}
 	
 	public boolean visit(TypeDeclarationStatement node) {
 		return true;
 	}
 
+	public boolean visit(ArrayAccess node) {
+		return true;
+	}
+	
+	public boolean visit(ArrayCreation node) {
+		return true;
+	}
+	
+	public boolean visit(ArrayInitializer node) {
+		return true;
+	}	
+	
 	@Override
 	public void releaseUnder(int percentage) {
-		statistics.releaseUnder(percentage);
+		//statistics.releaseUnder(percentage);
 	}
-		
-
 }

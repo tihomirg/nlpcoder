@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 
 import rules.Rule;
 
-public class EntryComparator implements Comparator<Entry<Rule, RuleStatistics>>
+public class EntryComparator implements Comparator<Entry<String, RuleStatistics>>
 {
 	private static interface CmpStragegy {
 		public int cmp(int x, int y);
@@ -55,7 +55,7 @@ public class EntryComparator implements Comparator<Entry<Rule, RuleStatistics>>
 	}
 	
     @Override
-    public int compare(Entry<Rule, RuleStatistics> e1, Entry<Rule, RuleStatistics> e2)
+    public int compare(Entry<String, RuleStatistics> e1, Entry<String, RuleStatistics> e2)
     {
     	int x = e1.getValue().getCount();
     	int y = e2.getValue().getCount();

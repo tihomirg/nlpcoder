@@ -37,28 +37,28 @@ public class MethodInvocationRule extends Rule {
 	}
 
 	private List<Symbol> toTypeArguments(){
-		return toInfixList(this.typeArguments, Terminals.COLON);
+		return null;//toInfixList(this.typeArguments, Terminals.COLON);
 	}	
 	
 	private List<Symbol> toArguments(){
-		return toInfixList(this.arguments, Terminals.COLON);
+		return null;//toInfixList(this.arguments, Terminals.COLON);
 	}	
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
 		if (this.expression != null){
-			list.f(this.expression).f(Terminals.DOT);
+			//list.f(this.expression).f(Terminals.DOT);
 		}
 
 		if(this.typeArguments != null){
-			list.f(Terminals.L_TARG).f(toTypeArguments()).f(Terminals.R_TARG);
+			//list.f(Terminals.L_TARG).f(toTypeArguments()).f(Terminals.R_TARG);
 		}		
 		
-		list.f(this.name).f(Terminals.L_PAR);
+		//list.f(this.name).f(Terminals.L_PAR);
 		
 		if(this.arguments != null){
 		  list.f(toArguments());
 		}
-		list.f(Terminals.R_PAR);	
+		//list.f(Terminals.R_PAR);	
 	}
 }

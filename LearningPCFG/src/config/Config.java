@@ -1,5 +1,5 @@
 package config;
-import symbol.SymbolFactory;
+import symbol.Factory;
 
 
 
@@ -10,7 +10,7 @@ public class Config {
 	
 	private static int type = NAIVE;
 	
-	private static SymbolFactory factory = new SymbolFactory();
+	private static Factory factory = new Factory();
 	
 	public static int getType() {
 		return type;
@@ -20,11 +20,11 @@ public class Config {
 		Config.type = type;
 	}
 
-	public static SymbolFactory getFactory() {
+	public static Factory getFactory() {
 		return factory;
 	}
 
-	public static void setFactory(SymbolFactory factory) {
+	public static void setFactory(Factory factory) {
 		Config.factory = factory;
 	}
 	

@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayCreation;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
+import symbol.Factory;
 import symbol.Terminals;
 
 public class ArrayCreationRule extends Rule {
@@ -31,17 +31,17 @@ public class ArrayCreationRule extends Rule {
 
 
 	private List<Symbol> toExpressionIndexes(){
-		return toIndexList(this.dimensions, Terminals.L_SQUARE_BRACKET, Terminals.R_SQUARE_BRACKET);
+		return null;//toIndexList(this.dimensions, Terminals.L_SQUARE_BRACKET, Terminals.R_SQUARE_BRACKET);
 	}
 	
 	
 	private List<Symbol> toEmptyIndexes(){
-		return toIndexList(this.dimensionLength - this.dimensions.size(), Terminals.L_SQUARE_BRACKET, Terminals.R_SQUARE_BRACKET);
+		return null;//toIndexList(this.dimensionLength - this.dimensions.size(), Terminals.L_SQUARE_BRACKET, Terminals.R_SQUARE_BRACKET);
 	}		
 	
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(Terminals.NEW).f(this.type).f(toExpressionIndexes()).f(toEmptyIndexes());
+		//list.f(Terminals.NEW).f(this.type).f(toExpressionIndexes()).f(toEmptyIndexes());
 		
 		if(this.initializer != null){
 			list.f(this.initializer);

@@ -28,7 +28,7 @@ public class VariableDeclarationFragmentRule extends Rule {
 
 	
 	private List<Symbol> toDimensions() {
-		return toIndexList(this.dimensions, Terminals.L_CURLY_BRACKET, Terminals.R_SQUARE_BRACKET);
+		return null;//toIndexList(this.dimensions, Terminals.L_CURLY_BRACKET, Terminals.R_SQUARE_BRACKET);
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class VariableDeclarationFragmentRule extends Rule {
 		}
 		
 		if(this.initializer != null){
-			list.f(Terminals.ASSIGN);
+			//list.f(Terminals.ASSIGN);
 			list.f(this.initializer);
 		}
 	}

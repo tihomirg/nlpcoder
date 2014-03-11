@@ -2,19 +2,15 @@ package scopes;
 
 import java.util.Stack;
 
-public class Scopes<T> {
+public class Scopes<K,V> {
 
-	private Stack<Scope<T>> scopes = new Stack<Scope<T>>();
+	private Stack<Scope<K,V>> scopes = new Stack<Scope<K,V>>();
 	
 	public void push(){
-		scopes.push(new Scope<T>());
+		scopes.push(new Scope<K,V>());
 	}
 	
-	public void pushTD(){
-		scopes.push(new Scope<T>(true));
-	}	
-	
-	public Scope<T> peek(){
+	public Scope<K,V> peek(){
 		return scopes.peek();
 	}
 	
@@ -22,49 +18,23 @@ public class Scopes<T> {
 		scopes.pop();
 	}
 	
-	public void add(T symbol){
-		peek().add(symbol);
+	public void put(K key, V value){
+		peek().put(key, value);
 	}
 	
-	public boolean contains(T symbol){
-		for(Scope<T> scope: scopes){
-			if (scope.contains(symbol)) return true;
+	public boolean contains(K key){
+		for(Scope<K,V> scope: scopes){
+			if (scope.containsKey(key)) return true;
 		}
 		return false;
 	}
 		
 	public int size() {return scopes.size();}
 	
-	public boolean containsTD(T symbol){
-		for(Scope<T> scope: scopes){
-			if (scope.isTypedecl() && scope.contains(symbol)) return true;
-		}
-		return false;
-	}
-	
-	public T get(T symbol){
-		for(Scope<T> scope: scopes){
-			T a = scope.get(symbol);
-			if (a != null) return a;
-		}
-		return null;		
-	}
-	
-	public T getTD(T symbol){
-		for(Scope<T> scope: scopes){
-			if (scope.isTypedecl()){
-			  T a = scope.get(symbol);
-			  if (a != null) return a;
-			}
-		}
-		return null;		
-	}
-	
 	public String toString(){
 	  String s = "";
-	  for(Scope<T> scope: scopes){
-		s+="---------------------------------\n";  
-		s+= (scope.isTypedecl()? "TD\n":"");
+	  for(Scope<K,V> scope: scopes){
+		s+="---------------------------------\n";
 		s+=scope;
 	  }
 	  return s;

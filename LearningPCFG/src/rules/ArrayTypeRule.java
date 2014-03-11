@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
+import symbol.Factory;
 import symbol.Terminals;
 
 public class ArrayTypeRule extends Rule {
@@ -24,7 +24,7 @@ public class ArrayTypeRule extends Rule {
 	}
 	
 	private List<Symbol> toDimensions(){
-		return toIndexList(this.dimentsions, Terminals.L_CURLY_BRACKET, Terminals.R_CURLY_BRACKET);
+		return null;//toIndexList(this.dimentsions, Terminals.L_CURLY_BRACKET, Terminals.R_CURLY_BRACKET);
 	}
 
 	@Override

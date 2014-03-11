@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
+import symbol.Factory;
 
 public class AssignmentRule extends Rule {
 

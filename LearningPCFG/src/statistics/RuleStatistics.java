@@ -1,30 +1,26 @@
 package statistics;
 
 import rules.Rule;
+import symbol.Symbol;
 
 public class RuleStatistics {
 	
-	private Rule rule;
+	private String rule;
 	private int count;
 	
-	public RuleStatistics(Rule rule){
-		this.rule = rule;
-	}
-	
-	public RuleStatistics(Rule rule, int count){
-		this.rule = rule;
-		this.count = count;
+	public RuleStatistics(Symbol symbol){
+		this.rule = symbol.toString();
 	}
 	
 	public void incCount(){
 		count++;
 	}
 	
-	public Rule getRule() {
-		return rule;
-	}
-
 	public int getCount() {
 		return count;
+	}
+
+	public String toString() {
+		return count+"  "+rule;
 	}
 }

@@ -5,7 +5,7 @@ import util.List;
 import org.eclipse.jdt.core.dom.Block;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
+import symbol.Factory;
 import symbol.Terminals;
 
 public class BlockRule extends Rule {
@@ -20,7 +20,7 @@ public class BlockRule extends Rule {
 
 	@Override
 	protected void rhsAsList(List<Symbol> list) {
-		list.f(Terminals.L_CURLY_BRACKET).f(this.statements).f(Terminals.R_CURLY_BRACKET);
+		//list.f(Terminals.L_CURLY_BRACKET).f(this.statements).f(Terminals.R_CURLY_BRACKET);
 	}
 
 }

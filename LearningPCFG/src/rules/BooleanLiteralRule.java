@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 
 import symbol.Symbol;
-import symbol.SymbolFactory;
+import symbol.Factory;
 
 public class BooleanLiteralRule extends Rule {
 
