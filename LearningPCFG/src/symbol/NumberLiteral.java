@@ -1,6 +1,6 @@
 package symbol;
 
-public class NumberLiteral implements Symbol {
+public class NumberLiteral extends Symbol {
 
 	private String number;
 	

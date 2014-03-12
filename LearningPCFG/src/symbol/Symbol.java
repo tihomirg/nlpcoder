@@ -1,6 +1,10 @@
 package symbol;
 
-public interface Symbol {
+public abstract class Symbol {
 	
-	public String head();
+	public abstract String head();
+	
+	public boolean isVariable(){
+		return false;
+	}
 }

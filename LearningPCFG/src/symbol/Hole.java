@@ -1,6 +1,6 @@
 package symbol;
 
-public class Hole implements Symbol {
+public class Hole extends Symbol {
 	@Override
 	public String head() {
 		return "*";

@@ -1,6 +1,6 @@
 package symbol;
 
-public class BooleanLitera implements Symbol {
+public class BooleanLitera extends Symbol {
 
 	private boolean value;
 	

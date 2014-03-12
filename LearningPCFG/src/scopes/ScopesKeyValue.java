@@ -2,15 +2,15 @@ package scopes;
 
 import java.util.Stack;
 
-public class Scopes<K,V> {
+public class ScopesKeyValue<K,V> {
 
-	private Stack<Scope<K,V>> scopes = new Stack<Scope<K,V>>();
+	private Stack<ScopeKeyValue<K,V>> scopes = new Stack<ScopeKeyValue<K,V>>();
 	
 	public void push(){
-		scopes.push(new Scope<K,V>());
+		scopes.push(new ScopeKeyValue<K,V>());
 	}
 	
-	public Scope<K,V> peek(){
+	public ScopeKeyValue<K,V> peek(){
 		return scopes.peek();
 	}
 	
@@ -23,7 +23,7 @@ public class Scopes<K,V> {
 	}
 	
 	public boolean contains(K key){
-		for(Scope<K,V> scope: scopes){
+		for(ScopeKeyValue<K,V> scope: scopes){
 			if (scope.containsKey(key)) return true;
 		}
 		return false;
@@ -33,7 +33,7 @@ public class Scopes<K,V> {
 	
 	public String toString(){
 	  String s = "";
-	  for(Scope<K,V> scope: scopes){
+	  for(ScopeKeyValue<K,V> scope: scopes){
 		s+="---------------------------------\n";
 		s+=scope;
 	  }

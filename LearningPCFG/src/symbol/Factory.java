@@ -3,6 +3,12 @@ package symbol;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.InfixExpression.Operator;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression;
+
 public class Factory {
     public static final Symbol NULL = new Null();
 	public static final Symbol HOLE = new Hole();
@@ -69,5 +75,17 @@ public class Factory {
 			stringMap.put(value, new StringLiteral(value));
 		}
 		return null;
+	}
+
+	public Symbol createInfixOperator(InfixExpression.Operator operator, Symbol[] operands) {
+		return new InfixOperator(operator, operands);
+	}
+
+	public Symbol createPostfixOperator(PostfixExpression.Operator operator, Symbol operand) {
+		return new PostfixOperator(operator, operand);
+	}
+
+	public Symbol createPrefixOperator(PrefixExpression.Operator operator, Symbol operand) {
+		return new PrefixOperator(operator, operand);
 	}
 }

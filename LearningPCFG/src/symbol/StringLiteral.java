@@ -1,6 +1,6 @@
 package symbol;
 
-public class StringLiteral implements Symbol {
+public class StringLiteral extends Symbol {
 
 	private String value;
 	

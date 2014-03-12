@@ -1,6 +1,6 @@
 package symbol;
 
-public abstract class SymbolWithReceiver implements Symbol {
+public abstract class SymbolWithReceiver extends Symbol {
 
 	protected Symbol receiver;
 

@@ -1,6 +1,7 @@
 package builders;
 
 import java.io.PrintStream;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -13,6 +14,7 @@ import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Assignment.Operator;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
@@ -27,6 +29,7 @@ import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -78,7 +81,8 @@ import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.WildcardType;
 
-import scopes.SimpleScopes;
+import scopes.NameScopes;
+import scopes.EvalScopes;
 import statistics.Statistics;
 import symbol.Factory;
 import symbol.Symbol;
@@ -89,13 +93,15 @@ public class EBuilder extends IBuilder {
 	private SmallBuilder builder;
 	
 	private Statistics statistics;
-	private SimpleScopes scopes;
+	private EvalScopes locals;
+	private NameScopes decls;
 	private Factory factory;
 	
 	public EBuilder() {
 		this.statistics  = new Statistics();
-		this.scopes = new SimpleScopes();
+		this.locals = new EvalScopes();
 		this.builder = new SmallBuilder();
+		this.decls = new NameScopes();
 	}
 	
 	@Override
@@ -109,7 +115,21 @@ public class EBuilder extends IBuilder {
 	
 	//TODO: Important for variable propagation.
 	public boolean visit(Assignment node) {
+		
+		if(node.getOperator().equals(Operator.ASSIGN)){
+			Symbol lhs = getLeftSymbol(node.getLeftHandSide());  //TODO: This one should not be evaluated
+			if (lhs.isVariable()){
+				locals.put(lhs.head(), getSymbol(node.getRightHandSide()));  //TODO: This one should be evaluated
+			}
+		}
+		
 		return true;
+	}
+
+	//TODO: Non evaluated version!
+	private Symbol getLeftSymbol(Expression leftHandSide) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public boolean visit(ClassInstanceCreation node) {
@@ -138,18 +158,30 @@ public class EBuilder extends IBuilder {
 		return true;
 	}
 	
-	public boolean visit(InfixExpression node){		
-		//statistics.inc(new InfixExpressionRule(node));
+	public boolean visit(InfixExpression node){
+		Symbol[] operands = getOperands(node.getLeftOperand(), node.getRightOperand(), node.extendedOperands());
+		
+		statistics.inc(factory.createInfixOperator(node.getOperator(), operands));
 		return true;
 	}
 	
+	private Symbol[] getOperands(Expression leftOperand, Expression rightOperand, List<ASTNode> extendedOperands) {
+		List<ASTNode> list = new LinkedList<ASTNode>();
+		
+		list.add(leftOperand);
+		list.add(rightOperand);
+		list.addAll(extendedOperands);
+		
+		return getSymbols(list);
+	}
+
 	public boolean visit(PostfixExpression node) {
-		//statistics.inc(new PostfixExpressionRule(node));
+		statistics.inc(factory.createPostfixOperator(node.getOperator(), getSymbol(node.getOperand())));
 		return true;
 	}
 	
 	public boolean visit(PrefixExpression node) {
-		//statistics.inc(new PrefixExpressionRule(node));
+		statistics.inc(factory.createPrefixOperator(node.getOperator(), getSymbol(node.getOperand())));
 		return true;
 	}
 
@@ -176,7 +208,9 @@ public class EBuilder extends IBuilder {
 	}
 
 	private Symbol getSymbol(ASTNode exp) {
-		return builder.getSymbol(exp);
+		if(exp != null)
+		  return builder.getSymbol(exp);
+		else return Factory.NULL;
 	}
 
 	public boolean visit(InstanceofExpression node) {
@@ -206,7 +240,7 @@ public class EBuilder extends IBuilder {
 	//------------------------------------------------------ Statements ------------------------------------------------------	
 
 	public boolean visit(Block node) {
-		scopes.push();
+		locals.push();
 		
 		List<ASTNode> statements = node.statements();
 		
@@ -214,27 +248,27 @@ public class EBuilder extends IBuilder {
 			node2.accept(this);
 		}
 		
-		scopes.pop();
+		locals.pop();
 		
 		return false;
 	}
 	
 	public boolean visit(EnhancedForStatement node) {
-		scopes.push();		
+		locals.push();		
 		return true;
 	}
 	
 	public void endVisit(EnhancedForStatement node) {
-		scopes.pop();
+		locals.pop();
 	}
 	
 	public boolean visit(ForStatement node){
-		scopes.push();
+		locals.push();
 		return true;
 	}
 	
 	public void endVisit(ForStatement node){
-		scopes.pop();
+		locals.pop();
 	}
 	
 	public boolean visit(ThisExpression node){
@@ -325,7 +359,7 @@ public class EBuilder extends IBuilder {
 		
 		String name = node.getName().getIdentifier();
 		Symbol exp = getSymbol(node.getInitializer());
-		scopes.put(name, exp);
+		locals.put(name, exp);
 		
 		return true;
 	}
@@ -377,12 +411,12 @@ public class EBuilder extends IBuilder {
 	}
 
 	public boolean visit(FieldDeclaration node) {
-		scopes.push();
+		locals.push();
 		return true;
 	}
 	
 	public void endVisit(FieldDeclaration node) {
-		scopes.pop();
+		locals.pop();
 	}	
 
 	public boolean visit(ImportDeclaration node) {
@@ -423,12 +457,12 @@ public class EBuilder extends IBuilder {
 
 	//TODO: See what to do with parameters.
 	public boolean visit(MethodDeclaration node){
-		scopes.push();
+		locals.push();
 		
 		ASTNode body = node.getBody();
 		if(body != null) body.accept(this);
 		
-		scopes.pop();
+		locals.pop();
 		return false;
 	}
 
@@ -470,12 +504,28 @@ public class EBuilder extends IBuilder {
 	}
 
 	public boolean visit(TypeDeclaration node) {
-	    scopes.push();
+	    decls.push();
+	    
+	    MethodDeclaration[] methods = node.getMethods();
+	    
+	    for (MethodDeclaration method : methods) {
+			decls.put(method.getName().getIdentifier());
+		}
+	    
+	    FieldDeclaration[] fields = node.getFields();
+	    
+	    for (FieldDeclaration field : fields) {
+	    	List<VariableDeclarationFragment> fragments = field.fragments();
+	    	for (VariableDeclarationFragment fragment : fragments) {
+				decls.put(fragment.getName().getIdentifier());
+			}
+		}
+	    
 		return true;
 	}
 	
 	public void endVisit(TypeDeclaration node) {
-		scopes.pop();		
+		decls.pop();		
 	}
 	
 	public boolean visit(TypeDeclarationStatement node) {

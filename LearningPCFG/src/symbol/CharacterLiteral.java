@@ -1,6 +1,6 @@
 package symbol;
 
-public class CharacterLiteral implements Symbol {
+public class CharacterLiteral extends Symbol {
 
 	private char value;
 	

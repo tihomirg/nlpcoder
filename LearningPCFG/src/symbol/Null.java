@@ -1,6 +1,6 @@
 package symbol;
 
-public class Null implements Symbol {
+public class Null extends Symbol {
 
 	@Override
 	public String head() {

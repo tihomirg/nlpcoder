@@ -1,6 +1,6 @@
 package symbol;
 
-public class Variable implements Symbol {
+public class Variable extends Symbol {
 	
 	private String name;
 	
@@ -11,5 +11,10 @@ public class Variable implements Symbol {
 	@Override
 	public String head() {
 		return name;
+	}
+	
+	@Override
+	public boolean isVariable(){
+		return true;
 	}
 }
