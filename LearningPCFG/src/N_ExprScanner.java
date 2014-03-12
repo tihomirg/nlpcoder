@@ -1,6 +1,6 @@
 import java.io.File;
 
-import builders.EBuilder;
+import builders.PCFGBuilder;
 import builders.IBuilder;
 import config.Config;
 
@@ -8,7 +8,7 @@ import config.Config;
 public class N_ExprScanner extends N_PCFGScanner {
 
 		public static void main(String[] args){
-			IBuilder builder = new EBuilder();
+			IBuilder builder = new PCFGBuilder();
 				
 			//File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 			

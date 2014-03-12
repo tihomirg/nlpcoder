@@ -88,20 +88,23 @@ import symbol.Factory;
 import symbol.Symbol;
 
 
-public class EBuilder extends IBuilder {
+public class PCFGBuilder extends IBuilder {
 
-	private SmallBuilder builder;
+	private NonEvalExpBuilder nonEvaluator;
+	private EvalExpBuilder evaluator;
 	
 	private Statistics statistics;
 	private EvalScopes locals;
 	private NameScopes decls;
 	private Factory factory;
 	
-	public EBuilder() {
+	public PCFGBuilder() {
 		this.statistics  = new Statistics();
 		this.locals = new EvalScopes();
-		this.builder = new SmallBuilder();
 		this.decls = new NameScopes();
+		this.factory = new Factory();
+		this.nonEvaluator = new NonEvalExpBuilder(factory);
+		this.evaluator = new EvalExpBuilder(factory, locals, decls);
 	}
 	
 	@Override
@@ -117,9 +120,9 @@ public class EBuilder extends IBuilder {
 	public boolean visit(Assignment node) {
 		
 		if(node.getOperator().equals(Operator.ASSIGN)){
-			Symbol lhs = getLeftSymbol(node.getLeftHandSide());  //TODO: This one should not be evaluated
+			Symbol lhs = nonEval(node.getLeftHandSide());  //TODO: This one should not be evaluated
 			if (lhs.isVariable()){
-				locals.put(lhs.head(), getSymbol(node.getRightHandSide()));  //TODO: This one should be evaluated
+				locals.put(lhs.head(), eval(node.getRightHandSide()));  //TODO: This one should be evaluated
 			}
 		}
 		
@@ -127,15 +130,14 @@ public class EBuilder extends IBuilder {
 	}
 
 	//TODO: Non evaluated version!
-	private Symbol getLeftSymbol(Expression leftHandSide) {
-		// TODO Auto-generated method stub
-		return null;
+	private Symbol nonEval(Expression exp) {
+		return nonEvaluator.getSymbol(exp);
 	}
 
 	public boolean visit(ClassInstanceCreation node) {
 		String type = node.getType().toString();
-		Symbol receiver = getSymbol(node.getExpression());
-		Symbol[] arguments = getSymbols(node.arguments());
+		Symbol receiver = eval(node.getExpression());
+		Symbol[] arguments = eval(node.arguments());
 		
 		statistics.inc(factory.createConstructor(type, receiver, arguments));
 		
@@ -152,64 +154,64 @@ public class EBuilder extends IBuilder {
 	
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
-		Symbol receiver = getSymbol(node.getExpression());
+		Symbol receiver = eval(node.getExpression());
 		statistics.inc(factory.createField(name, receiver));
 		
 		return true;
 	}
 	
 	public boolean visit(InfixExpression node){
-		Symbol[] operands = getOperands(node.getLeftOperand(), node.getRightOperand(), node.extendedOperands());
+		Symbol[] operands = eval(node.getLeftOperand(), node.getRightOperand(), node.extendedOperands());
 		
 		statistics.inc(factory.createInfixOperator(node.getOperator(), operands));
 		return true;
 	}
 	
-	private Symbol[] getOperands(Expression leftOperand, Expression rightOperand, List<ASTNode> extendedOperands) {
+	private Symbol[] eval(Expression leftOperand, Expression rightOperand, List<ASTNode> extendedOperands) {
 		List<ASTNode> list = new LinkedList<ASTNode>();
 		
 		list.add(leftOperand);
 		list.add(rightOperand);
 		list.addAll(extendedOperands);
 		
-		return getSymbols(list);
+		return eval(list);
 	}
 
 	public boolean visit(PostfixExpression node) {
-		statistics.inc(factory.createPostfixOperator(node.getOperator(), getSymbol(node.getOperand())));
+		statistics.inc(factory.createPostfixOperator(node.getOperator(), eval(node.getOperand())));
 		return true;
 	}
 	
 	public boolean visit(PrefixExpression node) {
-		statistics.inc(factory.createPrefixOperator(node.getOperator(), getSymbol(node.getOperand())));
+		statistics.inc(factory.createPrefixOperator(node.getOperator(), eval(node.getOperand())));
 		return true;
 	}
 
 	public boolean visit(MethodInvocation node) {
 		
 		String name = node.getName().getIdentifier();
-		Symbol receiver = getSymbol(node.getExpression());
-		Symbol[] arguments = getSymbols(node.arguments());
+		Symbol receiver = eval(node.getExpression());
+		Symbol[] arguments = eval(node.arguments());
 		
 		statistics.inc(factory.createMethod(name, receiver, arguments));
 		
 		return true;
 	}
 
-	private Symbol[] getSymbols(List<ASTNode> args) {
+	private Symbol[] eval(List<ASTNode> args) {
 		int length = args.size();
 		Symbol[] symbols = new Symbol[length];
 		
 		for (int i = 0; i < length; i++) {
-			symbols[i] = getSymbol(args.get(i));
+			symbols[i] = eval(args.get(i));
 		}
 		
 		return symbols;
 	}
 
-	private Symbol getSymbol(ASTNode exp) {
+	private Symbol eval(ASTNode exp) {
 		if(exp != null)
-		  return builder.getSymbol(exp);
+		  return evaluator.getSymbol(exp);
 		else return Factory.NULL;
 	}
 
@@ -358,7 +360,7 @@ public class EBuilder extends IBuilder {
 	public boolean visit(VariableDeclarationFragment node) {
 		
 		String name = node.getName().getIdentifier();
-		Symbol exp = getSymbol(node.getInitializer());
+		Symbol exp = eval(node.getInitializer());
 		locals.put(name, exp);
 		
 		return true;
@@ -455,15 +457,15 @@ public class EBuilder extends IBuilder {
 		return false;
 	}
 
-	//TODO: See what to do with parameters.
 	public boolean visit(MethodDeclaration node){
+		decls.push();
 		locals.push();
-		
-		ASTNode body = node.getBody();
-		if(body != null) body.accept(this);
-		
-		locals.pop();
-		return false;
+		return true;
+	}
+	
+	public void endVisit(MethodDeclaration node){
+		decls.pop();
+		locals.pop();	
 	}
 
 	public boolean visit(Modifier node) {
@@ -484,6 +486,7 @@ public class EBuilder extends IBuilder {
 
 	//TODO: Used for method parameters.
 	public boolean visit(SingleVariableDeclaration node) {
+		decls.put(node.getName().getIdentifier());
 		return false;
 	}
 

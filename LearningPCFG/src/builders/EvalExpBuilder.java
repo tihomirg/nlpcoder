@@ -19,14 +19,24 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 
+import scopes.EvalScopes;
+import scopes.NameScopes;
 import symbol.Factory;
 import symbol.Symbol;
 
-public class SmallBuilder extends FalseBuilder {
+public class EvalExpBuilder extends FalseBuilder {
 
 	private Factory factory;
+	private EvalScopes locals;
+	private NameScopes decls;
 	private Symbol symbol;
-	
+
+	public EvalExpBuilder(Factory factory, EvalScopes locals, NameScopes decls) {
+		this.factory = factory;
+		this.locals = locals;
+		this.decls = decls;
+	}
+
 	public Symbol getSymbol(ASTNode node){
 		symbol = null;
 		node.accept(this);
@@ -115,5 +125,6 @@ public class SmallBuilder extends FalseBuilder {
 	public boolean visit(Initializer node) {
 		symbol = factory.HOLE;
 		return false;
-	}	
+	}		
+
 }

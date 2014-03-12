@@ -74,7 +74,7 @@ public class Factory {
 		if(!stringMap.containsKey(value)){
 			stringMap.put(value, new StringLiteral(value));
 		}
-		return null;
+		return stringMap.get(value);
 	}
 
 	public Symbol createInfixOperator(InfixExpression.Operator operator, Symbol[] operands) {
