@@ -1,14 +1,17 @@
 package symbol;
 
-public class Method implements Symbol {
+public class Method extends SymbolWithReceiver {
 	private String name;
-	private Symbol receiver;
 	private Symbol[] args;
 	
 	public Method(String name, Symbol receiver, Symbol[] args) {
+		super(receiver);
 		this.name = name;
-		this.receiver = receiver;
 		this.args = args;
+	}
+
+	public Method(String name) {
+		this.name = name;
 	}
 
 	public String getName() {
@@ -40,15 +43,9 @@ public class Method implements Symbol {
 		return s;
 	}
 	
-	private String receiverToString(){
-		if(receiver != null){
-			return receiver +".";
-		} else return "";
-	}
-	
 	@Override
 	public String toString() {
-		return "name ("+argHeadsToString()+")";
+		return receiverToString()+"name ("+argHeadsToString()+")";
 	}
 
 	@Override

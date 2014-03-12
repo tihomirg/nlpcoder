@@ -1,10 +1,15 @@
 package symbol;
 
-public class Field implements Symbol {
+public class Field extends SymbolWithReceiver {
 
 	private String name;
 
 	public Field(String name) {
+		this.name = name;
+	}	
+	
+	public Field(String name, Symbol reciever) {
+		super(reciever);
 		this.name = name;
 	}
 
@@ -13,7 +18,8 @@ public class Field implements Symbol {
 		return name;
 	}
 	
-	public String toString(){
-		return name;
+	@Override
+	public String toString() {
+		return receiverToString()+name;
 	}
 }

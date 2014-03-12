@@ -86,15 +86,16 @@ import symbol.Symbol;
 
 public class EBuilder extends IBuilder {
 
-	protected Statistics statistics;
-
-	protected SimpleScopes scopes;
-
+	private SmallBuilder builder;
+	
+	private Statistics statistics;
+	private SimpleScopes scopes;
 	private Factory factory;
 	
 	public EBuilder() {
 		this.statistics  = new Statistics();
 		this.scopes = new SimpleScopes();
+		this.builder = new SmallBuilder();
 	}
 	
 	@Override
@@ -129,7 +130,7 @@ public class EBuilder extends IBuilder {
 		return true;
 	}
 	
-	public boolean visit(FieldAccess node){
+	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
 		Symbol receiver = getSymbol(node.getExpression());
 		statistics.inc(factory.createField(name, receiver));
@@ -164,13 +165,18 @@ public class EBuilder extends IBuilder {
 	}
 
 	private Symbol[] getSymbols(List<ASTNode> args) {
-		// TODO Auto-generated method stub
-		return null;
+		int length = args.size();
+		Symbol[] symbols = new Symbol[length];
+		
+		for (int i = 0; i < length; i++) {
+			symbols[i] = getSymbol(args.get(i));
+		}
+		
+		return symbols;
 	}
 
 	private Symbol getSymbol(ASTNode exp) {
-		// TODO Auto-generated method stub
-		return null;
+		return builder.getSymbol(exp);
 	}
 
 	public boolean visit(InstanceofExpression node) {
