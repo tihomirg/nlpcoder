@@ -76,6 +76,8 @@ public class CityImpl implements City {
 		this.name = name;
 		//System.out.print("A"+this.name+"B"+"\n");
 		
+		List list = new LinkedList<Boolean>();
+		
 		for(int i= 0; i <10;i++){
 			System.out.print("A");
 		}

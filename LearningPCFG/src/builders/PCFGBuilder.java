@@ -226,8 +226,7 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	private Symbol eval(ASTNode exp) {
-		if(exp != null)
-		  return evaluator.getSymbol(exp);
+		if(exp != null) return evaluator.getSymbol(exp);
 		else return Factory.NULL;
 	}
 
@@ -374,11 +373,7 @@ public class PCFGBuilder extends IBuilder {
 	
 	//This is where variables are born
 	public boolean visit(VariableDeclarationFragment node) {
-		
-		String name = node.getName().getIdentifier();
-		Symbol exp = eval(node.getInitializer());
-		locals.put(name, exp);
-		
+		locals.put(node.getName().getIdentifier(), eval(node.getInitializer()));
 		return true;
 	}
 	
@@ -431,7 +426,9 @@ public class PCFGBuilder extends IBuilder {
 	public boolean visit(FieldDeclaration node) {
 		List<VariableDeclarationFragment> fragments = node.fragments();
 		for (VariableDeclarationFragment fragment : fragments) {
-			fragment.getInitializer().accept(this);
+			Expression exp = fragment.getInitializer();
+			if(exp != null)
+			   exp.accept(this);
 		}
 		return false;
 	}

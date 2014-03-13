@@ -36,7 +36,7 @@ public class Method extends SymbolWithReceiver {
 
 	@Override
 	public String toString() {
-		return receiverToString()+"name ("+argsToString()+")";
+		return receiverToString()+name+"("+argsToString()+")";
 	}
 
 	@Override

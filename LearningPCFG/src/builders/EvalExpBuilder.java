@@ -48,15 +48,25 @@ public class EvalExpBuilder extends FalseBuilder {
 	}
 	
 	public boolean visit(ClassInstanceCreation node){
-		symbol = factory.createConstructor(node.getType().toString());
+		String name = node.getType().toString();
+		symbol = factory.createConstructor(name);
 		return false;
 	}
 	
 	public boolean visit(FieldAccess node) {
-		symbol = factory.createField(node.getName().getIdentifier());
+		String name = node.getName().getIdentifier();
+		if(!isField(name)){
+		  symbol = factory.createField(name);
+		} else {
+		  symbol = Factory.HOLE;
+		}
 		return false;
 	}
 	
+	private boolean isField(String name) {
+		return fields.contains(name);
+	}
+
 	public boolean visit(MethodInvocation node) {
 		symbol = factory.createMethod(node.getName().getIdentifier());
 		return false;
@@ -89,11 +99,15 @@ public class EvalExpBuilder extends FalseBuilder {
 	
 	public boolean visit(SimpleName node){
 		String name = node.getIdentifier();
-		
+
 		if (!isParam(name)){
 			if (isLocalVariable(name)){
 				symbol = locals.get(name);
+			} else {
+				symbol = Factory.HOLE;
 			}
+		} else {
+			symbol = Factory.HOLE;
 		}
 
 		return false;
