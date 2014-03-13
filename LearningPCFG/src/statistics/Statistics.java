@@ -4,7 +4,6 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import rules.Rule;
 import symbol.Symbol;
 import util.Pair;
 

@@ -30,22 +30,13 @@ public class Method extends SymbolWithReceiver {
 		this.args = args;
 	}
 
-	private String argHeadsToString(){
-		String s ="";
-		
-		if (args.length > 0){
-			s+= args[0].head();
-			for (int i = 1; i < args.length; i++) {
-				s+=", "+args[i].head();
-			}
-		}
-		
-		return s;
+	private String argsToString(){
+		return symbolHeadsToString(this.args);
 	}
-	
+
 	@Override
 	public String toString() {
-		return receiverToString()+"name ("+argHeadsToString()+")";
+		return receiverToString()+"name ("+argsToString()+")";
 	}
 
 	@Override

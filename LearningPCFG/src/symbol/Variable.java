@@ -17,4 +17,13 @@ public class Variable extends Symbol {
 	public boolean isVariable(){
 		return true;
 	}
+	
+	public String getName() {
+		return "Variable("+name+")";
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

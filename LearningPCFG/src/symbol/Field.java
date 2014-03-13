@@ -15,6 +15,10 @@ public class Field extends SymbolWithReceiver {
 
 	@Override
 	public String head() {
+		return "Field("+name+")";
+	}
+	
+	public String getName() {
 		return name;
 	}
 	

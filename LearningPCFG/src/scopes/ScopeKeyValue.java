@@ -10,6 +10,10 @@ public class ScopeKeyValue<K,V> {
 		variables.put(key, value);
 	}
 	
+	public V get(K key) {
+		return variables.get(key);
+	}
+	
 	public boolean containsKey(K key){
 		return variables.containsKey(key);
 	}

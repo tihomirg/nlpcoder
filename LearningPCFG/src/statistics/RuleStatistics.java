@@ -1,6 +1,5 @@
 package statistics;
 
-import rules.Rule;
 import symbol.Symbol;
 
 public class RuleStatistics {

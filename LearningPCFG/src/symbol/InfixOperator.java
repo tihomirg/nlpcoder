@@ -1,6 +1,7 @@
 package symbol;
 
-import org.eclipse.jdt.core.dom.ASTNode;
+import java.util.Arrays;
+
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 
 public class InfixOperator extends Symbol {
@@ -15,7 +16,15 @@ public class InfixOperator extends Symbol {
 
 	@Override
 	public String head() {
-		return operator.toString();
+		return "InfixOp("+operator.toString()+")";
+	}
+	
+	public String toString(){
+		return operator.toString()+" "+operandsToString();
+	}
+
+	private String operandsToString() {
+		return symbolHeadsToString(opreands);
 	}
 
 }

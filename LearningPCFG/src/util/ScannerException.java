@@ -1,3 +1,4 @@
+package util;
 
 public class ScannerException extends Exception {
 

@@ -83,6 +83,7 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 import scopes.NameScopes;
 import scopes.EvalScopes;
+import scopes.ScopesKeyValue;
 import statistics.Statistics;
 import symbol.Factory;
 import symbol.Symbol;
@@ -94,17 +95,21 @@ public class PCFGBuilder extends IBuilder {
 	private EvalExpBuilder evaluator;
 	
 	private Statistics statistics;
-	private EvalScopes locals;
-	private NameScopes decls;
 	private Factory factory;
+	private ScopesKeyValue<String, Symbol> locals;
+	private NameScopes methods;
+	private NameScopes fields;
+	private NameScopes params;
 	
 	public PCFGBuilder() {
 		this.statistics  = new Statistics();
 		this.locals = new EvalScopes();
-		this.decls = new NameScopes();
+		this.methods = new NameScopes();
+		this.fields = new NameScopes();
+		this.params = new NameScopes();
 		this.factory = new Factory();
-		this.nonEvaluator = new NonEvalExpBuilder(factory);
-		this.evaluator = new EvalExpBuilder(factory, locals, decls);
+		this.nonEvaluator = new NonEvalExpBuilder(factory, locals, methods, fields, params);
+		this.evaluator = new EvalExpBuilder(factory, locals, methods, fields, params);
 	}
 	
 	@Override
@@ -116,13 +121,12 @@ public class PCFGBuilder extends IBuilder {
 		return statistics;
 	}
 	
-	//TODO: Important for variable propagation.
 	public boolean visit(Assignment node) {
 		
 		if(node.getOperator().equals(Operator.ASSIGN)){
 			Symbol lhs = nonEval(node.getLeftHandSide());  //TODO: This one should not be evaluated
-			if (lhs.isVariable()){
-				locals.put(lhs.head(), eval(node.getRightHandSide()));  //TODO: This one should be evaluated
+			if (lhs.isVariable()){				
+				locals.put(lhs.getName(), eval(node.getRightHandSide()));  //TODO: This one should be evaluated
 			}
 		}
 		
@@ -154,12 +158,22 @@ public class PCFGBuilder extends IBuilder {
 	
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
-		Symbol receiver = eval(node.getExpression());
-		statistics.inc(factory.createField(name, receiver));
+		
+		if(!isField(name)){
+			statistics.inc(factory.createField(name, eval(node.getExpression())));
+		}
 		
 		return true;
 	}
 	
+	private boolean isLocals(String name) {
+		return locals.contains(name);
+	}
+
+	private boolean isField(String name) {
+		return fields.contains(name);
+	}
+
 	public boolean visit(InfixExpression node){
 		Symbol[] operands = eval(node.getLeftOperand(), node.getRightOperand(), node.extendedOperands());
 		
@@ -190,12 +204,14 @@ public class PCFGBuilder extends IBuilder {
 	public boolean visit(MethodInvocation node) {
 		
 		String name = node.getName().getIdentifier();
-		Symbol receiver = eval(node.getExpression());
-		Symbol[] arguments = eval(node.arguments());
-		
-		statistics.inc(factory.createMethod(name, receiver, arguments));
-		
+		if(!isMethod(name)){
+		statistics.inc(factory.createMethod(name, eval(node.getExpression()), eval(node.arguments())));
+		}
 		return true;
+	}
+
+	private boolean isMethod(String name) {
+		return methods.contains(name);
 	}
 
 	private Symbol[] eval(List<ASTNode> args) {
@@ -413,13 +429,12 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(FieldDeclaration node) {
-		locals.push();
-		return true;
+		List<VariableDeclarationFragment> fragments = node.fragments();
+		for (VariableDeclarationFragment fragment : fragments) {
+			fragment.getInitializer().accept(this);
+		}
+		return false;
 	}
-	
-	public void endVisit(FieldDeclaration node) {
-		locals.pop();
-	}	
 
 	public boolean visit(ImportDeclaration node) {
 		return false;
@@ -458,14 +473,14 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(MethodDeclaration node){
-		decls.push();
 		locals.push();
+		params.push();
 		return true;
 	}
 	
 	public void endVisit(MethodDeclaration node){
-		decls.pop();
-		locals.pop();	
+		locals.pop();
+		params.pop();
 	}
 
 	public boolean visit(Modifier node) {
@@ -486,7 +501,7 @@ public class PCFGBuilder extends IBuilder {
 
 	//TODO: Used for method parameters.
 	public boolean visit(SingleVariableDeclaration node) {
-		decls.put(node.getName().getIdentifier());
+		params.put(node.getName().getIdentifier());
 		return false;
 	}
 
@@ -507,20 +522,21 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(TypeDeclaration node) {
-	    decls.push();
+	    methods.push();
+	    fields.push();
 	    
-	    MethodDeclaration[] methods = node.getMethods();
+	    MethodDeclaration[] methodDecls = node.getMethods();
 	    
-	    for (MethodDeclaration method : methods) {
-			decls.put(method.getName().getIdentifier());
+	    for (MethodDeclaration methodDecl : methodDecls) {
+			methods.put(methodDecl.getName().getIdentifier());
 		}
 	    
-	    FieldDeclaration[] fields = node.getFields();
+	    FieldDeclaration[] fieldDecls = node.getFields();
 	    
-	    for (FieldDeclaration field : fields) {
-	    	List<VariableDeclarationFragment> fragments = field.fragments();
+	    for (FieldDeclaration fieldDecl : fieldDecls) {
+	    	List<VariableDeclarationFragment> fragments = fieldDecl.fragments();
 	    	for (VariableDeclarationFragment fragment : fragments) {
-				decls.put(fragment.getName().getIdentifier());
+				fields.put(fragment.getName().getIdentifier());
 			}
 		}
 	    
@@ -528,7 +544,8 @@ public class PCFGBuilder extends IBuilder {
 	}
 	
 	public void endVisit(TypeDeclaration node) {
-		decls.pop();		
+		methods.pop();
+		fields.pop();
 	}
 	
 	public boolean visit(TypeDeclarationStatement node) {

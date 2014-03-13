@@ -14,7 +14,11 @@ public class PostfixOperator extends Symbol {
 
 	@Override
 	public String head() {
-		return operator.toString();
+		return "PostfixOp("+operator.toString()+")";
 	}
 
+	@Override
+	public String toString() {
+		return operator+" "+operand;
+	}
 }

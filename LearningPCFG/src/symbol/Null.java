@@ -7,4 +7,11 @@ public class Null extends Symbol {
 		return "null";
 	}
 
+	@Override
+	public String toString() {
+		return "null";
+	}
+	
+	
+
 }

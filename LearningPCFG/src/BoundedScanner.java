@@ -1,15 +1,24 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.text.NumberFormat;
+import java.util.Map;
 
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import config.Config;
+import util.ScannerException;
 
 import builders.IBuilder;
 
-public class N_Scanner {
+public class BoundedScanner {
 
 	private static int fileNum;
 	private static int intervalNum;
@@ -29,8 +38,8 @@ public class N_Scanner {
 	
 	protected static void scan(IBuilder builder, File folder, File file, int fileNum, int intervalNum) {
 		
-		N_Scanner.fileNum = fileNum;
-		N_Scanner.intervalNum = intervalNum;
+		BoundedScanner.fileNum = fileNum;
+		BoundedScanner.intervalNum = intervalNum;
 		
 		startTime = System.currentTimeMillis();
 		
@@ -88,7 +97,7 @@ public class N_Scanner {
 			        } else {
 			        	if (fileEntry.isFile() && fileEntry.getName().endsWith(".java")){
 			        	   //System.out.println(fileEntry.getAbsolutePath());
-			        	   FileScanner.scan(fileEntry.getAbsolutePath(), builder);
+			        	   scan(fileEntry.getAbsolutePath(), builder);
 			               counter++;
 			               
 			               if (counter == intervalCounter *(fileNum / intervalNum)){
@@ -119,9 +128,6 @@ public class N_Scanner {
 			            		   builder.releaseUnder(0);
 			            		   
 			            		   
-			            		   System.out.println(Config.getFactory());
-			            		   
-			            		   
 			            		   System.out.println();
 			            		   System.out.println();
 			            		   
@@ -138,4 +144,49 @@ public class N_Scanner {
 			        }
 			    }
 			}
+	
+
+	public static void scan(String fileName, ASTVisitor builder) {
+		ASTParser parser = ASTParser.newParser(AST.JLS3);
+		char[] fileContent = readFile(fileName);
+		
+		parser.setSource(fileContent);
+		Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
+		parser.setCompilerOptions(options);
+		
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setStatementsRecovery(true);	
+		
+		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+		
+		cu.accept(builder);
+	}
+
+	private static char[] readFile(String fileName){
+		StringBuffer sb = new StringBuffer();
+		BufferedReader reader = null;
+		
+		try{
+		
+		  reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(fileName)), "UTF-8"));
+		
+		  String line = null;
+		  while ((line = reader.readLine()) != null) {
+		    sb.append(line+"\n");
+		  }
+		
+		} catch(IOException e){
+		} finally{
+			
+		  if (reader != null)
+			try {
+				reader.close();
+			} catch (IOException e) {
+			}
+		}
+		
+		return sb.toString().toCharArray();
+	}	
+	
 }

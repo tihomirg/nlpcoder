@@ -10,7 +10,11 @@ public class BooleanLitera extends Symbol {
 
 	@Override
 	public String head() {
-		return Boolean.toString(value);
+		return "Boolean("+Boolean.toString(value)+")";
 	}
 
+	@Override
+	public String toString() {
+		return Boolean.toString(value);
+	}
 }

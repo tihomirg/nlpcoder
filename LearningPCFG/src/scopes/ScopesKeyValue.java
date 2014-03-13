@@ -32,11 +32,19 @@ public class ScopesKeyValue<K,V> {
 	public int size() {return scopes.size();}
 	
 	public String toString(){
-	  String s = "";
-	  for(ScopeKeyValue<K,V> scope: scopes){
-		s+="---------------------------------\n";
-		s+=scope;
-	  }
-	  return s;
+		String s = "";
+		for(ScopeKeyValue<K,V> scope: scopes){
+			s+="---------------------------------\n";
+			s+=scope;
+		}
+		return s;
+	}
+
+	public V get(K name) {
+		for(ScopeKeyValue<K,V> scope: scopes){
+			V value = scope.get(name);
+			if (value != null) return value;
+		}
+		return null;
 	}
 }

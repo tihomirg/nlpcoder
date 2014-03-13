@@ -19,22 +19,26 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 
-import scopes.EvalScopes;
 import scopes.NameScopes;
+import scopes.ScopesKeyValue;
 import symbol.Factory;
 import symbol.Symbol;
 
 public class EvalExpBuilder extends FalseBuilder {
 
 	private Factory factory;
-	private EvalScopes locals;
-	private NameScopes decls;
+	private ScopesKeyValue<String, Symbol> locals;
+	private NameScopes methods;
+	private NameScopes fields;
+	private NameScopes params;
 	private Symbol symbol;
-
-	public EvalExpBuilder(Factory factory, EvalScopes locals, NameScopes decls) {
+	
+	public EvalExpBuilder(Factory factory, ScopesKeyValue<String, Symbol> locals, NameScopes methods, NameScopes fields, NameScopes params) {
 		this.factory = factory;
 		this.locals = locals;
-		this.decls = decls;
+		this.methods = methods;
+		this.fields = fields;
+		this.params = params;
 	}
 
 	public Symbol getSymbol(ASTNode node){
@@ -84,8 +88,23 @@ public class EvalExpBuilder extends FalseBuilder {
 	}	
 	
 	public boolean visit(SimpleName node){
-		symbol = factory.createVariable(node.getIdentifier());
+		String name = node.getIdentifier();
+		
+		if (!isParam(name)){
+			if (isLocalVariable(name)){
+				symbol = locals.get(name);
+			}
+		}
+
 		return false;
+	}
+
+	private boolean isLocalVariable(String name) {
+		return locals.contains(name);
+	}
+
+	private boolean isParam(String name) {
+		return params.contains(name);
 	}
 
 	public boolean visit(QualifiedName node) {
@@ -125,6 +144,5 @@ public class EvalExpBuilder extends FalseBuilder {
 	public boolean visit(Initializer node) {
 		symbol = factory.HOLE;
 		return false;
-	}		
-
+	}
 }

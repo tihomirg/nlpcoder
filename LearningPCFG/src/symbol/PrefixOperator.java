@@ -14,7 +14,11 @@ public class PrefixOperator extends Symbol {
 
 	@Override
 	public String head() {
-		return operator.toString();
+		return "PrefixOp("+operator+")";
 	}
 
+	@Override
+	public String toString() {
+		return operator + " " + operand;
+	}
 }

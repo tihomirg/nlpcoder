@@ -10,7 +10,11 @@ public class StringLiteral extends Symbol {
 
 	@Override
 	public String head() {
-		return value;
+		return "String("+value+")";
 	}
 
+	@Override
+	public String toString() {
+		return value;
+	}
 }

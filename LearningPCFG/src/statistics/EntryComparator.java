@@ -3,8 +3,6 @@ package statistics;
 import java.util.Comparator;
 import java.util.Map.Entry;
 
-import rules.Rule;
-
 public class EntryComparator implements Comparator<Entry<String, RuleStatistics>>
 {
 	private static interface CmpStragegy {

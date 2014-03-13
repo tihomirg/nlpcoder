@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
-import java.util.Set;
-
-import rules.Rule;
 import symbol.Symbol;
 import util.Pair;
 

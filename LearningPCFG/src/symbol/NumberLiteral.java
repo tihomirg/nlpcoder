@@ -10,7 +10,11 @@ public class NumberLiteral extends Symbol {
 
 	@Override
 	public String head() {
-		// TODO Auto-generated method stub
+		return number;
+	}
+
+	@Override
+	public String toString() {
 		return number;
 	}
 

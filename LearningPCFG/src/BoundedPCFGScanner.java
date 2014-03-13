@@ -2,10 +2,9 @@ import java.io.File;
 
 import builders.PCFGBuilder;
 import builders.IBuilder;
-import config.Config;
 
 
-public class N_ExprScanner extends N_PCFGScanner {
+public class BoundedPCFGScanner extends BoundedScanner {
 
 		public static void main(String[] args){
 			IBuilder builder = new PCFGBuilder();
@@ -13,9 +12,8 @@ public class N_ExprScanner extends N_PCFGScanner {
 			//File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 			
 			File input = new File("test");
-			File output = setTypeAndGetOutputFile(Config.NAIVE);
+			File output = new File("naive.txt");
 			
 			scan(builder, input, output, 10000, 10);		
 		}
-		
 }
