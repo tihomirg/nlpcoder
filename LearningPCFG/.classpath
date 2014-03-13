@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="C:/Program Files/eclipse-indigo/plugins/org.eclipse.core.runtime_3.7.0.v20110110.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/eclipse-indigo/plugins/org.eclipse.equinox.preferences_3.4.2.v20120111-2020.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/eclipse-indigo/plugins/org.eclipse.osgi_3.7.2.v20120110-1415.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/APIExtractor"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -27,6 +27,9 @@ public class Declaration implements Serializable {
 	private String clazz;
 	
 	private Word[] words;
+
+	private String simpleName;
+	private String packageName;
 	
 	public Declaration(){}	
 
@@ -36,7 +39,12 @@ public class Declaration implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+		this.simpleName = getShortName(name);
 	}
+	
+	private String getShortName(String name) {
+		return name.substring(name.lastIndexOf(".")+1);
+	}	
 
 	public int getArgNum() {
 		return argNum;
@@ -169,4 +177,21 @@ public class Declaration implements Serializable {
 	private String shortType(String type) {
 		return type.substring(type.lastIndexOf(".")+1);
 	}
+
+	public String getSimpleName() {
+		return simpleName;
+	}
+
+	public void setSimpleName(String simpleName) {
+		this.simpleName = simpleName;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
 }

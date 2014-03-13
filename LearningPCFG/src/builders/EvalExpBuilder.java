@@ -68,10 +68,19 @@ public class EvalExpBuilder extends FalseBuilder {
 	}
 
 	public boolean visit(MethodInvocation node) {
-		symbol = factory.createMethod(node.getName().getIdentifier());
+		String name = node.getName().getIdentifier();
+		if(!isMethod(name)){
+		  symbol = factory.createMethod(name);
+		} else {
+			symbol = Factory.HOLE;
+		}
 		return false;
 	}
 	
+	private boolean isMethod(String name) {
+		return methods.contains(name);
+	}
+
 	public boolean visit(BooleanLiteral node) {
 		symbol = factory.createBooleanLiteral(node.booleanValue());
 		return false;

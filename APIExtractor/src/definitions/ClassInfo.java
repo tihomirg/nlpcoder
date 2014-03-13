@@ -31,11 +31,15 @@ public class ClassInfo implements Serializable {
 	
 	private Declaration[] methods;
 	private Declaration[] fields;
+	private String simpleName;
+	private String packageName;
 	
 	public ClassInfo(){}
 	
 	public ClassInfo(JavaClass clazz, IWordExtractor extractor) {
 		this.name = clazz.getClassName();
+		this.packageName = clazz.getPackageName();
+		this.simpleName = getShortName(this.name);
 		classes.put(this.name, this);
 		
 		this.isClass = clazz.isClass();
@@ -47,6 +51,10 @@ public class ClassInfo implements Serializable {
 		this.interfaces = makeInterfaces(clazz.getInterfaces(), extractor);
 		this.superClasses = makeSuperClasses(clazz.getSuperClasses(), extractor);
 		
+	}
+
+	private String getShortName(String name) {
+		return name.substring(name.lastIndexOf(".")+1);
 	}
 
 	private ClassInfo[] makeSuperClasses(JavaClass[] superClasses2, IWordExtractor extractor) {
@@ -191,18 +199,7 @@ public class ClassInfo implements Serializable {
 		}
 		return s;		
 	}
-
-	@Override
-	public String toString() {
-		return "ClassInfo [name=" + name + 
-				", superClasses=["+ superClassesToString() + "]"+
-				", interfaces=["+interfacesToString()+"],"+
-				"isClass=" + isClass+ 
-				", isPublic=" + isPublic + 
-				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
-				"]\n";
-	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -245,5 +242,33 @@ public class ClassInfo implements Serializable {
 
 	public void setFields(Declaration[] fields) {
 		this.fields = fields;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
+	public void setSimpleName(String simpleName) {
+		this.simpleName = simpleName;
 	}	
+
+	public String getSimpleName(){
+		return simpleName;
+	}
+
+	@Override
+	public String toString() {
+		return "ClassInfo [name=" + name + 
+				", superClasses=["+ superClassesToString() + "]"+
+				", interfaces=["+interfacesToString()+"],"+
+				"isClass=" + isClass+ 
+				", isPublic=" + isPublic + 
+				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
+				"]\n";
+	}
+	
 }

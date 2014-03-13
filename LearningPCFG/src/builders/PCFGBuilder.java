@@ -1,5 +1,6 @@
 package builders;
 
+
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,6 +82,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.WildcardType;
 
+import declarations.API;
+import declarations.Imported;
+
 import scopes.NameScopes;
 import scopes.EvalScopes;
 import scopes.ScopesKeyValue;
@@ -100,6 +104,8 @@ public class PCFGBuilder extends IBuilder {
 	private NameScopes methods;
 	private NameScopes fields;
 	private NameScopes params;
+	private Imported imported;
+	private API api;
 	
 	public PCFGBuilder() {
 		this.statistics  = new Statistics();
@@ -125,7 +131,7 @@ public class PCFGBuilder extends IBuilder {
 		
 		if(node.getOperator().equals(Operator.ASSIGN)){
 			Symbol lhs = nonEval(node.getLeftHandSide());  //TODO: This one should not be evaluated
-			if (lhs.isVariable()){				
+			if (lhs.isVariable()){
 				locals.put(lhs.getName(), eval(node.getRightHandSide()));  //TODO: This one should be evaluated
 			}
 		}
@@ -140,14 +146,20 @@ public class PCFGBuilder extends IBuilder {
 
 	public boolean visit(ClassInstanceCreation node) {
 		String type = node.getType().toString();
-		Symbol receiver = eval(node.getExpression());
-		Symbol[] arguments = eval(node.arguments());
 		
-		statistics.inc(factory.createConstructor(type, receiver, arguments));
-		
+		if(isImportedType(type)){
+			Symbol receiver = eval(node.getExpression());
+			Symbol[] arguments = eval(node.arguments());
+
+			statistics.inc(factory.createConstructor(type, receiver, arguments));
+		}
 		return true;
 	}
 	
+	private boolean isImportedType(String type) {
+		return imported.isImportedType(type);
+	}
+
 	public boolean visit(ConditionalExpression node){
 		return true;
 	}	
@@ -159,18 +171,24 @@ public class PCFGBuilder extends IBuilder {
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
 		
-		if(!isField(name)){
-			statistics.inc(factory.createField(name, eval(node.getExpression())));
+		if(!isOwnerField(name)){
+			if (isImportedField(name)){
+			   statistics.inc(factory.createField(name, eval(node.getExpression())));
+			}
 		}
 		
 		return true;
 	}
 	
-	private boolean isLocals(String name) {
+	private boolean isImportedField(String name) {
+		return imported.isImportedField(name);
+	}
+
+	private boolean isLocal(String name) {
 		return locals.contains(name);
 	}
 
-	private boolean isField(String name) {
+	private boolean isOwnerField(String name) {
 		return fields.contains(name);
 	}
 
@@ -202,15 +220,21 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(MethodInvocation node) {
-		
+
 		String name = node.getName().getIdentifier();
-		if(!isMethod(name)){
-		statistics.inc(factory.createMethod(name, eval(node.getExpression()), eval(node.arguments())));
+		if(!isOwnerMethod(name)){
+			if(isImportedMethod(name)){
+			   statistics.inc(factory.createMethod(name, eval(node.getExpression()), eval(node.arguments())));
+			}
 		}
 		return true;
 	}
 
-	private boolean isMethod(String name) {
+	private boolean isImportedMethod(String name) {
+		return imported.isImportedMethod(name);
+	}
+
+	private boolean isOwnerMethod(String name) {
 		return methods.contains(name);
 	}
 
@@ -404,6 +428,7 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(CompilationUnit node) {
+		this.imported = api.createImported();
 		return true;
 	}
 
@@ -434,6 +459,9 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(ImportDeclaration node) {
+		String imp = node.getName().toString();
+		boolean single = node.isOnDemand();
+		api.load(imported, imp, single);
 		return false;
 	}
 
