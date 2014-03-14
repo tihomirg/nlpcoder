@@ -194,4 +194,8 @@ public class Declaration implements Serializable {
 		this.packageName = packageName;
 	}
 
+	public boolean overrides(Declaration decl) {
+		return simpleName.equals(decl.simpleName);
+	}
+
 }

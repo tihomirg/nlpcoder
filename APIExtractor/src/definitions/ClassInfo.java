@@ -33,6 +33,7 @@ public class ClassInfo implements Serializable {
 	private Declaration[] fields;
 	private String simpleName;
 	private String packageName;
+	private Declaration[] udecls;
 	
 	public ClassInfo(){}
 	
@@ -86,7 +87,7 @@ public class ClassInfo implements Serializable {
 		}
 		return list.toArray(new ClassInfo[list.size()]);
 	}
-	
+
 	public Declaration[] getDeclarations(){
 		int length = this.methods.length + this.fields.length;
 		Declaration[] decls = new Declaration[length];
@@ -95,6 +96,48 @@ public class ClassInfo implements Serializable {
 		System.arraycopy(this.fields, 0, decls, this.methods.length, this.fields.length);	
 		
 		return decls;
+	}
+	
+	public Declaration[] getUniquDeclarations() {
+		if(this.udecls == null){
+			Declaration[] decls = getDeclarations();
+			List<Declaration> list = new LinkedList<Declaration>();
+			for (Declaration decl : decls) {
+				if(!isOverriden(decl)){
+					list.add(decl);
+				}
+			}
+			return this.udecls = list.toArray(new Declaration[list.size()]);
+		} else return this.udecls;
+	}
+
+	protected boolean isOverriden(Declaration decl, ClassInfo[] classes) {
+		for (ClassInfo clazz : classes) {
+			if(clazz.isOverriden(decl)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isOverriden(Declaration decl){
+		if (decl.isMethod()) {
+			return isOverridenMethod(decl);
+		} else {
+			return isOverridenField(decl);
+		}
+	}
+
+	private boolean isOverridenField(Declaration decl) {
+		for (Declaration field: fields) {
+			if (decl.overrides(field)) return true;
+		}
+		return false;
+	}
+
+	private boolean isOverridenMethod(Declaration decl) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	private Declaration[] initMethods(JavaClass clazz, IWordExtractor extractor) {
@@ -116,7 +159,7 @@ public class ClassInfo implements Serializable {
 					decl.setName(method.getName());
 					decl.setMethod(true);
 				}
-				
+
 				decl.setArgNum(method.getArgumentTypes().length);
 				
 				setArgTypes(method, decl);

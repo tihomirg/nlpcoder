@@ -22,11 +22,20 @@ public class API {
 	}
 
 	public void load(Imported imported, String imp, boolean single) {
-		Set<ClassInfo>  classes = getTypes(imp, single);
+		Set<ClassInfo>  classes = getSuperClasses(getTypes(imp, single));
         Set<Declaration> decls = getDecls(classes);
 		
 		imported.addTypes(classes);
 		imported.addDecls(decls);
+	}
+
+	private Set<ClassInfo> getSuperClasses(Set<ClassInfo> classes) {
+		Set<ClassInfo> set = new HashSet<ClassInfo>();
+		for (ClassInfo clazz : classes) {
+			set.addAll(Arrays.asList(clazz.getSuperClasses()));
+			//set.addAll(Arrays.asList(clazz.getInterfaces()));
+		}
+		return set;
 	}
 
 	private Set<Declaration> getDecls(Set<ClassInfo> classes2) {
@@ -38,7 +47,7 @@ public class API {
 	}
 
 	private Set<Declaration> getDecls(ClassInfo clazz) {
-		return new HashSet<Declaration>(Arrays.asList(clazz.getDeclarations()));
+		return new HashSet<Declaration>(Arrays.asList(clazz.getUniquDeclarations()));
 	}
 
 	private Set<ClassInfo> getTypes(String imp, boolean single) {
