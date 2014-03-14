@@ -1,11 +1,8 @@
 package declarations;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,22 +11,61 @@ import definitions.Declaration;
 
 public class API {
 
-	private Map<String, Set<ClassInfo>> fullPackages = new HashMap<String, Set<ClassInfo>>();
+	private static final String JAVA_LANG = "java.lang";
+	private Map<String, Set<ClassInfo>> packages = new HashMap<String, Set<ClassInfo>>();
 	private Map<String, ClassInfo> classes = new HashMap<String, ClassInfo>();	
 	
 	public Imported createImported() {
-		return null;
+		Imported imported = new Imported();
+		load(imported, JAVA_LANG, false);
+		return imported;
 	}
 
 	public void load(Imported imported, String imp, boolean single) {
-		Set<ClassInfo>  classes = getSuperClasses(getTypes(imp, single));
+		Set<ClassInfo> classes = getClasses(imp, single);
+		Set<ClassInfo>  superClasses = getSuperClasses(classes);
+		classes.addAll(superClasses);
         Set<Declaration> decls = getDecls(classes);
 		
-		imported.addTypes(classes);
+		imported.addClasses(classes);
 		imported.addDecls(decls);
 	}
 
-	private Set<ClassInfo> getSuperClasses(Set<ClassInfo> classes) {
+	public void addClasses(ClassInfo[] classes){
+		for (ClassInfo clazz : classes) {
+			addClass(clazz);
+		}
+	}
+	
+	private void addClass(ClassInfo clazz) {
+		putIntoPackages(clazz);
+		putIntoClasses(clazz);
+	}
+
+	private void putIntoClasses(ClassInfo clazz) {
+		classes.put(clazz.getName(), clazz);
+	}
+
+	private void putIntoPackages(ClassInfo clazz) {
+		Set<ClassInfo> pkg = getPackage(clazz);
+		pkg.add(clazz);
+	}
+
+	public Set<ClassInfo> getPackage(ClassInfo clazz) {
+		String pkg = clazz.getPackageName();
+		return getPackage(pkg);
+	}
+
+	public Set<ClassInfo> getPackage(String pkg) {
+		if (!packages.containsKey(pkg)) {
+			Set<ClassInfo> set = new HashSet<ClassInfo>();
+			packages.put(pkg, set);
+		}
+		return packages.get(pkg);
+	}
+
+	//TODO: Include interfaces.
+	private static Set<ClassInfo> getSuperClasses(Set<ClassInfo> classes) {
 		Set<ClassInfo> set = new HashSet<ClassInfo>();
 		for (ClassInfo clazz : classes) {
 			set.addAll(Arrays.asList(clazz.getSuperClasses()));
@@ -38,21 +74,21 @@ public class API {
 		return set;
 	}
 
-	private Set<Declaration> getDecls(Set<ClassInfo> classes2) {
+	private static Set<Declaration> getDecls(Set<ClassInfo> classes2) {
 		Set<Declaration> set = new HashSet<Declaration>();
 		for (ClassInfo clazz : classes2) {
-			set.addAll(getDecls(clazz));	
+			set.addAll(getDecls(clazz));
 		}
 		return set;
 	}
 
-	private Set<Declaration> getDecls(ClassInfo clazz) {
-		return new HashSet<Declaration>(Arrays.asList(clazz.getUniquDeclarations()));
+	private static Set<Declaration> getDecls(ClassInfo clazz) {
+		return new HashSet<Declaration>(Arrays.asList(clazz.getUniqueDeclarations()));
 	}
 
-	private Set<ClassInfo> getTypes(String imp, boolean single) {
+	private Set<ClassInfo> getClasses(String imp, boolean single) {
 		if (!single){
-			Set<ClassInfo> classes = fullPackages.get(imp);
+			Set<ClassInfo> classes = packages.get(imp);
 			if (classes != null) return classes;
 		} else {
 			final ClassInfo classInfo = classes.get(imp);

@@ -157,7 +157,7 @@ public class PCFGBuilder extends IBuilder {
 	}
 	
 	private boolean isImportedType(String type) {
-		return imported.isImportedType(type);
+		return imported.isImportedClass(type);
 	}
 
 	public boolean visit(ConditionalExpression node){

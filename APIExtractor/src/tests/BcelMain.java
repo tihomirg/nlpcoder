@@ -80,6 +80,7 @@ public class BcelMain {
 					String clazzName = clazz.getClassName();
 					decl.setName(clazzName.substring(clazzName.lastIndexOf('.')+1, clazzName.length()));
 					decl.setConstructor(true);
+					decl.setMethod(true);					
 				} else {
 					decl.setName(method.getName());
 					decl.setMethod(true);

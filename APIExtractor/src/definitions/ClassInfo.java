@@ -48,10 +48,21 @@ public class ClassInfo implements Serializable {
 		
 		this.methods = initMethods(clazz, extractor);
 		this.fields = initFields(clazz, extractor);
-		
-		this.interfaces = makeInterfaces(clazz.getInterfaces(), extractor);
-		this.superClasses = makeSuperClasses(clazz.getSuperClasses(), extractor);
-		
+
+		try {
+			this.interfaces = makeInterfaces(clazz.getInterfaces(), extractor);
+		} catch (Exception e) {
+			System.out.println("*******************************************************************************************");
+			this.interfaces = new ClassInfo[0];
+		}
+
+		try {
+
+			this.superClasses = makeSuperClasses(clazz.getSuperClasses(), extractor);		
+		} catch (Exception e) {
+			System.out.println("*******************************************************************************************");
+			this.superClasses = new ClassInfo[0];
+		}
 	}
 
 	private String getShortName(String name) {
@@ -61,8 +72,8 @@ public class ClassInfo implements Serializable {
 	private ClassInfo[] makeSuperClasses(JavaClass[] superClasses2, IWordExtractor extractor) {
 		List<ClassInfo> list = new LinkedList<ClassInfo>();
 		for (JavaClass superClass: superClasses2) {
-			getClass(superClass, list, extractor);	
-		}		
+			getClass(superClass, list, extractor);
+		}
 		return list.toArray(new ClassInfo[list.size()]);
 	}
 
@@ -98,12 +109,22 @@ public class ClassInfo implements Serializable {
 		return decls;
 	}
 	
-	public Declaration[] getUniquDeclarations() {
+	private ClassInfo[] getInheritedTypes(){
+		int length = this.superClasses.length + this.interfaces.length;
+		ClassInfo[] types = new ClassInfo[length];
+	
+		System.arraycopy(this.superClasses, 0, types, 0, this.superClasses.length);
+		System.arraycopy(this.interfaces, 0, types, this.superClasses.length, this.interfaces.length);
+		
+		return types;
+	}	
+	
+	public Declaration[] getUniqueDeclarations() {
 		if(this.udecls == null){
 			Declaration[] decls = getDeclarations();
 			List<Declaration> list = new LinkedList<Declaration>();
 			for (Declaration decl : decls) {
-				if(!isOverriden(decl)){
+				if(!isOverriden(decl, getInheritedTypes())){
 					list.add(decl);
 				}
 			}
@@ -111,7 +132,7 @@ public class ClassInfo implements Serializable {
 		} else return this.udecls;
 	}
 
-	protected boolean isOverriden(Declaration decl, ClassInfo[] classes) {
+	public static boolean isOverriden(Declaration decl, ClassInfo[] classes) {
 		for (ClassInfo clazz : classes) {
 			if(clazz.isOverriden(decl)){
 				return true;
@@ -136,7 +157,9 @@ public class ClassInfo implements Serializable {
 	}
 
 	private boolean isOverridenMethod(Declaration decl) {
-		// TODO Auto-generated method stub
+		for (Declaration method: methods) {
+			if (decl.overrides(method)) return true;
+		}
 		return false;
 	}
 
@@ -155,6 +178,7 @@ public class ClassInfo implements Serializable {
 					String clazzName = clazz.getClassName();
 					decl.setName(clazzName.substring(clazzName.lastIndexOf('.')+1, clazzName.length()));
 					decl.setConstructor(true);
+					decl.setMethod(true);					
 				} else {
 					decl.setName(method.getName());
 					decl.setMethod(true);

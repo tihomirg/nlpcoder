@@ -1,5 +1,6 @@
 package declarations;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -9,13 +10,20 @@ import definitions.Declaration;
 
 public class Imported {
 	
-	private Map<String, Set<ClassInfo>> types;
+	private Map<String, Set<ClassInfo>> classes;
 	private Map<String, Set<Declaration>> fields;
 	private Map<String, Set<Declaration>> methods;
 	private Map<String, Set<Declaration>> cons;
 	
-	public boolean isImportedType(String type) {
-		return types.containsKey(type);
+	public Imported() {
+		this.classes = new HashMap<String, Set<ClassInfo>>();
+		this.fields = new HashMap<String, Set<Declaration>>();
+		this.methods = new HashMap<String, Set<Declaration>>();
+		this.cons = new HashMap<String, Set<Declaration>>();
+	}
+	
+	public boolean isImportedClass(String type) {
+		return classes.containsKey(type);
 	}
 
 	public boolean isImportedField(String name) {
@@ -26,18 +34,18 @@ public class Imported {
 		return methods.containsKey(name);
 	}
 
-	public void addTypes(Set<ClassInfo> classes) {
+	public void addClasses(Set<ClassInfo> classes) {
 		for (ClassInfo clazz : classes) {
-			addType(clazz);
+			addClass(clazz);
 		}
 	}
 
-	public void addType(ClassInfo clazz) {
-		getTypes(clazz.getSimpleName()).add(clazz);
+	public void addClass(ClassInfo clazz) {
+		getClasses(clazz.getSimpleName()).add(clazz);
 	}
 
-	public Set<ClassInfo> getTypes(String name) {
-		return get(name, types);
+	public Set<ClassInfo> getClasses(String name) {
+		return get(name, classes);
 	}
 
 	public void addDecls(Set<Declaration> decls) {
@@ -78,6 +86,12 @@ public class Imported {
 		}
 		return cons.get(name);
 	}
-		
-	
+
+	public Map<String, Set<Declaration>> getMethods() {
+		return methods;
+	}
+
+	public Map<String, Set<ClassInfo>> getClasses() {
+		return classes;
+	}
 }
