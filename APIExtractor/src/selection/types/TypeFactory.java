@@ -20,7 +20,7 @@ public class TypeFactory {
 		if(!consts.containsKey(name)){
 			consts.put(name, new Const(name));
 		}
-		return consts.get(name);	
+		return consts.get(name);
 	}
 	
 	public Polymorphic createPolymorphic(String name, Type[] params) {

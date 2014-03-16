@@ -1,4 +1,4 @@
-package selection.types.serializers;
+package selection.serializers;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -12,6 +12,9 @@ import selection.types.Polymorphic;
 import selection.types.Type;
 import selection.types.TypeFactory;
 import selection.types.Variable;
+import selection.types.serializers.ConstSerializer;
+import selection.types.serializers.PolymorphicSerializer;
+import selection.types.serializers.VariableSrializer;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;

@@ -3,8 +3,7 @@ package selection;
 import java.util.Scanner;
 
 import oldcorpus.LoadOldCorpus;
-import selection.loaders.DeclarationDeserializer;
-import selection.loaders.DeclarationSerializer;
+import selection.deserializer.FullDeserializer;
 import selection.parser.one.ParserOne;
 import selection.parser.one.SentenceZero;
 import selection.parser.three.ParserThree;
@@ -14,6 +13,8 @@ import selection.parser.two.SentenceTwo;
 import selection.probability.designers.ConeProbabilityDesigner;
 import selection.probability.designers.MixedProbabilityDesigner;
 import selection.probability.designers.UniformProbabilityDesigner;
+import selection.serializers.FullSerializer;
+import selection.types.TypeFactory;
 
 public class Main {
 	private static SentenceTwo parse(String sentence, WordProcessor wordProcessor) {
@@ -27,9 +28,10 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		DeclarationDeserializer loader = new DeclarationDeserializer();
+		TypeFactory factory = new TypeFactory();
+		FullDeserializer deserializer = new FullDeserializer(factory);
 		Selection selection = new Selection(Config.topSelectedLength(), new LoadOldCorpus(Config.getOldCorpusLocation()));
-		selection.add(loader.deserialize(Config.getStorageLocation()), Config.getMaxWords(), Config.getNullProbability());
+		selection.add(deserializer.deserialize(Config.getStorageLocation()), Config.getMaxWords(), Config.getNullProbability());
 		
 		Scanner scanner = new Scanner(System.in);
 		WordProcessor wordProcessor = new WordProcessor();

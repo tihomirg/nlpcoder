@@ -8,11 +8,13 @@ import declarations.Imported;
 import definitions.ClassInfo;
 import definitions.Declaration;
 import selection.Config;
-import selection.loaders.DeclarationDeserializer;
+import selection.deserializer.FullDeserializer;
+import selection.types.TypeFactory;
 
 public class TestDefaultImport {
 	public static void main(String[] args) {
-		DeclarationDeserializer deserializer = new DeclarationDeserializer();
+		TypeFactory factory = new TypeFactory();
+		FullDeserializer deserializer = new FullDeserializer(factory);
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API();
 		api.addClasses(classes);

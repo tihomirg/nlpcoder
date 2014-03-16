@@ -1,4 +1,4 @@
-package selection.loaders;
+package selection.serializers;
 
 import java.io.File;
 import java.util.Collection;
@@ -15,25 +15,36 @@ import selection.IDeclarationParser;
 import selection.IWordExtractor;
 import selection.WordExtractorEmpty;
 import selection.WordProcessor;
+import selection.loaders.FolderLoader;
+import selection.loaders.IJarLoader;
+import selection.loaders.TargetJarLoader;
+import selection.types.TypeFactory;
 import definitions.ClassInfo;
 
 public class TargetSerialaizer {
 
-	public void serialize(String folderName, String storageLocation,
-			IWordExtractor extractor) {
+	private String targetPackage;
+	private TypeFactory factory;	
+	
+	public TargetSerialaizer(TypeFactory factory, String targetPackage) {
+		this.factory = factory;
+		this.targetPackage = targetPackage;
+	}
+
+	public void serialize(String folderName, String storageLocation, IWordExtractor extractor) {
 		File folder = new File(folderName);
 		
 		try {
 			
 			FolderLoader fLoader = new FolderLoader();
 			List<String> jars = fLoader.getJars(folder);
-			IJarLoader jLoder = new TargetJarLoader(Config.getMaxFilesToScan(), "java.lang");
+			IJarLoader jLoder = new TargetJarLoader(Config.getMaxFilesToScan(), targetPackage);
 			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor);
 			
 			Collection<ClassInfo> values = classFiles.values();
 			ClassInfo[] values2 = values.toArray(new ClassInfo[values.size()]);
-			DataSerializer serializer = new DataSerializer();
-			serializer.writeObject(storageLocation, values2, values2.getClass());
+			TypeSerializer serializer = new TypeSerializer(factory);
+			serializer.writeObject(storageLocation, values2);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -42,12 +53,8 @@ public class TargetSerialaizer {
 	}
 	
 	public static void main(String[] args) {
-		TargetSerialaizer loader = new TargetSerialaizer();
-		
-		WordProcessor wordProcessor = new WordProcessor();
-		//IWordExtractor extractor = new WordExtractorFromSignature(new ParserPipeline(new IParser[]{new ParserOne(wordProcessor), new ParserTwoIndexes()}));
-		
-		//IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.4, new int[]{2,5}, Config.getNullProbability())}));
+		TypeFactory factory = new TypeFactory();
+		TargetSerialaizer loader = new TargetSerialaizer(factory, "java.lang");
 		
 		IWordExtractor extractor = new WordExtractorEmpty();
 		

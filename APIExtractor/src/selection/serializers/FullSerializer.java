@@ -1,4 +1,4 @@
-package selection.loaders;
+package selection.serializers;
 
 import java.io.File;
 import java.util.Arrays;
@@ -17,12 +17,21 @@ import selection.GroupWordExtractor;
 import selection.IDeclarationParser;
 import selection.IWordExtractor;
 import selection.WordProcessor;
+import selection.loaders.BoundedJarLoader;
+import selection.loaders.FolderLoader;
+import selection.loaders.IJarLoader;
 import selection.parser.one.ParserOne;
+import selection.types.TypeFactory;
 
-public class DeclarationSerializer {
+public class FullSerializer {
 
-	public void serialize(String folderName, String storageLocation,
-			IWordExtractor extractor) {
+	private TypeFactory factory;
+	
+	public FullSerializer(TypeFactory factory) {
+		this.factory = factory;
+	}
+
+	public void serialize(String folderName, String storageLocation, IWordExtractor extractor) {
 		File folder = new File(folderName);
 		
 		try {
@@ -38,9 +47,9 @@ public class DeclarationSerializer {
 			
 			//System.out.println(Arrays.toString(classes));
 			
-			DataSerializer serializer = new DataSerializer();
+			TypeSerializer serializer = new TypeSerializer(factory);
 			
-			serializer.writeObject(storageLocation, values2, values2.getClass());
+			serializer.writeObject(storageLocation, values2);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -49,7 +58,8 @@ public class DeclarationSerializer {
 	}
 	
 	public static void main(String[] args) {
-		DeclarationSerializer loader = new DeclarationSerializer();
+		TypeFactory factory = new TypeFactory();
+		FullSerializer loader = new FullSerializer(factory);
 		
 		WordProcessor wordProcessor = new WordProcessor();
 		//IWordExtractor extractor = new WordExtractorFromSignature(new ParserPipeline(new IParser[]{new ParserOne(wordProcessor), new ParserTwoIndexes()}));
