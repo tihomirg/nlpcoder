@@ -1,9 +1,15 @@
 package selection.types;
 
+import java.io.Serializable;
 import java.util.List;
 
-public abstract class Type {
+public abstract class Type implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -900979897015622962L;
+
 	public Type apply(List<Substitution> subs, TypeFactory factory){
 		Type curr = this;
 		for (Substitution sub : subs) {

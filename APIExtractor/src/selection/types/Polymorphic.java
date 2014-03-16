@@ -5,6 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Polymorphic extends Type {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8410671184621593335L;
+	
 	private final String name;
 	private final Type[] params;
 	

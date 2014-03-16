@@ -30,5 +30,10 @@ public class TypeFactory {
 		}
 		return poly.get(hash);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "TypeFactory [\npoly=" + poly.values() + ", \nconsts=" + consts.values() + ", \nvars="
+				+ vars.values() + "]";
+	}
 }

@@ -4,6 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Const extends Type {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2178934969598789226L;
+	
 	private final String name;
 
 	protected Const(String name) {

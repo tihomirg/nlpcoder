@@ -51,7 +51,7 @@ public class DataSerializer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
 	
 	
 	public Object readObject(String file, Serializer serializer, Class type) {
