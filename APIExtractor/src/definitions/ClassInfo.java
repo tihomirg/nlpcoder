@@ -183,15 +183,12 @@ public class ClassInfo implements Serializable {
 					decl.setName(method.getName());
 					decl.setMethod(true);
 				}
-
+				
 				decl.setArgNum(method.getArgumentTypes().length);
 				
 				setArgTypes(method, decl);
-				
 				decl.setRetType(method.getReturnType().toString());
-				
-				decl.setStatic(method.isStatic());
-				
+				decl.setStatic(method.isStatic());			
 				decl.setWords(extractor.getWords(decl));
 				
 				decls.add(decl);				

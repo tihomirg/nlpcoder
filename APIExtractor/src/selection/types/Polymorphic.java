@@ -91,4 +91,11 @@ public class Polymorphic extends Type {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Polymorphic ("+name + ", "+ Arrays.toString(params) + ")";
+	}
+	
+	
 }

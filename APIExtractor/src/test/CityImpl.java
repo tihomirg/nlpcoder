@@ -11,118 +11,24 @@ import java.util.Map;
  * @author Eric F. Savage <code@efsavage.com>
  */
 
-interface City1<T>{}
+class NewClass<T>{}
 
-interface City2<T>{}
-
-interface City3<T>{}
-
-class State{
+public class CityImpl<A> extends NewClass<A> {
 	
-	public Country getCountry(){return null;}
-}
-
-class Country<B>{}
-
-abstract class ACity{}
-
-abstract class ACity2<K,V>{}
-
-public class CityImpl<A extends Country<A>> extends ACity2<String,Boolean> implements City1<A>, City2<A>, City3<A> {
-
-	protected String id = "ovde";
-
-	protected String name = id;
-
-	protected State state;
-
-	protected final Country<A> country = null;
-
-	/**
-	 * If state is set, will return state.getCountry(), otherwise will return
-	 * local country field.
-	 * 
-	 * @see State#getCountry()
-	 * @return Country object as set via setCountry or from state, may be null.
-	 */
-	public Country<? extends A> getCountry() {
-		if (this.state == null) {
-			return this.country;
-		}
-		return this.state.getCountry();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getId() {
-		return this.id;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-
-	public String getName() {
-		return this.name;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public State getState() {
-		return this.state;
-	}
-
-	/**
-	 * Sets the ID.
-	 * 
-	 * @param id
-	 */
-	public void setId(final String id) {
-		this.id = id; //Righthand-side comment under
-	}
-
-	/**
-	 * Sets the name.
-	 * 
-	 * @param name
-	 */
-	public void setName(final String name) {
-		//Comment under
-		this.name = name;
-		//System.out.print("A"+this.name+"B"+"\n");
-		
-		for(int i= 0; i <10;i++){
-			System.out.print("A");
-		}
-	}
-
-	/**
-	 * Sets the state.
-	 * 
-	 * @param state
-	 */
-	public void setState(final State state) {
-		this.state = state;
-		
-		// Comment below
-	}
-
-	public boolean is1(List<String> list){
-		return false;
+	public int[] m1() {
+		return null;
 	}
 	
-	public <T> boolean is3(List<T> list){
-		return false;
+	public String m2(){
+		return null;
 	}
 	
-	synchronized final public <K, V> boolean is4(Map<K, V> list){
-		return false;
+	public<T> List<T>[][] m3(List<Object>[] map){
+		return null;
 	}
 	
-	public boolean is2(List<String> list, boolean[] b){
-		return false;
+	public int[][][] m4(){
+		return null;
 	}
 	
 }
