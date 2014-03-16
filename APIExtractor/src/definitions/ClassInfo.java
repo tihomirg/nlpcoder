@@ -8,12 +8,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
-import org.apache.bcel.generic.Type;
+//import org.apache.bcel.generic.Type;
+import org.eclipse.jdt.core.Signature;
 
 import selection.IWordExtractor;
+import selection.types.Type;
+import selection.types.TypeFactory;
 
 public class ClassInfo implements Serializable {
 
@@ -22,7 +26,8 @@ public class ClassInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = -8473504638929013042L;	
 	private static final Map<String, ClassInfo> classes = new HashMap<String, ClassInfo>();
-
+	public static TypeFactory factory = new TypeFactory();
+	
 	private String name;
 	private ClassInfo[] interfaces;
 	private ClassInfo[] superClasses;
@@ -186,8 +191,24 @@ public class ClassInfo implements Serializable {
 				
 				decl.setArgNum(method.getArgumentTypes().length);
 				
-				setArgTypes(method, decl);
-				decl.setRetType(method.getReturnType().toString());
+				String signature = null;
+				
+				Attribute[] attributes = method.getAttributes();
+				
+				for (Attribute attribute : attributes) {
+					if (attribute instanceof org.apache.bcel.classfile.Signature){
+						signature = ((org.apache.bcel.classfile.Signature) attribute).getSignature();
+						break;
+					}
+				}
+
+				if (signature == null){
+					signature = method.getSignature();
+				}
+				
+				decl.setRetType(returnType(signature));
+				decl.setArgType(parameterTypes(signature));
+				
 				decl.setStatic(method.isStatic());			
 				decl.setWords(extractor.getWords(decl));
 				
@@ -198,18 +219,18 @@ public class ClassInfo implements Serializable {
 		return decls.toArray(new Declaration[decls.size()]);
 	}
 
-	private void setArgTypes(Method method, Declaration decl) {
-		String[] argTypes = new String[decl.getArgNum()];
-		
-		Type[] argumentTypes = method.getArgumentTypes();
-		
-		for (int i = 0; i < argTypes.length; i++) {
-			Type type = argumentTypes[i];
-			argTypes[i] = type.toString();
-		}
-		
-		decl.setArgType(argTypes);
-	}
+//	private void setArgTypes(Method method, Declaration decl) {
+//		String[] argTypes = new String[decl.getArgNum()];
+//		
+//		Type[] argumentTypes = method.getArgumentTypes();
+//		
+//		for (int i = 0; i < argTypes.length; i++) {
+//			Type type = argumentTypes[i];
+//			argTypes[i] = type.toString();
+//		}
+//		
+//		decl.setArgType(argTypes);
+//	}
 	
 	private Declaration[] initFields(JavaClass clazz, IWordExtractor extractor) {
 		Field[] fields = clazz.getFields();
@@ -222,7 +243,23 @@ public class ClassInfo implements Serializable {
 				decl.setName(field.getName());
 				decl.setField(true);
 				decl.setStatic(field.isStatic());
-				decl.setRetType(field.getType().toString());
+				
+				String signature = null;
+				
+				Attribute[] attributes = field.getAttributes();
+				
+				for (Attribute attribute : attributes) {
+					if (attribute instanceof org.apache.bcel.classfile.Signature){
+						signature = ((org.apache.bcel.classfile.Signature) attribute).getSignature();
+						break;
+					}
+				}
+
+				if (signature == null){
+					signature = field.getSignature();
+				}
+				
+				decl.setRetType(type(signature));
 				
 				decl.setWords(extractor.getWords(decl));
 				
@@ -231,6 +268,74 @@ public class ClassInfo implements Serializable {
 		}
 		return decls.toArray(new Declaration[decls.size()]);
 	}
+	
+	private static Type[] parameterTypes(String signature) {
+		String[] parameterTypes = Signature.getParameterTypes(signature);
+		int length = parameterTypes.length;
+		Type[] types = new Type[length];
+		for (int i = 0; i < length; i++) {
+			types[i] = type(parameterTypes[i]);
+		}
+		return types;
+	}
+
+	private static Type returnType(String signature) {
+		String returnType = Signature.getReturnType(signature);
+		return type(returnType);
+	}
+
+	private static Type type(String type) {
+		if (isArrayType(type)){
+			int dimension = Signature.getArrayCount(type);
+			String elementType = Signature.getElementType(type);
+			return arrayType(elementType, dimension);
+		} else if (isPolymorphicType(type)) {
+			String[] typeParams = Signature.getTypeArguments(type);
+			String typeErasure = Signature.getTypeErasure(type);
+			return polyType(typeErasure, typeParams);
+		} else {
+			String dotSignature = dottedTransformation(type);
+			return factory.createConst(dotSignature);
+		}
+	}
+
+	protected static String dottedTransformation(String type) {
+		return dottedName(Signature.toString(type));
+	}
+
+	private static String dottedName(String string) {
+		return string.replace("/", ".");
+	}
+
+	private static Type polyType(String typeErasure, String[] typeParams) {
+		String name = Signature.toString(typeErasure);
+		return factory.createPolymorphic(dottedName(name), types(typeParams));
+	}
+
+	private static Type[] types(String[] signatures) {
+		int length = signatures.length;
+		Type[] types = new Type[length];
+		for (int i = 0; i < length; i++) {
+			types[i] = type(signatures[i]);
+		}
+		return types;
+	}
+
+	private static Type arrayType(String elementType, int dimension) {
+		if (dimension > 0){
+		return factory.createPolymorphic("java.lang.Array", new Type[]{arrayType(elementType, dimension - 1)});	
+		} else {
+			return type(elementType);
+		}
+	}
+
+	private static boolean isPolymorphicType(String type) {
+		return Signature.getTypeArguments(type).length > 0;
+	}
+
+	private static boolean isArrayType(String type) {
+		return Signature.getArrayCount(type) > 0;
+	}	
 
 	public Declaration[] getMethods() {
 		return methods;

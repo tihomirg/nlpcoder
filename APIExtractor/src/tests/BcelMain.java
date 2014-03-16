@@ -16,10 +16,10 @@ import org.apache.bcel.generic.ArrayType;
 import org.apache.bcel.generic.BasicType;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.ReferenceType;
-import org.apache.bcel.generic.Type;
 import org.eclipse.jdt.core.Signature;
 
 import selection.types.Const;
+import selection.types.Type;
 import selection.types.TypeFactory;
 
 
@@ -101,40 +101,30 @@ public class BcelMain {
 					decl.setMethod(true);
 				}
 				
+				
+				String signature = null;
+				
 				Attribute[] attributes = method.getAttributes();
 				
-				System.out.println("Name: "+method.getName());
-				System.out.println("Basic Signature: "+method.getSignature());
+				System.out.println("Method: "+method.getName());
 				
 				for (Attribute attribute : attributes) {
 					if (attribute instanceof org.apache.bcel.classfile.Signature){
-						org.apache.bcel.classfile.Signature sig = (org.apache.bcel.classfile.Signature) attribute;
-						String signature = sig.getSignature();
-						
-						System.out.println("Signature: "+ signature);
-						
-						String[] parameterTypes = Signature.getParameterTypes(signature);
-						
-						System.out.println("Params: "+ Arrays.toString(parameterTypes));
-						
-						String returnType = Signature.getReturnType(signature);
-						
-						int count = Signature.getArrayCount(returnType);
-						
-						System.out.println("ReturType: "+returnType+"   count: "+count);
-						
-//						String[] typeParams = Signature.getTypeArguments(returnType);
-//						
-//						String typeName = Signature.getTypeErasure(returnType); 
-//						
-//						System.out.println("TypeName:" +typeName);
-//						System.out.println("TypeParams: "+ Arrays.toString(typeParams));
-						
+						signature = ((org.apache.bcel.classfile.Signature) attribute).getSignature();
+						break;
 					}
 				}
+
+				if (signature == null){
+					signature = method.getSignature();
+				}
 				
-				
-				//System.out.println(type(method.getReturnType()));
+				Type returnType = returnType(signature);
+				System.out.println("Ret. type: "+ returnType);
+				decl.setRetType(returnType);
+				Type[] parameterTypes = parameterTypes(signature);
+				System.out.println("Args: "+ Arrays.toString(parameterTypes));
+				decl.setArgType(parameterTypes);
 				
 				decl.setArgNum(method.getArgumentTypes().length);
 				decl.setStatic(method.isStatic());
@@ -145,52 +135,73 @@ public class BcelMain {
 		return decls;
 	}
 	
-	private static selection.types.Type type(Type type) {
-		if (type instanceof BasicType){
-			BasicType bType = (BasicType) type;
-			return basicType(bType);
-		} else if (type instanceof ArrayType){
-			ArrayType aType = (ArrayType) type;
-			Type elementType = aType.getElementType();
-			return arrayType(elementType);
-		} else if (type instanceof ObjectType) {
-			ObjectType oType = (ObjectType) type;
-			return objectType(oType);
-		} else if (type instanceof ReferenceType) {
-			ReferenceType rType = (ReferenceType) type;
-			return refType(rType.toString());
-		} else {
-			return factory.createConst("ReturnaddressType");
+	private static Type[] parameterTypes(String signature) {
+		String[] parameterTypes = Signature.getParameterTypes(signature);
+		int length = parameterTypes.length;
+		Type[] types = new Type[length];
+		for (int i = 0; i < length; i++) {
+			types[i] = type(parameterTypes[i]);
 		}
-		
+		return types;
 	}
 
-	private static selection.types.Type refType(String signature) {
-		if (isPolyType(signature)) {
-			
-			return null;
+	private static Type returnType(String signature) {
+		return type(Signature.getReturnType(signature));
+	}
+
+	private static Type type(String type) {
+		if (isArrayType(type)){
+			int dimension = Signature.getArrayCount(type);
+			String elementType = Signature.getElementType(type);
+			return arrayType(elementType, dimension);
+		} else if (isPolymorphicType(type)) {
+			String[] typeParams = Signature.getTypeArguments(type);
+			String typeErasure = Signature.getTypeErasure(type);
+			return polyType(typeErasure, typeParams);
 		} else {
-			return factory.createConst(signature);
+			String dotSignature = dottedTransformation(type);
+			return factory.createConst(dotSignature);
 		}
 	}
 
-	private static boolean isPolyType(String signature) {
-		// TODO Auto-generated method stub
-		return false;
+	protected static String dottedTransformation(String type) {
+		return dottedName(Signature.toString(type));
 	}
 
-	private static selection.types.Type objectType(ObjectType oType) {
-		return factory.createConst(oType.toString());
+	private static String dottedName(String string) {
+		return string.replace("/", ".");
 	}
 
-	private static selection.types.Type arrayType(Type elementType) {
-		return factory.createPolymorphic("java.lang.Array", new selection.types.Type[]{type(elementType)});
+	private static Type polyType(String typeErasure, String[] typeParams) {
+		String name = Signature.toString(typeErasure);
+		return factory.createPolymorphic(dottedName(name), types(typeParams));
 	}
 
-	private static selection.types.Type basicType(BasicType bType) {
-		return factory.createConst(bType.toString());
+	private static Type[] types(String[] signatures) {
+		int length = signatures.length;
+		Type[] types = new Type[length];
+		for (int i = 0; i < length; i++) {
+			types[i] = type(signatures[i]);
+		}
+		return types;
 	}
 
+	private static Type arrayType(String elementType, int dimension) {
+		if (dimension > 0){
+		return factory.createPolymorphic("java.lang.Array", new Type[]{arrayType(elementType, dimension - 1)});	
+		} else {
+			return type(elementType);
+		}
+	}
+
+	private static boolean isPolymorphicType(String type) {
+		return Signature.getTypeArguments(type).length > 0;
+	}
+
+	private static boolean isArrayType(String type) {
+		return Signature.getArrayCount(type) > 0;
+	}
+	
 	private static List<Declaration> getFields(JavaClass clazz) {
 		Field[] fields = clazz.getFields();
 		
@@ -201,6 +212,29 @@ public class BcelMain {
 				Declaration decl = new Declaration();
 				decl.setName(field.getName());
 				decl.setField(true);
+				
+				String signature = null;
+				
+				Attribute[] attributes = field.getAttributes();
+				
+				for (Attribute attribute : attributes) {
+					if (attribute instanceof org.apache.bcel.classfile.Signature){
+						signature = ((org.apache.bcel.classfile.Signature) attribute).getSignature();
+						break;
+					}
+				}
+
+				if (signature == null){
+					signature = field.getSignature();
+				}
+				
+				Type returnType = type(signature);
+				
+				System.out.println("Field: "+field.getName());
+				System.out.println("Type: "+returnType);
+				
+				decl.setRetType(returnType);				
+				
 				decl.setStatic(field.isStatic());
 				decls.add(decl);
 			}

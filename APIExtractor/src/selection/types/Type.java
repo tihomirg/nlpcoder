@@ -15,4 +15,6 @@ public abstract class Type {
 	public abstract Type apply(Substitution sub, TypeFactory factory);
 	public abstract boolean contains(Type type);
 	public abstract Unifier unify(Type type, TypeFactory factory);
+
+	public abstract List<String> caracteristicWords();
 }

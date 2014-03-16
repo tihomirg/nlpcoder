@@ -15,6 +15,10 @@ class NewClass<T>{}
 
 public class CityImpl<A> extends NewClass<A> {
 	
+	public int[] f1;
+	public String f2;
+	public Map<Integer, String> f3;
+	
 	public int[] m1() {
 		return null;
 	}

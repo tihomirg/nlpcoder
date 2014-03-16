@@ -6,7 +6,9 @@ import java.util.List;
 public class Variable extends Type {
 	protected final String name;
 	
-	public Variable(String name) {
+	private static final List EMPTY_LIST = new LinkedList<String>();	
+	
+	protected Variable(String name) {
 		this.name = name;
 	}
 
@@ -48,5 +50,10 @@ public class Variable extends Type {
 	@Override
 	public boolean contains(Type type) {
 		return this.equals(type);
+	}
+	
+	@Override
+	public List<String> caracteristicWords() {
+		return EMPTY_LIST;
 	}
 }

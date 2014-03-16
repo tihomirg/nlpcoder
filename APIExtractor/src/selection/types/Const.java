@@ -1,5 +1,8 @@
 package selection.types;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Const extends Type {
 	private final String name;
 
@@ -44,5 +47,10 @@ public class Const extends Type {
 	@Override
 	public boolean contains(Type type) {
 		return this.equals(type);
+	}
+
+	@Override
+	public List<String> caracteristicWords() {
+		return new LinkedList<String>(){{add(name);}};
 	}
 }

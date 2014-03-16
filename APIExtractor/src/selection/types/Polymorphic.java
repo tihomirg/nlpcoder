@@ -96,6 +96,18 @@ public class Polymorphic extends Type {
 	public String toString() {
 		return "Polymorphic ("+name + ", "+ Arrays.toString(params) + ")";
 	}
+
+	@Override
+	public List<String> caracteristicWords() {
+		List<String> list = new LinkedList<String>();
+		list.add(name);
+		
+		for (Type type : params) {
+			list.addAll(type.caracteristicWords());
+		}
+		
+		return list;
+	}
 	
 	
 }
