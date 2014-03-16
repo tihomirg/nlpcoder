@@ -27,11 +27,11 @@ public class CityImpl<A> extends NewClass<A> {
 		return null;
 	}
 	
-	public<T> List<T>[][] m3(List<Object>[] map){
+	public List<? extends Object> m3(long a){
 		return null;
 	}
 	
-	public int[][][] m4(){
+	public int[] m4(){
 		return null;
 	}
 	

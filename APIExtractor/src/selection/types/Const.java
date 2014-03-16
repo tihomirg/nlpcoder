@@ -56,6 +56,10 @@ public class Const extends Type {
 
 	@Override
 	public List<String> caracteristicWords() {
-		return new LinkedList<String>(){{add(name);}};
+		return new LinkedList<String>(){{add(shortName(name));}};
+	}
+	
+	private static String shortName(String name) {
+		return name.substring(name.lastIndexOf(".")+1);
 	}
 }
