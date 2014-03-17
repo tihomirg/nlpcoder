@@ -218,19 +218,6 @@ public class ClassInfo implements Serializable {
 		
 		return decls.toArray(new Declaration[decls.size()]);
 	}
-
-//	private void setArgTypes(Method method, Declaration decl) {
-//		String[] argTypes = new String[decl.getArgNum()];
-//		
-//		Type[] argumentTypes = method.getArgumentTypes();
-//		
-//		for (int i = 0; i < argTypes.length; i++) {
-//			Type type = argumentTypes[i];
-//			argTypes[i] = type.toString();
-//		}
-//		
-//		decl.setArgType(argTypes);
-//	}
 	
 	private Declaration[] initFields(JavaClass clazz, IWordExtractor extractor) {
 		Field[] fields = clazz.getFields();
