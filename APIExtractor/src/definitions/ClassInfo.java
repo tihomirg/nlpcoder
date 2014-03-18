@@ -26,6 +26,7 @@ import selection.types.TypeFactory;
 
 public class ClassInfo implements Serializable {
 
+	private static final String CONSTRUCTOR_SHORT_NAME = "<init>";
 	/**
 	 * 
 	 */
@@ -256,20 +257,19 @@ public class ClassInfo implements Serializable {
 			if(method.isPublic()){
 				Declaration decl = new Declaration();
 				decl.setClazz(clazz.getClassName());
-
 				decl.setPackageName(pkg);
 				
 				String name = method.getName();
-				if (name.equals("<init>")){
+				if (name.equals(CONSTRUCTOR_SHORT_NAME)){
 					String clazzName = clazz.getClassName();
 					decl.setName(clazzName.substring(clazzName.lastIndexOf('.')+1, clazzName.length()));
 					decl.setConstructor(true);
-					decl.setMethod(true);					
+					decl.setMethod(true);		
 				} else {
 					decl.setName(method.getName());
 					decl.setMethod(true);
 				}
-				
+
 				decl.setStatic(method.isStatic());
 				decl.setPublic(method.isPublic());		
 				decl.setArgNum(method.getArgumentTypes().length);
@@ -342,13 +342,11 @@ public class ClassInfo implements Serializable {
 				decl.setPublic(field.isPublic());
 				
 				String signature = getSignature(field);
-				String[] methodTypeParams = typeParameters(signature);
+				
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams);
+				Set<String> vars = new HashSet<String>(Arrays.asList(classTypeParams));
 				
-				decl.setReceiverType(clazzType.apply(classVarSubs, factory));
-				
-				Set<String> vars = createVariables(methodTypeParams, classTypeParams);
-				
+				decl.setReceiverType(clazzType.apply(classVarSubs, factory));				
 				decl.setRetType(fieldType(signature, classVarSubs, vars));
 				
 				decl.setWords(extractor.getWords(decl));
@@ -402,15 +400,20 @@ public class ClassInfo implements Serializable {
 			String typeErasure = Signature.getTypeErasure(type);
 			return polyType(typeErasure, typeParams, vars);
 		} else {
-			String dotSignature = dottedTransformation(type);
-			if(vars.contains(dotSignature))
-				return factory.createVariable(dotSignature);
-			else
-				return factory.createConst(dotSignature);
+			if (Signature.toString(type).startsWith("?")){
+				//TODO: Once we introduce we will change this.
+				return factory.genNewVariable();
+			} else {
+				String dotSignature = dottedTransformation(type);
+				if(vars.contains(dotSignature))
+					return factory.createVariable(dotSignature);
+				else
+					return factory.createConst(dotSignature);				
+			}
 		}
 	}
 
-	protected static String dottedTransformation(String type) {
+	protected static String dottedTransformation(String type) {		
 		return dottedName(Signature.toString(type));
 	}
 

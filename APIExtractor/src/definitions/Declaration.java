@@ -21,7 +21,6 @@ public class Declaration implements Serializable {
 
 	private Type retType;
 	private Type[] argType;
-	private String[] typeParams;
 	private Type receiverType;
 	
 	private boolean method;
@@ -80,14 +79,6 @@ public class Declaration implements Serializable {
 
 	public void setArgType(Type[] paramTypes) {
 		this.argType = paramTypes;
-	}
-
-	public String[] getTypeParams() {
-		return typeParams;
-	}
-
-	public void setTypeParams(String[] typeParams) {
-		this.typeParams = typeParams;
 	}
 
 	public boolean isMethod() {

@@ -33,7 +33,7 @@ public class CityImpl<A>{
 		return null;
 	}
 	
-	public int[] m4(List<Integer> l1, List<String> l2){
+	public <T> T[] m4(List<? extends Integer> l1, List<T> l2){
 		return null;
 	}
 	
