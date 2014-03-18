@@ -39,7 +39,7 @@ public class TargetJarLoader implements IJarLoader {
 						String fullName = file.getName();
 						System.out.println(file);
 						String pkgName = fullName.substring(0, fullName.lastIndexOf("/")).replace("/", ".");
-						//if (pkgName.equals(this.pkg)){
+						if (pkgName.equals(this.pkg)){
 						
 							new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor);
 
@@ -47,7 +47,7 @@ public class TargetJarLoader implements IJarLoader {
 							if(scanned >= maxToScan){
 								break exit;
 							}
-						//}
+						}
 					}
 				}
 			} catch (IOException e) {

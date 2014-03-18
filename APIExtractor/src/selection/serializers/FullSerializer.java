@@ -46,8 +46,6 @@ public class FullSerializer {
 			
 			ClassInfo[] values2 = values.toArray(new ClassInfo[values.size()]);
 			
-			//System.out.println(Arrays.toString(classes));
-			
 			TypeSerializer serializer = new TypeSerializer(factory);
 			
 			serializer.writeObject(storageLocation, values2);
@@ -59,12 +57,10 @@ public class FullSerializer {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator("SV"));
+		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 		FullSerializer loader = new FullSerializer(factory);
 		
 		WordProcessor wordProcessor = new WordProcessor();
-		//IWordExtractor extractor = new WordExtractorFromSignature(new ParserPipeline(new IParser[]{new ParserOne(wordProcessor), new ParserTwoIndexes()}));
-		
 		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.4, new int[]{2,5}, Config.getNullProbability())}));
 		
 		
