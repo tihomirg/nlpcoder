@@ -21,6 +21,7 @@ import selection.loaders.BoundedJarLoader;
 import selection.loaders.FolderLoader;
 import selection.loaders.IJarLoader;
 import selection.parser.one.ParserOne;
+import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 
 public class FullSerializer {
@@ -58,7 +59,7 @@ public class FullSerializer {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory();
+		TypeFactory factory = new TypeFactory(new NameGenerator("SV"));
 		FullSerializer loader = new FullSerializer(factory);
 		
 		WordProcessor wordProcessor = new WordProcessor();

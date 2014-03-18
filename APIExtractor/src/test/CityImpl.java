@@ -13,7 +13,9 @@ import java.util.Map;
 
 class NewClass<T>{}
 
-public class CityImpl<A> extends NewClass<A> {
+class C<T>{}
+
+public class CityImpl<A>{
 	
 	public int[] f1;
 	public String f2;
@@ -23,15 +25,20 @@ public class CityImpl<A> extends NewClass<A> {
 		return null;
 	}
 	
-	public String m2(){
+	public <A> Object m2(A a){
 		return null;
 	}
 	
-	public List<? extends Object> m3(long a){
+	public A m3(long a){
 		return null;
 	}
 	
-	public int[] m4(){
+	public int[] m4(List<? super Integer> l1, List<String> l2){
+		return null;
+	}
+	
+	@Override
+	public String toString(){
 		return null;
 	}
 	

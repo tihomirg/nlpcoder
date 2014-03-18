@@ -14,6 +14,7 @@ import selection.probability.designers.ConeProbabilityDesigner;
 import selection.probability.designers.MixedProbabilityDesigner;
 import selection.probability.designers.UniformProbabilityDesigner;
 import selection.serializers.FullSerializer;
+import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 
 public class Main {
@@ -28,7 +29,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory();
+		TypeFactory factory = new TypeFactory(new NameGenerator("DV"));
 		FullDeserializer deserializer = new FullDeserializer(factory);
 		Selection selection = new Selection(Config.topSelectedLength(), new LoadOldCorpus(Config.getOldCorpusLocation()));
 		selection.add(deserializer.deserialize(Config.getStorageLocation()), Config.getMaxWords(), Config.getNullProbability());

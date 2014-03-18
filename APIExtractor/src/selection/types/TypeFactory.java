@@ -5,9 +5,15 @@ import java.util.Map;
 
 public class TypeFactory {
 	
+	private NameGenerator nameGen;
+	
 	private final Map<Integer, Polymorphic> poly = new HashMap<Integer, Polymorphic>();
 	private final Map<String, Const> consts = new HashMap<String, Const>();
-	private final Map<String, Variable> vars = new HashMap<String, Variable>(); 
+	private final Map<String, Variable> vars = new HashMap<String, Variable>(); 	
+	
+	public TypeFactory(NameGenerator nameGen) {
+		this.nameGen = nameGen;
+	}
 	
 	public Variable createVariable(String name) {
 		if(!vars.containsKey(name)){
@@ -35,5 +41,17 @@ public class TypeFactory {
 	public String toString() {
 		return "TypeFactory [\npoly=" + poly.values() + ", \nconsts=" + consts.values() + ", \nvars="
 				+ vars.values() + "]";
+	}
+	
+	public Substitution varToNewVar(String oldName){
+		return new Substitution(createVariable(oldName), genNewVariable());
+	}
+	
+	public Variable genNewVariable(){
+		return createVariable(nameGen.genNewName());
+	}
+	
+	public NameGenerator getVarGen() {
+		return nameGen;
 	}
 }

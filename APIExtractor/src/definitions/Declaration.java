@@ -17,10 +17,12 @@ public class Declaration implements Serializable {
 	private String name;
 	private int argNum;
 	private boolean isStatic;
-	
+	private boolean isPublic;
+
 	private Type retType;
 	private Type[] argType;
 	private String[] typeParams;
+	private Type receiverType;
 	
 	private boolean method;
 	private boolean constructor;
@@ -212,4 +214,19 @@ public class Declaration implements Serializable {
 		return simpleName.equals(decl.simpleName);
 	}
 
+	public void setReceiverType(Type receiverType) {
+		this.receiverType = receiverType;
+	}
+
+	public Type getReceiverType() {
+		return receiverType;
+	}
+
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
+	}
 }

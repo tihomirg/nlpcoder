@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import selection.types.Const;
+import selection.types.NameGenerator;
 import selection.types.Polymorphic;
 import selection.types.Type;
 import selection.types.TypeFactory;
@@ -77,7 +78,7 @@ public class TypeSerializer {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory();
+		TypeFactory factory = new TypeFactory(new NameGenerator("SV"));
 		TypeSerializer serializer = new TypeSerializer(factory);
 		
 		String file = "types.kryo";

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import selection.Config;
 import selection.DataSerializer;
 import selection.serializers.TypeSerializer;
+import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 import definitions.ClassInfo;
 
@@ -22,7 +23,7 @@ public class FullDeserializer {
 	}	
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory();
+		TypeFactory factory = new TypeFactory(new NameGenerator("DV"));
 		FullDeserializer deserializer = new FullDeserializer(factory);
 		
 		System.out.println(Arrays.toString(deserializer.deserialize(Config.getStorageLocation())));

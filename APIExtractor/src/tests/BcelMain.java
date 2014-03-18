@@ -19,6 +19,7 @@ import org.apache.bcel.generic.ReferenceType;
 import org.eclipse.jdt.core.Signature;
 
 import selection.types.Const;
+import selection.types.NameGenerator;
 import selection.types.Type;
 import selection.types.TypeFactory;
 
@@ -27,7 +28,7 @@ import definitions.Declaration;
 
 public class BcelMain {
 	
-	public static TypeFactory factory = new TypeFactory();
+	public static TypeFactory factory = new TypeFactory(new NameGenerator("V"));
 	
 	public static void main(String[] args){
 		try {
@@ -46,8 +47,7 @@ public class BcelMain {
 		
 	}
 
-	public static Declaration[] getDeclarations(InputStream in)
-			throws IOException {
+	public static Declaration[] getDeclarations(InputStream in) throws IOException {
 		ClassParser parser = new ClassParser(in, null);
 		
         return getDeclarations(parser);
@@ -56,6 +56,8 @@ public class BcelMain {
 	private static Declaration[] getDeclarations(ClassParser parser)
 			throws IOException {
 		JavaClass clazz = parser.parse();
+		
+		Type clazzType = initClazzType(clazz);
 		
 		//System.out.println(clazz);
 		
@@ -71,8 +73,63 @@ public class BcelMain {
 	}	
 	
 	
-	private static Declaration[] getDeclarations(String fileName)
-			throws IOException {
+	private static Type initClazzType(JavaClass clazz) {
+		String signature = null;		
+		Attribute[] attributes = clazz.getAttributes();
+		for (Attribute attribute : attributes) {
+			if (attribute instanceof org.apache.bcel.classfile.Signature){
+				signature = ((org.apache.bcel.classfile.Signature) attribute).getSignature();
+				break;
+			}
+		}
+
+		String[] typeParameters = Signature.getTypeParameters(signature);
+		
+		
+		for (String param : typeParameters) {
+			String typeVariable = Signature.getTypeVariable(param);
+			
+			String[] typeParameterBounds = Signature.getTypeParameterBounds(param);
+			
+			System.out.println(typeVariable+"   "+Arrays.toString(typeParameterBounds));
+		}
+		
+
+		System.out.println(Arrays.toString(getInheritedTypes(signature)));
+
+		return null;
+	}
+
+	private static Type[] getInheritedTypes(String signature) {
+		int firstIndex = firstIndexOfInheritance(signature);
+		String inheiritanceList = signature.substring(firstIndex);		
+		String[] params = Signature.getParameterTypes("("+inheiritanceList+")V");
+		Type[] types = new Type[params.length];
+		for (int i = 0; i < types.length; i++) {
+			types[i] = type(params[i]);
+		}
+		return types;
+	}
+
+	private static int firstIndexOfInheritance(String signature) {
+		if (signature != null && signature.length() > 0){
+			int level = signature.charAt(0) == '<' ? 1:0;
+			if (level > 0){
+				int i=1;
+				for(; level > 0; i++){
+					char curr = signature.charAt(i);
+					if(curr == '<') level++;
+					else if (curr == '>') {
+						level--;
+					}
+				}
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	private static Declaration[] getDeclarations(String fileName) throws IOException {
 		ClassParser parser = new ClassParser(fileName);
 		
 		return getDeclarations(parser);
@@ -119,12 +176,19 @@ public class BcelMain {
 					signature = method.getSignature();
 				}
 				
-				Type returnType = returnType(signature);
-				System.out.println("Ret. type: "+ returnType);
-				decl.setRetType(returnType);
-				Type[] parameterTypes = parameterTypes(signature);
-				System.out.println("Args: "+ Arrays.toString(parameterTypes));
-				decl.setArgType(parameterTypes);
+				System.out.println("Signature: "+signature);				
+				
+				//Type returnType = returnType(signature);
+				//System.out.println("Ret. type: "+ returnType);
+				//decl.setRetType(returnType);
+				//Type[] parameterTypes = parameterTypes(signature);
+				//System.out.println("Args: "+ Arrays.toString(parameterTypes));
+				
+				String[] typeParams = Signature.getTypeParameters(signature);
+				
+				System.out.println("Type Params: "+Arrays.toString(typeParams));
+				System.out.println();
+				//decl.setArgType(parameterTypes);
 				
 				decl.setArgNum(method.getArgumentTypes().length);
 				decl.setStatic(method.isStatic());
@@ -228,9 +292,13 @@ public class BcelMain {
 					signature = field.getSignature();
 				}
 				
+				System.out.println(signature);
+				
 				Type returnType = type(signature);
 				
 				System.out.println("Field: "+field.getName());
+				System.out.println("Signature: "+signature);				
+				
 				System.out.println("Type: "+returnType);
 				
 				decl.setRetType(returnType);				

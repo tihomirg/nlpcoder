@@ -18,6 +18,7 @@ import selection.WordProcessor;
 import selection.loaders.FolderLoader;
 import selection.loaders.IJarLoader;
 import selection.loaders.TargetJarLoader;
+import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 import definitions.ClassInfo;
 
@@ -53,7 +54,7 @@ public class TargetSerialaizer {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory();
+		TypeFactory factory = new TypeFactory(new NameGenerator("SV"));
 		TargetSerialaizer loader = new TargetSerialaizer(factory, "java.lang");
 		
 		IWordExtractor extractor = new WordExtractorEmpty();
