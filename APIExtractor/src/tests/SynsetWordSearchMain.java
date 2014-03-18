@@ -176,54 +176,54 @@ public class SynsetWordSearchMain {
 	}	
 
 	private void scanFirst(String jarFile) throws Exception {
-		try {
-			JarFile jar = new JarFile(jarFile);
-
-			Enumeration<JarEntry> entries = jar.entries();
-			while (entries.hasMoreElements()) {
-				JarEntry file = entries.nextElement();
-
-				file.isDirectory();
-				if (!file.isDirectory() && file.getName().endsWith(".class")){
-					InputStream in = jar.getInputStream(file);
-					Declaration[] decls = BcelMain.getDeclarations(in);
-
-					put(decls);
-					
-				    scanned++;
-				    if(scanned >= MAX_TO_SCANE){
-				 	   throw new Exception("Scanned: "+scanned+" declarations.");
-				    }					
-										
-				}
-			}			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			JarFile jar = new JarFile(jarFile);
+//
+//			Enumeration<JarEntry> entries = jar.entries();
+//			while (entries.hasMoreElements()) {
+//				JarEntry file = entries.nextElement();
+//
+//				file.isDirectory();
+//				if (!file.isDirectory() && file.getName().endsWith(".class")){
+//					InputStream in = jar.getInputStream(file);
+//					Declaration[] decls = BcelMain.getDeclarations(in);
+//
+//					put(decls);
+//					
+//				    scanned++;
+//				    if(scanned >= MAX_TO_SCANE){
+//				 	   throw new Exception("Scanned: "+scanned+" declarations.");
+//				    }					
+//										
+//				}
+//			}			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}    
     
 	private void scan(String jarFile) {
-		try {
-			JarFile jar = new JarFile(jarFile);
-
-			Enumeration<JarEntry> entries = jar.entries();
-			while (entries.hasMoreElements()) {
-				JarEntry file = entries.nextElement();
-
-				file.isDirectory();
-				if (!file.isDirectory() && file.getName().endsWith(".class")){
-					InputStream in = jar.getInputStream(file);
-					Declaration[] decls = BcelMain.getDeclarations(in);
-					
-					put(decls);
-					
-				}
-			}			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			JarFile jar = new JarFile(jarFile);
+//
+//			Enumeration<JarEntry> entries = jar.entries();
+//			while (entries.hasMoreElements()) {
+//				JarEntry file = entries.nextElement();
+//
+//				file.isDirectory();
+//				if (!file.isDirectory() && file.getName().endsWith(".class")){
+//					InputStream in = jar.getInputStream(file);
+//					Declaration[] decls = BcelMain.getDeclarations(in);
+//					
+//					put(decls);
+//					
+//				}
+//			}			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	private void print(PrintStream out) {

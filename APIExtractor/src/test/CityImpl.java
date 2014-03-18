@@ -25,15 +25,15 @@ public class CityImpl<A>{
 		return null;
 	}
 	
-	public <A> Object m2(A a){
+	public Object m2(A a){
 		return null;
 	}
 	
-	public A m3(long a){
+	public A m3(long a, Map<Integer, Integer> b){
 		return null;
 	}
 	
-	public int[] m4(List<? super Integer> l1, List<String> l2){
+	public int[] m4(List<Integer> l1, List<String> l2){
 		return null;
 	}
 	

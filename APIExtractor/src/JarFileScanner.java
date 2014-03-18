@@ -111,26 +111,26 @@ public class JarFileScanner {
 	}	
 
 	private static void scan(String jarFile) {
-		try {
-			JarFile jar = new JarFile(jarFile);
-
-			Enumeration<JarEntry> entries = jar.entries();
-			while (entries.hasMoreElements()) {
-				JarEntry file = entries.nextElement();
-
-				file.isDirectory();
-				if (!file.isDirectory() && file.getName().endsWith(".class")){
-					InputStream in = jar.getInputStream(file);
-					Declaration[] decls = BcelMain.getDeclarations(in);
-					
-					put(decls);
-					
-				}
-			}			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			JarFile jar = new JarFile(jarFile);
+//
+//			Enumeration<JarEntry> entries = jar.entries();
+//			while (entries.hasMoreElements()) {
+//				JarEntry file = entries.nextElement();
+//
+//				file.isDirectory();
+//				if (!file.isDirectory() && file.getName().endsWith(".class")){
+//					InputStream in = jar.getInputStream(file);
+//					Declaration[] decls = BcelMain.getDeclarations(in);
+//					
+//					put(decls);
+//					
+//				}
+//			}			
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	private static void print(PrintStream out) {

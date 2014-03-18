@@ -249,7 +249,7 @@ public class ClassInfo implements Serializable {
 
 	private Declaration[] initMethods(JavaClass clazz, IWordExtractor extractor) {
 		Method[] methods = clazz.getMethods();
-
+		String pkg = clazz.getPackageName();
 		List<Declaration> decls = new ArrayList<Declaration>();
 
 		for(Method method: methods){
@@ -257,6 +257,8 @@ public class ClassInfo implements Serializable {
 				Declaration decl = new Declaration();
 				decl.setClazz(clazz.getClassName());
 
+				decl.setPackageName(pkg);
+				
 				String name = method.getName();
 				if (name.equals("<init>")){
 					String clazzName = clazz.getClassName();
@@ -279,7 +281,7 @@ public class ClassInfo implements Serializable {
 				
 				decl.setReceiverType(clazzType.apply(classVarSubs, factory));
 				
-				Set<String> vars = formVariables(methodTypeParams, classTypeParams);
+				Set<String> vars = createVariables(methodTypeParams, classTypeParams);
 				
 				decl.setRetType(returnType(signature, classVarSubs, methodVarSubs, vars));
 				decl.setArgType(parameterTypes(signature, classVarSubs, methodVarSubs, vars));
@@ -293,7 +295,7 @@ public class ClassInfo implements Serializable {
 		return decls.toArray(new Declaration[decls.size()]);
 	}
 
-	private static Set<String> formVariables(String[] methodTypeParams, String[] clazzTypeParams) {
+	private static Set<String> createVariables(String[] methodTypeParams, String[] clazzTypeParams) {
 		Set<String> vars = new HashSet<String>();
 		vars.addAll(Arrays.asList(methodTypeParams));
 		vars.addAll(Arrays.asList(clazzTypeParams));
@@ -327,12 +329,14 @@ public class ClassInfo implements Serializable {
 	private Declaration[] initFields(JavaClass clazz, IWordExtractor extractor) {
 		Field[] fields = clazz.getFields();
 
+		String pkg = clazz.getPackageName();
 		List<Declaration> decls = new ArrayList<Declaration>();
 
 		for(Field field: fields){
 			if(field.isPublic()){
 				Declaration decl = new Declaration();
 				decl.setName(field.getName());
+				decl.setPackageName(pkg);
 				decl.setField(true);
 				decl.setStatic(field.isStatic());
 				decl.setPublic(field.isPublic());
@@ -340,19 +344,22 @@ public class ClassInfo implements Serializable {
 				String signature = getSignature(field);
 				String[] methodTypeParams = typeParameters(signature);
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams);
-				List<Substitution> methodVarSubs = getUniqueVarNames(methodTypeParams);
 				
 				decl.setReceiverType(clazzType.apply(classVarSubs, factory));
 				
-				Set<String> vars = formVariables(methodTypeParams, classTypeParams);
+				Set<String> vars = createVariables(methodTypeParams, classTypeParams);
 				
-				decl.setRetType(returnType(signature, classVarSubs, methodVarSubs, vars));
+				decl.setRetType(fieldType(signature, classVarSubs, vars));
 				
 				decl.setWords(extractor.getWords(decl));
 				decls.add(decl);
 			}
 		}
 		return decls.toArray(new Declaration[decls.size()]);
+	}
+
+	private Type fieldType(String signature, List<Substitution> classVarSubs, Set<String> vars) {
+		return type(signature, vars).apply(classVarSubs, factory);
 	}
 
 	private static String getSignature(FieldOrMethod decl) {
@@ -533,6 +540,15 @@ public class ClassInfo implements Serializable {
 		return simpleName;
 	}
 
+	public static TypeFactory getFactory() {
+		return factory;
+	}
+
+	public static void setFactory(TypeFactory factory) {
+		ClassInfo.factory = factory;
+	}
+
+
 	@Override
 	public String toString() {
 		return "ClassInfo [name=" + name + 
@@ -542,14 +558,5 @@ public class ClassInfo implements Serializable {
 				", isPublic=" + isPublic + 
 				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
 				"]\n";
-	}
-
-	public static TypeFactory getFactory() {
-		return factory;
-	}
-
-	public static void setFactory(TypeFactory factory) {
-		ClassInfo.factory = factory;
-	}
-
+	}	
 }

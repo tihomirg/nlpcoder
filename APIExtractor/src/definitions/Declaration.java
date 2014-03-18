@@ -129,13 +129,7 @@ public class Declaration implements Serializable {
 	public void setWords(Word[] words) {
 		this.words = words;
 	}
-
-	@Override
-	public String toString() {
-		return "Declaration [name=" + name + ", clazz=" + clazz + ", isStatic="
-				+ isStatic + ", argNum=" + argNum + ", method=" + method +", words="+Arrays.toString(words)+"]\n";
-	}
-
+	
 	public String getSignature() {
 		String signature = this.name+(this.retType != null? " "+typeToSentence(this.retType):"");
 
@@ -228,5 +222,23 @@ public class Declaration implements Serializable {
 
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
+	}
+
+	private String modifiers() {
+		if(this.method){
+			if (this.constructor) {
+				return "constructor";
+			} else return "method";
+		} else if (field) {
+			return "field";
+		} else return "error";
+	}
+	
+	@Override
+	public String toString() {
+		return modifiers()+" name=" + simpleName + ", pkg="
+				+ packageName + ", receiver=" + receiverType + ", params="
+				+ Arrays.toString(argType) + ", ret=" + retType
+				+ ", words=" + Arrays.toString(words) + "]\n";
 	}
 }

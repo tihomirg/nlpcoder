@@ -21,7 +21,8 @@ public class Config {
 
 	//Number of declarations in sets
 	private static final int topSelectedLength = 20;
-	private static final double nullProb = (0.1 / maxWords);	
+	private static final double nullProb = (0.1 / maxWords);
+	private static final String serializationVarPrefix = "SV";	
 	
 	public static String getTaggerLocation(){
 		return tagger;
@@ -72,6 +73,10 @@ public class Config {
 
 	public static String getOldCorpusLocation() {
 		return oldcorpus;
+	}
+
+	public static String getSerializationVariablePrefix() {
+		return serializationVarPrefix;
 	}
 	
 }
