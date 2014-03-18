@@ -54,7 +54,7 @@ public class TargetSerialaizer {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator("SV"));
+		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 		TargetSerialaizer loader = new TargetSerialaizer(factory, "java.lang");
 		
 		IWordExtractor extractor = new WordExtractorEmpty();

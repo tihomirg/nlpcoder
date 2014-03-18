@@ -3,7 +3,7 @@ package selection;
 import java.util.Scanner;
 
 import oldcorpus.LoadOldCorpus;
-import selection.deserializer.FullDeserializer;
+import selection.deserializers.FullDeserializer;
 import selection.parser.one.ParserOne;
 import selection.parser.one.SentenceZero;
 import selection.parser.three.ParserThree;

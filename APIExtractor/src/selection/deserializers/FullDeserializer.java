@@ -1,4 +1,4 @@
-package selection.deserializer;
+package selection.deserializers;
 
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ public class FullDeserializer {
 	}	
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator("DV"));
+		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		FullDeserializer deserializer = new FullDeserializer(factory);
 		
 		System.out.println(Arrays.toString(deserializer.deserialize(Config.getStorageLocation())));

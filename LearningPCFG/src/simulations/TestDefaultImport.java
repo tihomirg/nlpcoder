@@ -8,7 +8,7 @@ import declarations.Imported;
 import definitions.ClassInfo;
 import definitions.Declaration;
 import selection.Config;
-import selection.deserializer.FullDeserializer;
+import selection.deserializers.FullDeserializer;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 

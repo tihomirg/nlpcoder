@@ -9,7 +9,7 @@ import selection.types.TypeFactory;
 public class FullSerializerWithoutWords {
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator("SV"));
+		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 		FullSerializer serializer = new FullSerializer(factory);
 		
 		IWordExtractor extractor = new WordExtractorEmpty();
