@@ -3,6 +3,8 @@ package selection.types;
 import java.util.HashMap;
 import java.util.Map;
 
+import definitions.ClassInfo;
+
 public class TypeFactory {
 	
 	private NameGenerator nameGen;
@@ -13,6 +15,7 @@ public class TypeFactory {
 	
 	public TypeFactory(NameGenerator nameGen) {
 		this.nameGen = nameGen;
+		ClassInfo.setFactory(this);
 	}
 	
 	public Variable createVariable(String name) {

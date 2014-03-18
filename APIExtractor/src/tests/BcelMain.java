@@ -32,10 +32,12 @@ import definitions.Declaration;
 
 public class BcelMain {
 	
-	public static TypeFactory factory = new TypeFactory(new NameGenerator("V"));
+	public static TypeFactory factory;
 	
 	public static void main(String[] args){
 		try {
+			
+			BcelMain.factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 			
 			String fileName = "C:/users/gvero/git/nlpcoder/APIExtractor/bin/test/CityImpl.class";
 			
@@ -43,8 +45,6 @@ public class BcelMain {
 			
 			ClassParser cp = new ClassParser(fileName);
 			JavaClass parsed = cp.parse();
-
-			ClassInfo.setFactory(new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix())));
 			
 			ClassInfo clazz = new ClassInfo(parsed, new WordExtractorEmpty());
 			
