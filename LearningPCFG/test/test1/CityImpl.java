@@ -1,7 +1,7 @@
 package com.ajah.geo;
 
 import java.io.*;
-
+import java.util.*;
 /**
  * Skeleton implementation of City interface. Usable as-is or suitable for
  * extension.

@@ -1,30 +1,34 @@
 package simulations;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
+
+import java.io.File;
 
 import declarations.API;
-import declarations.Imported;
 import definitions.ClassInfo;
-import definitions.Declaration;
+
+import scanners.BoundedScanner;
 import selection.Config;
 import selection.deserializers.FullDeserializer;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 
-public class TestDefaultImport {
+import builders.IBuilder;
+import builders.PCFGBuilder;
+
+public class TestPCFGBuilder extends BoundedScanner {
 	public static void main(String[] args) {
 		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		FullDeserializer deserializer = new FullDeserializer(factory);
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API();
-		api.addClasses(classes);
+		api.addClasses(classes);		
 		
-		Imported java = api.createImported();
-		api.load(java, "java.util.List", true);
-		
-		System.out.println(Arrays.toString(((ClassInfo)(java.getClasses("Collection").toArray()[0])).getUniqueDeclarations()));
-		
-		//System.out.println(java.getMethods("append"));
+		IBuilder builder = new PCFGBuilder(api);
+
+		//File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
+
+		File input = new File("test");		
+		File output = new File("naive.txt");
+
+		scan(builder, input, output, 10, 10);	
 	}
 }

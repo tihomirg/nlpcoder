@@ -4,6 +4,7 @@ package builders;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
@@ -74,6 +75,7 @@ import org.eclipse.jdt.core.dom.TextElement;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.TypeLiteral;
@@ -84,6 +86,7 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 import declarations.API;
 import declarations.Imported;
+import definitions.Declaration;
 
 import scopes.NameScopes;
 import scopes.EvalScopes;
@@ -107,13 +110,14 @@ public class PCFGBuilder extends IBuilder {
 	private Imported imported;
 	private API api;
 	
-	public PCFGBuilder() {
+	public PCFGBuilder(API api) {
 		this.statistics  = new Statistics();
 		this.locals = new EvalScopes();
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
 		this.params = new NameScopes();
 		this.factory = new Factory();
+		this.api = api;
 		this.nonEvaluator = new NonEvalExpBuilder(factory, locals, methods, fields, params);
 		this.evaluator = new EvalExpBuilder(factory, locals, methods, fields, params);
 	}
@@ -145,7 +149,7 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(ClassInstanceCreation node) {
-		String type = node.getType().toString();
+		String type = getTypeName(node.getType()); 
 		
 		if(isImportedType(type)){
 			Symbol receiver = eval(node.getExpression());
@@ -155,9 +159,21 @@ public class PCFGBuilder extends IBuilder {
 		}
 		return true;
 	}
+
+	private String getTypeName(Type type) {
+		if (type.isParameterizedType()) {
+			ParameterizedType paramType = (ParameterizedType) type;
+			return paramType.getType().toString();
+		} else if (type.isArrayType()) {
+			ArrayType arrayType = (ArrayType) type;
+			return arrayType.getElementType().toString();
+		} else return type.toString();
+	}
 	
 	private boolean isImportedType(String type) {
-		return imported.isImportedClass(type);
+		boolean importedClass = imported.isImportedClass(type);
+		System.out.println("PCFGBuilder.isImportedType(): "+type+"  "+importedClass);		
+		return importedClass;
 	}
 
 	public boolean visit(ConditionalExpression node){
@@ -181,7 +197,9 @@ public class PCFGBuilder extends IBuilder {
 	}
 	
 	private boolean isImportedField(String name) {
-		return imported.isImportedField(name);
+		boolean importedField = imported.isImportedField(name);
+		System.out.println("PCFGBuilder.isImportedField(): "+name+"  "+importedField);
+		return importedField;
 	}
 
 	private boolean isLocal(String name) {
@@ -231,7 +249,15 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	private boolean isImportedMethod(String name) {
-		return imported.isImportedMethod(name);
+		boolean importedMethod = imported.isImportedMethod(name);
+		System.out.println("PCFGBuilder.isImportedMethod() "+name+"  "+importedMethod);
+		
+//		Set<Declaration> methods = imported.getMethods(name);
+//		for (Declaration declaration : methods) {
+//			System.out.println(declaration);
+//		}
+		
+		return importedMethod;
 	}
 
 	private boolean isOwnerMethod(String name) {
@@ -460,8 +486,11 @@ public class PCFGBuilder extends IBuilder {
 
 	public boolean visit(ImportDeclaration node) {
 		String imp = node.getName().toString();
-		boolean single = node.isOnDemand();
-		api.load(imported, imp, single);
+		boolean isPkg = node.isOnDemand();
+		
+		System.out.println("PCFGBuilder.visit(): "+imp+"  "+isPkg);
+		
+		api.load(imported, imp, isPkg);
 		return false;
 	}
 

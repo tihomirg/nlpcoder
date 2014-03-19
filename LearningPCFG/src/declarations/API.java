@@ -21,8 +21,12 @@ public class API {
 		return imported;
 	}
 
-	public void load(Imported imported, String imp, boolean single) {
-		Set<ClassInfo> classes = getClasses(imp, single);
+	public void load(Imported imported, String imp){
+		
+	}
+	
+	public void load(Imported imported, String imp, boolean isPkg) {
+		Set<ClassInfo> classes = getClasses(imp, isPkg);
 		Set<ClassInfo>  superClasses = getSuperClasses(classes);
 		classes.addAll(superClasses);
         Set<Declaration> decls = getDecls(classes);
@@ -86,8 +90,8 @@ public class API {
 		return new HashSet<Declaration>(Arrays.asList(clazz.getUniqueDeclarations()));
 	}
 
-	private Set<ClassInfo> getClasses(String imp, boolean single) {
-		if (!single){
+	private Set<ClassInfo> getClasses(String imp, boolean isPkg) {
+		if (isPkg){
 			Set<ClassInfo> classes = packages.get(imp);
 			if (classes != null) return classes;
 		} else {
