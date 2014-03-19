@@ -1,5 +1,9 @@
 package symbol;
 
+import java.util.Set;
+
+import definitions.Declaration;
+
 public abstract class Symbol {
 	
 	public abstract String head();
@@ -9,6 +13,10 @@ public abstract class Symbol {
 	}
 	
 	public String getName(){
+		return null;
+	}
+
+	public Set<Declaration> getDecls() {
 		return null;
 	}
 
@@ -23,4 +31,8 @@ public abstract class Symbol {
 		}
 		return s;
 	}
+	
+	public boolean isTemp() {
+		return false;
+	}	
 }

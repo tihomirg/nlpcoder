@@ -12,14 +12,14 @@ public class Imported {
 	
 	private Map<String, Set<ClassInfo>> classes;
 	private Map<String, Set<Declaration>> fields;
-	private Map<String, Set<Declaration>> methods;
-	private Map<String, Set<Declaration>> cons;
+	private Map<String, Map<Integer, Set<Declaration>>> methods;
+	private Map<String, Map<Integer, Set<Declaration>>> cons;
 	
 	public Imported() {
 		this.classes = new HashMap<String, Set<ClassInfo>>();
 		this.fields = new HashMap<String, Set<Declaration>>();
-		this.methods = new HashMap<String, Set<Declaration>>();
-		this.cons = new HashMap<String, Set<Declaration>>();
+		this.methods = new HashMap<String, Map<Integer,Set<Declaration>>>();
+		this.cons = new HashMap<String, Map<Integer,Set<Declaration>>>();
 	}
 	
 	public boolean isImportedClass(String type) {
@@ -29,9 +29,19 @@ public class Imported {
 	public boolean isImportedField(String name) {
 		return fields.containsKey(name);
 	}
+	
+	public boolean isImporteddConstructor(String name, int argNum){
+		return isImported(name, argNum, cons);
+	}
+	
+	public boolean isImportedMethod(String name, int argNum) {
+		return isImported(name, argNum, methods);
+	}
 
-	public boolean isImportedMethod(String name) {
-		return methods.containsKey(name);
+	private static <K,A,T> boolean isImported(K name, A argNum, Map<K, Map<A, Set<T>>> map) {
+		if (map.containsKey(name)){
+			return map.get(name).containsKey(argNum);
+		} else return false;
 	}
 
 	public void addClasses(Set<ClassInfo> classes) {
@@ -45,9 +55,21 @@ public class Imported {
 	}
 
 	public Set<ClassInfo> getClasses(String name) {
-		return get(name, classes);
+		return getSet(name, classes);
 	}
 
+	public Set<Declaration> getFields(String name) {
+		return getSet(name, fields);
+	}
+	
+	public Map<String, Map<Integer, Set<Declaration>>> getMethods() {
+		return methods;
+	}
+
+	public Map<String, Set<ClassInfo>> getClasses() {
+		return classes;
+	}
+		
 	public void addDecls(Set<Declaration> decls) {
 		for (Declaration decl : decls) {
 			addDecl(decl);
@@ -58,40 +80,46 @@ public class Imported {
 		String name = decl.getSimpleName();
 		if (decl.isMethod()){
 			if (decl.isConstructor()){
-				getConstructors(name).add(decl);
+				getConstructors(name, decl.getArgNum()).add(decl);
 			} else {
-				getMethods(name).add(decl);				
+				getMethods(name, decl.getArgNum()).add(decl);				
 			}
 		} else if (decl.isField()) {
 			getFields(name).add(decl);
 		}
 	}
-
-	public Set<Declaration> getConstructors(String name) {
-		return get(name, cons);
+	
+	public Map<Integer, Set<Declaration>> getConstructors(String name) {
+		return getMap(name, cons);
+	}
+	
+	private static <K,A,T> Map<A, Set<T>> getMap(K name, Map<K, Map<A, Set<T>>> decls) {
+		if (!decls.containsKey(name)) {
+			decls.put(name, new HashMap<A, Set<T>>());
+		}
+		return decls.get(name);
 	}
 
-	public Set<Declaration> getMethods(String name) {
-		return get(name, methods);
+	public Map<Integer, Set<Declaration>> getMethods(String name) {
+		return getMap(name, methods);
 	}
 
-	public Set<Declaration> getFields(String name) {
-		return get(name, fields);
+	public Set<Declaration> getConstructors(String name, int argNum) {
+		return getSet(name, argNum, cons);
 	}
 
-	private <T> Set<T> get(String name, Map<String, Set<T>> cons) {
+	public Set<Declaration> getMethods(String name, int argNum) {
+		return getSet(name, argNum, methods);
+	}
+
+	private static <K,A,T> Set<T> getSet(K name, A argNum, Map<K, Map<A, Set<T>>> decls) {
+		return getSet(argNum, getMap(name, decls));
+	}
+	
+	private static <K, T> Set<T> getSet(K name, Map<K, Set<T>> cons) {
 		if(!cons.containsKey(name)){
-			HashSet<T> set = new HashSet<T>();
-			cons.put(name, set);
+			cons.put(name, new HashSet<T>());
 		}
 		return cons.get(name);
-	}
-
-	public Map<String, Set<Declaration>> getMethods() {
-		return methods;
-	}
-
-	public Map<String, Set<ClassInfo>> getClasses() {
-		return classes;
-	}
+	}	
 }

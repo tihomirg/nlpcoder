@@ -2,6 +2,8 @@ package builders;
 
 
 import java.io.PrintStream;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -143,7 +145,6 @@ public class PCFGBuilder extends IBuilder {
 		return true;
 	}
 
-	//TODO: Non evaluated version!
 	private Symbol nonEval(Expression exp) {
 		return nonEvaluator.getSymbol(exp);
 	}
@@ -240,16 +241,115 @@ public class PCFGBuilder extends IBuilder {
 	public boolean visit(MethodInvocation node) {
 
 		String name = node.getName().getIdentifier();
+		List<ASTNode> arguments = node.arguments();
+		int argNum = arguments.size();
+		
 		if(!isOwnerMethod(name)){
-			if(isImportedMethod(name)){
-			   statistics.inc(factory.createMethod(name, eval(node.getExpression()), eval(node.arguments())));
+			if(isImportedMethod(name, argNum)){
+			   Set<Declaration> headDecls = getImportedMethods(name, argNum);
+			   Symbol receiver = eval(node.getExpression());
+			   Symbol[] args = eval(arguments);
+			   methodStatistics(headDecls, receiver, args);
 			}
 		}
 		return true;
 	}
 
-	private boolean isImportedMethod(String name) {
-		boolean importedMethod = imported.isImportedMethod(name);
+	private void methodStatistics(Set<Declaration> headDecls, Symbol receiverSym, Symbol[] argSyms) {
+		
+		for (Declaration head : headDecls) {
+			Set<Symbol> receivers = new HashSet<Symbol>();
+
+			boolean inconsitent = false;
+			
+			if (receiverSym.isTemp()) {
+				Set<Declaration> receiverDecls = receiverSym.getDecls();
+				Set<Symbol> findRecievers = findRecievers(head, receiverDecls);
+				if (findRecievers == null){
+					inconsitent = true;
+				} else receivers.addAll(findRecievers);
+				
+			} else receivers.add(receiverSym);
+			
+			int length = argSyms.length;
+			LinkedList<Set<Symbol>> argss = new LinkedList<Set<Symbol>>();
+
+			if (inconsitent) continue;
+			
+			for (int i = 0; i < length; i++) {
+				Symbol argSym = argSyms[i];
+				Set<Symbol> args = new HashSet<Symbol>();
+				if(argSym.isTemp()){
+					Set<Declaration> argDecls = argSym.getDecls();
+					Set<Symbol> findArgument = findArgument(head, i, argDecls);
+					if (findArgument == null) {
+						inconsitent = true;
+						break;
+					} else {
+						args.addAll(findArgument);
+					}
+				} else args.add(argSym);
+				argss.add(args);
+			}
+			
+			if (!inconsitent) inc(head, receivers, argss);
+		}
+	}
+	private void inc(Declaration head, Set<Symbol> receivers, LinkedList<Set<Symbol>> argss) {
+		Set<Symbol> exps = getMethods(head, receivers, argss);
+		for (Symbol exp: exps) {
+			statistics.inc(exp);
+		}
+	}
+
+	private Set<Symbol> getMethods(Declaration head, Set<Symbol> receivers, LinkedList<Set<Symbol>> argss) {
+		Set<Symbol> exps = new HashSet<Symbol>();
+		for (Symbol receiver : receivers) {
+			List<List<Symbol>> argSymbolss = getArguments(argss);
+			for (List<Symbol> arguments: argSymbolss) {
+				exps.add(factory.createMethod(head, receiver, arguments.toArray(new Symbol[arguments.size()])));
+			}
+		}
+		return exps;
+	}
+
+	private static final List<List<Symbol>> emptyArgList = new LinkedList<List<Symbol>>(){{add(new LinkedList<Symbol>());}};
+	
+	private List<List<Symbol>> getArguments(LinkedList<Set<Symbol>> argss) {
+		if (argss.isEmpty()){
+			return emptyArgList;
+		} else {
+			List<List<Symbol>> result = new LinkedList<List<Symbol>>();
+			Set<Symbol> firsts = argss.removeFirst();
+			List<List<Symbol>> tails = getArguments(argss);
+			for (Symbol first: firsts) {
+				List<Symbol> list = new LinkedList<Symbol>();
+				list.add(first);
+				for (List<Symbol> tail : tails) {
+					list.addAll(tail);
+				}
+				result.add(list);
+			}
+			return result;
+		}
+	}
+
+	private Set<Symbol> findArgument(Declaration head, int i, Set<Declaration> argDecls) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Set<Symbol> findRecievers(Declaration head, Set<Declaration> receiverDecls) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Set<Declaration> getImportedMethods(String name, int argNum) {
+		return imported.getMethods(name, argNum);
+	}
+
+	private boolean isImportedMethod(String name, int argNum) {
+		boolean importedMethod = imported.isImportedMethod(name, argNum);
 		System.out.println("PCFGBuilder.isImportedMethod() "+name+"  "+importedMethod);
 		
 //		Set<Declaration> methods = imported.getMethods(name);

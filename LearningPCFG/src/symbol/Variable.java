@@ -7,10 +7,14 @@ public class Variable extends Symbol {
 	public Variable(String name) {
 		this.name = name;
 	}
-
+ 
 	@Override
 	public String head() {
 		return name;
+	}
+	
+	public boolean isTemporal(){
+		return false;
 	}
 	
 	@Override

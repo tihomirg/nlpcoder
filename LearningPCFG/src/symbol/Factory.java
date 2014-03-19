@@ -2,12 +2,17 @@ package symbol;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
+
+import definitions.Declaration;
+
+import symbol.temp.DeclarationSet;
 
 public class Factory {
     public static final Symbol NULL = new Null();
@@ -23,32 +28,60 @@ public class Factory {
     	return HOLE;
     }
 
-	public Symbol createMethod(String name, Symbol receiver, Symbol[] arguments) {
+	public Method createMethod(String name, Symbol receiver, Symbol[] arguments) {
 		return new Method(name, receiver, arguments);
 	}
 
-	public Symbol createField(String name, Symbol receiver) {
+	public Field createField(String name, Symbol receiver) {
 		return new Field(name, receiver);
 	}
 
-	public Symbol createConstructor(String type, Symbol receiver, Symbol[] arguments) {
+	public Method createConstructor(String type, Symbol receiver, Symbol[] arguments) {
 		return new Method(type, receiver, arguments);
 	}
 
-	public Symbol createConstructor(String name) {
+	public Method createConstructor(String name) {
 		return new Method(name);
 	}
+	
+	public Method createConstructor(Declaration decl){
+		return new Method(decl.getName());
+	}
+	
+	public Method createMethod(Declaration decl){
+		return new Method(decl.getName());
+	}
+	
+	public Field createField(Declaration decl){
+		return new Field(decl.getName());
+	}
+	
+	public Method createMethod(Declaration decl, Symbol receiver, Symbol[] arguments){
+		return new Method(decl.getName(), receiver, arguments);
+	}
+	
+	public Method createConstructor(Declaration decl, Symbol receiver, Symbol[] arguments){
+		return new Method(decl.getName(), receiver, arguments);
+	}
+	
+	public Field createField(Declaration decl, Symbol receiver){
+		return new Field(decl.getName(), receiver);
+	}	
 
-	public Symbol createField(String name) {
+	public Field createField(String name) {
 		return new Field(name);
 	}
 
-	public Symbol createMethod(String name) {
+	public Method createMethod(String name) {
 		return new Method(name);
 	}
 
-	public Symbol createVariable(String name) {
+	public Variable createVariable(String name) {
 		return new Variable(name);
+	}
+	
+	public DeclarationSet createDeclarationSet(Set<Declaration> decls){
+		return new DeclarationSet(decls);
 	}
 
 	public Symbol createBooleanLiteral(boolean value) {
