@@ -2,34 +2,33 @@ package symbol;
 
 import java.util.Set;
 
-import selection.types.Const;
+import definitions.Declaration;
 import selection.types.Type;
 import selection.types.TypeFactory;
-import definitions.Declaration;
 
-public class StringLiteral extends Symbol {
+public class BooleanLiteral extends Symbol {
 
-	private String value;
+	private boolean value;
 	private Type retType;
 	
-	public StringLiteral(String value, TypeFactory factory) {
+	public BooleanLiteral(boolean value, TypeFactory factory) {
 		this.value = value;
-		this.retType = factory.createConst("java.lang.String");
+		this.retType = factory.createConst("java.lang.Boolean");
 	}
 
 	@Override
 	public String head() {
-		return "String("+value+")";
+		return "Boolean("+value+")";
 	}
 
 	@Override
 	public String toString() {
-		return value;
+		return Boolean.toString(value);
 	}
 
 	@Override
 	public Type retType() {
-		return this.retType;
+		return retType;
 	}
 
 	@Override
@@ -39,19 +38,16 @@ public class StringLiteral extends Symbol {
 
 	@Override
 	public boolean isVariable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public Set<Declaration> getDecls() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean hasDecls() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

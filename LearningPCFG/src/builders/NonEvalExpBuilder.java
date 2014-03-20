@@ -19,6 +19,8 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 
+import declarations.Imported;
+
 import scopes.NameScopes;
 import scopes.ScopesKeyValue;
 import symbol.Factory;
@@ -32,6 +34,7 @@ public class NonEvalExpBuilder extends FalseBuilder {
 	private NameScopes methods;
 	private NameScopes fields;
 	private NameScopes params;
+	private Imported imported;
 	
 	public NonEvalExpBuilder(Factory factory, ScopesKeyValue<String, Symbol> locals, NameScopes methods, NameScopes fields, NameScopes params) {
 		this.factory = factory;
@@ -41,6 +44,14 @@ public class NonEvalExpBuilder extends FalseBuilder {
 		this.params = params;
 	}
 
+	public Imported getImported() {
+		return imported;
+	}
+
+	public void setImported(Imported imported) {
+		this.imported = imported;
+	}
+
 	public Symbol getSymbol(ASTNode node){
 		symbol = null;
 		node.accept(this);
@@ -48,17 +59,17 @@ public class NonEvalExpBuilder extends FalseBuilder {
 	}
 	
 	public boolean visit(ClassInstanceCreation node){
-		symbol = factory.createConstructor(node.getType().toString());
+		symbol = factory.createHole();
 		return false;
 	}
 	
 	public boolean visit(FieldAccess node) {
-		symbol = factory.createField(node.getName().getIdentifier());
+		symbol = factory.createHole();
 		return false;
 	}
 	
 	public boolean visit(MethodInvocation node) {
-		symbol = factory.createMethod(node.getName().getIdentifier());
+		symbol = factory.createHole();
 		return false;
 	}
 	
@@ -73,7 +84,7 @@ public class NonEvalExpBuilder extends FalseBuilder {
 	}	
 	
 	public boolean visit(NullLiteral node){
-		symbol = Factory.NULL;
+		symbol = factory.createNull();
 		return false;
 	}
 
@@ -92,8 +103,8 @@ public class NonEvalExpBuilder extends FalseBuilder {
 		if(!isParam(name)) {
 			if(isLocalVariable(name)){
 			  symbol = factory.createVariable(name);
-			}
-		}
+			} else symbol = factory.createHole();
+		} else symbol = factory.createHole();
 		return false;
 	}
 	
@@ -106,41 +117,41 @@ public class NonEvalExpBuilder extends FalseBuilder {
 	}	
 
 	public boolean visit(QualifiedName node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 	
 	public boolean visit(ConstructorInvocation node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 
 	public boolean visit(EmptyStatement node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}	
 	public boolean visit(ArrayAccess node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 	
 	public boolean visit(ArrayCreation node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 	
 	public boolean visit(ArrayInitializer node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}	
 	
 	public boolean visit(SuperConstructorInvocation node) {
-		symbol = factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}	
 
 	public boolean visit(Initializer node) {
-		symbol = factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}	
 }

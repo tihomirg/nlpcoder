@@ -93,6 +93,7 @@ import definitions.Declaration;
 import scopes.NameScopes;
 import scopes.EvalScopes;
 import scopes.ScopesKeyValue;
+import selection.types.TypeFactory;
 import statistics.Statistics;
 import symbol.Factory;
 import symbol.Symbol;
@@ -112,13 +113,13 @@ public class PCFGBuilder extends IBuilder {
 	private Imported imported;
 	private API api;
 	
-	public PCFGBuilder(API api) {
+	public PCFGBuilder(API api, TypeFactory tFactory) {
 		this.statistics  = new Statistics();
 		this.locals = new EvalScopes();
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
 		this.params = new NameScopes();
-		this.factory = new Factory();
+		this.factory = new Factory(tFactory);
 		this.api = api;
 		this.nonEvaluator = new NonEvalExpBuilder(factory, locals, methods, fields, params);
 		this.evaluator = new EvalExpBuilder(factory, locals, methods, fields, params);
@@ -150,15 +151,23 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	public boolean visit(ClassInstanceCreation node) {
-		String type = getTypeName(node.getType()); 
-		
-		if(isImportedType(type)){
-			Symbol receiver = eval(node.getExpression());
-			Symbol[] arguments = eval(node.arguments());
-
-			statistics.inc(factory.createConstructor(type, receiver, arguments));
+		String name = getTypeName(node.getType()); 
+		List<ASTNode> arguments = node.arguments();
+		int argNum = arguments.size();
+		if(isImportedCons(name, argNum)){
+			Set<Declaration> headDecls = getImportedConstructors(name, argNum);
+			Symbol[] args = eval(node.arguments());
+			constructorStatistics(headDecls, args);
 		}
 		return true;
+	}
+
+	private void constructorStatistics(Set<Declaration> headDecls, Symbol[] args) {
+		// TODO Auto-generated method stub
+	}
+
+	private Set<Declaration> getImportedConstructors(String name, int argNum) {
+		return imported.getConstructors(name, argNum);
 	}
 
 	private String getTypeName(Type type) {
@@ -171,9 +180,9 @@ public class PCFGBuilder extends IBuilder {
 		} else return type.toString();
 	}
 	
-	private boolean isImportedType(String type) {
-		boolean importedClass = imported.isImportedClass(type);
-		System.out.println("PCFGBuilder.isImportedType(): "+type+"  "+importedClass);		
+	private boolean isImportedCons(String name, int argNum) {
+		boolean importedClass = imported.isImporteddConstructor(name, argNum);
+		System.out.println("PCFGBuilder.isImportedCons(): "+name+"  "+importedClass);		
 		return importedClass;
 	}
 
@@ -188,15 +197,24 @@ public class PCFGBuilder extends IBuilder {
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
 		
-		if(!isOwnerField(name)){
-			if (isImportedField(name)){
-			   statistics.inc(factory.createField(name, eval(node.getExpression())));
+		if(!isOwnerMethod(name)){
+			if(isImportedField(name)){
+			   Set<Declaration> headDecls = getImportedFields(name);
+			   Symbol receiver = eval(node.getExpression());
+			   fieldStatistics(headDecls, receiver);
 			}
 		}
-		
 		return true;
 	}
 	
+	private void fieldStatistics(Set<Declaration> headDecls, Symbol receiver) {
+		// TODO Auto-generated method stub
+	}
+
+	private Set<Declaration> getImportedFields(String name) {
+		return imported.getFields(name);
+	}
+
 	private boolean isImportedField(String name) {
 		boolean importedField = imported.isImportedField(name);
 		System.out.println("PCFGBuilder.isImportedField(): "+name+"  "+importedField);
@@ -262,7 +280,7 @@ public class PCFGBuilder extends IBuilder {
 
 			boolean inconsitent = false;
 			
-			if (receiverSym.isTemp()) {
+			if (receiverSym.hasDecls()) {
 				Set<Declaration> receiverDecls = receiverSym.getDecls();
 				Set<Symbol> findRecievers = findRecievers(head, receiverDecls);
 				if (findRecievers == null){
@@ -279,7 +297,7 @@ public class PCFGBuilder extends IBuilder {
 			for (int i = 0; i < length; i++) {
 				Symbol argSym = argSyms[i];
 				Set<Symbol> args = new HashSet<Symbol>();
-				if(argSym.isTemp()){
+				if(argSym.hasDecls()){
 					Set<Declaration> argDecls = argSym.getDecls();
 					Set<Symbol> findArgument = findArgument(head, i, argDecls);
 					if (findArgument == null) {
@@ -377,7 +395,7 @@ public class PCFGBuilder extends IBuilder {
 
 	private Symbol eval(ASTNode exp) {
 		if(exp != null) return evaluator.getSymbol(exp);
-		else return Factory.NULL;
+		else return factory.createNull();
 	}
 
 	public boolean visit(InstanceofExpression node) {
@@ -555,6 +573,8 @@ public class PCFGBuilder extends IBuilder {
 
 	public boolean visit(CompilationUnit node) {
 		this.imported = api.createImported();
+		this.evaluator.setImported(this.imported);
+		this.nonEvaluator.setImported(this.imported);
 		return true;
 	}
 

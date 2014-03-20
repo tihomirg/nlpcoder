@@ -1,29 +1,55 @@
 package symbol;
 
+import java.util.Set;
+
+import selection.types.Type;
+import definitions.Declaration;
+
 public class Field extends SymbolWithReceiver {
 
-	private String name;
+	private Declaration decl;
 
-	public Field(String name) {
-		this.name = name;
+	public Field(Declaration decl) {
+		this(decl, null);
 	}	
 	
-	public Field(String name, Symbol reciever) {
+	public Field(Declaration decl, Symbol reciever) {
 		super(reciever);
-		this.name = name;
+		this.decl = decl;
 	}
 
 	@Override
 	public String head() {
-		return "Field("+name+")";
-	}
-	
-	public String getName() {
-		return name;
+		return "Field("+decl.getFullName()+")";
 	}
 	
 	@Override
 	public String toString() {
-		return receiverToString()+name;
+		return receiverToString()+decl.getFullName();
+	}
+
+	@Override
+	public Type retType() {
+		return decl.getRetType();
+	}
+
+	@Override
+	public boolean hasRetType() {
+		return true;
+	}
+
+	@Override
+	public boolean isVariable() {
+		return false;
+	}
+
+	@Override
+	public Set<Declaration> getDecls() {
+		return null;
+	}
+
+	@Override
+	public boolean hasDecls() {
+		return false;
 	}
 }

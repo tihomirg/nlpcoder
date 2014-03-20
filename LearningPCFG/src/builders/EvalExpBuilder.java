@@ -19,6 +19,8 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 
+import declarations.Imported;
+
 import scopes.NameScopes;
 import scopes.ScopesKeyValue;
 import symbol.Factory;
@@ -32,6 +34,7 @@ public class EvalExpBuilder extends FalseBuilder {
 	private NameScopes fields;
 	private NameScopes params;
 	private Symbol symbol;
+	private Imported imported;
 	
 	public EvalExpBuilder(Factory factory, ScopesKeyValue<String, Symbol> locals, NameScopes methods, NameScopes fields, NameScopes params) {
 		this.factory = factory;
@@ -47,37 +50,61 @@ public class EvalExpBuilder extends FalseBuilder {
 		return symbol;
 	}
 	
+	public Imported getImported() {
+		return imported;
+	}
+
+	public void setImported(Imported imported) {
+		this.imported = imported;
+	}
+
 	public boolean visit(ClassInstanceCreation node){
 		String name = node.getType().toString();
-		symbol = factory.createConstructor(name);
+		int argNum = node.arguments().size();
+		if(isImportedCons(name, argNum)){
+			symbol = factory.createDeclarationSet(imported.getConstructors(name, argNum));
+		} else symbol = factory.createHole();
 		return false;
 	}
 	
+	private boolean isImportedCons(String name, int argNum) {
+		return imported.isImporteddConstructor(name, argNum);
+	}
+
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
-		if(!isField(name)){
-		  symbol = factory.createField(name);
-		} else {
-		  symbol = Factory.HOLE;
-		}
+		if(!isOwnerField(name)){
+			if(isImportedField(name)){
+				symbol = factory.createDeclarationSet(imported.getFields(name));
+			} else symbol = factory.createHole();
+		} else symbol = factory.createHole();
 		return false;
 	}
 	
-	private boolean isField(String name) {
+	private boolean isOwnerField(String name) {
 		return fields.contains(name);
 	}
 
 	public boolean visit(MethodInvocation node) {
 		String name = node.getName().getIdentifier();
-		if(!isMethod(name)){
-		  symbol = factory.createMethod(name);
-		} else {
-			symbol = Factory.HOLE;
-		}
+		int argNum = node.arguments().size();
+		if(!isOwnerMethod(name)){
+			if(isImportedMethod(name, argNum)){
+				symbol = factory.createDeclarationSet(imported.getMethods(name, argNum));
+			} else symbol = factory.createHole();
+		} else symbol = factory.createHole();
 		return false;
 	}
 	
-	private boolean isMethod(String name) {
+	private boolean isImportedMethod(String name, int argNum) {
+		return false;
+	}
+
+	private boolean isImportedField(String name) {
+		return imported.isImportedField(name);
+	}
+
+	private boolean isOwnerMethod(String name) {
 		return methods.contains(name);
 	}
 
@@ -92,7 +119,7 @@ public class EvalExpBuilder extends FalseBuilder {
 	}	
 	
 	public boolean visit(NullLiteral node){
-		symbol = Factory.NULL;
+		symbol = factory.createNull();
 		return false;
 	}
 
@@ -113,10 +140,10 @@ public class EvalExpBuilder extends FalseBuilder {
 			if (isLocalVariable(name)){
 				symbol = locals.get(name);
 			} else {
-				symbol = Factory.HOLE;
+				symbol = factory.createHole();
 			}
 		} else {
-			symbol = Factory.HOLE;
+			symbol = factory.createHole();
 		}
 
 		return false;
@@ -131,41 +158,41 @@ public class EvalExpBuilder extends FalseBuilder {
 	}
 
 	public boolean visit(QualifiedName node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 	
 	public boolean visit(ConstructorInvocation node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 
 	public boolean visit(EmptyStatement node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}	
 	public boolean visit(ArrayAccess node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 	
 	public boolean visit(ArrayCreation node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 	
 	public boolean visit(ArrayInitializer node) {
-		symbol = Factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}	
 	
 	public boolean visit(SuperConstructorInvocation node) {
-		symbol = factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}	
 
 	public boolean visit(Initializer node) {
-		symbol = factory.HOLE;
+		symbol = factory.createHole();
 		return false;
 	}
 }

@@ -14,6 +14,9 @@ public class Declaration implements Serializable {
 	 */
 	private static final long serialVersionUID = 6849217608815581633L;
 	
+	private static int idGen = 0; 
+	private int id = idGen++;
+	
 	private String name;
 	private int argNum;
 	private boolean isStatic;
@@ -224,7 +227,15 @@ public class Declaration implements Serializable {
 			return "field";
 		} else return "error";
 	}
-	
+		
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return modifiers()+" name=" + simpleName + ", pkg="
@@ -232,4 +243,6 @@ public class Declaration implements Serializable {
 				+ Arrays.toString(argType) + ", ret=" + retType
 				+ ", words=" + Arrays.toString(words) + "]\n";
 	}
+	
+	
 }

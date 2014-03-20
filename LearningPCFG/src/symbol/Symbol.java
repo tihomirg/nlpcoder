@@ -1,25 +1,23 @@
 package symbol;
-
 import java.util.Set;
 
+import selection.types.Type;
 import definitions.Declaration;
 
 public abstract class Symbol {
 	
 	public abstract String head();
 	
-	public boolean isVariable(){
-		return false;
-	}
+	public abstract Type retType();
 	
-	public String getName(){
-		return null;
-	}
+	public abstract boolean hasRetType();
 
-	public Set<Declaration> getDecls() {
-		return null;
-	}
+	public abstract boolean isVariable();
 
+	public abstract Set<Declaration> getDecls();
+
+	public abstract boolean hasDecls();
+	
 	protected static String symbolHeadsToString(Symbol[] args) {
 		String s ="";
 		
@@ -31,8 +29,8 @@ public abstract class Symbol {
 		}
 		return s;
 	}
-	
-	public boolean isTemp() {
-		return false;
-	}	
+
+	public String getName() {
+		return null;
+	}
 }

@@ -4,6 +4,7 @@ import java.util.Set;
 
 import definitions.Declaration;
 
+import selection.types.Type;
 import symbol.Symbol;
 
 public class DeclarationSet extends Symbol {
@@ -28,6 +29,29 @@ public class DeclarationSet extends Symbol {
 	}
 	
 	public boolean isTemp() {
+		return true;
+	}
+
+	@Override
+	public Type retType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasRetType() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isVariable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean hasDecls() {
 		return true;
 	}
 	

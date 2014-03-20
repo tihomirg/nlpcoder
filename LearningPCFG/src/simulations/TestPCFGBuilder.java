@@ -22,7 +22,7 @@ public class TestPCFGBuilder extends BoundedScanner {
 		API api = new API();
 		api.addClasses(classes);		
 		
-		IBuilder builder = new PCFGBuilder(api);
+		IBuilder builder = new PCFGBuilder(api, factory);
 
 		//File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 

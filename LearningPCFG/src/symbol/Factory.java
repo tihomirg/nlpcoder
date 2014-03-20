@@ -12,72 +12,53 @@ import org.eclipse.jdt.core.dom.PrefixExpression;
 
 import definitions.Declaration;
 
+import selection.types.TypeFactory;
 import symbol.temp.DeclarationSet;
 
 public class Factory {
-    public static final Symbol NULL = new Null();
-	public static final Symbol HOLE = new Hole();
-    public static final Symbol TRUE = new BooleanLitera(true);
-    public static final Symbol FALSE = new BooleanLitera(false);
+    private final Symbol NULL = new Null();
+	private final Symbol HOLE = new Hole();
+    private final Symbol TRUE;
+    private final Symbol FALSE;
     
 	private static final Map<String, Symbol> numberMap = new HashMap<String, Symbol>();
 	private static final Map<Character, Symbol> charMap = new HashMap<Character, Symbol>();
 	private static final Map<String, Symbol> stringMap = new HashMap<String, Symbol>();
     
+	private TypeFactory factory;
+	
+	public Factory(TypeFactory factory){
+		this.factory = factory;
+		TRUE = new BooleanLiteral(true, factory);
+		FALSE = new BooleanLiteral(false, factory);
+	}
+	
     public Symbol createHole(){
     	return HOLE;
     }
 
-	public Method createMethod(String name, Symbol receiver, Symbol[] arguments) {
-		return new Method(name, receiver, arguments);
-	}
-
-	public Field createField(String name, Symbol receiver) {
-		return new Field(name, receiver);
-	}
-
-	public Method createConstructor(String type, Symbol receiver, Symbol[] arguments) {
-		return new Method(type, receiver, arguments);
-	}
-
-	public Method createConstructor(String name) {
-		return new Method(name);
-	}
-	
 	public Method createConstructor(Declaration decl){
-		return new Method(decl.getName());
+		return new Method(decl);
 	}
 	
 	public Method createMethod(Declaration decl){
-		return new Method(decl.getName());
+		return new Method(decl);
 	}
 	
 	public Field createField(Declaration decl){
-		return new Field(decl.getName());
+		return new Field(decl);
 	}
 	
 	public Method createMethod(Declaration decl, Symbol receiver, Symbol[] arguments){
-		return new Method(decl.getName(), receiver, arguments);
+		return new Method(decl, receiver, arguments);
 	}
 	
 	public Method createConstructor(Declaration decl, Symbol receiver, Symbol[] arguments){
-		return new Method(decl.getName(), receiver, arguments);
+		return new Method(decl, receiver, arguments);
 	}
 	
 	public Field createField(Declaration decl, Symbol receiver){
-		return new Field(decl.getName(), receiver);
-	}	
-
-	public Field createField(String name) {
-		return new Field(name);
-	}
-
-	public Method createMethod(String name) {
-		return new Method(name);
-	}
-
-	public Variable createVariable(String name) {
-		return new Variable(name);
+		return new Field(decl, receiver);
 	}
 	
 	public DeclarationSet createDeclarationSet(Set<Declaration> decls){
@@ -91,7 +72,7 @@ public class Factory {
 
 	public Symbol createCharacterLiteral(char value) {
 		if(!charMap.containsKey(value)){
-			charMap.put(value, new CharacterLiteral(value));
+			charMap.put(value, new CharacterLiteral(value, factory));
 		}
 		return charMap.get(value);
 	}
@@ -105,9 +86,13 @@ public class Factory {
 
 	public Symbol createStringLiteral(String value) {
 		if(!stringMap.containsKey(value)){
-			stringMap.put(value, new StringLiteral(value));
+			stringMap.put(value, new StringLiteral(value, factory));
 		}
 		return stringMap.get(value);
+	}
+	
+	public Symbol createVariable(String name){
+		return new Variable(name);
 	}
 
 	public Symbol createInfixOperator(InfixExpression.Operator operator, Symbol[] operands) {
@@ -120,5 +105,9 @@ public class Factory {
 
 	public Symbol createPrefixOperator(PrefixExpression.Operator operator, Symbol operand) {
 		return new PrefixOperator(operator, operand);
+	}
+
+	public Symbol createNull() {
+		return NULL;
 	}
 }

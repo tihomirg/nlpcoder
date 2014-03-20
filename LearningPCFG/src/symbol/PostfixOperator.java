@@ -1,6 +1,11 @@
 package symbol;
 
+import java.util.Set;
+
 import org.eclipse.jdt.core.dom.PostfixExpression.Operator;
+
+import selection.types.Type;
+import definitions.Declaration;
 
 public class PostfixOperator extends Symbol {
 	
@@ -14,11 +19,41 @@ public class PostfixOperator extends Symbol {
 
 	@Override
 	public String head() {
-		return "PostfixOp("+operator.toString()+")";
+		return "PostfixOp("+operator+")";
 	}
 
 	@Override
 	public String toString() {
 		return operator+" "+operand;
+	}
+
+	@Override
+	public Type retType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasRetType() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isVariable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Set<Declaration> getDecls() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasDecls() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
