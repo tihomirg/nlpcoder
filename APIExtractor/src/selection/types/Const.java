@@ -9,19 +9,13 @@ public class Const extends Type {
 	 */
 	private static final long serialVersionUID = 2178934969598789226L;
 	
-	private final String name;
-
 	protected Const(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
+		super(name);
 	}
 
 	@Override
 	public int hashCode() {
-		return name.hashCode();
+		return head.hashCode();
 	}
 
 	@Override
@@ -31,7 +25,7 @@ public class Const extends Type {
 
 	@Override
 	public String toString() {
-		return "Const ("+ name + ")";
+		return "Const ("+ head + ")";
 	}
 
 	@Override
@@ -56,7 +50,7 @@ public class Const extends Type {
 
 	@Override
 	public List<String> caracteristicWords() {
-		return new LinkedList<String>(){{add(shortName(name));}};
+		return new LinkedList<String>(){{add(shortName(head));}};
 	}
 	
 	private static String shortName(String name) {

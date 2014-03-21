@@ -9,6 +9,11 @@ public abstract class Type implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -900979897015622962L;
+	protected final String head;
+	
+	public Type(String head){
+		this.head = head;
+	}
 
 	public Type apply(List<Substitution> subs, TypeFactory factory){
 		Type curr = this;
@@ -23,4 +28,8 @@ public abstract class Type implements Serializable{
 	public abstract Unifier unify(Type type, TypeFactory factory);
 
 	public abstract List<String> caracteristicWords();
+
+	public String getHead() {
+		return head;
+	}
 }

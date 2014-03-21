@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import selection.parser.one.Word;
+import selection.types.Const;
 import selection.types.Type;
 
 public class Declaration implements Serializable {
@@ -29,6 +30,7 @@ public class Declaration implements Serializable {
 	private boolean method;
 	private boolean constructor;
 	private boolean field;
+	private boolean literal;
 
 	private String clazz;
 	
@@ -38,6 +40,18 @@ public class Declaration implements Serializable {
 	private String packageName;
 	
 	public Declaration(){}	
+
+	public Declaration(String name, Type retType, boolean isLiteral) {
+		
+		this.name = name;
+		this.retType = retType;
+		
+		if(isLiteral){
+			this.literal = isLiteral;
+			this.isPublic = true;
+		}
+		
+	}
 
 	public String getName() {
 		return name;
@@ -243,6 +257,12 @@ public class Declaration implements Serializable {
 				+ Arrays.toString(argType) + ", ret=" + retType
 				+ ", words=" + Arrays.toString(words) + "]\n";
 	}
-	
-	
+
+	public boolean isLiteral() {
+		return literal;
+	}
+
+	public void setLiteral(boolean literal) {
+		this.literal = literal;
+	}	
 }

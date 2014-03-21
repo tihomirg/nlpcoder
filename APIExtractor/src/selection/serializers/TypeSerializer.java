@@ -87,8 +87,8 @@ public class TypeSerializer {
 //		serializer.writeObject(file, factory.createConst("java.lang.Integer"));
 //		Const type = (Const) serializer.readObject(file, Const.class);
 		
-		Const cons1 = factory.createConst("java.lang.Integer");
-		Const cons2 = factory.createConst("java.lang.String");
+		Type cons1 = factory.createConst("java.lang.Integer");
+		Type cons2 = factory.createConst("java.lang.String");
 		
 		Polymorphic poly = factory.createPolymorphic("java.util.List", new Type[]{cons1});
 		Polymorphic poly2 = factory.createPolymorphic("java.util.Map", new Type[]{poly, cons2});

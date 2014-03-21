@@ -14,7 +14,8 @@ import builders.IBuilder;
 public class BoundedPCFGScanner extends BoundedScanner {
 
 		public static void main(String[] args){
-			IBuilder builder = new PCFGBuilder(new API(), new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix())));
+			TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
+			IBuilder builder = new PCFGBuilder(new API(factory), factory);
 				
 			//File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 			

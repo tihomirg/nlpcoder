@@ -10,11 +10,10 @@ public class Polymorphic extends Type {
 	 */
 	private static final long serialVersionUID = 8410671184621593335L;
 	
-	private final String name;
 	private final Type[] params;
 	
 	protected Polymorphic(String name, Type[] params) {
-		this.name = name;
+		super(name);
 		this.params = params;
 	}
 
@@ -23,12 +22,12 @@ public class Polymorphic extends Type {
 	}
 	
 	public String getName() {
-		return name;
+		return head;
 	}
 
 	@Override
 	public int hashCode() {
-		return getHashCode(this.name, this.params);
+		return getHashCode(this.head, this.params);
 	}
 
 	protected static int getHashCode(String name, Type[] params) {
@@ -46,7 +45,7 @@ public class Polymorphic extends Type {
 
 	@Override
 	public Type apply(Substitution sub, TypeFactory factory) {
-		return factory.createPolymorphic(this.name, apply(params, sub, factory));
+		return factory.createPolymorphic(this.head, apply(params, sub, factory));
 	}
 
 	private static Type[] apply(Type[] params, Substitution sub, TypeFactory factory) {
@@ -62,7 +61,7 @@ public class Polymorphic extends Type {
 		if (this.equals(type)) return Unifier.True();
 		if (type instanceof Polymorphic){
 			Polymorphic poly = (Polymorphic) type;
-			if(this.name.equals(poly.name) 
+			if(this.head.equals(poly.head) 
 			   && this.params.length == poly.params.length){
 				List<Substitution> subs = new LinkedList<Substitution>();
 				for (int i = 0; i< this.params.length; i++) {
@@ -99,13 +98,13 @@ public class Polymorphic extends Type {
 
 	@Override
 	public String toString() {
-		return "Polymorphic ("+name + ", "+ Arrays.toString(params) + ")";
+		return "Polymorphic ("+head + ", "+ Arrays.toString(params) + ")";
 	}
 
 	@Override
 	public List<String> caracteristicWords() {
 		List<String> list = new LinkedList<String>();
-		list.add(name);
+		list.add(head);
 		
 		for (Type type : params) {
 			list.addAll(type.caracteristicWords());

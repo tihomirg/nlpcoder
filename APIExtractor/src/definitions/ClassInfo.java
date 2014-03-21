@@ -46,7 +46,7 @@ public class ClassInfo implements Serializable {
 	private String packageName;
 	private Declaration[] udecls;
 	private String[] classTypeParams;
-	private Type clazzType;
+	private Type type;
 
 	public ClassInfo(){}
 
@@ -91,7 +91,7 @@ public class ClassInfo implements Serializable {
 		}
 
 		this.classTypeParams = typeParameters(signature);
-		this.clazzType = getClazzType(this.classTypeParams, this.name);
+		this.type = getClazzType(this.classTypeParams, this.name);
 		
 		//inherietedTypes = getgetInheritedTypes(signature); 
 	}
@@ -102,7 +102,13 @@ public class ClassInfo implements Serializable {
 		for (int i = 0; i < length; i++) {
 			typeParam[i] = factory.createVariable(typeParameters[i]);
 		}
-		return factory.createPolymorphic(name, typeParam);
+		
+		if (length > 0) {
+		    return factory.createPolymorphic(name, typeParam);			
+		} else {
+		    return factory.createConst(name);
+		}
+		
 	}
 
 	private static String[] typeParameters(String signature) {
@@ -279,7 +285,7 @@ public class ClassInfo implements Serializable {
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams);
 				List<Substitution> methodVarSubs = getUniqueVarNames(methodTypeParams);
 				
-				decl.setReceiverType(clazzType.apply(classVarSubs, factory));
+				decl.setReceiverType(type.apply(classVarSubs, factory));
 				
 				Set<String> vars = createVariables(methodTypeParams, classTypeParams);
 				
@@ -346,7 +352,7 @@ public class ClassInfo implements Serializable {
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams);
 				Set<String> vars = new HashSet<String>(Arrays.asList(classTypeParams));
 				
-				decl.setReceiverType(clazzType.apply(classVarSubs, factory));				
+				decl.setReceiverType(type.apply(classVarSubs, factory));				
 				decl.setRetType(fieldType(signature, classVarSubs, vars));
 				
 				decl.setWords(extractor.getWords(decl));
@@ -551,6 +557,9 @@ public class ClassInfo implements Serializable {
 		ClassInfo.factory = factory;
 	}
 
+	public Type getType() {
+		return this.type;
+	}	
 
 	@Override
 	public String toString() {
@@ -561,5 +570,6 @@ public class ClassInfo implements Serializable {
 				", isPublic=" + isPublic + 
 				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
 				"]\n";
-	}	
+	}
+	
 }

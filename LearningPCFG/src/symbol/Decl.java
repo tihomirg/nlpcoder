@@ -5,18 +5,22 @@ import java.util.Set;
 import selection.types.Type;
 import definitions.Declaration;
 
-public class Method extends SymbolWithReceiver {
+public class Decl extends SymbolWithReceiver {
 	private Declaration decl;
 	private Symbol[] args;
+
+	public Decl(Declaration decl) {
+		this(decl, null);
+	}	
 	
-	public Method(Declaration decl, Symbol receiver, Symbol[] args) {
+	public Decl(Declaration decl, Symbol receiver){
+		this(decl, receiver, null);
+	}
+	
+	public Decl(Declaration decl, Symbol receiver, Symbol[] args) {
 		super(receiver);
 		this.decl = decl;
 		this.args = args;
-	}
-
-	public Method(Declaration decl) {
-		this(decl, null, null);
 	}
 	
 	public Declaration getDecl() {

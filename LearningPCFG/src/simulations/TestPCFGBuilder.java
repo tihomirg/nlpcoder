@@ -19,7 +19,7 @@ public class TestPCFGBuilder extends BoundedScanner {
 		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		FullDeserializer deserializer = new FullDeserializer(factory);
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
-		API api = new API();
+		API api = new API(factory);
 		api.addClasses(classes);		
 		
 		IBuilder builder = new PCFGBuilder(api, factory);

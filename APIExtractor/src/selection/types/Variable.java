@@ -9,21 +9,19 @@ public class Variable extends Type {
 	 */
 	private static final long serialVersionUID = 2312467056934914968L;
 
-	protected final String name;
-	
 	private static final List<String> EMPTY_LIST = new LinkedList<String>();	
 	
 	protected Variable(String name) {
-		this.name = name;
+		super(name);
 	}
 
 	public String getName() {
-		return name;
+		return head;
 	}
 
 	@Override
 	public int hashCode() {
-		return name.hashCode();
+		return head.hashCode();
 	}
 
 	@Override
@@ -33,7 +31,7 @@ public class Variable extends Type {
 
 	@Override
 	public String toString() {
-		return "Variable (" + name + ")";
+		return "Variable (" + head + ")";
 	}
 
 	@Override

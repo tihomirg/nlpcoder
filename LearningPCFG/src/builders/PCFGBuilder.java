@@ -119,8 +119,8 @@ public class PCFGBuilder extends IBuilder {
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
 		this.params = new NameScopes();
-		this.factory = new Factory(tFactory);
 		this.api = api;
+		this.factory = new Factory(api);
 		this.nonEvaluator = new NonEvalExpBuilder(factory, locals, methods, fields, params);
 		this.evaluator = new EvalExpBuilder(factory, locals, methods, fields, params);
 	}
@@ -283,7 +283,7 @@ public class PCFGBuilder extends IBuilder {
 			if (receiverSym.hasDecls()) {
 				Set<Declaration> receiverDecls = receiverSym.getDecls();
 				Set<Symbol> findRecievers = findRecievers(head, receiverDecls);
-				if (findRecievers == null){
+				if (findRecievers.isEmpty()){
 					inconsitent = true;
 				} else receivers.addAll(findRecievers);
 				
@@ -300,7 +300,7 @@ public class PCFGBuilder extends IBuilder {
 				if(argSym.hasDecls()){
 					Set<Declaration> argDecls = argSym.getDecls();
 					Set<Symbol> findArgument = findArgument(head, i, argDecls);
-					if (findArgument == null) {
+					if (findArgument.isEmpty()) {
 						inconsitent = true;
 						break;
 					} else {
@@ -325,7 +325,7 @@ public class PCFGBuilder extends IBuilder {
 		for (Symbol receiver : receivers) {
 			List<List<Symbol>> argSymbolss = getArguments(argss);
 			for (List<Symbol> arguments: argSymbolss) {
-				exps.add(factory.createMethod(head, receiver, arguments.toArray(new Symbol[arguments.size()])));
+				exps.add(factory.createDecl(head, receiver, arguments.toArray(new Symbol[arguments.size()])));
 			}
 		}
 		return exps;
@@ -353,13 +353,23 @@ public class PCFGBuilder extends IBuilder {
 	}
 
 	private Set<Symbol> findArgument(Declaration head, int i, Set<Declaration> argDecls) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Symbol> arguments = new HashSet<Symbol>();
+		for (Declaration arg : argDecls) {
+			if(api.canBeArgument(head, i, arg)){
+				arguments.add(factory.createDecl(arg));
+			}
+		}
+		return arguments;
 	}
 
 	private Set<Symbol> findRecievers(Declaration head, Set<Declaration> receiverDecls) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Symbol> receivers = new HashSet<Symbol>();
+		for (Declaration receiver : receiverDecls) {
+			if(api.canBeReceiver(head, receiver)){
+				receivers.add(factory.createDecl(receiver));
+			}
+		}
+		return receivers;
 	}
 
 	private Set<Declaration> getImportedMethods(String name, int argNum) {

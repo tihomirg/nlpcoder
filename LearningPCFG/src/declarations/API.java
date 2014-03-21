@@ -3,8 +3,13 @@ package declarations;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import selection.types.Type;
+import selection.types.TypeFactory;
 
 import definitions.ClassInfo;
 import definitions.Declaration;
@@ -13,16 +18,18 @@ public class API {
 
 	private static final String JAVA_LANG = "java.lang";
 	private Map<String, Set<ClassInfo>> packages = new HashMap<String, Set<ClassInfo>>();
-	private Map<String, ClassInfo> classes = new HashMap<String, ClassInfo>();	
+	private Map<String, ClassInfo> classes = new HashMap<String, ClassInfo>();
+	private TypeFactory factory;	
+	private static ClassInfo JAVA_LANG_STRING = null;
 	
+	public API(TypeFactory factory) {
+		this.factory = factory;
+	}
+
 	public Imported createImported() {
 		Imported imported = new Imported();
 		load(imported, JAVA_LANG, false);
 		return imported;
-	}
-
-	public void load(Imported imported, String imp){
-		
 	}
 	
 	public void load(Imported imported, String imp, boolean isPkg) {
@@ -89,6 +96,12 @@ public class API {
 	private static Set<Declaration> getDecls(ClassInfo clazz) {
 		return new HashSet<Declaration>(Arrays.asList(clazz.getUniqueDeclarations()));
 	}
+	
+	private ClassInfo getClass(String className){
+		Set<ClassInfo> classes = getClasses(className, false);
+		if(classes.isEmpty()) return null;
+		else return classes.toArray(new ClassInfo[1])[0];
+	}
 
 	private Set<ClassInfo> getClasses(String imp, boolean isPkg) {
 		if (isPkg){
@@ -102,4 +115,65 @@ public class API {
 		return new HashSet<ClassInfo>();
 	}
 
+	public Declaration getTrueBooleanLiteral() {
+		return new Declaration("true", factory.createConst("boolean"), true);
+	}
+
+	private ClassInfo getJavaLangString() {
+		if (JAVA_LANG_STRING == null) {
+			JAVA_LANG_STRING = getClasses("java.lang.String", true).toArray(new ClassInfo[1])[0];
+		}
+		return JAVA_LANG_STRING;
+	}
+
+	public Declaration getFalseBooleanLiteral() {
+		return new Declaration("false", factory.createConst("boolean"), true);
+	}
+
+	public Declaration getStringLiteral() {
+		return new Declaration("string", getJavaLangString().getType(), true);
+	}
+
+	public Declaration getCharacterLiteral() {
+		return new Declaration("char", factory.createConst("char"), true);
+	}
+
+	public Declaration getNumberLiteral() {
+		return new Declaration("number", factory.createConst("java.lang.NoType"), true);
+	}
+
+	public boolean canBeReceiver(Declaration head, Declaration receiver) {
+		return compatableTypes(head.getReceiverType(), receiver.getReceiverType());
+	}
+
+	private boolean compatableTypes(Type recParamType, Type recArgType) {
+		return getCompatableTypes(recArgType).contains(recParamType);
+	}
+
+	private Set<Type> getCompatableTypes(Type type) {
+		Set<Type> types = new HashSet<Type>();
+		types.add(type);
+		
+		String head = type.getHead();
+		ClassInfo clazz = getClass(head);
+		if(clazz != null){
+			List<ClassInfo> list = new LinkedList<ClassInfo>();
+			list.addAll(Arrays.asList(clazz.getSuperClasses()));
+			list.addAll(Arrays.asList(clazz.getInterfaces()));
+			types.addAll(getTypes(list));
+		}
+		return types;
+	}
+
+	private Set<Type> getTypes(List<ClassInfo> list) {
+		Set<Type> types = new HashSet<Type>();
+		for (ClassInfo clazz : list) {
+			types.add(clazz.getType());
+		}
+		return types;
+	}
+
+	public boolean canBeArgument(Declaration head, int i, Declaration arg) {
+		return compatableTypes(head.getArgType()[i], arg.getReceiverType());
+	}
 }

@@ -79,7 +79,7 @@ public class NonEvalExpBuilder extends FalseBuilder {
 	}
 	
 	public boolean visit(CharacterLiteral node) {
-		symbol = factory.createCharacterLiteral(node.charValue());
+		symbol = factory.createCharacterLiteral();
 		return false;
 	}	
 	
@@ -89,12 +89,12 @@ public class NonEvalExpBuilder extends FalseBuilder {
 	}
 
 	public boolean visit(NumberLiteral node){
-		symbol = factory.createNumberLiteral(node.getToken());
+		symbol = factory.createNumberLiteral();
 		return false;
 	}
 	
 	public boolean visit(StringLiteral node) {
-		symbol = factory.createStringLiteral(node.getEscapedValue());
+		symbol = factory.createStringLiteral();
 		return false;
 	}	
 	

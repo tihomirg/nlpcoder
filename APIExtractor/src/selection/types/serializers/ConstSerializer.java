@@ -25,6 +25,6 @@ public class ConstSerializer extends Serializer<Const> {
 
 	@Override
 	public void write(Kryo kryo, Output out, Const cons) {
-		out.writeString(cons.getName());
+		out.writeString(cons.getHead());
 	}
 }

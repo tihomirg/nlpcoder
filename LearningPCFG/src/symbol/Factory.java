@@ -1,18 +1,14 @@
 package symbol;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.InfixExpression;
-import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 
+import declarations.API;
 import definitions.Declaration;
 
-import selection.types.TypeFactory;
 import symbol.temp.DeclarationSet;
 
 public class Factory {
@@ -20,45 +16,32 @@ public class Factory {
 	private final Symbol HOLE = new Hole();
     private final Symbol TRUE;
     private final Symbol FALSE;
-    
-	private static final Map<String, Symbol> numberMap = new HashMap<String, Symbol>();
-	private static final Map<Character, Symbol> charMap = new HashMap<Character, Symbol>();
-	private static final Map<String, Symbol> stringMap = new HashMap<String, Symbol>();
-    
-	private TypeFactory factory;
+    private final Symbol StringLiteral;
+    private final Symbol CharacterLiteral;
+    private final Symbol NumberLiteral;
 	
-	public Factory(TypeFactory factory){
-		this.factory = factory;
-		TRUE = new BooleanLiteral(true, factory);
-		FALSE = new BooleanLiteral(false, factory);
+	public Factory(API api){
+		this.TRUE = new Decl(api.getTrueBooleanLiteral());
+		this.FALSE = new Decl(api.getFalseBooleanLiteral());
+		this.StringLiteral = new Decl(api.getStringLiteral());
+		this.CharacterLiteral = new Decl(api.getCharacterLiteral());
+		this.NumberLiteral = new Decl(api.getNumberLiteral());
 	}
 	
     public Symbol createHole(){
     	return HOLE;
     }
+    
+	public Symbol createNull() {
+		return NULL;
+	}    
 
-	public Method createConstructor(Declaration decl){
-		return new Method(decl);
+	public Decl createDecl(Declaration decl){
+		return new Decl(decl);
 	}
-	
-	public Method createMethod(Declaration decl){
-		return new Method(decl);
-	}
-	
-	public Field createField(Declaration decl){
-		return new Field(decl);
-	}
-	
-	public Method createMethod(Declaration decl, Symbol receiver, Symbol[] arguments){
-		return new Method(decl, receiver, arguments);
-	}
-	
-	public Method createConstructor(Declaration decl, Symbol receiver, Symbol[] arguments){
-		return new Method(decl, receiver, arguments);
-	}
-	
-	public Field createField(Declaration decl, Symbol receiver){
-		return new Field(decl, receiver);
+
+	public Decl createDecl(Declaration decl, Symbol receiver, Symbol[] arguments){
+		return new Decl(decl, receiver, arguments);
 	}
 	
 	public DeclarationSet createDeclarationSet(Set<Declaration> decls){
@@ -70,25 +53,16 @@ public class Factory {
 		else return FALSE;
 	}
 
-	public Symbol createCharacterLiteral(char value) {
-		if(!charMap.containsKey(value)){
-			charMap.put(value, new CharacterLiteral(value, factory));
-		}
-		return charMap.get(value);
+	public Symbol createCharacterLiteral() {
+		return CharacterLiteral;
 	}
 
-	public Symbol createNumberLiteral(String value) {
-		if(!numberMap.containsKey(value)){
-			numberMap.put(value, new NumberLiteral(value));
-		}
-		return numberMap.get(value);
+	public Symbol createNumberLiteral() {
+		return NumberLiteral;
 	}
 
-	public Symbol createStringLiteral(String value) {
-		if(!stringMap.containsKey(value)){
-			stringMap.put(value, new StringLiteral(value, factory));
-		}
-		return stringMap.get(value);
+	public Symbol createStringLiteral() {
+		return StringLiteral;
 	}
 	
 	public Symbol createVariable(String name){
@@ -105,9 +79,5 @@ public class Factory {
 
 	public Symbol createPrefixOperator(PrefixExpression.Operator operator, Symbol operand) {
 		return new PrefixOperator(operator, operand);
-	}
-
-	public Symbol createNull() {
-		return NULL;
 	}
 }
