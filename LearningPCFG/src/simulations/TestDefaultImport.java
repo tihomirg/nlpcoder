@@ -8,14 +8,14 @@ import declarations.Imported;
 import definitions.ClassInfo;
 import definitions.Declaration;
 import selection.Config;
-import selection.deserializers.FullDeserializer;
+import selection.deserializers.Deserializer;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 
 public class TestDefaultImport {
 	public static void main(String[] args) {
 		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		FullDeserializer deserializer = new FullDeserializer(factory);
+		Deserializer deserializer = new Deserializer(factory);
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API(factory);
 		api.addClasses(classes);

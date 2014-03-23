@@ -1,9 +1,12 @@
 package selection.serializers;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import definitions.ClassInfo;
 
 import selection.Config;
 import selection.DataSerializer;
@@ -13,23 +16,20 @@ import selection.DeclarationParserTwo;
 import selection.GroupWordExtractor;
 import selection.IDeclarationParser;
 import selection.IWordExtractor;
-import selection.WordExtractorEmpty;
 import selection.WordProcessor;
+import selection.loaders.BoundedJarLoader;
 import selection.loaders.FolderLoader;
 import selection.loaders.IJarLoader;
-import selection.loaders.TargetJarLoader;
+import selection.parser.one.ParserOne;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
-import definitions.ClassInfo;
 
-public class TargetSerialaizer {
+public class Serializer {
 
-	private String targetPackage;
-	private TypeFactory factory;	
+	private TypeFactory factory;
 	
-	public TargetSerialaizer(TypeFactory factory, String targetPackage) {
+	public Serializer(TypeFactory factory) {
 		this.factory = factory;
-		this.targetPackage = targetPackage;
 	}
 
 	public void serialize(String folderName, String storageLocation, IWordExtractor extractor) {
@@ -39,12 +39,15 @@ public class TargetSerialaizer {
 			
 			FolderLoader fLoader = new FolderLoader();
 			List<String> jars = fLoader.getJars(folder);
-			IJarLoader jLoder = new TargetJarLoader(Config.getMaxFilesToScan(), targetPackage);
+			IJarLoader jLoder = new BoundedJarLoader(Config.getMaxFilesToScan());
 			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor);
 			
 			Collection<ClassInfo> values = classFiles.values();
+			
 			ClassInfo[] values2 = values.toArray(new ClassInfo[values.size()]);
+			
 			TypeSerializer serializer = new TypeSerializer(factory);
+			
 			serializer.writeObject(storageLocation, values2);
 			
 		} catch (Exception e) {
@@ -55,9 +58,10 @@ public class TargetSerialaizer {
 	
 	public static void main(String[] args) {
 		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		TargetSerialaizer loader = new TargetSerialaizer(factory, "java.lang");
+		Serializer loader = new Serializer(factory);
 		
-		IWordExtractor extractor = new WordExtractorEmpty();
+		WordProcessor wordProcessor = new WordProcessor();
+		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.4, new int[]{2,5}, Config.getNullProbability())}));
 		
 		loader.serialize(Config.getJarfolder(), Config.getStorageLocation(), extractor);
 	

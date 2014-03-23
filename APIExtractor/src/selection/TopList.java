@@ -1,11 +1,11 @@
 package selection;
 
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import selection.parser.one.Word;
-
-import definitions.Declaration;
 
 public class TopList {
 
@@ -24,23 +24,46 @@ public class TopList {
 		this.word = word;
 	}
 
-	public void put(RichDeclaration richDeclaration, double probability) {
-		// TODO Auto-generated method stub
-		top.add(new Pair(richDeclaration, probability));
-		if(top.size() > this.size){
-			top.remove(); //first is the smallest one.
+	public void tryPut(RichDeclaration richDeclaration, double score) {
+		Pair pair = new Pair(richDeclaration, score);
+
+		if (top.contains(pair)){
+			top.remove(pair);
+			top.add(pair);
+		} else {
+			top.add(pair);
+			if(top.size() > this.size){
+				top.remove(); //first is the smallest one.
+			}
 		}
 	}
-	
+
 	public Word getWord() {
 		return word;
 	}	
 
 	@Override
 	public String toString() {
-		return "TopList [\n"+top+"\n]\n";
+		StringBuffer sb = new StringBuffer();
+
+		sb.append("For word: "+ word.getLemma()+"\n");
+
+		List<String> list = new LinkedList<String>();
+		int length = top.size();
+		while(!top.isEmpty()){
+			Pair curr = top.remove();
+			list.add(curr+"\n");
+		}
+
+		String[] array = list.toArray(new String[length]);
+
+		for(int i = length-1; i >= 0; i--){
+			sb.append(array[i]);
+		}
+
+		return sb.toString();
 	}
-	
+
 }
 
 class Pair {
@@ -58,11 +81,36 @@ class Pair {
 
 	public double getProbability() {
 		return probability;
-	}	
-	
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((rd == null) ? 0 : rd.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pair other = (Pair) obj;
+		if (rd == null) {
+			if (other.rd != null)
+				return false;
+		} else if (!rd.equals(other.rd))
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
-		return "Pair [p=" + probability + ", rd=" + rd + "]\n";
+		return probability + " : " + rd;
 	}
 }
 

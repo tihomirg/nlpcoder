@@ -40,7 +40,6 @@ public class Level {
 
 	@Override
 	public String toString() {
-		return "Level [probability=" + probability + ", depth=" + depth
-				+ "]\n";//, words=" + words + "]\n";
+		return "Level [probability=" + probability + ", depth=" + depth+ ", words=" + words + "]\n";
 	}
 }

@@ -208,7 +208,7 @@ public class ClassInfo implements Serializable {
 		System.arraycopy(this.interfaces, 0, types, this.superClasses.length, this.interfaces.length);
 
 		return types;
-	}	
+	}
 
 	public Declaration[] getUniqueDeclarations() {
 		if(this.udecls == null){
@@ -475,7 +475,7 @@ public class ClassInfo implements Serializable {
 
 	private String interfacesToString(){
 		String s="";
-		for (ClassInfo clazz: superClasses) {
+		for (ClassInfo clazz: interfaces) {
 			s+=" "+clazz.getName();
 		}
 		return s;
@@ -483,10 +483,10 @@ public class ClassInfo implements Serializable {
 
 	private String superClassesToString(){
 		String s="";
-		for (ClassInfo clazz: interfaces) {
+		for (ClassInfo clazz: superClasses) {
 			s+=" "+clazz.getName();
 		}
-		return s;		
+		return s;
 	}
 
 	public String getName() {

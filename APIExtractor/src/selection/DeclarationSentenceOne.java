@@ -29,14 +29,17 @@ public class DeclarationSentenceOne implements IDeclarationSentence {
 
 	public Word[] getWords() {
 		
-		List<Word> words = new LinkedList<Word>();
-		for (SentenceOne sentence : result) {
-			Word[] words2 = sentence.getWords();
-			for (Word word : words2) {
-				words.add(word);
+		List<Word> newWords = new LinkedList<Word>();
+		int size = result.size();
+		for (int i = 0; i < size; i++){
+			SentenceOne sentence = result.get(i);
+			Word[] words = sentence.getWords();
+			for (Word word : words) {
+				word.setGroup(i);
+				newWords.add(word);
 			}
 		}
 		
-		return words.toArray(new Word[words.size()]);
+		return newWords.toArray(new Word[newWords.size()]);
 	}
 }

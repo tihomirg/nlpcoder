@@ -9,11 +9,11 @@ import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 import definitions.ClassInfo;
 
-public class FullDeserializer {
+public class Deserializer {
 	
 	private TypeFactory factory;
 
-	public FullDeserializer(TypeFactory factory) {
+	public Deserializer(TypeFactory factory) {
 		this.factory = factory;
 	}
 
@@ -24,7 +24,7 @@ public class FullDeserializer {
 	
 	public static void main(String[] args) {
 		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		FullDeserializer deserializer = new FullDeserializer(factory);
+		Deserializer deserializer = new Deserializer(factory);
 		
 		System.out.println(Arrays.toString(deserializer.deserialize(Config.getStorageLocation())));
 		

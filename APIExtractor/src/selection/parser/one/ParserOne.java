@@ -84,7 +84,7 @@ public class ParserOne extends IParser {
 
 	public ISentence parse(SentenceZero curr) { 
 		List<List<Word>> wordss = this.slice(curr.getRep());
-		Word[] words = getWords(wordss);
+		Word[] words = flatten(wordss);
 		setIndexes(words);
 		ConstituentOne[] cons = getConstituents(wordss);
 		
@@ -109,7 +109,7 @@ public class ParserOne extends IParser {
 		return cons;
 	}
 
-	private Word[] getWords(List<List<Word>> wordss) {
+	private Word[] flatten(List<List<Word>> wordss) {
 		List<Word> interm = new ArrayList<Word>();
 		for(List<Word> words: wordss){
 			interm.addAll(words);

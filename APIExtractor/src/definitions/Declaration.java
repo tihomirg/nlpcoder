@@ -153,19 +153,27 @@ public class Declaration implements Serializable {
 		return signature;
 	}
 	
-	private String groupTwo(){
-		String signature = (this.retType != null? typeToSentence(this.retType):"");		
+	private String groupOne(){
+		String one = this.simpleName;
 		
-        if(clazz != null && (!constructor || isStatic)) {
-           signature += " "+shortType(clazz);
+		one += (this.retType != null? " "+typeToSentence(this.retType):"");
+        
+		if(clazz != null && (!constructor || isStatic)) {
+            one += " "+shortType(clazz);
         }
+		
+		return one;
+	}
+	
+	private String groupTwo(){
+		String two = "";
 
 		if (this.argType != null)
 			for (Type argType : this.argType) {
-				signature += (argType != null? " "+typeToSentence(argType):"");
+				two += (argType != null? " "+typeToSentence(argType):"");
 			}
 		
-		return signature;
+		return two;
 	}
 
 	private String shortType(String clazz) {
@@ -180,8 +188,8 @@ public class Declaration implements Serializable {
 		return prefix + name;
 	}
 	
-	public String[] getGroups(){
-		return new String[]{this.name, groupTwo()};
+	public String[] getCaracteristicWordGroups(){
+		return new String[]{groupOne(), groupTwo()};
 	}
 
 	private String typeToSentence(Type type) {

@@ -1,8 +1,7 @@
 package selection;
 
-import java.util.List;
-
 import selection.parser.one.SentenceZero;
+import selection.parser.one.Word;
 
 public class DeclarationSentenceZero implements IDeclarationSentence {
 
@@ -14,6 +13,10 @@ public class DeclarationSentenceZero implements IDeclarationSentence {
 
 	public SentenceZero[] getSentences() {
 		return sentences;
+	}
+	
+	public Word[] getWords(){
+		return null;
 	}
 
 	@Override

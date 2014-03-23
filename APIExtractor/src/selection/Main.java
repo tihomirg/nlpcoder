@@ -3,7 +3,7 @@ package selection;
 import java.util.Scanner;
 
 import oldcorpus.LoadOldCorpus;
-import selection.deserializers.FullDeserializer;
+import selection.deserializers.Deserializer;
 import selection.parser.one.ParserOne;
 import selection.parser.one.SentenceZero;
 import selection.parser.three.ParserThree;
@@ -13,7 +13,7 @@ import selection.parser.two.SentenceTwo;
 import selection.probability.designers.ConeProbabilityDesigner;
 import selection.probability.designers.MixedProbabilityDesigner;
 import selection.probability.designers.UniformProbabilityDesigner;
-import selection.serializers.FullSerializer;
+import selection.serializers.Serializer;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 
@@ -30,17 +30,20 @@ public class Main {
 	
 	public static void main(String[] args) {
 		TypeFactory factory = new TypeFactory(new NameGenerator("DV"));
-		FullDeserializer deserializer = new FullDeserializer(factory);
-		Selection selection = new Selection(Config.topSelectedLength(), new LoadOldCorpus(Config.getOldCorpusLocation()));
+		Deserializer deserializer = new Deserializer(factory);
+		Selection selection = new Selection(Config.topSelectedLength());
 		selection.add(deserializer.deserialize(Config.getStorageLocation()), Config.getMaxWords(), Config.getNullProbability());
 		
 		Scanner scanner = new Scanner(System.in);
 		WordProcessor wordProcessor = new WordProcessor();
+		
 		String line = null;
 		while((line = scanner.nextLine()) != null){
 			if (line.equals("exit")) break;
 			else {
 				SentenceTwo sentence = parse(line, wordProcessor);
+				
+				System.out.println(sentence);
 				for (ConstituentTwo cons : sentence.getConstituents()) {
 					TopList top = selection.tryInc(cons);
 					System.out.println(top);

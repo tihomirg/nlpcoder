@@ -13,7 +13,6 @@ import org.apache.bcel.classfile.ClassParser;
 import definitions.ClassInfo;
 
 import selection.IWordExtractor;
-import selection.WordExtractorFromName;
 
 public class BoundedJarLoader implements IJarLoader {
 	

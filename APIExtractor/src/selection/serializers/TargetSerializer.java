@@ -1,15 +1,11 @@
 package selection.serializers;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import definitions.ClassInfo;
-
 import selection.Config;
-import selection.DataSerializer;
 import selection.DeclarationParserOne;
 import selection.DeclarationParserPipeline;
 import selection.DeclarationParserTwo;
@@ -17,19 +13,22 @@ import selection.GroupWordExtractor;
 import selection.IDeclarationParser;
 import selection.IWordExtractor;
 import selection.WordProcessor;
-import selection.loaders.BoundedJarLoader;
 import selection.loaders.FolderLoader;
 import selection.loaders.IJarLoader;
-import selection.parser.one.ParserOne;
+import selection.loaders.TargetJarLoader;
+import selection.serializers.config.TargetConfig;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
+import definitions.ClassInfo;
 
-public class FullSerializer {
+public class TargetSerializer {
 
-	private TypeFactory factory;
+	private String targetPackage;
+	private TypeFactory factory;	
 	
-	public FullSerializer(TypeFactory factory) {
+	public TargetSerializer(TypeFactory factory, String targetPackage) {
 		this.factory = factory;
+		this.targetPackage = targetPackage;
 	}
 
 	public void serialize(String folderName, String storageLocation, IWordExtractor extractor) {
@@ -39,15 +38,12 @@ public class FullSerializer {
 			
 			FolderLoader fLoader = new FolderLoader();
 			List<String> jars = fLoader.getJars(folder);
-			IJarLoader jLoder = new BoundedJarLoader(Config.getMaxFilesToScan());
+			IJarLoader jLoder = new TargetJarLoader(Config.getMaxFilesToScan(), targetPackage);
 			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor);
 			
 			Collection<ClassInfo> values = classFiles.values();
-			
 			ClassInfo[] values2 = values.toArray(new ClassInfo[values.size()]);
-			
 			TypeSerializer serializer = new TypeSerializer(factory);
-			
 			serializer.writeObject(storageLocation, values2);
 			
 		} catch (Exception e) {
@@ -58,13 +54,12 @@ public class FullSerializer {
 	
 	public static void main(String[] args) {
 		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		FullSerializer loader = new FullSerializer(factory);
+		TargetSerializer loader = new TargetSerializer(factory, TargetConfig.getTarget());
 		
 		WordProcessor wordProcessor = new WordProcessor();
-		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.4, new int[]{2,5}, Config.getNullProbability())}));
-		
+		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor)}));
 		
 		loader.serialize(Config.getJarfolder(), Config.getStorageLocation(), extractor);
 	
-	}
+	}	
 }

@@ -15,9 +15,9 @@ public class Word implements Cloneable, Serializable {
 	private int index;
 	private int constIndex;
 	private double probability;
+	private int group;
 	
 	public Word(){
-		
 	}
 	
 	public Word(String lemma, POS pos) {
@@ -81,10 +81,18 @@ public class Word implements Cloneable, Serializable {
 		return (Word) super.clone();
 	}
 	
+	public int getGroup() {
+		return group;
+	}
+
+	public void setGroup(int group) {
+		this.group = group;
+	}
+
 	@Override
 	public String toString() {
 		return "Word [lemma=" + lemma + ", pos=" + pos + ", index=" + index
-				+ ", constIndex=" + constIndex + ", probability=" + probability
+				+ ", constIndex=" + constIndex + ", group=" + group + ", probability=" + probability
 				+ "]";
 	}
 }

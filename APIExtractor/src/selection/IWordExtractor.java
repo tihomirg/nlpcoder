@@ -1,13 +1,12 @@
 package selection;
 
 import selection.parser.one.Word;
+import selection.scorers.Scorer;
 
 import definitions.Declaration;
 
 public interface IWordExtractor {
 
-	Indexes get(Declaration decl);
-	
 	Word[] getWords(Declaration decl);	
 
 }

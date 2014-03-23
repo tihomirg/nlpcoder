@@ -199,20 +199,20 @@ public class LoadOldCorpus {
 		return list;
 	}
 
-	public void setProb(RichDeclaration rd) {
-		Declaration decl = rd.getDecl();
-		String fullName = decl.getFullName();
-		if(map.containsKey(fullName)){
-			Map<Integer, Double> map2 = map.get(fullName);
-			int argNum = decl.getArgNum();
-			if (map2.containsKey(argNum)){
-				double prob = map2.get(argNum);
-				System.out.println(fullName+"  p = "+prob);
-				rd.setProbability(prob);
-				
-			} else rd.setProbability(0.0);
-		} else {
-			rd.setProbability(0.0);
-		}
-	}
+//	public void setProb(RichDeclaration rd) {
+//		Declaration decl = rd.getDecl();
+//		String fullName = decl.getFullName();
+//		if(map.containsKey(fullName)){
+//			Map<Integer, Double> map2 = map.get(fullName);
+//			int argNum = decl.getArgNum();
+//			if (map2.containsKey(argNum)){
+//				double prob = map2.get(argNum);
+//				System.out.println(fullName+"  p = "+prob);
+//				rd.setProbability(prob);
+//				
+//			} else rd.setProbability(0.0);
+//		} else {
+//			rd.setProbability(0.0);
+//		}
+//	}
 }

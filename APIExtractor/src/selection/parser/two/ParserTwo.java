@@ -1,18 +1,15 @@
 package selection.parser.two;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import edu.mit.jwi.item.ISynset;
-import edu.mit.jwi.item.Synset;
 
 import selection.IParser;
 import selection.ISentence;
-import selection.WordProcessor;
 import selection.parser.one.ConstituentOne;
 import selection.parser.one.Word;
 import selection.parser.one.WordNet;
@@ -20,7 +17,7 @@ import selection.parser.one.trees.SentenceOne;
 
 public class ParserTwo extends IParser {
 
-	private WordNet wordnet;	
+	private WordNet wordnet;
 	private int maxLevelDepth;
 	private int intervalRadius;
 
@@ -49,22 +46,20 @@ public class ParserTwo extends IParser {
 	}
 
 	private ConstituentTwo getConstituent(ConstituentOne cons, Word[] words) {
-		int index = cons.getIndex();
+		int consIndex = cons.getIndex();
 		int firstImportantIndex = cons.smallestIndex();
 		int lastImportantIndex = cons.largestIndex();
 		int leftIndex = getSmallestIndex(firstImportantIndex);
 		int rightIndex = getLargestIndex(lastImportantIndex, words.length);
 
-		Word[] words2 = Arrays.copyOfRange(words, leftIndex, rightIndex+1);
+		Word[] consWords = Arrays.copyOfRange(words, leftIndex, rightIndex+1);
 
-		Wordset[] wordsets = new Wordset[words2.length];
-		for (int i = 0; i < words2.length; i++) {
-			Word word2 = words2[i];
-			int wordIndex = word2.getIndex();
-			wordsets[i] = getWordset(word2, index, wordIndex);
+		Wordset[] wordsets = new Wordset[consWords.length];
+		for (int i = 0; i < consWords.length; i++) {
+			wordsets[i] = getWordset(consWords[i], consIndex);
 		}
 
-		return new ConstituentTwo(wordsets, index, firstImportantIndex - leftIndex, lastImportantIndex - leftIndex);
+		return new ConstituentTwo(wordsets, consIndex, firstImportantIndex - leftIndex, lastImportantIndex - leftIndex);
 	}
 
 	private List<Word> prepareWords(LinkedList<Word> words, int constituentIndex, int wordIndex, Set<String> visited) {
@@ -75,8 +70,7 @@ public class ParserTwo extends IParser {
 		return words2;
 	}
 
-	private void prepareWord(int constituentIndex, int wordIndex,
-			Set<String> visited, List<Word> words2, Word word) {
+	private void prepareWord(int constituentIndex, int wordIndex, Set<String> visited, List<Word> words2, Word word) {
 		String name = word.getLemma();
 		if (!name.contains("_") && !visited.contains(name)){
 			visited.add(name);
@@ -86,29 +80,35 @@ public class ParserTwo extends IParser {
 		}
 	}
 
-	private Wordset getWordset(Word word, int constituentIndex, int wordIndex) {
+	private Wordset getWordset(Word word, int constituentIndex) {
 		Set<String> visited = new HashSet<String>();
 		Level[] levels = new Level[maxLevelDepth];
-
+		
 		List<ISynset> synsets = getSynonyms(word);
-		levels[0] = new Level(levelZero(word, constituentIndex, wordIndex, visited, synsets), 0);
+		
+		levels[0] = new Level(levelZero(word, constituentIndex, visited, synsets), 0);
 
+		int wordIndex = word.getIndex();
+		
 		for (int i = 1; i < maxLevelDepth; i++) {
 			synsets = getNeighbours(synsets);
+	
 			levels[i] = new Level(getWords(synsets, constituentIndex, wordIndex, visited), i);
 		}
 
 		return new Wordset(levels);
 	}
 
-	private List<Word> levelZero(Word word, int constituentIndex, int wordIndex, Set<String> visited, List<ISynset> synsets) {
+	private List<Word> levelZero(Word word, int constituentIndex, Set<String> visited, List<ISynset> synsets) {
 		List<Word> zeroLevelWords = new LinkedList<Word>();
+		int wordIndex = word.getIndex();
 		try {
 			prepareWord(constituentIndex, wordIndex, visited, zeroLevelWords, word.clone());
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		zeroLevelWords.addAll(getWords(synsets, constituentIndex, wordIndex, visited));
 		return zeroLevelWords;
 	}

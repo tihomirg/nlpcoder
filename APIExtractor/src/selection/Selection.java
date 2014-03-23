@@ -1,8 +1,14 @@
 package selection;
 
-import oldcorpus.LoadOldCorpus;
+import java.util.HashMap;
+import java.util.Map;
+
 import selection.parser.one.Word;
 import selection.parser.two.ConstituentTwo;
+import selection.scorers.AddScorer;
+import selection.scorers.GroupScorer;
+import selection.scorers.HitScorer;
+import selection.scorers.Scorer;
 
 import definitions.ClassInfo;
 import definitions.Declaration;
@@ -10,12 +16,12 @@ import definitions.Declaration;
 public class Selection {
 	private Table table;
 	private int topListSize;
-	private LoadOldCorpus loc;
 	
-	public Selection(int size, LoadOldCorpus loc){
+	private static final Map<Integer, Double> scores = new HashMap<Integer, Double>(){ {put(0, 1.0); put(1, 0.25);}};
+	
+	public Selection(int size){
 		this.table = new Table(Config.getNumOfTags());
 		this.topListSize = size;
-		this.loc = loc;
 	}
 
 	public void add(ClassInfo[] classes, int maxWords, double nullProbs){
@@ -35,16 +41,11 @@ public class Selection {
 	}
 	
 	public void add(Declaration decl, double nullProbs){
-		Indexes indexes = new Indexes(decl.getWords(), nullProbs);
-		RichDeclaration rd = new RichDeclaration(decl, indexes);
-
-		//TODO: Should be replaced with a real prob. assignment.
-		if (loc != null){
-			loc.setProb(rd);
-		}
+		Word[] words = decl.getWords();		
+		RichDeclaration rd = new RichDeclaration(decl, new AddScorer(new Scorer[]{new GroupScorer(words, scores)}));
 		
-		  for(Word word: indexes.getWords())
-			table.addRichDeclaration(word, rd);
+		for(Word word: words)
+		  table.addRichDeclaration(word, rd);
 	}
 	
 	public void tryInc(Word word, TopList top, int consLength){

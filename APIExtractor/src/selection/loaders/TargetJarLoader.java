@@ -37,10 +37,10 @@ public class TargetJarLoader implements IJarLoader {
 					
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
 						String fullName = file.getName();
-						System.out.println(file);
+
 						String pkgName = fullName.substring(0, fullName.lastIndexOf("/")).replace("/", ".");
 						if (pkgName.equals(this.pkg)){
-						
+							System.out.println(file);						
 							new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor);
 
 							scanned++;

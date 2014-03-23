@@ -1,18 +1,18 @@
-package selection;
+package selection.scorers;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import selection.parser.one.Word;
 
-public class Indexes {
+public class OldScorer extends Scorer {
 
 	public Map<String, Word> lemmaToWord;
 	public Word[] words;
 	private double nullProb;
-	private double prbability;
+	private double declProbability;
 	
-	public Indexes(Word[] words, double nullProb){
+	public OldScorer(Word[] words, double nullProb){
 		this.lemmaToWord = make(words);
 		this.words = words;
 		this.nullProb = nullProb; 
@@ -34,12 +34,12 @@ public class Indexes {
 		return lemmaToWord.get(key.getLemma());
 	}
 
-	//TODO: Change the way we calculate probabilities, such that a probability of a containig wor is taken into account.
-	public double getProbability(Word key, int constLength) {
-		Word word = lemmaToWord.get(key.getLemma());
+	//TODO: Change the way we calculate probabilities, such that a probability of a containig word is taken into account.
+	public double getScore(Word key) {
+		Word word = find(key);
 		assert word != null;
 		
-		return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) * word.getProbability() * this.prbability;		
+		return 1; //key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) * word.getProbability() * this.declProbability;		
 		
 		//return key.getProbability() * (1 - Math.abs(constLength - words.length)*nullProb) / constLength;
 		
@@ -52,7 +52,12 @@ public class Indexes {
 		return words;
 	}
 
-	public void setProbability(double d) {
-		this.prbability = d;
+	public void setDeclProbability(double d) {
+		this.declProbability = d;
+	}
+
+	@Override
+	public void clear() {
+				
 	}
 }
