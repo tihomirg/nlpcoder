@@ -112,7 +112,8 @@ public class DeclFreqBuilder extends IBuilder {
 	
 	@Override
 	public void print(PrintStream out) {
-		statistics.print(api.getDeclMap(), out);
+		statistics.print(out);
+		//statistics.print(api.getDeclMap(), out);	
 	}
 	
 	public boolean visit(Assignment node) {

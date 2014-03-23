@@ -26,6 +26,6 @@ public class DeclFreqBoundedScanner extends BoundedScanner {
 		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 		File output = new File("frequences.txt");
 		
-		scan(builder, input, output, 10000, 10);		
+		scan(builder, input, output, 100000, 10);		
 	}
 }

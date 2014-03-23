@@ -23,10 +23,10 @@ import definitions.ClassInfo;
 
 public class TargetSerializer {
 
-	private String targetPackage;
+	private String[] targetPackage;
 	private TypeFactory factory;	
 	
-	public TargetSerializer(TypeFactory factory, String targetPackage) {
+	public TargetSerializer(TypeFactory factory, String[] targetPackage) {
 		this.factory = factory;
 		this.targetPackage = targetPackage;
 	}
