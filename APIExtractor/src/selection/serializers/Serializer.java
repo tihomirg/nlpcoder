@@ -61,7 +61,7 @@ public class Serializer {
 		Serializer loader = new Serializer(factory);
 		
 		WordProcessor wordProcessor = new WordProcessor();
-		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor), new DeclarationParserTwo(0.4, new int[]{2,5}, Config.getNullProbability())}));
+		IWordExtractor extractor  = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor)}));
 		
 		loader.serialize(Config.getJarfolder(), Config.getStorageLocation(), extractor);
 	

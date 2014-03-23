@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import oldcorpus.LoadOldCorpus;
 import selection.deserializers.Deserializer;
+import selection.deserializers.FrequencyDeserializer;
 import selection.parser.one.ParserOne;
 import selection.parser.one.SentenceZero;
 import selection.parser.three.ParserThree;
@@ -29,9 +30,12 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator("DV"));
+		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer(factory);
-		Selection selection = new Selection(Config.topSelectedLength());
+		
+		FrequencyDeserializer fDeserializer = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());
+		
+		Selection selection = new Selection(Config.topSelectedLength(), fDeserializer.getFreq());
 		selection.add(deserializer.deserialize(Config.getStorageLocation()), Config.getMaxWords(), Config.getNullProbability());
 		
 		Scanner scanner = new Scanner(System.in);

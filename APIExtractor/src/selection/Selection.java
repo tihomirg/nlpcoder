@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import selection.parser.one.Word;
 import selection.parser.two.ConstituentTwo;
-import selection.scorers.AddScorer;
+import selection.scorers.DeclFreqModelScorer;
 import selection.scorers.FrequencyScorer;
 import selection.scorers.GroupScorer;
 import selection.scorers.MultiScorer;
@@ -23,27 +22,31 @@ public class Selection {
 	private int topListSize;
 	private Map<POS, Map<String, Integer>> frequency;
 	private List<FrequencyScorer> fScorers;
-//	private int wordCount;
-//	private Map<POS, Map<String, Double>> nFrequency;
+	private DeclFreqMap fMap;
+	private Map<Integer, Integer> declFreq;
+	private int totalDeclNum;
 
 	private static final Map<Integer, Double> scores = new HashMap<Integer, Double>(){ {put(0, 1.0); put(1, 0.25);}};
 
-	public Selection(int size){
+	public Selection(int size, Map<Integer, Integer> freq){
 		this.table = new Table(Config.getNumOfTags());
 		this.topListSize = size;
 		this.frequency = new HashMap<POS, Map<String,Integer>>();
 		this.fScorers = new LinkedList<FrequencyScorer>();
+		this.declFreq = freq;
+		this.fMap = new DeclFreqMap();
 	}
 
 	public void add(ClassInfo[] classes, int maxWords, double nullProbs){
 		for (ClassInfo clazz : classes) {
 			add(clazz, maxWords, nullProbs);
 		}
-		makeFrequencies();
+		//makeFrequencies();
+		createDeclFreq();
 	}	
 
 	public void add(ClassInfo clazz, int maxWords, double nullProbs){
-		addAll(clazz.getDeclarations(), nullProbs);
+		addAll(clazz.getUniqueDeclarations(), nullProbs);
 	}
 
 	public void addAll(Declaration[] decls, double nullProbs){
@@ -51,16 +54,18 @@ public class Selection {
 			add(declaration, nullProbs);
 		}
 	}
+	
+	private void createDeclFreq() {
+		this.fMap.create(declFreq, totalDeclNum, Config.getSmoothFactor());
+	}
 
 	public void add(Declaration decl, double nullProbs){
-		Word[] words = decl.getWords();		
-		//RichDeclaration rd = new RichDeclaration(decl, new AddScorer(new Scorer[]{new GroupScorer(words, scores)}));
+		Word[] words = decl.getWords();
+		RichDeclaration rd = new RichDeclaration(decl, new MultiScorer(new Scorer[]{new GroupScorer(words, scores), new DeclFreqModelScorer(fMap, decl.getId())}));
 		
-		FrequencyScorer frequencyScorer = new FrequencyScorer(words);
-		
-		fScorers.add(frequencyScorer);
-		
-		RichDeclaration rd = new RichDeclaration(decl, new MultiScorer(new Scorer[]{frequencyScorer}));
+//		FrequencyScorer frequencyScorer = new FrequencyScorer(words);
+//		fScorers.add(frequencyScorer);
+//		RichDeclaration rd = new RichDeclaration(decl, new MultiScorer(new Scorer[]{frequencyScorer}));
 		
 		for(Word word: words)
 			table.addRichDeclaration(word, rd);

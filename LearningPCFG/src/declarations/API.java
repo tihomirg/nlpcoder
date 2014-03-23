@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import selection.DeclMap;
 import selection.types.Type;
 import selection.types.TypeFactory;
 
@@ -19,11 +20,13 @@ public class API {
 	private static final String JAVA_LANG = "java.lang";
 	private Map<String, Set<ClassInfo>> packages = new HashMap<String, Set<ClassInfo>>();
 	private Map<String, ClassInfo> classes = new HashMap<String, ClassInfo>();
-	private TypeFactory factory;	
+	private TypeFactory factory;
+	private DeclMap declMap;
 	private static ClassInfo JAVA_LANG_STRING = null;
 	
 	public API(TypeFactory factory) {
 		this.factory = factory;
+		this.declMap = new DeclMap();
 	}
 
 	public Imported createImported() {
@@ -38,6 +41,8 @@ public class API {
 		classes.addAll(superClasses);
         Set<Declaration> decls = getDecls(classes);
 		
+        this.declMap.add(decls);
+        
 		imported.addClasses(classes);
 		imported.addDecls(decls);
 	}
@@ -175,5 +180,9 @@ public class API {
 
 	public boolean canBeArgument(Declaration head, int i, Declaration arg) {
 		return compatableTypes(head.getArgType()[i], arg.getReceiverType());
+	}
+
+	public DeclMap getDeclMap() {
+		return declMap;
 	}
 }

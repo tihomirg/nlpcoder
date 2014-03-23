@@ -24,7 +24,7 @@ public class MultiScorer extends Scorer{
 	public void clear() {
 		for (Scorer scorer : scorers) {
 			scorer.clear();
-		}		
+		}
 	}
 
 	@Override

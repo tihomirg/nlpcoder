@@ -23,7 +23,9 @@ public class Config {
 	private static final int topSelectedLength = 20;
 	private static final double nullProb = (0.1 / maxWords);
 	private static final String serializationVarPrefix = "SV";
-	private static final String deserializationVarPrefix = "DV";	
+	private static final String deserializationVarPrefix = "DV";
+	private static final double smoothFactor = 0.2;
+	private static final String frequencyLocation = "frequences.txt";
 	
 	public static String getTaggerLocation(){
 		return tagger;
@@ -82,6 +84,14 @@ public class Config {
 
 	public static String getDeserializerVariablePrefix() {
 		return deserializationVarPrefix;
+	}
+
+	public static double getSmoothFactor() {
+		return smoothFactor;
+	}
+
+	public static String getDeclarationFrequencyLocation() {
+		return frequencyLocation;
 	}
 	
 }
