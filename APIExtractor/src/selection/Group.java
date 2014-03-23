@@ -2,11 +2,9 @@ package selection;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import definitions.Declaration;
 
 import selection.parser.one.Word;
 
@@ -44,4 +42,5 @@ public class Group {
 	public RichDeclarations select(Word word) {
 		return map.get(word.getLemma());
 	}
+
 }
