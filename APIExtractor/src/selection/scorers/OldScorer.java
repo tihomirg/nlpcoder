@@ -60,4 +60,10 @@ public class OldScorer extends Scorer {
 	public void clear() {
 				
 	}
+
+	@Override
+	public String toString(int contextIndex) {
+		// TODO Auto-generated method stub
+		return "";
+	}
 }

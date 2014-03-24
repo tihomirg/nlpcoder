@@ -8,4 +8,6 @@ public abstract class Scorer {
 
 	public abstract void clear();
 	
+	public abstract String toString(int contextIndex);
+	
 }

@@ -35,4 +35,9 @@ public class RichDeclaration {
 	public String toString() {
 		return scorer +"  "+ decl.toString();
 	}
+
+	public String toString(int constIndex) {
+		// TODO Auto-generated method stub
+		return scorer.toString(constIndex) +"  "+ decl.toString();
+	}
 }

@@ -41,4 +41,9 @@ public class IntervalScorer extends Scorer{
 		hits.clear();
 	}
 
+	@Override
+	public String toString(int contextIndex) {
+		return Double.toString(getResult(hits.get(contextIndex)));
+	}
+
 }

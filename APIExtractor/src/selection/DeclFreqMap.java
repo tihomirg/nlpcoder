@@ -26,12 +26,15 @@ public class DeclFreqMap {
 	private Map<Integer, Double> make(Map<Integer, Integer> freq, int totalDeclNum, double factor) {
 		double total = findTotal(freq.values());
 		int numOfRest = totalDeclNum - freq.size();
-		this.smoothValue = (total * factor) / numOfRest;
-		
-		Map<Integer, Double> map = new HashMap<Integer, Double>();
 		
 		double sTotal = total * (1 + factor);
 		
+		this.smoothValue = (total * factor) / (numOfRest * sTotal);
+		
+		System.out.println("Smooth value: "+this.smoothValue + "    "+ numOfRest);
+		
+		Map<Integer, Double> map = new HashMap<Integer, Double>();
+			
 		for (Entry<Integer, Integer> fEntry : freq.entrySet()) {
 			map.put(fEntry.getKey(), fEntry.getValue() / sTotal);
 		}

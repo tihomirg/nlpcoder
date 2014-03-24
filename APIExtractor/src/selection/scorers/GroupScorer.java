@@ -96,4 +96,9 @@ public class GroupScorer extends Scorer {
 	public String toString() {
 		return "GroupScorer [hits=" + hits + "]";
 	}
+
+	@Override
+	public String toString(int contextIndex) {
+		return Double.toString(getResult(contextIndex));
+	}
 }

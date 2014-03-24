@@ -32,4 +32,9 @@ public class HitScorer extends Scorer {
 	public String toString() {
 		return "HitScorer [hits=" + hits + "]";
 	}
+
+	@Override
+	public String toString(int contextIndex) {
+		return Integer.toString(hits.get(contextIndex).size());
+	}
 }

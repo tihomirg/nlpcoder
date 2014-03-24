@@ -15,14 +15,14 @@ public class Config {
 	private static final String storageLocation = "declarations.kryo";
 
 	//Sentence-Word Parser
-	private static final int levelNum = 3;
+	private static final int levelNum = 2;
 	private static final double[] scores = new double[]{5.0,1.0};
 	private static final int intervalRadius = scores.length-1;	
 	private static final int maxWords = 2* intervalRadius + 1;
 	
 	//Number of declarations in sets
 	private static final int topSelectedLength = 20;
-	private static final double nullProb = (0.1 / maxWords);
+	private static final double nullProb = 0.1;
 	private static final String serializationVarPrefix = "SV";
 	private static final String deserializationVarPrefix = "DV";
 	private static final double smoothFactor = 0.2;

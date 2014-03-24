@@ -116,5 +116,10 @@ public class FrequencyScorer extends Scorer {
 	@Override
 	public String toString() {
 		return "FreqScorer [hits=" + hits + "]";
+	}
+
+	@Override
+	public String toString(int contextIndex) {
+		return Double.toString(getResult(contextIndex));
 	}	
 }

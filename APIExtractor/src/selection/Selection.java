@@ -10,7 +10,9 @@ import selection.parser.two.ConstituentTwo;
 import selection.scorers.DeclFreqModelScorer;
 import selection.scorers.FrequencyScorer;
 import selection.scorers.GroupScorer;
+import selection.scorers.HitScorer;
 import selection.scorers.IntervalScorer;
+import selection.scorers.MissScorer;
 import selection.scorers.MultiScorer;
 import selection.scorers.Scorer;
 
@@ -51,6 +53,7 @@ public class Selection {
 	public void addAll(Declaration[] decls, double nullProbs){
 		for (Declaration declaration : decls) {
 			add(declaration, nullProbs);
+			totalDeclNum++;
 		}
 	}
 	
@@ -63,7 +66,8 @@ public class Selection {
 		RichDeclaration rd = new RichDeclaration(decl, 
 				new MultiScorer(new Scorer[]{
 						new IntervalScorer(),
-						new GroupScorer(words, selection.scorers.config.Config.getScores()), 
+						new GroupScorer(words, selection.scorers.config.Config.getScores()),
+						new MissScorer(new HitScorer(), Config.getNullProbability(), words.length),
 						new DeclFreqModelScorer(fMap, decl.getId())}));
 		
 //		FrequencyScorer frequencyScorer = new FrequencyScorer(words);

@@ -31,4 +31,14 @@ public class MultiScorer extends Scorer{
 	public String toString() {
 		return "MultiScorer [" + Arrays.toString(scorers) + "]";
 	}
+
+	@Override
+	public String toString(int contextIndex) {
+		StringBuffer sb = new StringBuffer("[");
+		for (Scorer scorer : scorers) {
+			sb.append(scorer.toString(contextIndex)+", ");
+		}
+		sb.append("]");
+		return sb.toString();
+	}
 }

@@ -50,9 +50,11 @@ public class TopList {
 
 		List<String> list = new LinkedList<String>();
 		int length = top.size();
+		
+		int constIndex = word.getConstIndex();
 		while(!top.isEmpty()){
 			Pair curr = top.remove();
-			list.add(curr+"\n");
+			list.add(curr.toString(constIndex)+"\n");
 		}
 
 		String[] array = list.toArray(new String[length]);
@@ -112,6 +114,11 @@ class Pair {
 	public String toString() {
 		return probability + " : " + rd;
 	}
+	
+	public String toString(int constIndex) {
+		// TODO Auto-generated method stub
+		return probability + " : " + rd.toString(constIndex);
+	}	
 }
 
 class PairComparator implements Comparator<Pair> {

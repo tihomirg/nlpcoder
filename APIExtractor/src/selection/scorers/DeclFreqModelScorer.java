@@ -23,4 +23,9 @@ public class DeclFreqModelScorer extends Scorer {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public String toString(int contextIndex) {
+		return Double.toString(fMap.getProbability(id));
+	}
+
 }
