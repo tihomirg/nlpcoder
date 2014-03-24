@@ -10,6 +10,7 @@ import selection.parser.two.ConstituentTwo;
 import selection.scorers.DeclFreqModelScorer;
 import selection.scorers.FrequencyScorer;
 import selection.scorers.GroupScorer;
+import selection.scorers.IntervalScorer;
 import selection.scorers.MultiScorer;
 import selection.scorers.Scorer;
 
@@ -25,8 +26,6 @@ public class Selection {
 	private DeclFreqMap fMap;
 	private Map<Integer, Integer> declFreq;
 	private int totalDeclNum;
-
-	private static final Map<Integer, Double> scores = new HashMap<Integer, Double>(){ {put(0, 1.0); put(1, 0.25);}};
 
 	public Selection(int size, Map<Integer, Integer> freq){
 		this.table = new Table(Config.getNumOfTags());
@@ -61,7 +60,11 @@ public class Selection {
 
 	public void add(Declaration decl, double nullProbs){
 		Word[] words = decl.getWords();
-		RichDeclaration rd = new RichDeclaration(decl, new MultiScorer(new Scorer[]{new GroupScorer(words, scores), new DeclFreqModelScorer(fMap, decl.getId())}));
+		RichDeclaration rd = new RichDeclaration(decl, 
+				new MultiScorer(new Scorer[]{
+						new IntervalScorer(),
+						new GroupScorer(words, selection.scorers.config.Config.getScores()), 
+						new DeclFreqModelScorer(fMap, decl.getId())}));
 		
 //		FrequencyScorer frequencyScorer = new FrequencyScorer(words);
 //		fScorers.add(frequencyScorer);

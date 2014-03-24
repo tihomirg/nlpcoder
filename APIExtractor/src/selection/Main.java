@@ -13,6 +13,7 @@ import selection.parser.two.ParserTwo;
 import selection.parser.two.SentenceTwo;
 import selection.probability.designers.ConeProbabilityDesigner;
 import selection.probability.designers.MixedProbabilityDesigner;
+import selection.probability.designers.ScoreDesigner;
 import selection.probability.designers.UniformProbabilityDesigner;
 import selection.serializers.Serializer;
 import selection.types.NameGenerator;
@@ -23,7 +24,7 @@ public class Main {
 		ParserPipeline parser = new ParserPipeline(new IParser[]{
 				new ParserOne(wordProcessor), 
 				new ParserTwo(wordProcessor.getWordNet(), Config.getNumOfLevels(), Config.getIntervalRadius()),
-				new ParserThree(new MixedProbabilityDesigner(0.5), Config.getIntervalRadius())
+				new ParserThree(new ScoreDesigner(Config.getScores()))
 		});
 
 		return (SentenceTwo) parser.parse(new SentenceZero(sentence));
