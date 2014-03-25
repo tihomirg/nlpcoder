@@ -5,6 +5,8 @@ import java.util.Scanner;
 import oldcorpus.LoadOldCorpus;
 import selection.deserializers.Deserializer;
 import selection.deserializers.FrequencyDeserializer;
+import selection.parser.minusone.ParserMinusOne;
+import selection.parser.minusone.SentenceMinusOne;
 import selection.parser.one.ParserOne;
 import selection.parser.one.SentenceZero;
 import selection.parser.three.ParserThree;
@@ -22,12 +24,13 @@ import selection.types.TypeFactory;
 public class Main {
 	private static SentenceTwo parse(String sentence, WordProcessor wordProcessor) {
 		ParserPipeline parser = new ParserPipeline(new IParser[]{
+				new ParserMinusOne(),
 				new ParserOne(wordProcessor), 
 				new ParserTwo(wordProcessor.getWordNet(), Config.getNumOfLevels(), Config.getIntervalRadius()),
 				new ParserThree(new ScoreDesigner(Config.getScores()))
 		});
 
-		return (SentenceTwo) parser.parse(new SentenceZero(sentence));
+		return (SentenceTwo) parser.parse(new SentenceMinusOne(sentence));
 	}
 	
 	public static void main(String[] args) {
@@ -48,7 +51,6 @@ public class Main {
 			else {
 				SentenceTwo sentence = parse(line, wordProcessor);
 				
-				System.out.println(sentence);
 				for (ConstituentTwo cons : sentence.getConstituents()) {
 					TopList top = selection.tryInc(cons);
 					System.out.println(top);

@@ -1,21 +1,18 @@
 package selection.scorers;
 
-import selection.DeclFreqMap;
 import selection.parser.one.Word;
 
 public class DeclFreqModelScorer extends Scorer {
 
-	private DeclFreqMap fMap;
-	private int id;
+	private double score;
 
-	public DeclFreqModelScorer(DeclFreqMap fMap, int id) {
-		this.fMap = fMap;
-		this.id = id;
+	public DeclFreqModelScorer(double score) {
+		this.score = score;
 	}
 
 	@Override
 	public double getScore(Word key) {
-		return fMap.getProbability(id);
+		return this.score;
 	}
 
 	@Override
@@ -25,7 +22,7 @@ public class DeclFreqModelScorer extends Scorer {
 
 	@Override
 	public String toString(int contextIndex) {
-		return Double.toString(fMap.getProbability(id));
+		return Double.toString(score);
 	}
 
 }

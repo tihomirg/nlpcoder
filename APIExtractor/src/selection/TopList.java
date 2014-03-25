@@ -6,22 +6,23 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import selection.parser.one.Word;
+import selection.parser.two.ConstituentTwo;
 
 public class TopList {
 
 	private int size;
 	private PriorityQueue<Pair> top;
-	private Word word;
+	private ConstituentTwo cons;
 
 	public TopList(int size) {
 		this(null, size);
 	}
 
-	public TopList(Word word, int size) {
+	public TopList(ConstituentTwo cons, int size) {
 		Comparator<Pair> comparator = new PairComparator();
 		this.top = new PriorityQueue<Pair>(size+1, comparator);
 		this.size = size;
-		this.word = word;
+		this.cons = cons;
 	}
 
 	public void tryPut(RichDeclaration richDeclaration, double score) {
@@ -37,21 +38,17 @@ public class TopList {
 			}
 		}
 	}
-
-	public Word getWord() {
-		return word;
-	}	
-
+	
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 
-		sb.append("For word: "+ word.getLemma()+"\n");
+		sb.append("For word(s): "+ cons.getImportantLemmas()+"\n");
 
 		List<String> list = new LinkedList<String>();
 		int length = top.size();
 		
-		int constIndex = word.getConstIndex();
+		int constIndex = cons.getIndex();
 		while(!top.isEmpty()){
 			Pair curr = top.remove();
 			list.add(curr.toString(constIndex)+"\n");

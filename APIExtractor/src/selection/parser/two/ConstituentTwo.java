@@ -40,8 +40,28 @@ public class ConstituentTwo {
 		this.lastImportantIndex = lastImportantIndex;
 	}
 	
-	public Word getFirstImportantWord(){
-		return wordsets[this.firstImporatantIndex].getLevels()[0].getWords().get(0);
+	public String getImportantLemmas(){
+		Word[] words = getImportantWords();
+		
+		String s= "";
+		
+		for (Word word : words) {
+			s+= word.getLemma()+" ";
+		}
+		
+		return s;
+	}
+	
+	public Word[] getImportantWords(){
+		Word[] words = new Word[getImportantLength()];
+		
+		for (int i = this.firstImporatantIndex; i <= this.lastImportantIndex; i++) {
+			List<Word> list = wordsets[i].getLevels()[0].getWords();
+			if (!list.isEmpty()) {
+				words[i - this.firstImporatantIndex] = list.get(0);			
+			}
+		}
+		return words;
 	}
 	
 	public List<Word> getWords(){

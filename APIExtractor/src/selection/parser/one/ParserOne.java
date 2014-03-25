@@ -1,6 +1,7 @@
 package selection.parser.one;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import selection.IParser;
@@ -23,7 +24,6 @@ public class ParserOne extends IParser {
 		List<String> splits = tag(sentence);
 		
 		for(int i = 0; i < splits.size(); i++) {
-			//System.out.println("Split in 'slice': "+splits.get(i));
 			wordss.add(getWords(TaggedLemma.create(splits.get(i)), i));
 		}
 
@@ -99,14 +99,16 @@ public class ParserOne extends IParser {
 
 	private ConstituentOne[] getConstituents(List<List<Word>> wordss) {
 		int length = wordss.size();
-		ConstituentOne[] cons = new ConstituentOne[length];
+		List<ConstituentOne> consts = new LinkedList<ConstituentOne>();
 		
 		for(int i = 0; i< length; i++){
 		  List<Word> list = wordss.get(i);
-		  cons[i] = new ConstituentOne(list.toArray(new Word[list.size()]), i);
+		  if(!list.isEmpty()){
+		    consts.add(new ConstituentOne(list.toArray(new Word[list.size()]), i));
+		  }
 		}
 		
-		return cons;
+		return consts.toArray(new ConstituentOne[consts.size()]);
 	}
 
 	private Word[] flatten(List<List<Word>> wordss) {

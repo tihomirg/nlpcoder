@@ -27,7 +27,6 @@ public class Selection {
 	private List<FrequencyScorer> fScorers;
 	private DeclFreqMap fMap;
 	private Map<Integer, Integer> declFreq;
-	private int totalDeclNum;
 
 	public Selection(int size, Map<Integer, Integer> freq){
 		this.table = new Table(Config.getNumOfTags());
@@ -39,25 +38,33 @@ public class Selection {
 	}
 
 	public void add(ClassInfo[] classes, int maxWords, double nullProbs){
+		createDeclFreq(findTotalDeclNum(classes));
+		
 		for (ClassInfo clazz : classes) {
 			add(clazz, maxWords, nullProbs);
 		}
 		//makeFrequencies();
-		createDeclFreq();
 	}	
 
 	public void add(ClassInfo clazz, int maxWords, double nullProbs){
 		addAll(clazz.getUniqueDeclarations(), nullProbs);
 	}
+	
+	private int findTotalDeclNum(ClassInfo[] classes){
+		int num = 0;
+		for (ClassInfo classInfo : classes) {
+			num += classInfo.getUniqueDeclarations().length;
+		}
+		return num;
+	}
 
 	public void addAll(Declaration[] decls, double nullProbs){
 		for (Declaration declaration : decls) {
 			add(declaration, nullProbs);
-			totalDeclNum++;
 		}
 	}
 	
-	private void createDeclFreq() {
+	private void createDeclFreq(int totalDeclNum) {
 		this.fMap.create(declFreq, totalDeclNum, Config.getSmoothFactor());
 	}
 
@@ -68,7 +75,7 @@ public class Selection {
 						new IntervalScorer(),
 						new GroupScorer(words, selection.scorers.config.Config.getScores()),
 						new MissScorer(new HitScorer(), Config.getNullProbability(), words.length),
-						new DeclFreqModelScorer(fMap, decl.getId())}));
+						new DeclFreqModelScorer(fMap.getProbability(decl.getId()))}));
 		
 //		FrequencyScorer frequencyScorer = new FrequencyScorer(words);
 //		fScorers.add(frequencyScorer);
@@ -108,7 +115,7 @@ public class Selection {
 	}
 
 	public TopList tryInc(ConstituentTwo cons) {
-		TopList top = new TopList(cons.getFirstImportantWord(), this.topListSize);
+		TopList top = new TopList(cons, this.topListSize);
 		int consLength = cons.getLength();
 		for (Word word: cons.getWords()) {
 			//System.out.println(word);
