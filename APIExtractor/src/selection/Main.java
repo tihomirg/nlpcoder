@@ -50,7 +50,7 @@ public class Main {
 			if (line.equals("exit")) break;
 			else {
 				SentenceTwo sentence = parse(line, wordProcessor);
-				
+				//System.out.println(sentence);
 				for (ConstituentTwo cons : sentence.getConstituents()) {
 					TopList top = selection.tryInc(cons);
 					System.out.println(top);

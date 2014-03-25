@@ -32,7 +32,8 @@ public class ParserMinusOne extends IParser {
 	private String extractStrings(String curr) {
 		
 		String sentence ="";
-	
+		String bsentence = "";
+		
 		boolean started = false;
 		
 		for (int i = 0; i < curr.length(); i++) {
@@ -41,6 +42,8 @@ public class ParserMinusOne extends IParser {
 			if (ch != '"'){
 				if (!started) {
 					sentence += ch;	
+				} else {
+				   bsentence += ch;
 				}
 			} else {
 				if (started){
@@ -48,9 +51,14 @@ public class ParserMinusOne extends IParser {
 					sentence+=stringToken;
 				} else {
 					started = true;
+					bsentence = "";
 				}
 			}
 			
+		}
+		
+		if (started){
+			sentence += bsentence;
 		}
 		
 		return sentence;

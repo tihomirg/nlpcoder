@@ -75,7 +75,9 @@ public class Selection {
 						new IntervalScorer(),
 						new GroupScorer(words, selection.scorers.config.Config.getScores()),
 						new MissScorer(new HitScorer(), Config.getNullProbability(), words.length),
-						new DeclFreqModelScorer(fMap.getProbability(decl.getId()))}));
+						new DeclFreqModelScorer(fMap.getProbability(decl.getId()))		
+				})
+		);
 		
 //		FrequencyScorer frequencyScorer = new FrequencyScorer(words);
 //		fScorers.add(frequencyScorer);

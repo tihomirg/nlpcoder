@@ -260,9 +260,10 @@ public class Declaration implements Serializable {
 
 	@Override
 	public String toString() {
-		return modifiers()+" name=" + simpleName + ", pkg="
-				+ packageName + ", receiver=" + receiverType + ", params="
-				+ Arrays.toString(argType) + ", ret=" + retType
+		return modifiers()+" name=" + simpleName 
+				+ ", receiver=" + receiverType + ", params="
+				+ Arrays.toString(argType) + ", ret=" + retType 
+				+ ", pkg=" + packageName
 				+ ", words=" + Arrays.toString(words) + "]\n";
 	}
 
