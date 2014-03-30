@@ -42,9 +42,10 @@ O: File afile =new File("C:\\folderA\\"+"Afile.txt");
   
 (4) Parse XML file.
 
-I: Parse XML "staff.xml" file. Get all elements with tag "staff" and 
+I: Parse XML "staff.xml" file.
 
 O: File fXmlFile = new File("staff.xml");
+
    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
    Document doc = dBuilder.parse(fXmlFile);  
