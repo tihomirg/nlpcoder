@@ -1,0 +1,39 @@
+package examples.java.io.outputstreamwriter;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class T1 {
+
+  public static void Converter(String input, String output) {
+    try {
+      FileInputStream fis = new FileInputStream(new File(input));
+      BufferedReader in = new BufferedReader(new InputStreamReader(fis, "SJIS"));
+
+      FileOutputStream fos = new FileOutputStream(new File(output));
+      BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos, "UTF8"));
+
+      int len = 80;
+      char buf[] = new char[len];
+
+      int numRead;
+      while ((numRead = in.read(buf, 0, len)) != -1)
+        out.write(buf, 0, numRead);
+
+      out.close();
+      in.close();
+    } catch (IOException e) {
+      System.out.println("An I/O Exception Occurred: " + e);
+    }
+  }
+
+  public static void main(String args[]) {
+    T1.Converter(args[0], args[1]);
+  }
+
+}
