@@ -1,131 +1,146 @@
-(1) Date, Time and Calendar examples:
+1)
 
 I: Print current date in format "dd/M/yyyy".
 
 O: SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
    String date = sdf.format(new Date()); 
    System.out.println(date); //15/10/2013
-   
-I: Print current date and time in format "dd-M-yyyy hh:mm:ss".   
-   
-O: SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-   String dateInString = "31-08-1982 10:20:56";
-   Date date = sdf.parse(dateInString);
-   System.out.println(date); //Tue Aug 31 10:20:56 SGT 1982
-   
-O: SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-   Date date = new Date();
-   System.out.println(dateFormat.format(date)); //2013/10/15 16:16:39
 
-O: SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");	
-   Calendar calendar = new GregorianCalendar(2013,0,31);
-   System.out.println(sdf.format(calendar.getTime()));
-   
-   
-   
-(2) Transferring files.
+//Or any variation, e.g.: Print the date in format "dd/M/yyyy". Where "date" is the name of the variable that keeps "new Data()".
 
-I: Transfer (copy) content from "text1.txt" file to "text2.txt" file.
+
+2)
+
+I: Transfer (copy) content from the "text1.txt" file to the "text2.txt" file.
 
 O: FileChannel source = new FileInputStream("text1.txt").getChannel();
    FileChannel destination = new FileOutputStream("text2.txt").getChannel();
    destination.transferFrom(source, 0, source.size());
    
-   
-(3) Move file to a new directory.
+//This example is tricky cause variable "source" appears two times in the last line.
+//Here we would need an orthogonal analysis and a model that will save info on variable occurrence and sequence.
 
-I: Move file "Afile.txt" from "C:\\folderA\\" to "C:\\folderB\\" directory.
+   
+3)
+
+I: Move the file "Afile.txt" from "C:\\folderA\\" to "C:\\folderB\\" directory.
 
 O: File afile =new File("C:\\folderA\\"+"Afile.txt");
-   afile.renameTo(new File("C:\\folderB\\" + afile.getName()))
-  
-  
-(4) Parse XML file.
+   afile.renameTo(new File("C:\\folderB\\" +"Afile.txt"))
+
+
+4)
 
 I: Parse XML "staff.xml" file.
 
 O: File fXmlFile = new File("staff.xml");
-
    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-   Document doc = dBuilder.parse(fXmlFile);  
+   Document doc = dBuilder.parse(fXmlFile);
+
+   
+5)
+
+I: Create "Ok" button with image "bullet.gif" and add it to the panel.
   
-   NodeList nList = doc.getElementsByTagName("staff");
- 
-	System.out.println("----------------------------");
- 
-	for (int i = 0; i < nList.getLength(); i++) {
- 
-		Node nNode = nList.item(i);
- 
-		System.out.println(nNode.getNodeName());
-	}
-	
-(5) Create XML file:
+O: JPanel panel = new JPanel();
+   JButton jb = new JButton("Ok", new ImageIcon("bullet.gif"));
+   
+       
+6) 
 
-O:
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
- 
-		// root elements
-		Document doc = docBuilder.newDocument();
-		Element rootElement = doc.createElement("company");
-		doc.appendChild(rootElement);
- 
-		// staff elements
-		Element staff = doc.createElement("Staff");
-		rootElement.appendChild(staff);
- 
-		// set attribute to staff element
-		Attr attr = doc.createAttribute("id");
-		attr.setValue("1");
-		staff.setAttributeNode(attr);
- 
-		// shorten way
-		// staff.setAttribute("id", "1");
- 
-		// firstname elements
-		Element firstname = doc.createElement("firstname");
-		firstname.appendChild(doc.createTextNode("yong"));
-		staff.appendChild(firstname);
- 
-		// lastname elements
-		Element lastname = doc.createElement("lastname");
-		lastname.appendChild(doc.createTextNode("mook kim"));
-		staff.appendChild(lastname);
- 
-		// nickname elements
-		Element nickname = doc.createElement("nickname");
-		nickname.appendChild(doc.createTextNode("mkyong"));
-		staff.appendChild(nickname);
- 
-		// salary elements
-		Element salary = doc.createElement("salary");
-		salary.appendChild(doc.createTextNode("100000"));
-		staff.appendChild(salary);
- 
-		// write the content into xml file
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(new File("C:\\file.xml"));
- 
-		// Output to console for testing
-		// StreamResult result = new StreamResult(System.out);
- 
-		transformer.transform(source, result);
- 
-		System.out.println("File saved!");
-		
-(6) Count XML elements.
+I: Get all entries from jar file "filename.jar".
 
-Count XML elements of the file "c:\\file.xml".
+O:  JarFile jf = new JarFile(args[0]);
+    Enumeration e = jf.entries();
 
-O:      String filepath = "c:\\file.xml";
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-		Document doc = docBuilder.parse(filepath);
- 
-		NodeList list = doc.getElementsByTagName("staff");
- 
-		System.out.println("Total of elements : " + list.getLength());
+
+7) Connect to the address "java.sun.com" via port 80.
+
+    InetAddress addr = InetAddress.getByName("java.sun.com");
+    int port = 80;
+    SocketAddress sockaddr = new InetSocketAddress(addr, port);
+
+    Socket sock = new Socket();
+
+    int timeoutMs = 2000; // 2 seconds
+    sock.connect(sockaddr, timeoutMs);
+
+
+8) Convert the number to an integer.
+
+String number = args[0];
+int x = Integer.parseInt(number);
+
+//Or 
+
+String number = args[0];
+Integer x = Integer.valueOf(number);
+
+
+9) Find maximum of two numbers "a" and "b".
+
+int a = 34l;
+int b = 243;
+
+int max = Math.max(a,b);
+
+
+10)
+
+I: Get a field "id" of the class Bean.
+
+O: Bean demo = new Bean();
+   Class clazz = demo.getClass();
+
+   Field field = clazz.getField("id");
+
+
+11) 
+
+I: Add "A", "B" and "C" to array.
+
+O: ArrayList<String> al = new ArrayList<String>();
+   al.add("A");
+   al.add("B");
+   al.add("C");
+
+
+12) 
+
+I:  Add all elements of the list2 to the list.
+
+O:  List<String> list = new ArrayList<String>();
+    list.add("A");
+    list.add("B");
+    list.add("C");
+    List<String> list2 = new ArrayList<String>();
+    list2.add("X");
+    list2.add("Y");
+    list2.add("Z");
+    
+    list.addAll(list2);
+
+
+13) 
+
+I:  Log result and class of the "myMethod". 
+
+O:  boolean result = true;
+    Logger logger = Logger.getLogger("com.mycompany.MyClass");
+    logger.exiting(this.getClass().getName(), "myMethod", new Boolean(result));
+    
+
+14)
+
+I: Read the file "text.txt“.
+
+O: BufferedReader br = new BufferedReader(new FileReader(“text.txt”))
+   br.readLine()
+
+
+15)
+
+I: Read file "text.txt" via data buffer.
+
+O: new DataInputStream(new BufferedInputStream(new FileInputStream(new File(“text.txt”))))
