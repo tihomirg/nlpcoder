@@ -1,4 +1,4 @@
-package exmaples.java.io.filepermission;
+package examples.java.io.filepermission;
 import java.io.FilePermission;
 import java.security.AccessController;
 
