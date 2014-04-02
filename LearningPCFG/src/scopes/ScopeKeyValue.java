@@ -7,18 +7,26 @@ public class ScopeKeyValue<K,V> {
 	private Map<K,V> variables = new HashMap<K, V>();
 	
 	public void put(K key, V value){
-		variables.put(key, value);
+		getVariables().put(key, value);
 	}
 	
 	public V get(K key) {
-		return variables.get(key);
+		return getVariables().get(key);
 	}
 	
 	public boolean containsKey(K key){
-		return variables.containsKey(key);
+		return getVariables().containsKey(key);
 	}
 	
 	public String toString(){
-		return variables.toString();
+		return getVariables().toString();
+	}
+
+	public Map<K,V> getVariables() {
+		return variables;
+	}
+
+	public void setVariables(Map<K,V> variables) {
+		this.variables = variables;
 	}
 }
