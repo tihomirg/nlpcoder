@@ -26,18 +26,17 @@ public class BoundedScanner {
 	private static int counter;
 	private static int intervalCounter = 1;
 
-	
-	protected static void scan(IBuilder builder, File folder, File file){
-		scan(builder, folder, file, 10000);
+	protected static void scan(IBuilder builder, File folder, File file, boolean testCheck){
+		scan(builder, folder, file, 10000, testCheck);
 	}
 	
-	protected static void scan(IBuilder builder, File folder, File file, int fileNum){
-		scan(builder, folder, file, fileNum, 10);
+	protected static void scan(IBuilder builder, File folder, File file, int fileNum, boolean testCheck){
+		scan(builder, folder, file, fileNum, 10, testCheck);
 	}
 	
 	private static long startTime;
 	
-	protected static void scan(IBuilder builder, File folder, File file, int fileNum, int intervalNum) {
+	protected static void scan(IBuilder builder, File folder, File file, int fileNum, int intervalNum, boolean testCheck) {
 		
 		BoundedScanner.fileNum = fileNum;
 		BoundedScanner.intervalNum = intervalNum;
@@ -47,7 +46,7 @@ public class BoundedScanner {
 		long fstartTime = startTime;
 		
 		try{
-			scanProjects(folder, builder);
+			scanProjects(folder, builder, testCheck);
 		} catch(ScannerException ex){
 			System.out.println(ex);
 		} catch(Throwable ex){
@@ -73,12 +72,12 @@ public class BoundedScanner {
 	}
 
 	
-	public static void scanProjects(final File folder, IBuilder builder)
+	public static void scanProjects(final File folder, IBuilder builder, boolean testCheck)
 			throws Throwable {
 		int projCount = 0;
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
-	            listFilesForFolder(fileEntry, builder);
+	            listFilesForFolder(fileEntry, builder, testCheck);
 	        }
 	        projCount++;
 	        
@@ -90,13 +89,14 @@ public class BoundedScanner {
 	}
 	
 	
-	public static void listFilesForFolder(final File folder, IBuilder builder)
+	public static void listFilesForFolder(final File folder, IBuilder builder, boolean testCheck)
 			throws Throwable {
 			    for (final File fileEntry : folder.listFiles()) {
 			        if (fileEntry.isDirectory()) {
-			            listFilesForFolder(fileEntry, builder);
+			            listFilesForFolder(fileEntry, builder, testCheck);
 			        } else {
-			        	if (fileEntry.isFile() && fileEntry.getName().endsWith(".java")){
+			        	String name = fileEntry.getName();
+						if (fileEntry.isFile() && name.endsWith(".java") && check(name, testCheck)){
 			        	   //System.out.println(fileEntry.getAbsolutePath());
 			        	   scan(fileEntry.getAbsolutePath(), builder);
 			               counter++;
@@ -146,6 +146,10 @@ public class BoundedScanner {
 			    }
 			}
 	
+
+	private static boolean check(String name, boolean testCheck) {
+		return !(testCheck && name.toLowerCase().contains("test"));
+	}
 
 	public static void scan(String fileName, ASTVisitor builder) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);

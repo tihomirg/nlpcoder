@@ -35,6 +35,7 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.Initializer;
@@ -64,6 +65,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
@@ -81,6 +83,7 @@ import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
 import declarations.API;
@@ -96,7 +99,7 @@ import statistics.SequenceStatistics;
 
 
 public class SequenceBuilder extends IBuilder {
-	
+
 	private SequenceStatistics statistics;
 	private NameScopes methods;
 	private NameScopes fields;
@@ -104,7 +107,7 @@ public class SequenceBuilder extends IBuilder {
 	private SimpleEvalScopes locals;
 	private NameScopes params;
 	private API api;
-	
+
 	public SequenceBuilder(API api) {
 		this.statistics  = new SequenceStatistics();
 		this.methods = new NameScopes();
@@ -113,24 +116,24 @@ public class SequenceBuilder extends IBuilder {
 		this.params = new NameScopes();
 		this.api = api;
 	}
-	
+
 	@Override
 	public void print(PrintStream out) {
 		statistics.print(out);
 		//statistics.print(api.getDeclMap(), out);	
 	}
-	
+
 	public boolean visit(Assignment node) {
 		return true;
 	}
 
 	public boolean visit(ClassInstanceCreation node) {
-//		String name = getTypeName(node.getType()); 
-//		List<ASTNode> arguments = node.arguments();
-//		int argNum = arguments.size();
-//		if(isImportedCons(name, argNum)){
-//			statistics.inc(getImportedConstructors(name, argNum));
-//		}
+		//		String name = getTypeName(node.getType()); 
+		//		List<ASTNode> arguments = node.arguments();
+		//		int argNum = arguments.size();
+		//		if(isImportedCons(name, argNum)){
+		//			statistics.inc(getImportedConstructors(name, argNum));
+		//		}
 		return true;
 	}
 
@@ -147,7 +150,7 @@ public class SequenceBuilder extends IBuilder {
 			return arrayType.getElementType().toString();
 		} else return type.toString();
 	}
-	
+
 	private boolean isImportedCons(String name, int argNum) {
 		return imported.isImporteddConstructor(name, argNum);
 	}
@@ -155,26 +158,26 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(ConditionalExpression node){
 		return true;
 	}	
-	
+
 	public boolean visit(ExpressionStatement node) {
 		return true;
 	}
-	
+
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
-		
+
 		if(!isOwnerField(name)){
 			if(isImportedField(name)){
 				Expression exp = node.getExpression();
-				
+
 				if (exp != null){
 					if (exp instanceof SimpleName){
 						SimpleName receiver = (SimpleName) exp;
 						String variable = receiver.getIdentifier();
-						
+
 						if (isLocal(variable)){
 							List<String> sequence = locals.get(variable);
-							sequence.add(name);
+							sequence.add(locals.locationToString() +" "+name);
 						}
 					}
 				}
@@ -190,7 +193,7 @@ public class SequenceBuilder extends IBuilder {
 	private boolean isImportedField(String name) {
 		return imported.isImportedField(name);
 	}
-	
+
 	private boolean isOwnerField(String name) {
 		return fields.contains(name);
 	}
@@ -198,7 +201,7 @@ public class SequenceBuilder extends IBuilder {
 	private boolean isLocal(String name) {
 		return locals.contains(name);
 	}	
-	
+
 	public boolean visit(InfixExpression node){
 		return true;
 	}
@@ -206,7 +209,7 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(PostfixExpression node) {
 		return true;
 	}
-	
+
 	public boolean visit(PrefixExpression node) {
 		return true;
 	}
@@ -216,31 +219,31 @@ public class SequenceBuilder extends IBuilder {
 		String name = node.getName().getIdentifier();
 		List<ASTNode> arguments = node.arguments();
 		int argNum = arguments.size();
-		
+
 		if(!isOwnerMethod(name)){
 			if(isImportedMethod(name, argNum)){
-				
+
 				Expression exp = node.getExpression();
-				
+
 				if (exp != null){
 					if (exp instanceof SimpleName){
 						SimpleName receiver = (SimpleName) exp;
 						String variable = receiver.getIdentifier();
-						
+
 						if (isLocal(variable)){
 							List<String> sequence = locals.get(variable);
-							sequence.add(name + "("+argNum+")");
+							sequence.add(locals.locationToString()+" "+name + "("+argNum+")");
 						}
 					}
 				}
 			}
 		}
-		
+
 		//TODO: make this true!
 		return false;
 	}
-    
-	
+
+
 	private Set<Declaration> getImportedMethods(String name, int argNum) {
 		return imported.getMethods(name, argNum);
 	}
@@ -256,7 +259,7 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(InstanceofExpression node) {
 		return true;
 	}	
-	
+
 	public boolean visit(ParenthesizedExpression node) {
 		return true;
 	}
@@ -268,7 +271,7 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(SuperMethodInvocation node) {
 		return true;
 	}	
-	
+
 	public boolean visit(VariableDeclarationExpression node){
 		return true;
 	}
@@ -276,21 +279,20 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(CastExpression node) {
 		return true;
 	}
-	
+
 	//------------------------------------------------------ Statements ------------------------------------------------------	
 
 	public boolean visit(Block node) {
 		locals.push();
-		
+
 		List<ASTNode> statements = node.statements();
-		
+
 		for (ASTNode node2 : statements) {
 			node2.accept(this);
 		}
-		
-		
+
 		popAndSaveLocals();
-		
+
 		return false;
 	}
 
@@ -299,53 +301,146 @@ public class SequenceBuilder extends IBuilder {
 		statistics.inc(variables);
 		locals.pop();
 	}
+
+	public boolean visit(IfStatement node){
+		Expression expression = node.getExpression();
+		if(expression != null){
+			locals.pushLocation("if exp");
+			expression.accept(this);
+			locals.popLocation();
+		}
+		
+		Statement thenStatement = node.getThenStatement();
+		if (thenStatement != null) {
+			locals.pushLocation("if then");
+			locals.push();		
+			thenStatement.accept(this);
+			popAndSaveLocals();
+			locals.popLocation();
+		}
+		
+		Statement elseStatement = node.getElseStatement();
+		if(elseStatement != null){
+			locals.pushLocation("if else");		
+			locals.push();
+			elseStatement.accept(this);
+			popAndSaveLocals();
+			locals.popLocation();
+		}
+		
+		return false;
+	}
 	
 	public boolean visit(EnhancedForStatement node) {
-		locals.push();		
-		return true;
-	}
-	
-	public void endVisit(EnhancedForStatement node) {
-		popAndSaveLocals();
-	}
-	
-	public boolean visit(ForStatement node){
+		Expression expression = node.getExpression();
+		if(expression != null){
+			locals.pushLocation("for2 exp");
+			expression.accept(this);
+			locals.popLocation();
+		}
+		
 		locals.push();
-		return true;
-	}
-	
-	public void endVisit(ForStatement node){
+		SingleVariableDeclaration parameter = node.getParameter();
+		if (parameter != null) {
+			locals.pushLocation("for2 param");
+			parameter.accept(this);	
+			locals.popLocation();
+		}
+		
+		Statement body = node.getBody();
+		if (body != null) {
+			locals.pushLocation("for2 body");
+			body.accept(this);
+			locals.popLocation();	
+		}
+
 		popAndSaveLocals();
+		return false;
+	}
+
+	public boolean visit(ForStatement node){
+		Expression expression = node.getExpression();
+		if(expression != null){
+			locals.pushLocation("for1 cond");
+			expression.accept(this);
+			locals.popLocation();
+		}
+		
+		locals.push();
+		locals.pushLocation("for1 init");
+		accept(node.initializers());
+		locals.popLocation();
+		
+		locals.pushLocation("for1 update");
+		accept(node.updaters());
+		locals.popLocation();
+		
+		Statement body = node.getBody();
+		if (body != null) {
+			locals.pushLocation("for1 body");
+			body.accept(this);
+			locals.popLocation();	
+		}
+		
+		popAndSaveLocals();
+		return false;
 	}
 	
+	public boolean visit(WhileStatement node){
+		Expression expression = node.getExpression();
+		if(expression != null){
+			locals.pushLocation("while cond");
+			expression.accept(this);
+			locals.popLocation();
+		}
+		
+		locals.push();
+		
+		Statement body = node.getBody();
+		if (body != null) {
+			locals.pushLocation("while body");
+			body.accept(this);
+			locals.popLocation();	
+		}
+		
+		popAndSaveLocals();
+		return false;
+	}
+
+	private void accept(List<ASTNode> initializers) {
+		for (ASTNode node : initializers) {
+			node.accept(this);
+		}
+	}
+
 	public boolean visit(ThisExpression node){
 		return true;				
 	}
-	
+
 	public boolean visit(ThrowStatement node) {
 		return true;
 	}
-	
+
 	public boolean visit(TryStatement node) {
 		return true;
 	}
-	
+
 	public boolean visit(TypeLiteral node) {
 		return true;
-	}	
-	
+	}
+
 	//------------------------------------------------------ Literals ------------------------------------------------------	
 
 	public boolean visit(BooleanLiteral node) {
 		//statistics.inc(new BooleanLiteralRule(node));
 		return true;
 	}
-	
+
 	public boolean visit(CharacterLiteral node) {
 		//statistics.inc(new CharacterLiteralRule(node));
 		return true;
 	}	
-	
+
 	public boolean visit(NullLiteral node){
 		//statistics.inc(new NullLiteralRule(node));
 		return true;
@@ -355,14 +450,14 @@ public class SequenceBuilder extends IBuilder {
 		//statistics.inc(new NumberLiteralRule(node));
 		return true;
 	}
-	
+
 	public boolean visit(StringLiteral node) {
 		//statistics.inc(new StringLiteralRule(node));
 		return true;
 	}
-	
-    //------------------------------------------------------ Types ------------------------------------------------------
-	
+
+	//------------------------------------------------------ Types ------------------------------------------------------
+
 	public boolean visit(ArrayType node) {
 		return false;
 	}
@@ -370,11 +465,11 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(ParameterizedType node) {
 		return false;
 	}
-	
+
 	public boolean visit(PrimitiveType node) {
 		return false;
 	}
-	
+
 	public boolean visit(QualifiedType node) {
 		return false;
 	}	
@@ -386,13 +481,13 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(TypeParameter node) {
 		return false;
 	}	
-	
+
 	public boolean visit(WildcardType node) {
 		return false;
 	}		
-	
+
 	//------------------------------------------------------ Special ------------------------------------------------------	
-	
+
 	public boolean visit(SimpleName node){
 		return false;
 	}
@@ -400,16 +495,16 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(QualifiedName node) {
 		return false;
 	}	
-	
+
 	//This is where variables are born
 	public boolean visit(VariableDeclarationFragment node) {
 		String name = node.getName().getIdentifier();
-		
+
 		List<String> list = new LinkedList<String>();
-		
+
 		Expression initializer = node.getInitializer();
 		if (initializer != null){
-			
+
 			if (initializer instanceof ClassInstanceCreation){
 				ClassInstanceCreation clazz = (ClassInstanceCreation) initializer;
 				String typeName = getTypeName(clazz.getType()); 
@@ -418,10 +513,10 @@ public class SequenceBuilder extends IBuilder {
 				if(isImportedCons(typeName, argNum)){
 					list.add("new "+typeName+"("+argNum+")");
 				}  else list.add(null); 
-				
+
 			} else {
 				if (initializer instanceof MethodInvocation){
-				    MethodInvocation method = (MethodInvocation) initializer;	
+					MethodInvocation method = (MethodInvocation) initializer;	
 					String methodName = method.getName().getIdentifier();
 					int argNum = method.arguments().size();
 					if(!isOwnerMethod(methodName)){
@@ -437,20 +532,20 @@ public class SequenceBuilder extends IBuilder {
 							list.add(fieldName);
 						} else list.add(null);
 					} else list.add(null);
-					
+
 				} else list.add(null);
 			}
 		} else {
 			list.add(null);
 		}
-		
+
 		locals.put(name, list);
-		
+
 		return false;
 	}
-	
+
 	//-------------------------------------------------------  Rest --------------------------------------------------------	
-	
+
 	public boolean visit(AnnotationTypeDeclaration node) {
 		return false;
 	}
@@ -470,7 +565,7 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(BlockComment node) {
 		return false;
 	}
-	
+
 	public boolean visit(CatchClause node) {
 		return true;
 	}
@@ -501,7 +596,7 @@ public class SequenceBuilder extends IBuilder {
 		for (VariableDeclarationFragment fragment : fragments) {
 			Expression exp = fragment.getInitializer();
 			if(exp != null)
-			   exp.accept(this);
+				exp.accept(this);
 		}
 		return false;
 	}
@@ -549,7 +644,7 @@ public class SequenceBuilder extends IBuilder {
 		params.push();
 		return true;
 	}
-	
+
 	public void endVisit(MethodDeclaration node){
 		locals.pop();
 		params.pop();
@@ -594,32 +689,32 @@ public class SequenceBuilder extends IBuilder {
 	}
 
 	public boolean visit(TypeDeclaration node) {
-	    methods.push();
-	    fields.push();
-	    
-	    MethodDeclaration[] methodDecls = node.getMethods();
-	    
-	    for (MethodDeclaration methodDecl : methodDecls) {
+		methods.push();
+		fields.push();
+
+		MethodDeclaration[] methodDecls = node.getMethods();
+
+		for (MethodDeclaration methodDecl : methodDecls) {
 			methods.put(methodDecl.getName().getIdentifier());
 		}
-	    
-	    FieldDeclaration[] fieldDecls = node.getFields();
-	    
-	    for (FieldDeclaration fieldDecl : fieldDecls) {
-	    	List<VariableDeclarationFragment> fragments = fieldDecl.fragments();
-	    	for (VariableDeclarationFragment fragment : fragments) {
+
+		FieldDeclaration[] fieldDecls = node.getFields();
+
+		for (FieldDeclaration fieldDecl : fieldDecls) {
+			List<VariableDeclarationFragment> fragments = fieldDecl.fragments();
+			for (VariableDeclarationFragment fragment : fragments) {
 				fields.put(fragment.getName().getIdentifier());
 			}
 		}
-	    
+
 		return true;
 	}
-	
+
 	public void endVisit(TypeDeclaration node) {
 		methods.pop();
 		fields.pop();
 	}
-	
+
 	public boolean visit(TypeDeclarationStatement node) {
 		return true;
 	}
@@ -627,15 +722,15 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(ArrayAccess node) {
 		return true;
 	}
-	
+
 	public boolean visit(ArrayCreation node) {
 		return true;
 	}
-	
+
 	public boolean visit(ArrayInitializer node) {
 		return true;
 	}	
-	
+
 	@Override
 	public void releaseUnder(int percentage) {
 		//statistics.releaseUnder(percentage);

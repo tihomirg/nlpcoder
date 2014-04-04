@@ -22,6 +22,6 @@ public class BoundedPCFGScanner extends BoundedScanner {
 			File input = new File("test");
 			File output = new File("naive.txt");
 			
-			scan(builder, input, output, 10, 10);		
+			scan(builder, input, output, 10, 10, true);		
 		}
 }
