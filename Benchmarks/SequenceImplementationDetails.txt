@@ -1,0 +1,71 @@
+
+We keep simple sequences:
+- Each sequence is determined by a variable.
+- A sequence has the type. The type of the sequence is the same as the type of the  
+- Instructions that we memorize are "call", "write", "arg_call"
+- The main info that we keep are "initialization", "selections" and "order" among declarations.
+- We keep location for each instruction.
+- We will memorize all names of the 
+- We specially threat:
+  - conditions
+  - switch cases
+  - operators and their operands (we keep one level of selection more). This includes 
+  - arrays
+  
+Ex.
+
+BufferedInputStream bis = new BufferedInputStream(fis);
+int i;
+while ((i = bis.read()) != -1) {
+  System.out.println(i);
+}
+
+Goes to:
+
+seq BufferedInputStream
+write(new BufferedInputStream(read seq:FileInputStream))
+while_cond(((op(!=, read(assign(v1, methodCall(v2, read())), -1), v1 -> seq int, v2 -> _)
+
+seq int
+while_cond(((op(!=, read(assign(v1, methodCall(v2, read())), -1) , v1 -> _, v2 -> seq BufferedInputStream)
+while_loop arg_call(_)
+
+seq PrintStream 
+while_loop write(System.out)
+call(select(_, println(arg_call(seq int))))
+
+
+-------------------------------------------------------------------------------------------------------------------
+Arrays:
+
+int[] a = new int[10];
+int[] b = new int[10];
+for(int i = 0; i < a.length; i++){
+  a[i] = b[i];
+} 
+
+seq int[]
+write(new int[seq int])
+for_cond(v1 < v2.length, v2 -> _, v1 -> seq int[]) 
+for_body write((_)[seq int], (seq int[])[seq int])
+
+seq int[]
+write(new int[seq int])
+for_body call_arg((_)[seq int]))
+
+int seq
+for_init(_ = intLiteral)
+for_cond(v1 < v2.length, v1 -> _, v2 -> seq int[])
+for_up(_++)
+
+int[][] a = new int[10][10];
+int[] b = new int[10];
+for(int j = 0; j < a.length; j++){
+  for(int i = 0; i < a[j].length; i++){
+    a[j][i] = b[i];
+  }
+}
+
+seq int[][]
+...
+for_body for_body write (((_)[seq int])[seq int], (seq int[])(seq int))

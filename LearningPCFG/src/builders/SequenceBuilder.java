@@ -83,6 +83,7 @@ import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
@@ -179,11 +180,14 @@ public class SequenceBuilder extends IBuilder {
 							List<String> sequence = locals.get(variable);
 							sequence.add(locals.locationToString() +" "+name);
 						}
+					} else {
+						exp.accept(this);
 					}
 				}
 			}
 		}
-		return true;
+		
+		return false;
 	}
 
 	private Set<Declaration> getImportedFields(String name) {
@@ -234,11 +238,17 @@ public class SequenceBuilder extends IBuilder {
 							List<String> sequence = locals.get(variable);
 							sequence.add(locals.locationToString()+" "+name + "("+argNum+")");
 						}
+					} else {
+						exp.accept(this);
 					}
 				}
 			}
 		}
 
+		for (ASTNode astNode : arguments) {
+			astNode.accept(this);
+		}
+		
 		//TODO: make this true!
 		return false;
 	}
@@ -305,7 +315,7 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(IfStatement node){
 		Expression expression = node.getExpression();
 		if(expression != null){
-			locals.pushLocation("if exp");
+			locals.pushLocation("if("+expression+")");
 			expression.accept(this);
 			locals.popLocation();
 		}
@@ -334,7 +344,7 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(EnhancedForStatement node) {
 		Expression expression = node.getExpression();
 		if(expression != null){
-			locals.pushLocation("for2 exp");
+			locals.pushLocation("for2("+expression+")");
 			expression.accept(this);
 			locals.popLocation();
 		}
@@ -361,7 +371,7 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(ForStatement node){
 		Expression expression = node.getExpression();
 		if(expression != null){
-			locals.pushLocation("for1 cond");
+			locals.pushLocation("for1("+expression+")");
 			expression.accept(this);
 			locals.popLocation();
 		}
@@ -389,7 +399,7 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(WhileStatement node){
 		Expression expression = node.getExpression();
 		if(expression != null){
-			locals.pushLocation("while cond");
+			locals.pushLocation("while("+expression+")");
 			expression.accept(this);
 			locals.popLocation();
 		}
@@ -489,7 +499,20 @@ public class SequenceBuilder extends IBuilder {
 	//------------------------------------------------------ Special ------------------------------------------------------	
 
 	public boolean visit(SimpleName node){
+		String variable = node.getIdentifier();
+
+		if (!isParam(variable)){
+			if (isLocal(variable)){
+				List<String> sequence = locals.get(variable);
+				sequence.add(locals.locationToString()+" "+variable);
+			}
+		}
+		
 		return false;
+	}
+
+	private boolean isParam(String variable) {
+		return params.contains(variable);
 	}
 
 	public boolean visit(QualifiedName node) {
@@ -500,6 +523,15 @@ public class SequenceBuilder extends IBuilder {
 	public boolean visit(VariableDeclarationFragment node) {
 		String name = node.getName().getIdentifier();
 
+		ASTNode parent = node.getParent();
+		String type = "";
+		if (parent instanceof VariableDeclarationStatement){
+			VariableDeclarationStatement vds = (VariableDeclarationStatement) parent;
+			
+			type = getTypeName(vds.getType())+" = ";
+			
+		}
+		
 		List<String> list = new LinkedList<String>();
 
 		Expression initializer = node.getInitializer();
@@ -511,7 +543,7 @@ public class SequenceBuilder extends IBuilder {
 				List<ASTNode> arguments = clazz.arguments();
 				int argNum = arguments.size();
 				if(isImportedCons(typeName, argNum)){
-					list.add("new "+typeName+"("+argNum+")");
+					list.add(type+"new "+typeName+"("+argNum+")");
 				}  else list.add(null); 
 
 			} else {
@@ -521,7 +553,7 @@ public class SequenceBuilder extends IBuilder {
 					int argNum = method.arguments().size();
 					if(!isOwnerMethod(methodName)){
 						if(isImportedMethod(methodName, argNum)){
-							list.add(methodName+"("+argNum+")");
+							list.add(type+methodName+"("+argNum+")");
 						} else list.add(null);
 					} else list.add(null);
 				} else if (initializer instanceof FieldAccess){
@@ -529,7 +561,7 @@ public class SequenceBuilder extends IBuilder {
 					String fieldName = filed.getName().getIdentifier();
 					if(!isOwnerField(fieldName)){
 						if(isImportedField(fieldName)){
-							list.add(fieldName);
+							list.add(type+fieldName);
 						} else list.add(null);
 					} else list.add(null);
 
@@ -692,12 +724,6 @@ public class SequenceBuilder extends IBuilder {
 		methods.push();
 		fields.push();
 
-		MethodDeclaration[] methodDecls = node.getMethods();
-
-		for (MethodDeclaration methodDecl : methodDecls) {
-			methods.put(methodDecl.getName().getIdentifier());
-		}
-
 		FieldDeclaration[] fieldDecls = node.getFields();
 
 		for (FieldDeclaration fieldDecl : fieldDecls) {
@@ -707,12 +733,23 @@ public class SequenceBuilder extends IBuilder {
 			}
 		}
 
-		return true;
+		MethodDeclaration[] methodDecls = node.getMethods();
+
+		for (MethodDeclaration methodDecl : methodDecls) {
+			methods.put(methodDecl.getName().getIdentifier());
+		}		
+
+		for (MethodDeclaration methodDecl : methodDecls) {
+			methodDecl.accept(this);
+		}
+
+		methods.pop();
+		fields.pop();
+		return false;
 	}
 
 	public void endVisit(TypeDeclaration node) {
-		methods.pop();
-		fields.pop();
+
 	}
 
 	public boolean visit(TypeDeclarationStatement node) {

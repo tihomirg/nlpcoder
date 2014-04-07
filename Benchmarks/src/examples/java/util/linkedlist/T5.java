@@ -11,9 +11,9 @@ public class T5 {
     lList.add("4");
     lList.add("5");
 
-    Iterator itr = lList.iterator();
-    while (itr.hasNext()) {
-      System.out.println(itr.next());
+    Iterator itr = lList.iterator();                    //v = v1.iterator()            //list iterate
+    while (itr.hasNext()) {                             //while(v.hasNext())
+      System.out.println(itr.next());                   //v.next()
     }
   }
 }
