@@ -1,4 +1,3 @@
-
 We keep simple sequences:
 - Each sequence is determined by a variable.
 - A sequence has the type. The type of the sequence is the same as the type of the  
@@ -11,7 +10,9 @@ We keep simple sequences:
   - switch cases
   - operators and their operands (we keep one level of selection more). This includes 
   - arrays
-  
+  - if-[then, else]-break statements
+  - [optionally] if-[then, else]-continue statements
+  - if-[then, else]-return statements
 Ex.
 
 BufferedInputStream bis = new BufferedInputStream(fis);
