@@ -12,7 +12,29 @@ We keep simple sequences:
   - arrays
   - if-[then, else]-break statements
   - [optionally] if-[then, else]-continue statements
-  - if-[then, else]-return statements
+  - if-[then, else]-return statements  
+  
+- Merging:
+  - Use heuristics like:
+      - minimize sequence number.
+      
+- Searching based on constraints
+- Type of constraints:
+   - Read/Write constraints
+   - Conditions as Patterns
+   - Location
+   - Type
+   
+- Sequences are sorted by:
+   - Conditions
+   - Types
+   - Read/Write constraints
+   - Sequence prefixes (up to some length) make a trie. 
+   
+- NL stuff:
+  - construct keywords and words should be connected
+  - names of the variables should be connected with sequences
+      
 Ex.
 
 BufferedInputStream bis = new BufferedInputStream(fis);
