@@ -4,7 +4,7 @@ import java.io.File;
 
 import builders.DeclFreqBuilder;
 import builders.IBuilder;
-import builders.SequenceBuilder;
+import builders.SimpleSequenceBuilder;
 import selection.Config;
 import selection.deserializers.Deserializer;
 import selection.types.NameGenerator;
@@ -22,7 +22,7 @@ public class SequenceBoundedScanner extends BoundedScanner {
 		
 		System.out.println("Classes are added!");
 		
-		IBuilder builder = new SequenceBuilder(api);
+		IBuilder builder = new SimpleSequenceBuilder(api);
 		
 		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 		File output = new File("sequences.txt");
