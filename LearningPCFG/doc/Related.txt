@@ -1,0 +1,11 @@
+1) From Program to Systems, page 142 contains many relevant references.
+
+http://www.wisdom.weizmann.ac.il/~harel/papers/NLProgrammingGordonHarel_ETAPS_llncs.pdf
+
+2) Sumit's work
+
+3) Up to some extent Vechev's and Eran's work.
+
+4) http://www.adampease.org/professional/CELT.pdf
+
+5) http://arxiv.org/pdf/1401.0514.pdf

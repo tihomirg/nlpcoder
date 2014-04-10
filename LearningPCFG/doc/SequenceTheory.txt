@@ -1,0 +1,118 @@
+----------------------------------------------- Instructions --------------------------------------------
+
+Short form read (SFR):
+
+1) var
+2) var.method
+3) var.field
+4) var[]
+5) op ...
+6) ... op
+7) ... op ...
+8) ClassName.method
+9) ClassName.field
+10) new T
+11) literal
+12) hole
+13) (type) ...
+
+Sort form write (SFW):
+
+1) var = SFR
+2) var.field = SFR
+3) var[] = SFR
+
+SF = SFR \cup SFW
+SFLE = {var, var.field, var[]}
+
+
+
+Long form read (LFR):
+
+1) var
+2) var.method(SF*)
+3) var.field
+4) var[SF]
+5) op SFLE
+6) SFLE op
+7) SF op SF
+8) ClassName.method(SF*)
+9) ClassName.field
+10) new T(SF*)
+11) literal
+12) hole
+13) (type) SF
+
+Long form write (LFW):
+
+1) var = LF
+2) var.field = LF
+3) var[SF] = LF
+
+LF = LFR \cup LFW
+
+Example:
+
+(i = bis.read()) != -1
+
+I check if it is in "Variable Normal Form".
+II type inference (if possible) do some simple. Only when we are 100% sure. For now without it.
+
+1) store: !=       read(!=, {int seq} = {bis seq} .read, literal)
+2) store: i        read(=, _, {bis seq}.read)
+3) store: bis      read(_.read)
+
+(a1.f1 + a2.f2) != -1
+
+1) store: !=       read(!=, +[int], literal[int])
+2) Emit literal(!=, 2, -1)
+3) store: +        read(+, a1.f1, a2.f2)
+
+
+Saving literals:
+literal(declaration, #arg, value)
+
+declarations = [static] methods, [static] fields, operators
+
+
+-------------------------------------------------- Conditions -------------------------------------------
+
+We save them, but rename variables to normalize the term. 
+We also produce a set of substitutions. For each variable
+in the condition we add the condition to the sequence.
+
+For instance:
+
+int a;
+int b;
+if(a.read(b)) 
+
+Produces var1.read(var2) substitution var1 -> a and var2 -> b.
+This further produces two instructions:
+
+For a:
+if-cond (var1.read(var2)), [var1 -> _, var2 -> {seq int}]
+
+For b:
+if-cond (var1.read(var2)), [var1 -> {seq int}, var2 -> _]
+
+
+For the variable that are not mentioned in the condition we put "?" everything is satisfiable.
+
+In the future we may want to put the conditions into variable normal form.
+
+-------------------------------------------------- 
+
+
+
+We need to keep info about the read as top or argument.
+
+
+-------------------------------------------------- Location -------------------------------------------------
+
+Should we save the entire location for each variable, or keep everithing in the
+for of AST. I'm more for the second solution.
+We start recording variables 
+
+
+------------------------------------------------- Constructs ------------------------------------------------
