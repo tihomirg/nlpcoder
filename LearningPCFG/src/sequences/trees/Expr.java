@@ -2,10 +2,10 @@ package sequences.trees;
 
 import selection.types.Type;
 
-public abstract class Expression {
-	private Type type;
+public abstract class Expr {
+	protected Type type;
 	
-	public Expression(Type type) {
+	public Expr(Type type) {
 		this.type = type;
 	}
 
@@ -16,6 +16,4 @@ public abstract class Expression {
 	public void setType(Type type) {
 		this.type = type;
 	}
-	
-	
 }

@@ -1,4 +1,4 @@
-package builders;
+package sequences.builders;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -8,12 +8,13 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SimpleName;
 
-import builders.SequenceBuilder.TempExpression;
-import builders.SequenceBuilder.TempVariable;
+import builders.IBuilder;
 
 import scopes.NameScopes;
 import scopes.SimpleEvalScopes;
 import selection.types.Type;
+import sequences.builders.SequenceBuilder.TempExpression;
+import sequences.builders.SequenceBuilder.TempVariable;
 import statistics.SequenceStatistics;
 import declarations.API;
 import declarations.Imported;

@@ -2,7 +2,7 @@ package sequences.trees;
 
 import selection.types.Type;
 
-public class Literal extends Expression{
+public class Literal extends Expr{
 
 	private String literal;
 
@@ -10,5 +10,9 @@ public class Literal extends Expression{
 		super(type);
 		this.literal = literal;
 	}
-	
+
+	@Override
+	public String toString() {
+		return literal;
+	}
 }

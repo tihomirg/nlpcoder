@@ -2,7 +2,7 @@ package sequences.trees;
 
 import selection.types.Type;
 
-public class StaticFieldAccess extends Expression {
+public class StaticFieldAccess extends Expr {
 
 	private String name;
 	private String className;
@@ -12,7 +12,9 @@ public class StaticFieldAccess extends Expression {
 		this.name = name;
 		this.className = className;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return className+"."+name;
+	}
 }

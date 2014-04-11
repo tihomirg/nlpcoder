@@ -1,4 +1,4 @@
-package builders;
+package sequences.builders;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class TypeBuilder extends ASTVisitor {
 		return false;
 	}
 	
-	private Type createType(org.eclipse.jdt.core.dom.Type type) {
+	public Type createType(org.eclipse.jdt.core.dom.Type type) {
 		type.accept(this);
 		return this.getResult();
 	}

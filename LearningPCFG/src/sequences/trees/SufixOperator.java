@@ -2,16 +2,19 @@ package sequences.trees;
 
 import selection.types.Type;
 
-public class SufixOperator extends Expression{
+public class SufixOperator extends Expr{
 
 	private String op;
-	private Expression exp;
+	private Expr exp;
 	
-	public SufixOperator(String op, Expression exp, Type type) {
+	public SufixOperator(String op, Expr exp, Type type) {
 		super(type);
 		this.op = op;
 		this.exp = exp;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return exp +" "+ op;
+	}	
 }

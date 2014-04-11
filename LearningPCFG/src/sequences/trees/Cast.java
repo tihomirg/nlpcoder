@@ -2,12 +2,19 @@ package sequences.trees;
 
 import selection.types.Type;
 
-public class Cast extends Expression {
+public class Cast extends Expr {
 
-	private Expression exp;
+	private Expr exp;
 
-	public Cast(Type type, Expression exp) {
+	public Cast(Type type, Expr exp) {
 		super(type);
 		this.exp = exp;
 	}
+
+	@Override
+	public String toString() {
+		return "("+type+")"+ exp;
+	}
+	
+	
 }

@@ -2,16 +2,21 @@ package sequences.trees;
 
 import selection.types.Type;
 
-public class InfixOperator extends Expression{
+public class InfixOperator extends Expr{
 	private String op;
-	private Expression lexp;
-	private Expression rexp;
+	private Expr lexp;
+	private Expr rexp;
 	
-	public InfixOperator(String op, Expression lexp, Expression rexp, Type type) {
+	public InfixOperator(String op, Expr lexp, Expr rexp, Type type) {
 		super(type);
 		this.op = op;
 		this.lexp = lexp;
 		this.rexp = rexp;
+	}
+
+	@Override
+	public String toString() {
+		return lexp + " " + op + " " + rexp;
 	}
 	
 	

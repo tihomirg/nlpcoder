@@ -3,7 +3,7 @@ package selection.types;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class Type implements Serializable{
+public abstract class Type implements Serializable {
 
 	private static final long serialVersionUID = -900979897015622962L;
 	protected final String head;
