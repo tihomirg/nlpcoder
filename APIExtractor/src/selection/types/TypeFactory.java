@@ -14,6 +14,8 @@ public class TypeFactory {
 	private final Map<String, Variable> vars = new HashMap<String, Variable>(); 	
 	
 	private final Type noType = createConst("noType");
+
+	private Type nullType;
 	
 	public TypeFactory(NameGenerator nameGen) {
 		this.nameGen = nameGen;
@@ -62,5 +64,9 @@ public class TypeFactory {
 
 	public Type getNoType() {
 		return noType;
+	}
+ 
+	public Type createNullType() {
+		return nullType;
 	}
 }

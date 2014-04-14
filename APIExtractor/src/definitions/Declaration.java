@@ -8,7 +8,7 @@ import selection.parser.one.Word;
 import selection.types.Const;
 import selection.types.Type;
 
-public class Declaration implements Serializable {
+public class Declaration implements Serializable, Cloneable {
 	
 	/**
 	 * 
@@ -90,7 +90,7 @@ public class Declaration implements Serializable {
 		this.retType = retType;
 	}
 
-	public Type[] getArgType() {
+	public Type[] getArgTypes() {
 		return argType;
 	}
 
@@ -231,6 +231,10 @@ public class Declaration implements Serializable {
 	public Type getReceiverType() {
 		return receiverType;
 	}
+	
+	public boolean hasReceiver(){
+		return receiverType != null;
+	}
 
 	public boolean isPublic() {
 		return isPublic;
@@ -273,5 +277,15 @@ public class Declaration implements Serializable {
 
 	public void setLiteral(boolean literal) {
 		this.literal = literal;
-	}	
+	}
+	
+	@Override
+	public Declaration clone() {
+		try {
+			return (Declaration) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

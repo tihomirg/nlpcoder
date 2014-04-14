@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.bcel.classfile.Attribute;
@@ -23,6 +24,7 @@ import selection.types.Const;
 import selection.types.Substitution;
 import selection.types.Type;
 import selection.types.TypeFactory;
+import selection.types.Unifier;
 
 public class ClassInfo implements Serializable {
 
@@ -47,6 +49,7 @@ public class ClassInfo implements Serializable {
 	private Declaration[] udecls;
 	private String[] classTypeParams;
 	private Type type;
+	private Type[] inheritedTypes;
 
 	public ClassInfo(){}
 
@@ -78,6 +81,7 @@ public class ClassInfo implements Serializable {
 			System.out.println("*******************************************************************************************");
 			this.superClasses = new ClassInfo[0];
 		}
+		
 	}
 
 	private void typeParametersAndInheritedTypes(JavaClass clazz) {
@@ -93,7 +97,7 @@ public class ClassInfo implements Serializable {
 		this.classTypeParams = typeParameters(signature);
 		this.type = getClazzType(this.classTypeParams, this.name);
 		
-		//inherietedTypes = getgetInheritedTypes(signature); 
+		this.inheritedTypes = getInheritedTypes(signature, new HashSet<String>(Arrays.asList(this.classTypeParams))); 
 	}
 
 	private static Type getClazzType(String[] typeParameters, String name) {
@@ -210,6 +214,91 @@ public class ClassInfo implements Serializable {
 		return types;
 	}
 
+	public Declaration[] getUniqueInstantiatedDeclarations(Type instType){
+		
+		Declaration[] uDecls = getUniqueDeclarations();
+		int length = uDecls.length;
+		Declaration[] clones = new Declaration[length];
+		for (int i = 0; i < length; i++) {
+			Declaration clone = uDecls[i].clone();
+			Unifier unify = null;
+			if(clone.isConstructor()){
+				Type retType = clone.getRetType();
+				unify = instType.unify(retType, factory);
+				clone.setRetType(instType);
+			} else {
+				Type receiverType = clone.getReceiverType();
+				unify = instType.unify(receiverType, factory);
+				clone.setReceiverType(instType);
+				
+				Type retType = clone.getRetType();
+				clone.setRetType(retType.apply(unify.getSubs(), factory));
+			}
+			
+			Type[] argTypes = clone.getArgTypes();
+			List<Substitution> subs = unify.getSubs();
+			for(int j=0; j < argTypes.length; j++){
+				argTypes[j] = argTypes[j].apply(subs, factory);
+			}
+			
+			clones[i] = clone;
+		}
+		
+		return clones;
+	}
+	
+	//TODO: Add a classInfo to each type.
+	private Map<Type, ClassInfo> getInheriedMap() {
+		ClassInfo[] iTypes = getInheritedTypes();
+		Map<Type, ClassInfo> map = new HashMap<Type, ClassInfo>();
+		for(int i = 0; i < this.inheritedTypes.length; i++){
+			Type type = this.inheritedTypes[i];
+			String head = type.getHead();
+			
+			for(ClassInfo iType: iTypes){
+				if(iType.name.equals(head)){
+					map.put(type, iType);
+					break;
+				}
+			}
+		}
+		
+		return map;
+	}
+	
+	public List<Declaration> getInstantiatedDeclarations(Type instType) {
+		List<Declaration> decls = new LinkedList<Declaration>();
+		
+		Declaration[] uDecls = getUniqueInstantiatedDeclarations(instType);
+		decls.addAll(Arrays.asList(uDecls));
+		
+		Unifier unify = this.type.unify(instType, factory);
+		Map<Type, ClassInfo> iMap = getInheriedMap();
+		
+		for (Entry<Type, ClassInfo> entry: iMap.entrySet()) {
+			Type type = entry.getKey();
+			ClassInfo classInfo = entry.getValue();
+			Type iType = type.apply(unify.getSubs(), factory);
+			decls.addAll(classInfo.getInstantiatedDeclarations(iType));
+		}
+		
+		return decls;
+	}
+
+	public Type[] getInstantiatedInheritedTypes(Type instType) {
+		Unifier unify = instType.unify(type, factory);
+		
+		List<Substitution> subs = unify.getSubs();
+		
+		int length = this.inheritedTypes.length;
+		Type[] uInhTypes = new Type[length];
+		for (int i = 0; i < length; i++) {
+			uInhTypes[i] = this.inheritedTypes[i].apply(subs, factory);
+		}
+		
+		return uInhTypes;
+	}
+	
 	public Declaration[] getUniqueDeclarations() {
 		if(this.udecls == null){
 			Declaration[] decls = getDeclarations();
@@ -268,7 +357,7 @@ public class ClassInfo implements Serializable {
 				String name = method.getName();
 				if (name.equals(CONSTRUCTOR_SHORT_NAME)){
 					String clazzName = clazz.getClassName();
-					decl.setName(clazzName.substring(clazzName.lastIndexOf('.')+1, clazzName.length()));
+					decl.setName("new "+clazzName.substring(clazzName.lastIndexOf('.')+1, clazzName.length()));
 					decl.setConstructor(true);
 					decl.setMethod(true);		
 				} else {
@@ -285,11 +374,18 @@ public class ClassInfo implements Serializable {
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams);
 				List<Substitution> methodVarSubs = getUniqueVarNames(methodTypeParams);
 				
-				decl.setReceiverType(type.apply(classVarSubs, factory));
+				if (!decl.isConstructor()){
+					decl.setReceiverType(type.apply(classVarSubs, factory));
+				}
 				
 				Set<String> vars = createVariables(methodTypeParams, classTypeParams);
 				
-				decl.setRetType(returnType(signature, classVarSubs, methodVarSubs, vars));
+				if (!decl.isConstructor()){				
+					decl.setRetType(returnType(signature, classVarSubs, methodVarSubs, vars));
+				} else {
+					decl.setRetType(type.apply(classVarSubs, factory));
+				}
+				
 				decl.setArgType(parameterTypes(signature, classVarSubs, methodVarSubs, vars));
 				
 				decl.setWords(extractor.getWords(decl));
@@ -566,6 +662,7 @@ public class ClassInfo implements Serializable {
 		return "ClassInfo [name=" + name + 
 				", superClasses=["+ superClassesToString() + "]"+
 				", interfaces=["+interfacesToString()+"],"+
+				", ["+Arrays.toString(this.inheritedTypes)+"],"+
 				"isClass=" + isClass+ 
 				", isPublic=" + isPublic + 
 				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+

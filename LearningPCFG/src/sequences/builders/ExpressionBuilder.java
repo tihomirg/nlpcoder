@@ -73,9 +73,6 @@ public class ExpressionBuilder extends FalseBuilder {
 			this.expr = expFactory.getHole(); 
 		return this.expr;
 	}
-
-	
-	
 	
 	public boolean visit(ClassInstanceCreation node){
 		Type type = typeBuilder.createType(node.getType());
@@ -121,7 +118,7 @@ public class ExpressionBuilder extends FalseBuilder {
 	}
 
 	public boolean visit(NullLiteral node){
-		this.expr = expFactory.createLiteral("null", typeFactory.createConst("java.lang.Object"));
+		this.expr = expFactory.createLiteral("null", typeFactory.createNullType());
 		return false;
 	}
 

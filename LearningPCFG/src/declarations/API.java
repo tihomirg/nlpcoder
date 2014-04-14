@@ -179,7 +179,7 @@ public class API {
 	}
 
 	public boolean canBeArgument(Declaration head, int i, Declaration arg) {
-		return compatableTypes(head.getArgType()[i], arg.getReceiverType());
+		return compatableTypes(head.getArgTypes()[i], arg.getReceiverType());
 	}
 
 	public DeclMap getDeclMap() {
