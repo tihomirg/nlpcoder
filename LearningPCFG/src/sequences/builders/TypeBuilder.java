@@ -33,7 +33,7 @@ public class TypeBuilder extends ASTVisitor {
 	
 	private Type createArrayType(int dimensions, org.eclipse.jdt.core.dom.Type elementType) {
 		if (dimensions > 0){
-			return factory.createPolymorphic("java.lang.Array", new Type[]{createArrayType(dimensions, elementType)});
+			return factory.createPolymorphicType("java.lang.Array", new Type[]{createArrayType(dimensions, elementType)});
 		} else {
 			return createType(elementType);
 		}
@@ -56,7 +56,7 @@ public class TypeBuilder extends ASTVisitor {
 		  types[i] = createType(typeArguments.get(i));	
 		}
 
-		result = factory.createPolymorphic(name, types);	
+		result = factory.createPolymorphicType(name, types);	
 		return false;
 	}
 	
@@ -66,22 +66,22 @@ public class TypeBuilder extends ASTVisitor {
 	}
 
 	public boolean visit(PrimitiveType node) {
-		result = factory.createConst(node.toString());
+		result = factory.createPrimitiveType(node.toString());
 		return false;
 	}
 	
 	public boolean visit(QualifiedType node) {
-		result = factory.createConst(makeQualifiedName(node));
+		result = factory.createConstType(makeQualifiedName(node));
 		return false;
 	}	
 
 	private String makeQualifiedName(QualifiedType node) {
 		Type type = createType(node.getQualifier());
-		return type.getHead() +"$"+node.getName().getIdentifier();
+		return type.getPrefix() +"$"+node.getName().getIdentifier();
 	}
 
 	public boolean visit(SimpleType node) {
-		result = factory.createConst(node.toString());
+		result = factory.createConstType(node.toString());
 		return false;
 	}
 
@@ -90,7 +90,7 @@ public class TypeBuilder extends ASTVisitor {
 	}	
 	
 	public boolean visit(WildcardType node) {
-		result = factory.createConst("?");
+		result = factory.createConstType("?");
 		return false;
 	}	
 }

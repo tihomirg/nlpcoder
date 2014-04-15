@@ -4,34 +4,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Variable extends Type {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2312467056934914968L;
 
-	private static final List<String> EMPTY_LIST = new LinkedList<String>();	
-	
+	private static final long serialVersionUID = 2312467056934914968L;	
+
 	protected Variable(String name) {
 		super(name);
 	}
 
-	public String getName() {
-		return head;
-	}
-
-	@Override
-	public int hashCode() {
-		return head.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return this == obj;
-	}
-
 	@Override
 	public String toString() {
-		return "Variable (" + head + ")";
+		return "Variable (" + name + ")";
 	}
 
 	@Override
@@ -56,7 +38,69 @@ public class Variable extends Type {
 	}
 	
 	@Override
-	public List<String> caracteristicWords() {
-		return EMPTY_LIST;
+	public List<String> getWords() {
+		return EMPTY_STRING_LIST;
 	}
+
+	@Override
+	protected List<Type> getInheritedTypes(TypeFactory factory) {
+		return EMPTY_TYPE_LIST;
+	}	
+	
+	@Override
+	public List<Type> getCompatibleTypes(TypeFactory factory) {
+		return EMPTY_TYPE_LIST;
+	}
+
+	@Override
+	public Unifier isCompatible(Type type, TypeFactory factory) {
+		if (type.isNoType() || type.isNullType()) return Unifier.True();
+		else return this.unify(type, factory);
+	}
+
+	@Override
+	public String getPrefix() {
+		return this.name;
+	}
+
+	@Override
+	public boolean isPrimitiveType() {
+		return false;
+	}
+
+	@Override
+	public boolean isNullType() {
+		return false;
+	}
+
+	@Override
+	public boolean isNoType() {
+		return false;
+	}
+
+	@Override
+	public boolean isVariable() {
+		return true;
+	}
+
+	@Override
+	public boolean isReferenceType() {
+		return false;
+	}
+
+	@Override
+	public boolean isPolymorphicType() {
+		return false;
+	}
+
+	@Override
+	public boolean isConstantType() {
+		return false;
+	}
+
+	@Override
+	public boolean isBoxedType() {
+		return false;
+	}
+
 }

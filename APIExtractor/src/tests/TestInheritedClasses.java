@@ -13,7 +13,7 @@ import org.apache.bcel.classfile.ClassParser;
 import selection.Config;
 import selection.WordExtractorEmpty;
 import selection.types.NameGenerator;
-import selection.types.Polymorphic;
+import selection.types.PolymorphicType;
 import selection.types.Type;
 import selection.types.TypeFactory;
 
@@ -30,7 +30,7 @@ public class TestInheritedClasses {
 			
 			ClassInfo classInfo = new ClassInfo(new ClassParser(bis, null).parse(), new WordExtractorEmpty());
 			
-			Type instType = factory.createPolymorphic("test.T1", new Type[]{factory.createConst("java.lang.Integer")});
+			Type instType = factory.createPolymorphicType(classInfo, new Type[]{factory.createPrimitiveType("java.lang.Integer")});
 			
 			Type[] instantiated = classInfo.getInstantiatedInheritedTypes(instType);
 			

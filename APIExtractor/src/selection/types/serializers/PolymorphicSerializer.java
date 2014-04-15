@@ -1,6 +1,6 @@
 package selection.types.serializers;
 
-import selection.types.Polymorphic;
+import selection.types.PolymorphicType;
 import selection.types.Type;
 import selection.types.TypeFactory;
 
@@ -9,7 +9,9 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-public class PolymorphicSerializer extends Serializer<Polymorphic> {
+import definitions.ClassInfo;
+
+public class PolymorphicSerializer extends Serializer<PolymorphicType> {
 
 	private TypeFactory factory;
 	
@@ -18,15 +20,15 @@ public class PolymorphicSerializer extends Serializer<Polymorphic> {
 	}
 
 	@Override
-	public Polymorphic read(Kryo kryo, Input in, Class<Polymorphic> type) {
-		String name = in.readString();
+	public PolymorphicType read(Kryo kryo, Input in, Class<PolymorphicType> type) {
+		ClassInfo clazz = kryo.readObject(in, ClassInfo.class);
 		Type[] params = kryo.readObject(in, Type[].class);
-		return factory.createPolymorphic(name, params);
+		return factory.createPolymorphicType(clazz, params);
 	}
 
 	@Override
-	public void write(Kryo kryo, Output out, Polymorphic poly) {
-		out.writeString(poly.getName());
+	public void write(Kryo kryo, Output out, PolymorphicType poly) {
+		kryo.writeObject(out, poly.getClassInfo());
 		kryo.writeObject(out, poly.getParams());
 	}
 

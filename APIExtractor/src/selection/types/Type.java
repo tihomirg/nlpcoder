@@ -1,96 +1,71 @@
 package selection.types;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Type implements Serializable {
 
 	private static final long serialVersionUID = -900979897015622962L;
-	protected final String head;
 
-	private boolean regularType;
-	private boolean primitiveType;
-	private boolean holeType;
-	private boolean boxedType;
-
-	public Type(String head){
-		this.head = head;
-	}
+	protected static final List<String> EMPTY_STRING_LIST = new LinkedList<String>();
+	protected static final List<Type> EMPTY_TYPE_LIST = new LinkedList<Type>();	
 	
-	public boolean isHoleType() {
-		return holeType;
+	protected String name;
+	
+	protected Type(String name) {
+		this.name = name;
 	}
 
-	public void setHoleType(boolean holeType) {
-		this.holeType = holeType;
-	}
-
-	public boolean isBoxedType() {
-		return boxedType;
-	}
-
-	public void setBoxedType(boolean boxedType) {
-		this.boxedType = boxedType;
-	}
-
-	public boolean isRegularType() {
-		return regularType;
-	}
-
-	public void setRegularType(boolean regularType) {
-		this.regularType = regularType;
-	}
-
-	public boolean isPrimitiveType() {
-		return primitiveType;
-	}
-
-	public void setPrimitiveType(boolean primitiveType) {
-		this.primitiveType = primitiveType;
-	}
-
+	//Compatible
+	protected abstract List<Type> getInheritedTypes(TypeFactory factory);
+	protected abstract List<Type> getCompatibleTypes(TypeFactory factory);
+	public abstract Unifier isCompatible(Type type, TypeFactory factory);
+	
+	//Type kind
+	public abstract boolean isPrimitiveType();
+	public abstract boolean isNullType();
+	public abstract boolean isNoType();
+	public abstract boolean isVariable();
+	public abstract boolean isReferenceType();	
+	public abstract boolean isPolymorphicType();
+	public abstract boolean isConstantType();
+	public abstract boolean isBoxedType();
+	
+	
+	//Unification
+	public abstract Type apply(Substitution sub, TypeFactory factory);
+	public abstract Unifier unify(Type type, TypeFactory factory);
+	public abstract boolean contains(Type type);	
+	
 	public Type apply(List<Substitution> subs, TypeFactory factory){
 		Type curr = this;
 		for (Substitution sub : subs) {
 			curr = curr.apply(sub, factory);
 		}
 		return curr;
-	}
+	}	
 	
-	public abstract Type apply(Substitution sub, TypeFactory factory);
-	public abstract boolean contains(Type type);
-	public abstract Unifier unify(Type type, TypeFactory factory);
-
-	public abstract List<String> caracteristicWords();
-
-	public String getHead() {
-		return head;
+	@Override
+	public int hashCode() {
+		return this.name.hashCode();
 	}
-	/**
-	 * Only for ref types!
-	 * @return
-	 */
-	public List<Type> compatable(){
-		//TODO: Implement
-		return null;
+
+	@Override
+	public boolean equals(Object obj) {
+		return this.hashCode() == obj.hashCode();
 	}
+
+	public List<String> getWords() {
+		return new LinkedList<String>(){{add(shortName(name));}};
+	}
+
+	protected static String shortName(String name) {
+		return name.substring(name.lastIndexOf(".")+1);
+	}	
 	
-	public boolean isCompatible(Type type){
-		if(this.regularType){
-			if (this.primitiveType) {
-				return type.isRegularType() && (type.isPrimitiveType() || type.isBoxedType());
-			} else {
-				return type.isRegularType() && !type.isPrimitiveType() && this.compatable().contains(type);
-			}
-		} else {
-			if(this.holeType) return true;
-			else {
-				if (this.primitiveType) {//operatorType
-					return type.isRegularType() && (type.isPrimitiveType() || type.isBoxedType());
-				} else { //NullType
-					return type.isRegularType() && !type.isPrimitiveType();
-				}
-			}
-		}
+	public String getPrefix() {
+		return this.name;
 	}
+
 }

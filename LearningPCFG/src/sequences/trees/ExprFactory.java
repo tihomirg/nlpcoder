@@ -1,6 +1,5 @@
 package sequences.trees;
 
-import selection.types.Const;
 import selection.types.Type;
 import selection.types.TypeFactory;
 

@@ -121,7 +121,7 @@ public class API {
 	}
 
 	public Declaration getTrueBooleanLiteral() {
-		return new Declaration("true", factory.createConst("boolean"), true);
+		return new Declaration("true", factory.createPrimitiveType("boolean"), true);
 	}
 
 	private ClassInfo getJavaLangString() {
@@ -132,7 +132,7 @@ public class API {
 	}
 
 	public Declaration getFalseBooleanLiteral() {
-		return new Declaration("false", factory.createConst("boolean"), true);
+		return new Declaration("false", factory.createPrimitiveType("boolean"), true);
 	}
 
 	public Declaration getStringLiteral() {
@@ -140,11 +140,11 @@ public class API {
 	}
 
 	public Declaration getCharacterLiteral() {
-		return new Declaration("char", factory.createConst("char"), true);
+		return new Declaration("char", factory.createPrimitiveType("char"), true);
 	}
 
 	public Declaration getNumberLiteral() {
-		return new Declaration("number", factory.createConst("java.lang.NoType"), true);
+		return new Declaration("number", factory.getNoType(), true);
 	}
 
 	public boolean canBeReceiver(Declaration head, Declaration receiver) {
@@ -159,7 +159,7 @@ public class API {
 		Set<Type> types = new HashSet<Type>();
 		types.add(type);
 		
-		String head = type.getHead();
+		String head = type.getPrefix();
 		ClassInfo clazz = getClass(head);
 		if(clazz != null){
 			List<ClassInfo> list = new LinkedList<ClassInfo>();

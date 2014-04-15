@@ -4,30 +4,34 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Polymorphic extends Type {
+import definitions.ClassInfo;
+
+public class PolymorphicType extends ReferenceType {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8410671184621593335L;
-	
 	private final Type[] params;
+
 	
-	protected Polymorphic(String name, Type[] params) {
+	protected PolymorphicType(String name, Type[] params) {
 		super(name);
+		this.params = params;
+	}	
+	
+	protected PolymorphicType(ClassInfo clazz, Type[] params) {
+		super(clazz);
 		this.params = params;
 	}
 
 	public Type[] getParams() {
 		return params;
 	}
-	
-	public String getName() {
-		return head;
-	}
 
 	@Override
 	public int hashCode() {
-		return getHashCode(this.head, this.params);
+		return getHashCode(this.name, this.params);
 	}
 
 	protected static int getHashCode(String name, Type[] params) {
@@ -39,13 +43,8 @@ public class Polymorphic extends Type {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		return this == obj;
-	}
-
-	@Override
 	public Type apply(Substitution sub, TypeFactory factory) {
-		return factory.createPolymorphic(this.head, apply(params, sub, factory));
+		return factory.createPolymorphicType(clazz, apply(params, sub, factory));
 	}
 
 	private static Type[] apply(Type[] params, Substitution sub, TypeFactory factory) {
@@ -59,9 +58,9 @@ public class Polymorphic extends Type {
 	@Override
 	public Unifier unify(Type type, TypeFactory factory) {
 		if (this.equals(type)) return Unifier.True();
-		if (type instanceof Polymorphic){
-			Polymorphic poly = (Polymorphic) type;
-			if(this.head.equals(poly.head) 
+		if (type.isPolymorphicType()){
+			PolymorphicType poly = (PolymorphicType) type;
+			if(this.getPrefix().equals(poly.getPrefix()) 
 			   && this.params.length == poly.params.length){
 				List<Substitution> subs = new LinkedList<Substitution>();
 				for (int i = 0; i< this.params.length; i++) {
@@ -78,9 +77,8 @@ public class Polymorphic extends Type {
 				return new Unifier(true, subs);
 			}
 		} else {
-			if (type instanceof Variable){
-				Variable var = (Variable) type;
-				return var.unify(this, factory);
+			if (type.isVariable()){
+				return type.unify(this, factory);
 			}
 		}
 		
@@ -97,21 +95,35 @@ public class Polymorphic extends Type {
 	}
 
 	@Override
-	public String toString() {
-		return "Polymorphic ("+head + ", "+ Arrays.toString(params) + ")";
-	}
-
-	@Override
-	public List<String> caracteristicWords() {
+	public List<String> getWords() {
 		List<String> list = new LinkedList<String>();
-		list.add(head);
+		list.add(this.name);
 		
 		for (Type type : params) {
-			list.addAll(type.caracteristicWords());
+			list.addAll(type.getWords());
 		}
 		
 		return list;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Polymorphic ("+this.getPrefix()+ ", "+ Arrays.toString(params) + ")";
+	}
+
+	@Override
+	public boolean isPolymorphicType() {
+		return true;
+	}
+
+	@Override
+	public boolean isConstantType() {
+		return false;
+	}
+
+	@Override
+	public boolean isBoxedType() {
+		return false;
+	}
+
 }

@@ -21,7 +21,6 @@ import org.eclipse.jdt.core.Signature;
 
 import selection.Config;
 import selection.WordExtractorEmpty;
-import selection.types.Const;
 import selection.types.NameGenerator;
 import selection.types.Type;
 import selection.types.TypeFactory;

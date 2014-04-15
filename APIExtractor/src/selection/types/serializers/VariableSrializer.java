@@ -23,7 +23,7 @@ public class VariableSrializer extends Serializer<Variable> {
 
 	@Override
 	public void write(Kryo kryo, Output out, Variable var) {
-		out.writeString(var.getName());
+		out.writeString(var.getPrefix());
 	}
 
 }

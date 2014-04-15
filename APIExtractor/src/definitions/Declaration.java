@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import selection.parser.one.Word;
-import selection.types.Const;
 import selection.types.Type;
 
 public class Declaration implements Serializable, Cloneable {
@@ -193,7 +192,7 @@ public class Declaration implements Serializable, Cloneable {
 	}
 
 	private String typeToSentence(Type type) {
-		return toString(type.caracteristicWords());
+		return toString(type.getWords());
 	}
 
 	private String toString(List<String> words) {

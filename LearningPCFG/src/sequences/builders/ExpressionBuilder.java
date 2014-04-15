@@ -107,13 +107,13 @@ public class ExpressionBuilder extends FalseBuilder {
 
 	public boolean visit(BooleanLiteral node) {
 		boolean val = node.booleanValue();
-		this.expr = expFactory.createLiteral(Boolean.toString(val), typeFactory.createConst("boolean"));
+		this.expr = expFactory.createLiteral(Boolean.toString(val), typeFactory.createPrimitiveType("boolean"));
 		return false;
 	}
 
 	public boolean visit(CharacterLiteral node) {
 		char val = node.charValue();
-		this.expr = expFactory.createLiteral(Character.toString(val), typeFactory.createConst("char"));
+		this.expr = expFactory.createLiteral(Character.toString(val), typeFactory.createPrimitiveType("char"));
 		return false;
 	}
 
@@ -123,12 +123,12 @@ public class ExpressionBuilder extends FalseBuilder {
 	}
 
 	public boolean visit(NumberLiteral node){
-		this.expr = expFactory.createLiteral(node.getToken(), typeFactory.createConst("java.lang.Object"));
+		this.expr = expFactory.createLiteral(node.getToken(), typeFactory.createConstType("java.lang.Object"));
 		return false;
 	}
 
 	public boolean visit(StringLiteral node) {
-		this.expr = expFactory.createLiteral(node.getEscapedValue(), typeFactory.createConst("java.lang.String"));		
+		this.expr = expFactory.createLiteral(node.getEscapedValue(), typeFactory.createConstType("java.lang.String"));		
 		return false;
 	}	
 

@@ -20,7 +20,6 @@ import org.apache.bcel.classfile.Method;
 import org.eclipse.jdt.core.Signature;
 
 import selection.IWordExtractor;
-import selection.types.Const;
 import selection.types.Substitution;
 import selection.types.Type;
 import selection.types.TypeFactory;
@@ -66,7 +65,7 @@ public class ClassInfo implements Serializable {
 
 		this.methods = initMethods(clazz, extractor);
 		this.fields = initFields(clazz, extractor);
-
+		
 		try {
 			this.interfaces = makeInterfaces(clazz.getInterfaces(), extractor);
 		} catch (Exception e) {
@@ -95,12 +94,12 @@ public class ClassInfo implements Serializable {
 		}
 
 		this.classTypeParams = typeParameters(signature);
-		this.type = getClazzType(this.classTypeParams, this.name);
+		this.type = getClazzType(this.classTypeParams, this);
 		
 		this.inheritedTypes = getInheritedTypes(signature, new HashSet<String>(Arrays.asList(this.classTypeParams))); 
 	}
 
-	private static Type getClazzType(String[] typeParameters, String name) {
+	private static Type getClazzType(String[] typeParameters, ClassInfo clazz) {
 		int length = typeParameters.length;
 		Type[] typeParam = new Type[length];
 		for (int i = 0; i < length; i++) {
@@ -108,9 +107,12 @@ public class ClassInfo implements Serializable {
 		}
 		
 		if (length > 0) {
-		    return factory.createPolymorphic(name, typeParam);			
+		    return factory.createPolymorphicType(clazz, typeParam);			
 		} else {
-		    return factory.createConst(name);
+			//TODO: CreateOthers
+			
+			//Referenced or Boxed type
+		    return null;
 		}
 		
 	}
@@ -253,7 +255,7 @@ public class ClassInfo implements Serializable {
 		Map<Type, ClassInfo> map = new HashMap<Type, ClassInfo>();
 		for(int i = 0; i < this.inheritedTypes.length; i++){
 			Type type = this.inheritedTypes[i];
-			String head = type.getHead();
+			String head = type.getPrefix();
 			
 			for(ClassInfo iType: iTypes){
 				if(iType.name.equals(head)){
@@ -510,7 +512,9 @@ public class ClassInfo implements Serializable {
 				if(vars.contains(dotSignature))
 					return factory.createVariable(dotSignature);
 				else
-					return factory.createConst(dotSignature);				
+					//TODO: Find appropriate types here. Find out if this is Boxed, Primitive, ConstType 
+					
+					return null;//factory.createConst(dotSignature);				
 			}
 		}
 	}
@@ -525,7 +529,7 @@ public class ClassInfo implements Serializable {
 
 	private static Type polyType(String typeErasure, String[] typeParams, Set<String> vars) {
 		String name = Signature.toString(typeErasure);
-		return factory.createPolymorphic(dottedName(name), types(typeParams, vars));
+		return factory.createPolymorphicType0(dottedName(name), types(typeParams, vars));
 	}
 
 	private static Type[] types(String[] signatures, Set<String> vars) {
@@ -539,7 +543,7 @@ public class ClassInfo implements Serializable {
 
 	private static Type arrayType(String elementType, int dimension, Set<String> vars) {
 		if (dimension > 0){
-			return factory.createPolymorphic("java.lang.Array", new Type[]{arrayType(elementType, dimension - 1, vars)});	
+			return factory.createPolymorphicType("java.lang.Array", new Type[]{arrayType(elementType, dimension - 1, vars)});	
 		} else {
 			return type(elementType, vars);
 		}
