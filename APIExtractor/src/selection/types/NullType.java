@@ -20,17 +20,17 @@ public class NullType extends Type {
 	}
 
 	@Override
-	protected List<Type> getInheritedTypes(TypeFactory factory) {
+	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}	
 	
 	@Override
-	protected List<Type> getCompatibleTypes(TypeFactory factory) {
+	protected List<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}
 
 	@Override
-	public Unifier isCompatible(Type type, TypeFactory factory) {
+	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
 		if(type.isReferenceType() || type.isNullType() || type.isNoType()) return Unifier.True();
 		else return Unifier.False();
 	}

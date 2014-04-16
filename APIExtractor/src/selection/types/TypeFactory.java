@@ -1,103 +1,72 @@
 package selection.types;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import definitions.ClassInfo;
 
-public class TypeFactory {
+public abstract class TypeFactory {
 
 	private NameGenerator nameGen;
 	
-	private final Map<String, ReferenceType> cons = new HashMap<String, ReferenceType>();
-	private final Map<String, BoxedType> boxed = new HashMap<String, BoxedType>();
-	private final Map<String, PrimitiveType> primitive = new HashMap<String, PrimitiveType>();
-	private final Set<ReferenceType> reference = new HashSet<ReferenceType>();
+	protected final Map<String, ConstType> cons = new HashMap<String, ConstType>();
+	protected final Map<String, BoxedType> boxed = new HashMap<String, BoxedType>();
+	protected final Map<String, PrimitiveType> primitive = new HashMap<String, PrimitiveType>();
 	
-	private final Type noType = new NoType();
-	private final Type nullType = new NullType();
+	private final NoType noType = new NoType();
+	private final NullType nullType = new NullType();
 	
 	public TypeFactory(NameGenerator nameGen) {
 		this.nameGen = nameGen;
-		ClassInfo.setFactory(this);
 	}
 
-	public Variable createVariable(String name) {
-		return new Variable(name);
+	protected abstract void addReferenceType(ReferenceType type);
+
+	public BoxedType createBoxedType(String name) {
+		return createBoxedType(name, null);
 	}
 	
-	public Type createBoxedType0(String name) {
-		if(!boxed.containsKey(name)){
-			BoxedType type = new BoxedType(name);
-			this.reference.add(type);
-			boxed.put(name, type);
-		}
-		return boxed.get(name);
-	}
-	
-	public Type createBoxedType(String name) {
-		if(!boxed.containsKey(name)){
-			BoxedType type = new BoxedType(name);
-			boxed.put(name, type);
-		}
-		return boxed.get(name);
+	public ConstType createConstType(String name) {
+		return createConstType(name, null);
 	}	
 	
-	public Type createConstType0(String name) {
-		if(!cons.containsKey(name)){
-			ConstType type = new ConstType(name);
-			this.reference.add(type);
-			cons.put(name, type);
-		}
-		return cons.get(name);
-	}
-	
-	public Type createConstType(String name) {
-		if(!cons.containsKey(name)){
-			ConstType type = new ConstType(name);
-			cons.put(name, type);
-		}
-		return cons.get(name);
-	}	
-	
-	public Type createConstType(ClassInfo clazz) {
-		String name = clazz.getName();
-		if(!cons.containsKey(name)){
-			ConstType type = new ConstType(clazz);
-			cons.put(name, type);
-		}
-		return cons.get(name);
-	}	
-	
-	public Type createPrimitiveType(String name) {
+	public PrimitiveType createPrimitiveType(String name) {
 		if(!primitive.containsKey(name)){
 			primitive.put(name, new PrimitiveType(name));
 		}
-		return cons.get(name);
+		return primitive.get(name);
 	}
-
 	
-	public PolymorphicType createPolymorphicType0(String name, Type[] params) {
-		PolymorphicType type = new PolymorphicType(name, params);
-	    this.reference.add(type);
-	    return type;
+	public BoxedType createBoxedType(String name, ClassInfo clazz) {
+		if(!boxed.containsKey(name)){
+			BoxedType type = new BoxedType(name, clazz);
+			addReferenceType(type);			
+			boxed.put(name, type);
+		}
+		return boxed.get(name);
 	}	
 	
-	public PolymorphicType createPolymorphicType(String name, Type[] params) {
-		return new PolymorphicType(name, params);
-	}
+	public ConstType createConstType(String name, ClassInfo clazz) {
+		if(!cons.containsKey(name)){
+			ConstType type = new ConstType(name, clazz);
+			addReferenceType(type);
+			cons.put(name, type);
+		}
+		return cons.get(name);
+	}	
 
-	public PolymorphicType createPolymorphicType(ClassInfo clazz, Type[] params) {
-		return new PolymorphicType(clazz, params);
-	}		
+	public PolymorphicType createPolymorphicType(String name, Type[] params) {
+	    return createPolymorphicType(name, null, params);
+	}
 	
-	@Override
-	public String toString() {
-		return    "\nprimitive: " + primitive.values()
-				+ "\nreference: "+reference;
+	public PolymorphicType createPolymorphicType(String name, ClassInfo clazz, Type[] params) {
+		PolymorphicType type = new PolymorphicType(name, clazz, params);
+		addReferenceType(type);	
+		return type;
+	}		
+
+	public Variable createVariable(String name) {
+		return new Variable(name);
 	}
 	
 	public Substitution varToNewVar(String oldName){
@@ -112,30 +81,20 @@ public class TypeFactory {
 		return nameGen;
 	}
 
-	public Type getNoType() {
+	public NoType createNoType() {
 		return noType;
 	}
  
-	public Type createNullType() {
+	public NullType createNullType() {
 		return nullType;
 	}
-
+	
 	public Type getBoxedType(PrimitiveType primitiveType) {
 		return null;
-	}
-	
-	public void setClassInfo(Map<String, ClassInfo> map){
-		for (ReferenceType type : reference) {
-			String name = type.getPrefix();
-			if(map.containsKey(name)){
-				type.setClassInfo(map.get(name));
-			}
-		}
-	}
+	}	
 
-	public List<Type> getInheritedTypes(ReferenceType referenceType) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public String toString() {
+		return "primitive: " + primitive.values();
 	}
-
 }

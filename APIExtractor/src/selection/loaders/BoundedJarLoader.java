@@ -13,6 +13,7 @@ import org.apache.bcel.classfile.ClassParser;
 import definitions.ClassInfo;
 
 import selection.IWordExtractor;
+import selection.types.InitialTypeFactory;
 
 public class BoundedJarLoader implements IJarLoader {
 	
@@ -24,7 +25,7 @@ public class BoundedJarLoader implements IJarLoader {
 	}
 
 	@Override
-	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor) {
+	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor, InitialTypeFactory factory) {
 		exit: for(String jarFile: jarFiles){
 
 			JarFile jar;
@@ -36,7 +37,7 @@ public class BoundedJarLoader implements IJarLoader {
 
 					file.isDirectory();
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor);
+						new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor, factory);
 
 						scanned++;
 						if(scanned >= maxToScan){

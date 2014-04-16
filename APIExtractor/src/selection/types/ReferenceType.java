@@ -17,8 +17,8 @@ public abstract class ReferenceType extends Type {
 		super(name);
 	}
 	
-	public ReferenceType(ClassInfo clazz) {
-		super(clazz.getName());
+	public ReferenceType(String name, ClassInfo clazz) {
+		super(name);
 		this.clazz = clazz;
 	}	
 	
@@ -30,8 +30,12 @@ public abstract class ReferenceType extends Type {
 		this.clazz = clazz;
 	}
 	
+	public boolean hasClassInfo(){
+		return this.clazz != null;
+	}
+	
 	@Override
-	protected List<Type> getInheritedTypes(TypeFactory factory) {
+	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
 		if(this.inheritedTypes == null){
 			this.inheritedTypes = factory.getInheritedTypes(this);
 		}
@@ -39,7 +43,7 @@ public abstract class ReferenceType extends Type {
 	}
 	
 	@Override
-	public List<Type> getCompatibleTypes(TypeFactory factory) {
+	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		if (this.compatibleTypes == null) {
 			this.compatibleTypes = new LinkedList<Type>();
 			this.compatibleTypes.add(this);
@@ -49,7 +53,7 @@ public abstract class ReferenceType extends Type {
 	}
 	
 	@Override
-	public Unifier isCompatible(Type type, TypeFactory factory) {
+	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
 		if(type.isNoType() || type.isNullType()) return Unifier.True();
 		else {
 			List<Type> cTypes = type.getCompatibleTypes(factory);

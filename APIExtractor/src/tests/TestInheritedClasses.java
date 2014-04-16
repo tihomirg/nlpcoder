@@ -12,8 +12,10 @@ import org.apache.bcel.classfile.ClassParser;
 
 import selection.Config;
 import selection.WordExtractorEmpty;
+import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
 import selection.types.PolymorphicType;
+import selection.types.StabileTypeFactory;
 import selection.types.Type;
 import selection.types.TypeFactory;
 
@@ -24,19 +26,24 @@ public class TestInheritedClasses {
 	public static void main(String[] args) {
 		try{
 
+			//Serilaization part
 			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(new File("C:/Users/gvero/git/nlpcoder/APIExtractor/bin/test/T1.class")));
 
-			TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
+			InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 			
-			ClassInfo classInfo = new ClassInfo(new ClassParser(bis, null).parse(), new WordExtractorEmpty());
+			ClassInfo classInfo = new ClassInfo(new ClassParser(bis, null).parse(), new WordExtractorEmpty(), factory);
 			
-			Type instType = factory.createPolymorphicType(classInfo, new Type[]{factory.createPrimitiveType("java.lang.Integer")});
+			Type instType = factory.createPolymorphicType(classInfo.getName(), classInfo, new Type[]{factory.createPrimitiveType("java.lang.Integer")});
 			
-			Type[] instantiated = classInfo.getInstantiatedInheritedTypes(instType);
+			
+			//Deserilaization part
+			StabileTypeFactory sfactory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
+			
+			Type[] instantiated = classInfo.getInstantiatedInheritedTypes(instType, sfactory);
 			
 			System.out.println(Arrays.toString(instantiated));
 			
-			List<Declaration> instDecls = classInfo.getInstantiatedDeclarations(instType);
+			List<Declaration> instDecls = classInfo.getInstantiatedDeclarations(instType, sfactory);
 			
 			System.out.println(instDecls);
 			

@@ -21,6 +21,7 @@ import org.eclipse.jdt.core.Signature;
 
 import selection.Config;
 import selection.WordExtractorEmpty;
+import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
 import selection.types.Type;
 import selection.types.TypeFactory;
@@ -31,12 +32,10 @@ import definitions.Declaration;
 
 public class BcelMain {
 	
-	public static TypeFactory factory;
-	
 	public static void main(String[] args){
 		try {
 			
-			BcelMain.factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
+			InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 			
 			String fileName = "C:/users/gvero/git/nlpcoder/APIExtractor/bin/test/CityImpl.class";
 			
@@ -45,7 +44,7 @@ public class BcelMain {
 			ClassParser cp = new ClassParser(fileName);
 			JavaClass parsed = cp.parse();
 			
-			ClassInfo clazz = new ClassInfo(parsed, new WordExtractorEmpty());
+			ClassInfo clazz = new ClassInfo(parsed, new WordExtractorEmpty(), factory);
 			
 			Collection<ClassInfo> classes = ClassInfo.getClasses().values();
 		

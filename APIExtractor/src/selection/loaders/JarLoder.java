@@ -13,11 +13,12 @@ import org.apache.bcel.classfile.ClassParser;
 import definitions.ClassInfo;
 
 import selection.IWordExtractor;
+import selection.types.InitialTypeFactory;
 
 public class JarLoder implements IJarLoader {
 
 	@Override
-	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor) {
+	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor, InitialTypeFactory factory) {
 		for(String jarFile: jarFiles){
 
 			JarFile jar;
@@ -28,7 +29,7 @@ public class JarLoder implements IJarLoader {
 					JarEntry file = entries.nextElement();
 
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor);
+						new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor, factory);
 					}
 				}
 			} catch (IOException e) {

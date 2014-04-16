@@ -14,6 +14,7 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 
 import selection.IWordExtractor;
+import selection.types.InitialTypeFactory;
 import definitions.ClassInfo;
 
 public class TargetJarLoader implements IJarLoader {
@@ -28,7 +29,7 @@ public class TargetJarLoader implements IJarLoader {
 	}
 
 	@Override
-	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor) {
+	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor, InitialTypeFactory factory) {
 		exit: for(String jarFile: jarFiles){
 
 			JarFile jar;
@@ -44,7 +45,7 @@ public class TargetJarLoader implements IJarLoader {
 						String pkgName = fullName.substring(0, fullName.lastIndexOf("/")).replace("/", ".");
 						if (this.pkg.contains(pkgName)){
 							System.out.println(file);						
-							new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor);
+							new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor, factory);
 
 							scanned++;
 							if(scanned >= maxToScan){

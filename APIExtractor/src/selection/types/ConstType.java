@@ -1,6 +1,5 @@
 package selection.types;
 
-import java.util.List;
 
 import definitions.ClassInfo;
 
@@ -15,8 +14,8 @@ public class ConstType extends ReferenceType {
 		super(name);
 	}
 	
-	public ConstType(ClassInfo clazz) {
-		super(clazz);
+	public ConstType(String name, ClassInfo clazz) {
+		super(name, clazz);
 	}	
 	
 	public Type apply(Substitution sub, TypeFactory factory) {

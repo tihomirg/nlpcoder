@@ -7,13 +7,14 @@ import builders.IBuilder;
 import selection.Config;
 import selection.deserializers.Deserializer;
 import selection.types.NameGenerator;
+import selection.types.StabileTypeFactory;
 import selection.types.TypeFactory;
 import declarations.API;
 import definitions.ClassInfo;
 
 public class DeclFreqBoundedScanner extends BoundedScanner {
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
+		TypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer(factory);
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API(factory);

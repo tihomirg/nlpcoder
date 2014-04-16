@@ -18,9 +18,9 @@ public abstract class Type implements Serializable {
 	}
 
 	//Compatible
-	protected abstract List<Type> getInheritedTypes(TypeFactory factory);
-	protected abstract List<Type> getCompatibleTypes(TypeFactory factory);
-	public abstract Unifier isCompatible(Type type, TypeFactory factory);
+	protected abstract List<Type> getInheritedTypes(StabileTypeFactory factory);
+	protected abstract List<Type> getCompatibleTypes(StabileTypeFactory factory);
+	public abstract Unifier isCompatible(Type type, StabileTypeFactory factory);
 	
 	//Type kind
 	public abstract boolean isPrimitiveType();

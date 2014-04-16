@@ -17,16 +17,18 @@ import selection.loaders.FolderLoader;
 import selection.loaders.IJarLoader;
 import selection.loaders.TargetJarLoader;
 import selection.serializers.config.TargetConfig;
+import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
+import tests.TypeSerializer;
 import definitions.ClassInfo;
 
 public class TargetSerializer {
 
 	private String[] targetPackage;
-	private TypeFactory factory;	
+	private InitialTypeFactory factory;	
 	
-	public TargetSerializer(TypeFactory factory, String[] targetPackage) {
+	public TargetSerializer(InitialTypeFactory factory, String[] targetPackage) {
 		this.factory = factory;
 		this.targetPackage = targetPackage;
 	}
@@ -39,7 +41,7 @@ public class TargetSerializer {
 			FolderLoader fLoader = new FolderLoader();
 			List<String> jars = fLoader.getJars(folder);
 			IJarLoader jLoder = new TargetJarLoader(Config.getMaxFilesToScan(), targetPackage);
-			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor);
+			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor, factory);
 			
 			Collection<ClassInfo> values = classFiles.values();
 			ClassInfo[] values2 = values.toArray(new ClassInfo[values.size()]);
@@ -53,7 +55,7 @@ public class TargetSerializer {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
+		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 		TargetSerializer loader = new TargetSerializer(factory, TargetConfig.getTarget());
 		
 		WordProcessor wordProcessor = new WordProcessor();

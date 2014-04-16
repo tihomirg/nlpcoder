@@ -6,8 +6,9 @@ import java.util.Map;
 import definitions.ClassInfo;
 
 import selection.IWordExtractor;
+import selection.types.InitialTypeFactory;
 
 
 public interface IJarLoader {
-	Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor);
+	Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor, InitialTypeFactory factory);
 }

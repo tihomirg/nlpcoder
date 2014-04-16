@@ -11,6 +11,14 @@ public class BoxedType extends ConstType {
 
 	public BoxedType(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
+
+	public BoxedType(String name, ClassInfo clazz) {
+		super(name, clazz);
+	}
+	
+	@Override
+	public boolean isBoxedType() {
+		return true;
+	}		
 }

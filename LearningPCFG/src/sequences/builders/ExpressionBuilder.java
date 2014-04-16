@@ -84,7 +84,7 @@ public class ExpressionBuilder extends FalseBuilder {
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
 		Expr exp = getExpr(node.getExpression());
-		this.expr = expFactory.createFieldAccess(name, exp, typeFactory.getNoType());
+		this.expr = expFactory.createFieldAccess(name, exp, typeFactory.createNoType());
 		return false;
 	}
 
@@ -92,7 +92,7 @@ public class ExpressionBuilder extends FalseBuilder {
 		String name = node.getName().getIdentifier();
 		Expr exp = getExpr(node.getExpression());
 		Expr[] args = getExprs(node.arguments());
-		this.expr = expFactory.createMethodInvocation(name, exp, args, typeFactory.getNoType());
+		this.expr = expFactory.createMethodInvocation(name, exp, args, typeFactory.createNoType());
 		return false;
 	}
 
@@ -134,7 +134,7 @@ public class ExpressionBuilder extends FalseBuilder {
 
 	public boolean visit(SimpleName node){
 		String name = node.getIdentifier();
-		this.expr = expFactory.createVariable(name, typeFactory.getNoType());
+		this.expr = expFactory.createVariable(name, typeFactory.createNoType());
 		return false;
 	}
 	
@@ -155,7 +155,7 @@ public class ExpressionBuilder extends FalseBuilder {
 	public boolean visit(ArrayAccess node) {
 		Expr expr = getExpr(node.getArray());		
 		Expr index = getExpr(node.getIndex());
-		this.expr = expFactory.createMethodInvocation("[]", expr, new Expr[]{index}, typeFactory.getNoType());
+		this.expr = expFactory.createMethodInvocation("[]", expr, new Expr[]{index}, typeFactory.createNoType());
 		return false;
 	}
 

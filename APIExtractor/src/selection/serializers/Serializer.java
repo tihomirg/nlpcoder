@@ -21,14 +21,16 @@ import selection.loaders.BoundedJarLoader;
 import selection.loaders.FolderLoader;
 import selection.loaders.IJarLoader;
 import selection.parser.one.ParserOne;
+import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
+import tests.TypeSerializer;
 
 public class Serializer {
 
-	private TypeFactory factory;
+	private InitialTypeFactory factory;
 	
-	public Serializer(TypeFactory factory) {
+	public Serializer(InitialTypeFactory factory) {
 		this.factory = factory;
 	}
 
@@ -40,7 +42,7 @@ public class Serializer {
 			FolderLoader fLoader = new FolderLoader();
 			List<String> jars = fLoader.getJars(folder);
 			IJarLoader jLoder = new BoundedJarLoader(Config.getMaxFilesToScan());
-			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor);
+			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor, factory);
 			
 			Collection<ClassInfo> values = classFiles.values();
 			
@@ -57,7 +59,7 @@ public class Serializer {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
+		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 		Serializer loader = new Serializer(factory);
 		
 		WordProcessor wordProcessor = new WordProcessor();

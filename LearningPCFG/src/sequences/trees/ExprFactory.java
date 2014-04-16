@@ -11,7 +11,7 @@ public class ExprFactory {
 
 	public ExprFactory(TypeFactory typeFactory) {
 		this.typeFactory = typeFactory;
-		this.hole = new Hole(typeFactory.getNoType());
+		this.hole = new Hole(typeFactory.createNoType());
 	}
 	
 	public Expr getHole() {

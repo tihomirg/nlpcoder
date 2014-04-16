@@ -1,4 +1,4 @@
-package selection.serializers;
+package tests;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import selection.Config;
+import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
 import selection.types.PolymorphicType;
 import selection.types.Type;
@@ -28,9 +29,7 @@ public class TypeSerializer {
 	private Serializer<Variable> varSer;
 	
 	public TypeSerializer(TypeFactory factory) {
-		this.factory = factory;
-		polySer = new PolymorphicSerializer(factory);
-		varSer = new VariableSrializer(factory);		
+		this.factory = factory;	
 	}
 
 	public Object readObject(String file, Class type) {
@@ -73,7 +72,7 @@ public class TypeSerializer {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
+		TypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 		TypeSerializer serializer = new TypeSerializer(factory);
 		
 		String file = "types.kryo";

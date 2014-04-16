@@ -9,6 +9,7 @@ import scanners.BoundedScanner;
 import selection.Config;
 import selection.deserializers.Deserializer;
 import selection.types.NameGenerator;
+import selection.types.StabileTypeFactory;
 import selection.types.TypeFactory;
 
 import builders.IBuilder;
@@ -16,7 +17,7 @@ import builders.PCFGBuilder;
 
 public class TestPCFGBuilder extends BoundedScanner {
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
+		TypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer(factory);
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API(factory);

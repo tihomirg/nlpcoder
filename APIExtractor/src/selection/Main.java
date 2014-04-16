@@ -18,6 +18,7 @@ import selection.probability.designers.MixedProbabilityDesigner;
 import selection.probability.designers.ScoreDesigner;
 import selection.probability.designers.UniformProbabilityDesigner;
 import selection.serializers.Serializer;
+import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 
@@ -34,7 +35,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new TypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
+		TypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer(factory);
 		
 		FrequencyDeserializer fDeserializer = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());

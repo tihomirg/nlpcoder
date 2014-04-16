@@ -19,17 +19,17 @@ public class NoType extends Type {
 	}
 
 	@Override
-	protected List<Type> getInheritedTypes(TypeFactory factory) {
+	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}	
 	
 	@Override
-	public List<Type> getCompatibleTypes(TypeFactory factory) {
+	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}
 
 	@Override
-	public Unifier isCompatible(Type type, TypeFactory factory) {
+	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
 		return Unifier.True();
 	}
 

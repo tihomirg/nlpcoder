@@ -30,7 +30,7 @@ public class PrimitiveType extends Type {
 	}
 
 	@Override
-	protected List<Type> getCompatibleTypes(TypeFactory factory) {
+	protected List<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		if (this.compatibleTypes == null) {
 			this.compatibleTypes = new LinkedList<Type>();
 			this.compatibleTypes.add(this);
@@ -41,7 +41,7 @@ public class PrimitiveType extends Type {
 	}
 
 	@Override
-	public Unifier isCompatible(Type type, TypeFactory factory) {
+	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
 		if (type.isNoType()) return Unifier.True();
 		else {
 			if (type.isBoxedType() && type.getCompatibleTypes(factory).contains(this)) return Unifier.True();
@@ -92,7 +92,7 @@ public class PrimitiveType extends Type {
 	}
 
 	@Override
-	protected List<Type> getInheritedTypes(TypeFactory factory) {
+	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}
 }

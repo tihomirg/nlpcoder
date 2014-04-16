@@ -144,7 +144,7 @@ public class API {
 	}
 
 	public Declaration getNumberLiteral() {
-		return new Declaration("number", factory.getNoType(), true);
+		return new Declaration("number", factory.createNoType(), true);
 	}
 
 	public boolean canBeReceiver(Declaration head, Declaration receiver) {

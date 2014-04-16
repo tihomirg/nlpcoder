@@ -20,6 +20,8 @@ import org.apache.bcel.classfile.Method;
 import org.eclipse.jdt.core.Signature;
 
 import selection.IWordExtractor;
+import selection.types.InitialTypeFactory;
+import selection.types.StabileTypeFactory;
 import selection.types.Substitution;
 import selection.types.Type;
 import selection.types.TypeFactory;
@@ -33,7 +35,6 @@ public class ClassInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = -8473504638929013042L;	
 	private static final Map<String, ClassInfo> classes = new HashMap<String, ClassInfo>();
-	private static TypeFactory factory;
 	
 	private String name;
 	private ClassInfo[] interfaces;
@@ -52,7 +53,7 @@ public class ClassInfo implements Serializable {
 
 	public ClassInfo(){}
 
-	public ClassInfo(JavaClass clazz, IWordExtractor extractor) {
+	public ClassInfo(JavaClass clazz, IWordExtractor extractor, InitialTypeFactory factory) {
 		this.name = clazz.getClassName();
 		this.packageName = clazz.getPackageName();
 		this.simpleName = getShortName(this.name);
@@ -61,13 +62,13 @@ public class ClassInfo implements Serializable {
 		this.isClass = clazz.isClass();
 		this.isPublic = clazz.isPublic();
 
-		typeParametersAndInheritedTypes(clazz);
+		typeParametersAndInheritedTypes(clazz, factory);
 
-		this.methods = initMethods(clazz, extractor);
-		this.fields = initFields(clazz, extractor);
+		this.methods = initMethods(clazz, extractor, factory);
+		this.fields = initFields(clazz, extractor, factory);
 		
 		try {
-			this.interfaces = makeInterfaces(clazz.getInterfaces(), extractor);
+			this.interfaces = makeInterfaces(clazz.getInterfaces(), extractor, factory);
 		} catch (Exception e) {
 			System.out.println("*******************************************************************************************");
 			this.interfaces = new ClassInfo[0];
@@ -75,7 +76,7 @@ public class ClassInfo implements Serializable {
 
 		try {
 
-			this.superClasses = makeSuperClasses(clazz.getSuperClasses(), extractor);		
+			this.superClasses = makeSuperClasses(clazz.getSuperClasses(), extractor, factory);		
 		} catch (Exception e) {
 			System.out.println("*******************************************************************************************");
 			this.superClasses = new ClassInfo[0];
@@ -83,7 +84,7 @@ public class ClassInfo implements Serializable {
 		
 	}
 
-	private void typeParametersAndInheritedTypes(JavaClass clazz) {
+	private void typeParametersAndInheritedTypes(JavaClass clazz, InitialTypeFactory factory) {
 		Attribute[] attributes = clazz.getAttributes();
 		String signature = null;
 		for (Attribute attribute : attributes) {
@@ -94,12 +95,12 @@ public class ClassInfo implements Serializable {
 		}
 
 		this.classTypeParams = typeParameters(signature);
-		this.type = getClazzType(this.classTypeParams, this);
+		this.type = getClazzType(this.classTypeParams, this.name, factory);
 		
-		this.inheritedTypes = getInheritedTypes(signature, new HashSet<String>(Arrays.asList(this.classTypeParams))); 
+		this.inheritedTypes = getInheritedTypes(signature, new HashSet<String>(Arrays.asList(this.classTypeParams)), factory); 
 	}
 
-	private static Type getClazzType(String[] typeParameters, ClassInfo clazz) {
+	private static Type getClazzType(String[] typeParameters, String name, InitialTypeFactory factory) {
 		int length = typeParameters.length;
 		Type[] typeParam = new Type[length];
 		for (int i = 0; i < length; i++) {
@@ -107,7 +108,7 @@ public class ClassInfo implements Serializable {
 		}
 		
 		if (length > 0) {
-		    return factory.createPolymorphicType(clazz, typeParam);			
+		    return factory.createPolymorphicType(name, typeParam);			
 		} else {
 			//TODO: CreateOthers
 			
@@ -130,7 +131,7 @@ public class ClassInfo implements Serializable {
 		return vars;
 	}
 
-	private static Type[] getInheritedTypes(String signature, Set<String> vars) {
+	private static Type[] getInheritedTypes(String signature, Set<String> vars, InitialTypeFactory factory) {
 		if (signature == null) return new Type[0];
 		
 		int firstIndex = firstIndexOfInheritance(signature);
@@ -139,7 +140,7 @@ public class ClassInfo implements Serializable {
 		int length = params.length;
 		Type[] types = new Type[length];
 		for (int i = 0; i < length; i++) {
-			types[i] = type(params[i], vars);
+			types[i] = type(params[i], vars, factory);
 		}
 		return types;
 	}	
@@ -166,32 +167,32 @@ public class ClassInfo implements Serializable {
 		return name.substring(name.lastIndexOf(".")+1);
 	}
 
-	private ClassInfo[] makeSuperClasses(JavaClass[] superClasses2, IWordExtractor extractor) {
+	private ClassInfo[] makeSuperClasses(JavaClass[] superClasses2, IWordExtractor extractor, InitialTypeFactory factory) {
 		List<ClassInfo> list = new LinkedList<ClassInfo>();
 		for (JavaClass superClass: superClasses2) {
-			getClass(superClass, list, extractor);
+			getClass(superClass, list, extractor, factory);
 		}
 		return list.toArray(new ClassInfo[list.size()]);
 	}
 
-	private void getClass(JavaClass javaClass, List<ClassInfo> list, IWordExtractor extractor) {
+	private void getClass(JavaClass javaClass, List<ClassInfo> list, IWordExtractor extractor, InitialTypeFactory factory) {
 		String className = javaClass.getClassName();
 		if (className != null) {
 			ClassInfo clazz;
 			if (classes.containsKey(className)){
 				clazz = classes.get(className);
 			} else {
-				clazz = new ClassInfo(javaClass, extractor);
+				clazz = new ClassInfo(javaClass, extractor, factory);
 				classes.put(className, clazz);
 			}
 			list.add(clazz);
 		}
 	}
 
-	private ClassInfo[] makeInterfaces(JavaClass[] interfaces, IWordExtractor extractor) {
+	private ClassInfo[] makeInterfaces(JavaClass[] interfaces, IWordExtractor extractor, InitialTypeFactory factory) {
 		List<ClassInfo> list = new LinkedList<ClassInfo>();
 		for (JavaClass interfaceClass: interfaces) {
-			getClass(interfaceClass, list, extractor);
+			getClass(interfaceClass, list, extractor, factory);
 		}
 		return list.toArray(new ClassInfo[list.size()]);
 	}
@@ -216,7 +217,7 @@ public class ClassInfo implements Serializable {
 		return types;
 	}
 
-	public Declaration[] getUniqueInstantiatedDeclarations(Type instType){
+	public Declaration[] getUniqueInstantiatedDeclarations(Type instType, StabileTypeFactory factory){
 		
 		Declaration[] uDecls = getUniqueDeclarations();
 		int length = uDecls.length;
@@ -268,10 +269,10 @@ public class ClassInfo implements Serializable {
 		return map;
 	}
 	
-	public List<Declaration> getInstantiatedDeclarations(Type instType) {
+	public List<Declaration> getInstantiatedDeclarations(Type instType, StabileTypeFactory factory) {
 		List<Declaration> decls = new LinkedList<Declaration>();
 		
-		Declaration[] uDecls = getUniqueInstantiatedDeclarations(instType);
+		Declaration[] uDecls = getUniqueInstantiatedDeclarations(instType, factory);
 		decls.addAll(Arrays.asList(uDecls));
 		
 		Unifier unify = this.type.unify(instType, factory);
@@ -281,13 +282,13 @@ public class ClassInfo implements Serializable {
 			Type type = entry.getKey();
 			ClassInfo classInfo = entry.getValue();
 			Type iType = type.apply(unify.getSubs(), factory);
-			decls.addAll(classInfo.getInstantiatedDeclarations(iType));
+			decls.addAll(classInfo.getInstantiatedDeclarations(iType, factory));
 		}
 		
 		return decls;
 	}
 
-	public Type[] getInstantiatedInheritedTypes(Type instType) {
+	public Type[] getInstantiatedInheritedTypes(Type instType, StabileTypeFactory factory) {
 		Unifier unify = instType.unify(type, factory);
 		
 		List<Substitution> subs = unify.getSubs();
@@ -345,7 +346,7 @@ public class ClassInfo implements Serializable {
 		return false;
 	}
 
-	private Declaration[] initMethods(JavaClass clazz, IWordExtractor extractor) {
+	private Declaration[] initMethods(JavaClass clazz, IWordExtractor extractor, InitialTypeFactory factory) {
 		Method[] methods = clazz.getMethods();
 		String pkg = clazz.getPackageName();
 		List<Declaration> decls = new ArrayList<Declaration>();
@@ -373,8 +374,8 @@ public class ClassInfo implements Serializable {
 
 				String signature = getSignature(method);
 				String[] methodTypeParams = typeParameters(signature);
-				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams);
-				List<Substitution> methodVarSubs = getUniqueVarNames(methodTypeParams);
+				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, factory);
+				List<Substitution> methodVarSubs = getUniqueVarNames(methodTypeParams, factory);
 				
 				if (!decl.isConstructor()){
 					decl.setReceiverType(type.apply(classVarSubs, factory));
@@ -383,12 +384,12 @@ public class ClassInfo implements Serializable {
 				Set<String> vars = createVariables(methodTypeParams, classTypeParams);
 				
 				if (!decl.isConstructor()){				
-					decl.setRetType(returnType(signature, classVarSubs, methodVarSubs, vars));
+					decl.setRetType(returnType(signature, classVarSubs, methodVarSubs, vars, factory));
 				} else {
 					decl.setRetType(type.apply(classVarSubs, factory));
 				}
 				
-				decl.setArgType(parameterTypes(signature, classVarSubs, methodVarSubs, vars));
+				decl.setArgType(parameterTypes(signature, classVarSubs, methodVarSubs, vars, factory));
 				
 				decl.setWords(extractor.getWords(decl));
 
@@ -406,8 +407,8 @@ public class ClassInfo implements Serializable {
 		return vars;
 	}
 	
-	private static Type[] parameterTypes(String signature, List<Substitution> classVarSubs, List<Substitution> methodVarSubs, Set<String> vars) {
-		Type[] parameterTypes = parameterTypes(signature, vars);
+	private static Type[] parameterTypes(String signature, List<Substitution> classVarSubs, List<Substitution> methodVarSubs, Set<String> vars, InitialTypeFactory factory) {
+		Type[] parameterTypes = parameterTypes(signature, vars, factory);
 		int length = parameterTypes.length;
 		Type[] types = new Type[length];
 		for (int i = 0; i < length; i++) {
@@ -418,11 +419,11 @@ public class ClassInfo implements Serializable {
 	}
 
 	//Gives the priority to methodVarSubs cause they might hide some classVars.
-	private static Type returnType(String signature, List<Substitution> classVarSubs, List<Substitution> methodVarSubs, Set<String> vars) {
-		return returnType(signature, vars).apply(methodVarSubs, factory).apply(classVarSubs, factory);
+	private static Type returnType(String signature, List<Substitution> classVarSubs, List<Substitution> methodVarSubs, Set<String> vars, InitialTypeFactory factory) {
+		return returnType(signature, vars, factory).apply(methodVarSubs, factory).apply(classVarSubs, factory);
 	}
 
-	private static List<Substitution> getUniqueVarNames(String[] typeParameters) {
+	private static List<Substitution> getUniqueVarNames(String[] typeParameters, InitialTypeFactory factory) {
 		List<Substitution> list = new LinkedList<Substitution>();
 		for (String param : typeParameters) {
 			list.add(factory.varToNewVar(param));
@@ -430,7 +431,7 @@ public class ClassInfo implements Serializable {
 		return list;
 	}
 
-	private Declaration[] initFields(JavaClass clazz, IWordExtractor extractor) {
+	private Declaration[] initFields(JavaClass clazz, IWordExtractor extractor, InitialTypeFactory factory) {
 		Field[] fields = clazz.getFields();
 
 		String pkg = clazz.getPackageName();
@@ -447,11 +448,11 @@ public class ClassInfo implements Serializable {
 				
 				String signature = getSignature(field);
 				
-				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams);
+				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, factory);
 				Set<String> vars = new HashSet<String>(Arrays.asList(classTypeParams));
 				
 				decl.setReceiverType(type.apply(classVarSubs, factory));				
-				decl.setRetType(fieldType(signature, classVarSubs, vars));
+				decl.setRetType(fieldType(signature, classVarSubs, vars, factory));
 				
 				decl.setWords(extractor.getWords(decl));
 				decls.add(decl);
@@ -460,8 +461,8 @@ public class ClassInfo implements Serializable {
 		return decls.toArray(new Declaration[decls.size()]);
 	}
 
-	private Type fieldType(String signature, List<Substitution> classVarSubs, Set<String> vars) {
-		return type(signature, vars).apply(classVarSubs, factory);
+	private Type fieldType(String signature, List<Substitution> classVarSubs, Set<String> vars, InitialTypeFactory factory) {
+		return type(signature, vars, factory).apply(classVarSubs, factory);
 	}
 
 	private static String getSignature(FieldOrMethod decl) {
@@ -479,30 +480,30 @@ public class ClassInfo implements Serializable {
 		return signature;
 	}
 
-	private static Type[] parameterTypes(String signature, Set<String> vars) {
+	private static Type[] parameterTypes(String signature, Set<String> vars, InitialTypeFactory factory) {
 		String[] parameterTypes = Signature.getParameterTypes(signature);
 		int length = parameterTypes.length;
 		Type[] types = new Type[length];
 		for (int i = 0; i < length; i++) {
-			types[i] = type(parameterTypes[i], vars);
+			types[i] = type(parameterTypes[i], vars, factory);
 		}
 		return types;
 	}
 
-	private static Type returnType(String signature, Set<String> vars) {
+	private static Type returnType(String signature, Set<String> vars, InitialTypeFactory factory) {
 		String returnType = Signature.getReturnType(signature);
-		return type(returnType, vars);
+		return type(returnType, vars, factory);
 	}
 
-	private static Type type(String type, Set<String> vars) {
+	private static Type type(String type, Set<String> vars, InitialTypeFactory factory) {
 		if (isArrayType(type)){
 			int dimension = Signature.getArrayCount(type);
 			String elementType = Signature.getElementType(type);
-			return arrayType(elementType, dimension, vars);
+			return arrayType(elementType, dimension, vars, factory);
 		} else if (isPolymorphicType(type)) {
 			String[] typeParams = Signature.getTypeArguments(type);
 			String typeErasure = Signature.getTypeErasure(type);
-			return polyType(typeErasure, typeParams, vars);
+			return polyType(typeErasure, typeParams, vars, factory);
 		} else {
 			if (Signature.toString(type).startsWith("?")){
 				//TODO: Once we introduce we will change this.
@@ -527,25 +528,25 @@ public class ClassInfo implements Serializable {
 		return string.replace("/", ".");
 	}
 
-	private static Type polyType(String typeErasure, String[] typeParams, Set<String> vars) {
+	private static Type polyType(String typeErasure, String[] typeParams, Set<String> vars, InitialTypeFactory factory) {
 		String name = Signature.toString(typeErasure);
-		return factory.createPolymorphicType0(dottedName(name), types(typeParams, vars));
+		return factory.createPolymorphicType(dottedName(name), types(typeParams, vars, factory));
 	}
 
-	private static Type[] types(String[] signatures, Set<String> vars) {
+	private static Type[] types(String[] signatures, Set<String> vars, InitialTypeFactory factory) {
 		int length = signatures.length;
 		Type[] types = new Type[length];
 		for (int i = 0; i < length; i++) {
-			types[i] = type(signatures[i], vars);
+			types[i] = type(signatures[i], vars, factory);
 		}
 		return types;
 	}
 
-	private static Type arrayType(String elementType, int dimension, Set<String> vars) {
+	private static Type arrayType(String elementType, int dimension, Set<String> vars, InitialTypeFactory factory) {
 		if (dimension > 0){
-			return factory.createPolymorphicType("java.lang.Array", new Type[]{arrayType(elementType, dimension - 1, vars)});	
+			return factory.createPolymorphicType("java.lang.Array", new Type[]{arrayType(elementType, dimension - 1, vars, factory)});	
 		} else {
-			return type(elementType, vars);
+			return type(elementType, vars, factory);
 		}
 	}
 
@@ -647,14 +648,6 @@ public class ClassInfo implements Serializable {
 
 	public String getSimpleName(){
 		return simpleName;
-	}
-
-	public static TypeFactory getFactory() {
-		return factory;
-	}
-
-	public static void setFactory(TypeFactory factory) {
-		ClassInfo.factory = factory;
 	}
 
 	public Type getType() {

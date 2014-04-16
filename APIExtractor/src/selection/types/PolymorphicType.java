@@ -13,15 +13,14 @@ public class PolymorphicType extends ReferenceType {
 	 */
 	private static final long serialVersionUID = 8410671184621593335L;
 	private final Type[] params;
-
 	
 	protected PolymorphicType(String name, Type[] params) {
 		super(name);
 		this.params = params;
 	}	
 	
-	protected PolymorphicType(ClassInfo clazz, Type[] params) {
-		super(clazz);
+	protected PolymorphicType(String name, ClassInfo clazz, Type[] params) {
+		super(name, clazz);
 		this.params = params;
 	}
 
@@ -44,7 +43,7 @@ public class PolymorphicType extends ReferenceType {
 
 	@Override
 	public Type apply(Substitution sub, TypeFactory factory) {
-		return factory.createPolymorphicType(clazz, apply(params, sub, factory));
+		return factory.createPolymorphicType(name, clazz, apply(params, sub, factory));
 	}
 
 	private static Type[] apply(Type[] params, Substitution sub, TypeFactory factory) {
