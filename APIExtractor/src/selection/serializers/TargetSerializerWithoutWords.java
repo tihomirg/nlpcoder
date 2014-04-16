@@ -1,7 +1,7 @@
 package selection.serializers;
 
 import selection.Config;
-import selection.IWordExtractor;
+import selection.WordExtractor;
 import selection.WordExtractorEmpty;
 import selection.serializers.config.TargetConfig;
 import selection.types.InitialTypeFactory;
@@ -13,7 +13,7 @@ public class TargetSerializerWithoutWords {
 		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 		TargetSerializer loader = new TargetSerializer(factory, TargetConfig.getTarget());
 		
-		IWordExtractor extractor = new WordExtractorEmpty();
+		WordExtractor extractor = new WordExtractorEmpty();
 		
 		loader.serialize(Config.getJarfolder(), Config.getStorageLocation(), extractor);
 	

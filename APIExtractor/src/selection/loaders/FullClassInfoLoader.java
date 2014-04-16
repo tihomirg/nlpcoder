@@ -2,31 +2,18 @@ package selection.loaders;
 
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
 import org.apache.bcel.classfile.ClassParser;
-
 import definitions.ClassInfo;
-
-import selection.IWordExtractor;
 import selection.types.InitialTypeFactory;
 
-public class BoundedJarLoader implements IJarLoader {
-	
-	private int maxToScan = 1000;
-	private int scanned = 0;
-	
-	public BoundedJarLoader(int maxToScan) {
-		this.maxToScan = maxToScan;
-	}
+public class FullClassInfoLoader extends ClassInfoLoader {
 
 	@Override
-	public Map<String, ClassInfo> getClassFiles(List<String> jarFiles, IWordExtractor extractor, InitialTypeFactory factory) {
-		exit: for(String jarFile: jarFiles){
+	public void load(List<String> jarFiles, InitialTypeFactory factory) {
+		for(String jarFile: jarFiles){
 
 			JarFile jar;
 			try {
@@ -35,14 +22,8 @@ public class BoundedJarLoader implements IJarLoader {
 				while (entries.hasMoreElements()) {
 					JarEntry file = entries.nextElement();
 
-					file.isDirectory();
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						new ClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), extractor, factory);
-
-						scanned++;
-						if(scanned >= maxToScan){
-							break exit;
-						}			
+						ClassInfo.getClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), factory, getClassesMap());
 					}
 				}
 			} catch (IOException e) {
@@ -51,6 +32,6 @@ public class BoundedJarLoader implements IJarLoader {
 			}
 		}
 		
-		return ClassInfo.getClasses();
+	    factory.connectTypesAndClassInfos(getClassesMap());		
 	}
 }

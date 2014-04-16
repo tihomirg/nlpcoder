@@ -24,7 +24,7 @@ public class InitialTypeFactory extends TypeFactory {
 		this.reference.add(type);
 	}
 
-	public void setClassInfo(Map<String, ClassInfo> map){
+	public void connectTypesAndClassInfos(Map<String, ClassInfo> map){
 		for (ReferenceType type : reference) {
 			String name = type.getPrefix();
 			if(map.containsKey(name)){

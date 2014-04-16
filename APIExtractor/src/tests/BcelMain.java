@@ -6,7 +6,9 @@ import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.ClassParser;
@@ -44,11 +46,10 @@ public class BcelMain {
 			ClassParser cp = new ClassParser(fileName);
 			JavaClass parsed = cp.parse();
 			
-			ClassInfo clazz = new ClassInfo(parsed, new WordExtractorEmpty(), factory);
-			
-			Collection<ClassInfo> classes = ClassInfo.getClasses().values();
-		
-			for (ClassInfo classInfo : classes) {
+			Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();
+			ClassInfo.getClassInfo(parsed, factory, classesMap);
+					
+			for (ClassInfo classInfo : classesMap.values()) {
 				System.out.println(classInfo);
 				System.out.println();
 				System.out.println(Arrays.toString(classInfo.getUniqueDeclarations()));

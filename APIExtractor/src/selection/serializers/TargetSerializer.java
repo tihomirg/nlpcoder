@@ -11,10 +11,10 @@ import selection.DeclarationParserPipeline;
 import selection.DeclarationParserTwo;
 import selection.GroupWordExtractor;
 import selection.IDeclarationParser;
-import selection.IWordExtractor;
+import selection.WordExtractor;
 import selection.WordProcessor;
 import selection.loaders.FolderLoader;
-import selection.loaders.IJarLoader;
+import selection.loaders.ClassInfoLoader;
 import selection.loaders.TargetJarLoader;
 import selection.serializers.config.TargetConfig;
 import selection.types.InitialTypeFactory;
@@ -33,20 +33,21 @@ public class TargetSerializer {
 		this.targetPackage = targetPackage;
 	}
 
-	public void serialize(String folderName, String storageLocation, IWordExtractor extractor) {
+	public void serialize(String folderName, String storageLocation, WordExtractor extractor) {
 		File folder = new File(folderName);
 		
 		try {
 			
 			FolderLoader fLoader = new FolderLoader();
 			List<String> jars = fLoader.getJars(folder);
-			IJarLoader jLoder = new TargetJarLoader(Config.getMaxFilesToScan(), targetPackage);
-			Map<String, ClassInfo> classFiles = jLoder.getClassFiles(jars, extractor, factory);
+			ClassInfoLoader jLaoder = new TargetJarLoader(Config.getMaxFilesToScan(), targetPackage);
+			jLaoder.load(jars, factory);
+			Collection<ClassInfo> classes = jLaoder.getClasses();
 			
-			Collection<ClassInfo> values = classFiles.values();
-			ClassInfo[] values2 = values.toArray(new ClassInfo[values.size()]);
+			extractor.addWords(classes);
+			
 			TypeSerializer serializer = new TypeSerializer(factory);
-			serializer.writeObject(storageLocation, values2);
+			serializer.writeObject(storageLocation, classes.toArray(new ClassInfo[classes.size()]));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -59,7 +60,7 @@ public class TargetSerializer {
 		TargetSerializer loader = new TargetSerializer(factory, TargetConfig.getTarget());
 		
 		WordProcessor wordProcessor = new WordProcessor();
-		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor)}));
+		WordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor)}));
 		
 		loader.serialize(Config.getJarfolder(), Config.getStorageLocation(), extractor);
 	

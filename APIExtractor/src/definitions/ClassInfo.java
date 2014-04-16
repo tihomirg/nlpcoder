@@ -16,25 +16,19 @@ import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.FieldOrMethod;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
-//import org.apache.bcel.generic.Type;
 import org.eclipse.jdt.core.Signature;
 
-import selection.IWordExtractor;
+import selection.WordExtractor;
 import selection.types.InitialTypeFactory;
 import selection.types.StabileTypeFactory;
 import selection.types.Substitution;
 import selection.types.Type;
-import selection.types.TypeFactory;
 import selection.types.Unifier;
 
 public class ClassInfo implements Serializable {
 
-	private static final String CONSTRUCTOR_SHORT_NAME = "<init>";
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8473504638929013042L;	
-	private static final Map<String, ClassInfo> classes = new HashMap<String, ClassInfo>();
+	private static final String CONSTRUCTOR_SHORT_NAME = "<init>";
 	
 	private String name;
 	private ClassInfo[] interfaces;
@@ -52,23 +46,22 @@ public class ClassInfo implements Serializable {
 	private Type[] inheritedTypes;
 
 	public ClassInfo(){}
-
-	public ClassInfo(JavaClass clazz, IWordExtractor extractor, InitialTypeFactory factory) {
+	
+	public ClassInfo(JavaClass clazz, InitialTypeFactory factory, Map<String, ClassInfo> classes) {
 		this.name = clazz.getClassName();
 		this.packageName = clazz.getPackageName();
 		this.simpleName = getShortName(this.name);
-		classes.put(this.name, this);
 
 		this.isClass = clazz.isClass();
 		this.isPublic = clazz.isPublic();
 
 		typeParametersAndInheritedTypes(clazz, factory);
 
-		this.methods = initMethods(clazz, extractor, factory);
-		this.fields = initFields(clazz, extractor, factory);
+		this.methods = initMethods(clazz, factory);
+		this.fields = initFields(clazz, factory);
 		
 		try {
-			this.interfaces = makeInterfaces(clazz.getInterfaces(), extractor, factory);
+			this.interfaces = getClassInfos(clazz.getInterfaces(), factory, classes);
 		} catch (Exception e) {
 			System.out.println("*******************************************************************************************");
 			this.interfaces = new ClassInfo[0];
@@ -76,13 +69,26 @@ public class ClassInfo implements Serializable {
 
 		try {
 
-			this.superClasses = makeSuperClasses(clazz.getSuperClasses(), extractor, factory);		
+			this.superClasses = getClassInfos(clazz.getSuperClasses(), factory, classes);		
 		} catch (Exception e) {
 			System.out.println("*******************************************************************************************");
 			this.superClasses = new ClassInfo[0];
 		}
 		
 	}
+	
+	public static ClassInfo getClassInfo(JavaClass javaClass, InitialTypeFactory factory, Map<String, ClassInfo> classes){
+		ClassInfo clazz = null;
+		String className = javaClass.getClassName();		
+		if (classes.containsKey(className)){
+			clazz = classes.get(className);
+		} else {
+			clazz = new ClassInfo(javaClass, factory, classes);
+			classes.put(className, clazz);
+		}
+		
+		return clazz;
+	}	
 
 	private void typeParametersAndInheritedTypes(JavaClass clazz, InitialTypeFactory factory) {
 		Attribute[] attributes = clazz.getAttributes();
@@ -167,32 +173,10 @@ public class ClassInfo implements Serializable {
 		return name.substring(name.lastIndexOf(".")+1);
 	}
 
-	private ClassInfo[] makeSuperClasses(JavaClass[] superClasses2, IWordExtractor extractor, InitialTypeFactory factory) {
+	public static ClassInfo[] getClassInfos(JavaClass[] javaClassses, InitialTypeFactory factory, Map<String, ClassInfo> classes) {
 		List<ClassInfo> list = new LinkedList<ClassInfo>();
-		for (JavaClass superClass: superClasses2) {
-			getClass(superClass, list, extractor, factory);
-		}
-		return list.toArray(new ClassInfo[list.size()]);
-	}
-
-	private void getClass(JavaClass javaClass, List<ClassInfo> list, IWordExtractor extractor, InitialTypeFactory factory) {
-		String className = javaClass.getClassName();
-		if (className != null) {
-			ClassInfo clazz;
-			if (classes.containsKey(className)){
-				clazz = classes.get(className);
-			} else {
-				clazz = new ClassInfo(javaClass, extractor, factory);
-				classes.put(className, clazz);
-			}
-			list.add(clazz);
-		}
-	}
-
-	private ClassInfo[] makeInterfaces(JavaClass[] interfaces, IWordExtractor extractor, InitialTypeFactory factory) {
-		List<ClassInfo> list = new LinkedList<ClassInfo>();
-		for (JavaClass interfaceClass: interfaces) {
-			getClass(interfaceClass, list, extractor, factory);
+		for (JavaClass interfaceClass: javaClassses) {
+			list.add(getClassInfo(interfaceClass, factory, classes));
 		}
 		return list.toArray(new ClassInfo[list.size()]);
 	}
@@ -217,136 +201,7 @@ public class ClassInfo implements Serializable {
 		return types;
 	}
 
-	public Declaration[] getUniqueInstantiatedDeclarations(Type instType, StabileTypeFactory factory){
-		
-		Declaration[] uDecls = getUniqueDeclarations();
-		int length = uDecls.length;
-		Declaration[] clones = new Declaration[length];
-		for (int i = 0; i < length; i++) {
-			Declaration clone = uDecls[i].clone();
-			Unifier unify = null;
-			if(clone.isConstructor()){
-				Type retType = clone.getRetType();
-				unify = instType.unify(retType, factory);
-				clone.setRetType(instType);
-			} else {
-				Type receiverType = clone.getReceiverType();
-				unify = instType.unify(receiverType, factory);
-				clone.setReceiverType(instType);
-				
-				Type retType = clone.getRetType();
-				clone.setRetType(retType.apply(unify.getSubs(), factory));
-			}
-			
-			Type[] argTypes = clone.getArgTypes();
-			List<Substitution> subs = unify.getSubs();
-			for(int j=0; j < argTypes.length; j++){
-				argTypes[j] = argTypes[j].apply(subs, factory);
-			}
-			
-			clones[i] = clone;
-		}
-		
-		return clones;
-	}
-	
-	//TODO: Add a classInfo to each type.
-	private Map<Type, ClassInfo> getInheriedMap() {
-		ClassInfo[] iTypes = getInheritedTypes();
-		Map<Type, ClassInfo> map = new HashMap<Type, ClassInfo>();
-		for(int i = 0; i < this.inheritedTypes.length; i++){
-			Type type = this.inheritedTypes[i];
-			String head = type.getPrefix();
-			
-			for(ClassInfo iType: iTypes){
-				if(iType.name.equals(head)){
-					map.put(type, iType);
-					break;
-				}
-			}
-		}
-		
-		return map;
-	}
-	
-	public List<Declaration> getInstantiatedDeclarations(Type instType, StabileTypeFactory factory) {
-		List<Declaration> decls = new LinkedList<Declaration>();
-		
-		Declaration[] uDecls = getUniqueInstantiatedDeclarations(instType, factory);
-		decls.addAll(Arrays.asList(uDecls));
-		
-		Unifier unify = this.type.unify(instType, factory);
-		Map<Type, ClassInfo> iMap = getInheriedMap();
-		
-		for (Entry<Type, ClassInfo> entry: iMap.entrySet()) {
-			Type type = entry.getKey();
-			ClassInfo classInfo = entry.getValue();
-			Type iType = type.apply(unify.getSubs(), factory);
-			decls.addAll(classInfo.getInstantiatedDeclarations(iType, factory));
-		}
-		
-		return decls;
-	}
-
-	public Type[] getInstantiatedInheritedTypes(Type instType, StabileTypeFactory factory) {
-		Unifier unify = instType.unify(type, factory);
-		
-		List<Substitution> subs = unify.getSubs();
-		
-		int length = this.inheritedTypes.length;
-		Type[] uInhTypes = new Type[length];
-		for (int i = 0; i < length; i++) {
-			uInhTypes[i] = this.inheritedTypes[i].apply(subs, factory);
-		}
-		
-		return uInhTypes;
-	}
-	
-	public Declaration[] getUniqueDeclarations() {
-		if(this.udecls == null){
-			Declaration[] decls = getDeclarations();
-			List<Declaration> list = new LinkedList<Declaration>();
-			for (Declaration decl : decls) {
-				if(!isOverriden(decl, getInheritedTypes())){
-					list.add(decl);
-				}
-			}
-			return this.udecls = list.toArray(new Declaration[list.size()]);
-		} else return this.udecls;
-	}
-
-	public static boolean isOverriden(Declaration decl, ClassInfo[] classes) {
-		for (ClassInfo clazz : classes) {
-			if(clazz.isOverriden(decl)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isOverriden(Declaration decl){
-		if (decl.isMethod()) {
-			return isOverridenMethod(decl);
-		} else {
-			return isOverridenField(decl);
-		}
-	}
-
-	private boolean isOverridenField(Declaration decl) {
-		for (Declaration field: fields) {
-			if (decl.overrides(field)) return true;
-		}
-		return false;
-	}
-
-	private boolean isOverridenMethod(Declaration decl) {
-		for (Declaration method: methods) {
-			if (decl.overrides(method)) return true;
-		}
-		return false;
-	}
-
-	private Declaration[] initMethods(JavaClass clazz, IWordExtractor extractor, InitialTypeFactory factory) {
+	private Declaration[] initMethods(JavaClass clazz, InitialTypeFactory factory) {
 		Method[] methods = clazz.getMethods();
 		String pkg = clazz.getPackageName();
 		List<Declaration> decls = new ArrayList<Declaration>();
@@ -390,8 +245,6 @@ public class ClassInfo implements Serializable {
 				}
 				
 				decl.setArgType(parameterTypes(signature, classVarSubs, methodVarSubs, vars, factory));
-				
-				decl.setWords(extractor.getWords(decl));
 
 				decls.add(decl);				
 			}
@@ -431,7 +284,7 @@ public class ClassInfo implements Serializable {
 		return list;
 	}
 
-	private Declaration[] initFields(JavaClass clazz, IWordExtractor extractor, InitialTypeFactory factory) {
+	private Declaration[] initFields(JavaClass clazz, InitialTypeFactory factory) {
 		Field[] fields = clazz.getFields();
 
 		String pkg = clazz.getPackageName();
@@ -454,7 +307,6 @@ public class ClassInfo implements Serializable {
 				decl.setReceiverType(type.apply(classVarSubs, factory));				
 				decl.setRetType(fieldType(signature, classVarSubs, vars, factory));
 				
-				decl.setWords(extractor.getWords(decl));
 				decls.add(decl);
 			}
 		}
@@ -558,6 +410,137 @@ public class ClassInfo implements Serializable {
 		return Signature.getArrayCount(type) > 0;
 	}	
 
+	public Declaration[] getUniqueInstantiatedDeclarations(Type instType, StabileTypeFactory factory){
+		
+		Declaration[] uDecls = getUniqueDeclarations();
+		int length = uDecls.length;
+		Declaration[] clones = new Declaration[length];
+		for (int i = 0; i < length; i++) {
+			Declaration clone = uDecls[i].clone();
+			Unifier unify = null;
+			if(clone.isConstructor()){
+				Type retType = clone.getRetType();
+				unify = instType.unify(retType, factory);
+				clone.setRetType(instType);
+			} else {
+				Type receiverType = clone.getReceiverType();
+				unify = instType.unify(receiverType, factory);
+				clone.setReceiverType(instType);
+				
+				Type retType = clone.getRetType();
+				clone.setRetType(retType.apply(unify.getSubs(), factory));
+			}
+			
+			Type[] argTypes = clone.getArgTypes();
+			List<Substitution> subs = unify.getSubs();
+			for(int j=0; j < argTypes.length; j++){
+				argTypes[j] = argTypes[j].apply(subs, factory);
+			}
+			
+			clones[i] = clone;
+		}
+		
+		return clones;
+	}
+	
+	//----------------------------------------- Called once we connected types and class-infos -------------------------------------------
+	
+	//TODO: Add a classInfo to each type.
+	private Map<Type, ClassInfo> getInheriedMap() {
+		ClassInfo[] iTypes = getInheritedTypes();
+		Map<Type, ClassInfo> map = new HashMap<Type, ClassInfo>();
+		for(int i = 0; i < this.inheritedTypes.length; i++){
+			Type type = this.inheritedTypes[i];
+			String head = type.getPrefix();
+			
+			for(ClassInfo iType: iTypes){
+				if(iType.name.equals(head)){
+					map.put(type, iType);
+					break;
+				}
+			}
+		}
+		
+		return map;
+	}
+	
+	public List<Declaration> getInstantiatedDeclarations(Type instType, StabileTypeFactory factory) {
+		List<Declaration> decls = new LinkedList<Declaration>();
+		
+		Declaration[] uDecls = getUniqueInstantiatedDeclarations(instType, factory);
+		decls.addAll(Arrays.asList(uDecls));
+		
+		Unifier unify = this.type.unify(instType, factory);
+		Map<Type, ClassInfo> iMap = getInheriedMap();
+		
+		for (Entry<Type, ClassInfo> entry: iMap.entrySet()) {
+			Type type = entry.getKey();
+			ClassInfo classInfo = entry.getValue();
+			Type iType = type.apply(unify.getSubs(), factory);
+			decls.addAll(classInfo.getInstantiatedDeclarations(iType, factory));
+		}
+		
+		return decls;
+	}
+
+	public Type[] getInstantiatedInheritedTypes(Type instType, StabileTypeFactory factory) {
+		Unifier unify = instType.unify(type, factory);
+		
+		List<Substitution> subs = unify.getSubs();
+		
+		int length = this.inheritedTypes.length;
+		Type[] uInhTypes = new Type[length];
+		for (int i = 0; i < length; i++) {
+			uInhTypes[i] = this.inheritedTypes[i].apply(subs, factory);
+		}
+		
+		return uInhTypes;
+	}
+	
+	public Declaration[] getUniqueDeclarations() {
+		if(this.udecls == null){
+			Declaration[] decls = getDeclarations();
+			List<Declaration> list = new LinkedList<Declaration>();
+			for (Declaration decl : decls) {
+				if(!isOverriden(decl, getInheritedTypes())){
+					list.add(decl);
+				}
+			}
+			return this.udecls = list.toArray(new Declaration[list.size()]);
+		} else return this.udecls;
+	}
+
+	public static boolean isOverriden(Declaration decl, ClassInfo[] classes) {
+		for (ClassInfo clazz : classes) {
+			if(clazz.isOverriden(decl)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isOverriden(Declaration decl){
+		if (decl.isMethod()) {
+			return isOverridenMethod(decl);
+		} else {
+			return isOverridenField(decl);
+		}
+	}
+
+	private boolean isOverridenField(Declaration decl) {
+		for (Declaration field: fields) {
+			if (decl.overrides(field)) return true;
+		}
+		return false;
+	}
+
+	private boolean isOverridenMethod(Declaration decl) {
+		for (Declaration method: methods) {
+			if (decl.overrides(method)) return true;
+		}
+		return false;
+	}	
+	
 	public Declaration[] getMethods() {
 		return methods;
 	}
@@ -569,10 +552,6 @@ public class ClassInfo implements Serializable {
 	public Declaration[] getFields() {
 		return fields;
 	}	
-
-	public static Map<String, ClassInfo> getClasses() {
-		return classes;
-	}
 
 	private String interfacesToString(){
 		String s="";

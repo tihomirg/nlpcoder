@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +31,8 @@ public class TestInheritedClasses {
 			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(new File("C:/Users/gvero/git/nlpcoder/APIExtractor/bin/test/T1.class")));
 
 			InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-			
-			ClassInfo classInfo = new ClassInfo(new ClassParser(bis, null).parse(), new WordExtractorEmpty(), factory);
+						
+			ClassInfo classInfo = ClassInfo.getClassInfo(new ClassParser(bis, null).parse(), factory, new HashMap<String, ClassInfo>());
 			
 			Type instType = factory.createPolymorphicType(classInfo.getName(), classInfo, new Type[]{factory.createPrimitiveType("java.lang.Integer")});
 			

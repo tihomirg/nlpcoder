@@ -5,7 +5,7 @@ import selection.DeclarationParserOne;
 import selection.DeclarationParserPipeline;
 import selection.GroupWordExtractor;
 import selection.IDeclarationParser;
-import selection.IWordExtractor;
+import selection.WordExtractor;
 import selection.WordProcessor;
 import selection.serializers.config.TargetConfig;
 import selection.types.InitialTypeFactory;
@@ -19,7 +19,7 @@ public class TargetSerializerWithoutWordScores {
 
 		WordProcessor wordProcessor = new WordProcessor();	
 
-		IWordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor)}));
+		WordExtractor extractor = new GroupWordExtractor(new DeclarationParserPipeline(new IDeclarationParser[]{new DeclarationParserOne(wordProcessor)}));
 
 		loader.serialize(Config.getJarfolder(), Config.getStorageLocation(), extractor);
 	}

@@ -1,14 +1,15 @@
 package selection;
 
 import selection.parser.one.Word;
-import selection.scorers.Scorer;
 import definitions.Declaration;
 
-public class WordExtractorEmpty implements IWordExtractor {
+public class WordExtractorEmpty extends WordExtractor {
+
+	private static final Word[] EMPTY_WORDS = new Word[0];
 
 	@Override
 	public Word[] getWords(Declaration decl) {
-		return new Word[0];
+		return EMPTY_WORDS;
 	}
 
 }

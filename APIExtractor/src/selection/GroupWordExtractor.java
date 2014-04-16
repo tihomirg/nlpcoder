@@ -6,7 +6,7 @@ import selection.parser.one.trees.SentenceOne;
 import selection.scorers.Scorer;
 import definitions.Declaration;
 
-public class GroupWordExtractor implements IWordExtractor {
+public class GroupWordExtractor extends WordExtractor {
 	
 	private DeclarationParserPipeline strategy;
 
