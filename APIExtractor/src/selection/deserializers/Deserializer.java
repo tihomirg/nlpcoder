@@ -19,7 +19,7 @@ public class Deserializer {
 	}
 
 	public ClassInfo[] deserialize(String storageLocation) {
-		TypeDeserializer serializer = new TypeDeserializer(factory, cif);
+		KryoDeserializer serializer = new KryoDeserializer(factory, cif);
 		return (ClassInfo[]) serializer.readObject(storageLocation, ClassInfo[].class);
 	}	
 	

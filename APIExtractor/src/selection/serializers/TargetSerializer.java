@@ -46,7 +46,7 @@ public class TargetSerializer {
 			
 			extractor.addWords(classes);
 			
-			TypeSerializer serializer = new TypeSerializer();
+			KryoSerializer serializer = new KryoSerializer();
 			serializer.writeObject(storageLocation, classes.toArray(new ClassInfo[classes.size()]));
 			
 		} catch (Exception e) {

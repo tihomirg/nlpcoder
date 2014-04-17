@@ -24,7 +24,7 @@ import selection.types.serializers.VariableSerializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 
-public class TypeSerializer {
+public class KryoSerializer {
 	
 	private final NoTypeSerializer noTypeSer = new NoTypeSerializer();
 	private final NullTypeSerializer nullTypeSer = new NullTypeSerializer();
@@ -60,7 +60,7 @@ public class TypeSerializer {
 	
 	public static void main(String[] args) {
 		TypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		TypeSerializer serializer = new TypeSerializer();
+		KryoSerializer serializer = new KryoSerializer();
 		
 		String file = "types.kryo";
 //		
