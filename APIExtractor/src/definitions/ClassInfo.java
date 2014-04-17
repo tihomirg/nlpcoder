@@ -10,15 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.FieldOrMethod;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.eclipse.jdt.core.Signature;
-
-import selection.WordExtractor;
 import selection.types.InitialTypeFactory;
 import selection.types.StabileTypeFactory;
 import selection.types.Substitution;
@@ -47,7 +44,7 @@ public class ClassInfo implements Serializable {
 
 	public ClassInfo(){}
 	
-	public ClassInfo(JavaClass clazz, InitialTypeFactory factory, Map<String, ClassInfo> classes) {
+	public ClassInfo(JavaClass clazz, InitialTypeFactory factory, ClassInfoFactory cif) {
 		this.name = clazz.getClassName();
 		this.packageName = clazz.getPackageName();
 		this.simpleName = getShortName(this.name);
@@ -61,7 +58,7 @@ public class ClassInfo implements Serializable {
 		this.fields = initFields(clazz, factory);
 		
 		try {
-			this.interfaces = getClassInfos(clazz.getInterfaces(), factory, classes);
+			this.interfaces = cif.getClassInfos(clazz.getInterfaces());
 		} catch (Exception e) {
 			System.out.println("*******************************************************************************************");
 			this.interfaces = new ClassInfo[0];
@@ -69,27 +66,14 @@ public class ClassInfo implements Serializable {
 
 		try {
 
-			this.superClasses = getClassInfos(clazz.getSuperClasses(), factory, classes);		
+			this.superClasses = cif.getClassInfos(clazz.getSuperClasses());		
 		} catch (Exception e) {
 			System.out.println("*******************************************************************************************");
 			this.superClasses = new ClassInfo[0];
 		}
 		
 	}
-	
-	public static ClassInfo getClassInfo(JavaClass javaClass, InitialTypeFactory factory, Map<String, ClassInfo> classes){
-		ClassInfo clazz = null;
-		String className = javaClass.getClassName();		
-		if (classes.containsKey(className)){
-			clazz = classes.get(className);
-		} else {
-			clazz = new ClassInfo(javaClass, factory, classes);
-			classes.put(className, clazz);
-		}
 		
-		return clazz;
-	}	
-
 	private void typeParametersAndInheritedTypes(JavaClass clazz, InitialTypeFactory factory) {
 		Attribute[] attributes = clazz.getAttributes();
 		String signature = null;
@@ -171,14 +155,6 @@ public class ClassInfo implements Serializable {
 
 	private String getShortName(String name) {
 		return name.substring(name.lastIndexOf(".")+1);
-	}
-
-	public static ClassInfo[] getClassInfos(JavaClass[] javaClassses, InitialTypeFactory factory, Map<String, ClassInfo> classes) {
-		List<ClassInfo> list = new LinkedList<ClassInfo>();
-		for (JavaClass interfaceClass: javaClassses) {
-			list.add(getClassInfo(interfaceClass, factory, classes));
-		}
-		return list.toArray(new ClassInfo[list.size()]);
 	}
 
 	public Declaration[] getDeclarations(){

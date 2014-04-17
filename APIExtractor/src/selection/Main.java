@@ -2,24 +2,19 @@ package selection;
 
 import java.util.Scanner;
 
-import oldcorpus.LoadOldCorpus;
 import selection.deserializers.Deserializer;
 import selection.deserializers.FrequencyDeserializer;
 import selection.parser.minusone.ParserMinusOne;
 import selection.parser.minusone.SentenceMinusOne;
 import selection.parser.one.ParserOne;
-import selection.parser.one.SentenceZero;
 import selection.parser.three.ParserThree;
 import selection.parser.two.ConstituentTwo;
 import selection.parser.two.ParserTwo;
 import selection.parser.two.SentenceTwo;
-import selection.probability.designers.ConeProbabilityDesigner;
-import selection.probability.designers.MixedProbabilityDesigner;
 import selection.probability.designers.ScoreDesigner;
-import selection.probability.designers.UniformProbabilityDesigner;
-import selection.serializers.Serializer;
 import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
+import selection.types.StabileTypeFactory;
 import selection.types.TypeFactory;
 
 public class Main {
@@ -35,7 +30,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		TypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
+		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer(factory);
 		
 		FrequencyDeserializer fDeserializer = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());

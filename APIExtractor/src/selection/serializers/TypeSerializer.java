@@ -1,62 +1,49 @@
-package tests;
+package selection.serializers;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-
 import selection.Config;
+import selection.types.BoxedType;
+import selection.types.ConstType;
 import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
+import selection.types.NoType;
+import selection.types.NullType;
 import selection.types.PolymorphicType;
-import selection.types.Type;
+import selection.types.PrimitiveType;
 import selection.types.TypeFactory;
 import selection.types.Variable;
-import selection.types.serializers.PolymorphicSerializer;
-import selection.types.serializers.VariableSrializer;
-
+import selection.types.serializers.BoxedTypeSerializer;
+import selection.types.serializers.ConstTypeSerializer;
+import selection.types.serializers.NoTypeSerializer;
+import selection.types.serializers.NullTypeSerializer;
+import selection.types.serializers.PolymorphicTypeSerializer;
+import selection.types.serializers.PrimitiveTypeSerializer;
+import selection.types.serializers.VariableSerializer;
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.Serializer;
-import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 public class TypeSerializer {
 	
-	private TypeFactory factory;
-	private Serializer<PolymorphicType> polySer;
-	private Serializer<Variable> varSer;
-	
-	public TypeSerializer(TypeFactory factory) {
-		this.factory = factory;	
-	}
-
-	public Object readObject(String file, Class type) {
-		
-		Object obj = null;
-		
-		try {
-			Input in = new Input(new BufferedInputStream(new FileInputStream(file)));			
-
-			Kryo kryo = new Kryo();
-			kryo.register(PolymorphicType.class, polySer);
-			kryo.register(Variable.class, varSer);
-			
-			obj = kryo.readObject(in, type);
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return obj;
-	}
+	private final NoTypeSerializer noTypeSer = new NoTypeSerializer();
+	private final NullTypeSerializer nullTypeSer = new NullTypeSerializer();
+	private final PrimitiveTypeSerializer primSer = new PrimitiveTypeSerializer();
+	private final ConstTypeSerializer constSer = new ConstTypeSerializer();
+	private final BoxedTypeSerializer boxedSer = new BoxedTypeSerializer();
+	private final PolymorphicTypeSerializer polySer = new PolymorphicTypeSerializer();
+	private final VariableSerializer varSer = new VariableSerializer();
 
 	public void writeObject(String file, Object obj) {
 		try {
 			Output out = new Output(new BufferedOutputStream(new FileOutputStream(file)));
 
 			Kryo kryo = new Kryo();
+			kryo.register(NoType.class, noTypeSer);
+			kryo.register(NullType.class,nullTypeSer);
+			kryo.register(PrimitiveType.class, primSer);
+			kryo.register(ConstType.class, constSer);
+			kryo.register(BoxedType.class, boxedSer);
 			kryo.register(PolymorphicType.class, polySer);
 			kryo.register(Variable.class, varSer);
 			
@@ -73,7 +60,7 @@ public class TypeSerializer {
 	
 	public static void main(String[] args) {
 		TypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		TypeSerializer serializer = new TypeSerializer(factory);
+		TypeSerializer serializer = new TypeSerializer();
 		
 		String file = "types.kryo";
 //		

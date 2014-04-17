@@ -1,25 +1,22 @@
 package selection.loaders;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import definitions.ClassInfo;
-import selection.types.InitialTypeFactory;
-
+import definitions.ClassInfoFactory;
 
 public abstract class ClassInfoLoader {
 	
-	private final Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();
+	protected final ClassInfoFactory cif;
 	
-	public abstract void load(List<String> jarFiles, InitialTypeFactory factory);
+	public ClassInfoLoader(ClassInfoFactory cif) {
+		this.cif = cif;
+	}
+
+	public abstract void load(List<String> jarFiles);
 
 	public Collection<ClassInfo> getClasses() {
-		return classesMap.values();
-	}
-	
-	public Map<String, ClassInfo> getClassesMap() {
-		return classesMap;
-	}
+		return cif.getClasses();
+	}	
 }

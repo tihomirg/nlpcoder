@@ -1,5 +1,6 @@
 package selection.serializers;
 
+import definitions.ClassInfoFactory;
 import selection.Config;
 import selection.WordExtractor;
 import selection.WordExtractorEmpty;
@@ -11,7 +12,8 @@ public class SerializerWithoutWords {
 	
 	public static void main(String[] args) {
 		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		Serializer serializer = new Serializer(factory);
+		ClassInfoFactory cif = new ClassInfoFactory(factory);
+		Serializer serializer = new Serializer(cif);
 		
 		WordExtractor extractor = new WordExtractorEmpty();
 		

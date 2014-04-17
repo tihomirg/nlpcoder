@@ -6,7 +6,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-public class VariableSrializer extends Serializer<Variable> {
+public class VariableSerializer extends Serializer<Variable> {
 
 	@Override
 	public Variable read(Kryo kryo, Input in, Class<Variable> type) {

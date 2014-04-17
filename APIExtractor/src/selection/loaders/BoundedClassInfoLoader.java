@@ -6,20 +6,20 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
-import definitions.ClassInfo;
-import selection.types.InitialTypeFactory;
+import definitions.ClassInfoFactory;
 
 public class BoundedClassInfoLoader extends ClassInfoLoader {
 	
 	private int maxToScan = 1000;
 	private int scanned = 0;
 	
-	public BoundedClassInfoLoader(int maxToScan) {
+	public BoundedClassInfoLoader(int maxToScan, ClassInfoFactory cif) {
+		super(cif);
 		this.maxToScan = maxToScan;
 	}
-
+	
 	@Override
-	public void load(List<String> jarFiles, InitialTypeFactory factory) {
+	public void load(List<String> jarFiles) {
 		exit: for(String jarFile: jarFiles){
 
 			JarFile jar;
@@ -31,7 +31,7 @@ public class BoundedClassInfoLoader extends ClassInfoLoader {
 
 					file.isDirectory();
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						ClassInfo.getClassInfo(new ClassParser(jar.getInputStream(file), null).parse(), factory, getClassesMap());
+						cif.getClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
 
 						scanned++;
 						if(scanned >= maxToScan){
@@ -44,7 +44,6 @@ public class BoundedClassInfoLoader extends ClassInfoLoader {
 				e.printStackTrace();
 			}
 		}
-	
-       factory.connectTypesAndClassInfos(getClassesMap());	
+	    cif.connectTypesAndClassInfos();
 	}
 }

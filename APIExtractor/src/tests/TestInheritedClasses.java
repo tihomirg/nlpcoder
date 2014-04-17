@@ -21,6 +21,7 @@ import selection.types.Type;
 import selection.types.TypeFactory;
 
 import definitions.ClassInfo;
+import definitions.ClassInfoFactory;
 import definitions.Declaration;
 
 public class TestInheritedClasses {
@@ -32,7 +33,8 @@ public class TestInheritedClasses {
 
 			InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 						
-			ClassInfo classInfo = ClassInfo.getClassInfo(new ClassParser(bis, null).parse(), factory, new HashMap<String, ClassInfo>());
+			ClassInfoFactory cif = new ClassInfoFactory(factory);
+			ClassInfo classInfo = cif.getClassInfo(new ClassParser(bis, null).parse());
 			
 			Type instType = factory.createPolymorphicType(classInfo.getName(), classInfo, new Type[]{factory.createPrimitiveType("java.lang.Integer")});
 			

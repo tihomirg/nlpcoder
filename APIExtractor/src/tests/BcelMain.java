@@ -30,6 +30,7 @@ import selection.types.TypeFactory;
 
 
 import definitions.ClassInfo;
+import definitions.ClassInfoFactory;
 import definitions.Declaration;
 
 public class BcelMain {
@@ -46,10 +47,10 @@ public class BcelMain {
 			ClassParser cp = new ClassParser(fileName);
 			JavaClass parsed = cp.parse();
 			
-			Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();
-			ClassInfo.getClassInfo(parsed, factory, classesMap);
+			ClassInfoFactory cif = new ClassInfoFactory(factory);			
+			cif.getClassInfo(parsed);
 					
-			for (ClassInfo classInfo : classesMap.values()) {
+			for (ClassInfo classInfo : cif.getClasses()) {
 				System.out.println(classInfo);
 				System.out.println();
 				System.out.println(Arrays.toString(classInfo.getUniqueDeclarations()));

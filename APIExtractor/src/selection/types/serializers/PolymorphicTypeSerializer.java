@@ -8,7 +8,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 
-public class PolymorphicSerializer extends Serializer<PolymorphicType> {
+public class PolymorphicTypeSerializer extends Serializer<PolymorphicType> {
 
 	@Override
 	public PolymorphicType read(Kryo kryo, Input in, Class<PolymorphicType> type) {

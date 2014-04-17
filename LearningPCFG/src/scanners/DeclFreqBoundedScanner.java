@@ -14,7 +14,7 @@ import definitions.ClassInfo;
 
 public class DeclFreqBoundedScanner extends BoundedScanner {
 	public static void main(String[] args) {
-		TypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
+		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer(factory);
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API(factory);
