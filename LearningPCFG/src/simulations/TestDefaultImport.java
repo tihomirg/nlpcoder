@@ -7,6 +7,7 @@ import declarations.API;
 import declarations.Imported;
 import definitions.ClassInfo;
 import definitions.Declaration;
+import definitions.StabileClassInfoFactory;
 import selection.Config;
 import selection.deserializers.Deserializer;
 import selection.types.NameGenerator;
@@ -16,7 +17,7 @@ import selection.types.TypeFactory;
 public class TestDefaultImport {
 	public static void main(String[] args) {
 		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		Deserializer deserializer = new Deserializer(factory);
+		Deserializer deserializer = new Deserializer(factory, new StabileClassInfoFactory());
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API(factory);
 		api.addClasses(classes);

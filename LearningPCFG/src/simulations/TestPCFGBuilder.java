@@ -4,6 +4,7 @@ import java.io.File;
 
 import declarations.API;
 import definitions.ClassInfo;
+import definitions.StabileClassInfoFactory;
 
 import scanners.BoundedScanner;
 import selection.Config;
@@ -18,7 +19,7 @@ import builders.PCFGBuilder;
 public class TestPCFGBuilder extends BoundedScanner {
 	public static void main(String[] args) {
 		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		Deserializer deserializer = new Deserializer(factory);
+		Deserializer deserializer = new Deserializer(factory, new StabileClassInfoFactory());
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API(factory);
 		api.addClasses(classes);		

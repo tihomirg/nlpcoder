@@ -11,7 +11,7 @@ import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
 import selection.types.InitialTypeFactory;
 import definitions.ClassInfo;
-import definitions.ClassInfoFactory;
+import definitions.InitialClassInfoFactory;
 
 public class TargetJarLoader extends ClassInfoLoader {
 
@@ -19,7 +19,7 @@ public class TargetJarLoader extends ClassInfoLoader {
 	private int scanned = 0;
 	private Set<String> pkg;
 
-	public TargetJarLoader(int maxToScan, String[] pkg, ClassInfoFactory cif) {
+	public TargetJarLoader(int maxToScan, String[] pkg, InitialClassInfoFactory cif) {
 		super(cif);
 		this.maxToScan = maxToScan;
 		this.pkg = new HashSet<String>(Arrays.asList(pkg));
@@ -42,7 +42,7 @@ public class TargetJarLoader extends ClassInfoLoader {
 						String pkgName = fullName.substring(0, fullName.lastIndexOf("/")).replace("/", ".");
 						if (this.pkg.contains(pkgName)){
 							System.out.println(file);						
-							cif.getClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
+							cif.createClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
 
 							scanned++;
 							if(scanned >= maxToScan){

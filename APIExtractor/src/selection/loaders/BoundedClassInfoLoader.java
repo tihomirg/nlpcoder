@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
-import definitions.ClassInfoFactory;
+import definitions.InitialClassInfoFactory;
 
 public class BoundedClassInfoLoader extends ClassInfoLoader {
 	
 	private int maxToScan = 1000;
 	private int scanned = 0;
 	
-	public BoundedClassInfoLoader(int maxToScan, ClassInfoFactory cif) {
+	public BoundedClassInfoLoader(int maxToScan, InitialClassInfoFactory cif) {
 		super(cif);
 		this.maxToScan = maxToScan;
 	}
@@ -31,7 +31,7 @@ public class BoundedClassInfoLoader extends ClassInfoLoader {
 
 					file.isDirectory();
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						cif.getClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
+						cif.createClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
 
 						scanned++;
 						if(scanned >= maxToScan){

@@ -44,7 +44,7 @@ public class ClassInfo implements Serializable {
 
 	public ClassInfo(){}
 	
-	public ClassInfo(JavaClass clazz, InitialTypeFactory factory, ClassInfoFactory cif) {
+	public ClassInfo(JavaClass clazz, InitialTypeFactory factory, InitialClassInfoFactory cif) {
 		this.name = clazz.getClassName();
 		this.packageName = clazz.getPackageName();
 		this.simpleName = getShortName(this.name);
@@ -58,7 +58,7 @@ public class ClassInfo implements Serializable {
 		this.fields = initFields(clazz, factory);
 		
 		try {
-			this.interfaces = cif.getClassInfos(clazz.getInterfaces());
+			this.interfaces = cif.createClassInfos(clazz.getInterfaces());
 		} catch (Exception e) {
 			System.out.println("*******************************************************************************************");
 			this.interfaces = new ClassInfo[0];
@@ -66,7 +66,7 @@ public class ClassInfo implements Serializable {
 
 		try {
 
-			this.superClasses = cif.getClassInfos(clazz.getSuperClasses());		
+			this.superClasses = cif.createClassInfos(clazz.getSuperClasses());		
 		} catch (Exception e) {
 			System.out.println("*******************************************************************************************");
 			this.superClasses = new ClassInfo[0];

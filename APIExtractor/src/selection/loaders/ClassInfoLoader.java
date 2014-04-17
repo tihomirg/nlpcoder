@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.List;
 
 import definitions.ClassInfo;
-import definitions.ClassInfoFactory;
+import definitions.InitialClassInfoFactory;
 
 public abstract class ClassInfoLoader {
 	
-	protected final ClassInfoFactory cif;
+	protected final InitialClassInfoFactory cif;
 	
-	public ClassInfoLoader(ClassInfoFactory cif) {
+	public ClassInfoLoader(InitialClassInfoFactory cif) {
 		this.cif = cif;
 	}
 

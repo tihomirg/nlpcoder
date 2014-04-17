@@ -21,14 +21,14 @@ import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 import definitions.ClassInfo;
-import definitions.ClassInfoFactory;
+import definitions.InitialClassInfoFactory;
 
 public class TargetSerializer {
 
 	private String[] targetPackage;
-	private ClassInfoFactory cif;	
+	private InitialClassInfoFactory cif;	
 	
-	public TargetSerializer(ClassInfoFactory cif, String[] targetPackage) {
+	public TargetSerializer(InitialClassInfoFactory cif, String[] targetPackage) {
 		this.cif = cif;
 		this.targetPackage = targetPackage;
 	}
@@ -57,7 +57,7 @@ public class TargetSerializer {
 	
 	public static void main(String[] args) {
 		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		ClassInfoFactory classInfoFactory = new ClassInfoFactory(factory);
+		InitialClassInfoFactory classInfoFactory = new InitialClassInfoFactory(factory);
 		TargetSerializer loader = new TargetSerializer(classInfoFactory, TargetConfig.getTarget());
 		
 		WordProcessor wordProcessor = new WordProcessor();

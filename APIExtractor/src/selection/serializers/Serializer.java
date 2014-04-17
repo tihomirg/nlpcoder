@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import definitions.ClassInfo;
-import definitions.ClassInfoFactory;
+import definitions.InitialClassInfoFactory;
 import selection.Config;
 import selection.DeclarationParserOne;
 import selection.DeclarationParserPipeline;
@@ -20,9 +20,9 @@ import selection.types.NameGenerator;
 
 public class Serializer {
 
-	private ClassInfoFactory cif;
+	private InitialClassInfoFactory cif;
 	
-	public Serializer(ClassInfoFactory cif) {
+	public Serializer(InitialClassInfoFactory cif) {
 		this.cif = cif;
 	}
 
@@ -51,7 +51,7 @@ public class Serializer {
 
 	public static void main(String[] args) {
 		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		ClassInfoFactory classInfoFactory = new ClassInfoFactory(factory);
+		InitialClassInfoFactory classInfoFactory = new InitialClassInfoFactory(factory);
 		Serializer loader = new Serializer(classInfoFactory);
 		
 		WordProcessor wordProcessor = new WordProcessor();

@@ -10,16 +10,16 @@ import org.apache.bcel.classfile.JavaClass;
 
 import selection.types.InitialTypeFactory;
 
-public class ClassInfoFactory {
+public class InitialClassInfoFactory {
 	
 	private final Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();
 	private InitialTypeFactory factory;
 	
-	public ClassInfoFactory(InitialTypeFactory factory) {
+	public InitialClassInfoFactory(InitialTypeFactory factory) {
 		this.factory = factory;
 	}
 
-	public ClassInfo getClassInfo(JavaClass javaClass){
+	public ClassInfo createClassInfo(JavaClass javaClass){
 		ClassInfo clazz = null;
 		String className = javaClass.getClassName();		
 		if (classesMap.containsKey(className)){
@@ -32,10 +32,10 @@ public class ClassInfoFactory {
 		return clazz;
 	}	
 
-	public ClassInfo[] getClassInfos(JavaClass[] javaClassses) {
+	public ClassInfo[] createClassInfos(JavaClass[] javaClassses) {
 		List<ClassInfo> list = new LinkedList<ClassInfo>();
 		for (JavaClass javaClass: javaClassses) {
-			list.add(getClassInfo(javaClass));
+			list.add(createClassInfo(javaClass));
 		}
 		return list.toArray(new ClassInfo[list.size()]);
 	}

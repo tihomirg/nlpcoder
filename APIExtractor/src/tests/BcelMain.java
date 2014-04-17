@@ -30,7 +30,7 @@ import selection.types.TypeFactory;
 
 
 import definitions.ClassInfo;
-import definitions.ClassInfoFactory;
+import definitions.InitialClassInfoFactory;
 import definitions.Declaration;
 
 public class BcelMain {
@@ -47,8 +47,8 @@ public class BcelMain {
 			ClassParser cp = new ClassParser(fileName);
 			JavaClass parsed = cp.parse();
 			
-			ClassInfoFactory cif = new ClassInfoFactory(factory);			
-			cif.getClassInfo(parsed);
+			InitialClassInfoFactory cif = new InitialClassInfoFactory(factory);			
+			cif.createClassInfo(parsed);
 					
 			for (ClassInfo classInfo : cif.getClasses()) {
 				System.out.println(classInfo);

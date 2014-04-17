@@ -21,6 +21,8 @@ import selection.types.deserializers.VariableDeserializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 
+import definitions.StabileClassInfoFactory;
+
 public class TypeDeserializer {
 	
 	private final NoTypeDeserializer noTypeSer;
@@ -31,13 +33,13 @@ public class TypeDeserializer {
 	private final PolymorphicTypeDeserializer polySer;
 	private final VariableDeserializer varSer;
 	
-	public TypeDeserializer(StabileTypeFactory factory) {
+	public TypeDeserializer(StabileTypeFactory factory, StabileClassInfoFactory cif) {
 		this.noTypeSer = new NoTypeDeserializer(factory);
 		this.nullTypeSer = new NullTypeDeserializer(factory);
 		this.primSer = new PrimitiveTypeDeserializer(factory);
-		this.constSer = new ConstTypeDeserializer(factory);
-		this.boxedSer = new BoxedTypeDeserializer(factory);
-		this.polySer = new PolymorphicTypeDeserializer(factory);
+		this.constSer = new ConstTypeDeserializer(factory, cif);
+		this.boxedSer = new BoxedTypeDeserializer(factory, cif);
+		this.polySer = new PolymorphicTypeDeserializer(factory, cif);
 		this.varSer = new VariableDeserializer(factory);
 	}
 

@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
-import definitions.ClassInfoFactory;
+import definitions.InitialClassInfoFactory;
 
 public class FullClassInfoLoader extends ClassInfoLoader {
 
-	public FullClassInfoLoader(ClassInfoFactory cif) {
+	public FullClassInfoLoader(InitialClassInfoFactory cif) {
 		super(cif);
 	}
 
@@ -26,7 +26,7 @@ public class FullClassInfoLoader extends ClassInfoLoader {
 					JarEntry file = entries.nextElement();
 
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						cif.getClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
+						cif.createClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
 					}
 				}
 			} catch (IOException e) {
