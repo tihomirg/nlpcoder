@@ -29,7 +29,7 @@ public class ConstType extends ReferenceType {
 		}
 		
 		return Unifier.False();
-	}	
+	}
 
 	public boolean contains(Type type) {
 		return this.equals(type);

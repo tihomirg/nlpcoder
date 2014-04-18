@@ -45,13 +45,15 @@ public abstract class TypeFactory {
 		
 		}
 	};
+	
+	private final Map<String, ClassInfo> polyNameToClass = new HashMap<String, ClassInfo>();
 			
 	public TypeFactory(NameGenerator nameGen) {
 		this.nameGen = nameGen;
 	}
 
 	protected abstract void addReferenceType(ReferenceType type);
-
+	
 	public BoxedType createBoxedType(String name) {
 		return createBoxedType(name, null);
 	}
@@ -83,7 +85,7 @@ public abstract class TypeFactory {
 			cons.put(name, type);
 		}
 		return cons.get(name);
-	}	
+	}
 
 	public PolymorphicType createPolymorphicType(String name, Type[] params) {
 	    return createPolymorphicType(name, null, params);
@@ -91,31 +93,30 @@ public abstract class TypeFactory {
 	
 	public PolymorphicType createPolymorphicType(String name, ClassInfo clazz, Type[] params) {
 		PolymorphicType type = new PolymorphicType(name, clazz, params);
-		addReferenceType(type);	
+		addReferenceType(type);
 		return type;
 	}
-	
-	//Primitive or Boxed or Const type
+
 	public Type createMonomorphicType(String name) {
-		if (isPrimitive(name))
+		if (isPrimitiveType(name))
 			return createPrimitiveType(name);
 		else 
 			return createMonomorphicReferenceType(name);	
 	}
 	
 	public ReferenceType createMonomorphicReferenceType(String name) {
-		if(isBoxed(name)){
+		if(isBoxedType(name)){
 			return createBoxedType(name);
 		} else {
 			return createConstType(name);
 		}		
 	}	
 
-	public static boolean isBoxed(String name) {
+	public static boolean isBoxedType(String name) {
 		return boxedNames.contains(name);
 	}
 
-	public static boolean isPrimitive(String name) {
+	public static boolean isPrimitiveType(String name) {
 		return primitiveNames.contains(name);
 	}
 
