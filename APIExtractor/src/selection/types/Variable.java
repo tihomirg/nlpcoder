@@ -3,7 +3,7 @@ package selection.types;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Variable extends Type {
+public class Variable extends ReferenceType {
 
 	private static final long serialVersionUID = 2312467056934914968L;	
 
@@ -59,33 +59,8 @@ public class Variable extends Type {
 	}
 
 	@Override
-	public String getPrefix() {
-		return this.name;
-	}
-
-	@Override
-	public boolean isPrimitiveType() {
-		return false;
-	}
-
-	@Override
-	public boolean isNullType() {
-		return false;
-	}
-
-	@Override
-	public boolean isNoType() {
-		return false;
-	}
-
-	@Override
 	public boolean isVariable() {
 		return true;
-	}
-
-	@Override
-	public boolean isReferenceType() {
-		return false;
 	}
 
 	@Override
@@ -102,5 +77,4 @@ public class Variable extends Type {
 	public boolean isBoxedType() {
 		return false;
 	}
-
 }

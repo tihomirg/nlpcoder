@@ -49,4 +49,9 @@ public class ConstType extends ReferenceType {
 	public boolean isBoxedType() {
 		return false;
 	}	
+
+	@Override
+	public boolean isVariable() {
+		return false;
+	}
 }

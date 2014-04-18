@@ -3,12 +3,9 @@ package definitions;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.Field;
@@ -19,6 +16,7 @@ import org.eclipse.jdt.core.Signature;
 
 import definitions.factory.InitialClassInfoFactory;
 import selection.types.InitialTypeFactory;
+import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
 import selection.types.Substitution;
 import selection.types.Type;
@@ -41,8 +39,8 @@ public class ClassInfo implements Serializable {
 	private String packageName;
 	private Declaration[] udecls;
 	private String[] classTypeParams;
-	private Type type;
-	private Type[] inheritedTypes;
+	private ReferenceType type;
+	private ReferenceType[] inheritedTypes;
 
 	public ClassInfo(){}
 	
@@ -92,7 +90,7 @@ public class ClassInfo implements Serializable {
 		this.inheritedTypes = getInheritedTypes(signature, new HashSet<String>(Arrays.asList(this.classTypeParams)), factory); 
 	}
 
-	private static Type getClazzType(String[] typeParameters, String name, InitialTypeFactory factory) {
+	private static ReferenceType getClazzType(String[] typeParameters, String name, InitialTypeFactory factory) {
 		int length = typeParameters.length;
 		Type[] typeParam = new Type[length];
 		for (int i = 0; i < length; i++) {
@@ -102,10 +100,7 @@ public class ClassInfo implements Serializable {
 		if (length > 0) {
 		    return factory.createPolymorphicType(name, typeParam);			
 		} else {
-			//TODO: CreateOthers
-			
-			//Referenced or Boxed type
-		    return null;
+		    return factory.createMonomorphicReferenceType(name);
 		}
 		
 	}
@@ -123,14 +118,14 @@ public class ClassInfo implements Serializable {
 		return vars;
 	}
 
-	private static Type[] getInheritedTypes(String signature, Set<String> vars, InitialTypeFactory factory) {
-		if (signature == null) return new Type[0];
+	private static ReferenceType[] getInheritedTypes(String signature, Set<String> vars, InitialTypeFactory factory) {
+		if (signature == null) return new ReferenceType[0];
 		
 		int firstIndex = firstIndexOfInheritance(signature);
 		String inheiritanceList = signature.substring(firstIndex);		
 		String[] params = Signature.getParameterTypes("("+inheiritanceList+")V");
 		int length = params.length;
-		Type[] types = new Type[length];
+		ReferenceType[] types = new ReferenceType[length];
 		for (int i = 0; i < length; i++) {
 			types[i] = type(params[i], vars, factory);
 		}
@@ -167,16 +162,6 @@ public class ClassInfo implements Serializable {
 		System.arraycopy(this.fields, 0, decls, this.methods.length, this.fields.length);	
 
 		return decls;
-	}
-
-	private ClassInfo[] getInheritedTypes(){
-		int length = this.superClasses.length + this.interfaces.length;
-		ClassInfo[] types = new ClassInfo[length];
-
-		System.arraycopy(this.superClasses, 0, types, 0, this.superClasses.length);
-		System.arraycopy(this.interfaces, 0, types, this.superClasses.length, this.interfaces.length);
-
-		return types;
 	}
 
 	private Declaration[] initMethods(JavaClass clazz, InitialTypeFactory factory) {
@@ -325,7 +310,7 @@ public class ClassInfo implements Serializable {
 		return type(returnType, vars, factory);
 	}
 
-	private static Type type(String type, Set<String> vars, InitialTypeFactory factory) {
+	private static ReferenceType type(String type, Set<String> vars, InitialTypeFactory factory) {
 		if (isArrayType(type)){
 			int dimension = Signature.getArrayCount(type);
 			String elementType = Signature.getElementType(type);
@@ -336,16 +321,14 @@ public class ClassInfo implements Serializable {
 			return polyType(typeErasure, typeParams, vars, factory);
 		} else {
 			if (Signature.toString(type).startsWith("?")){
-				//TODO: Once we introduce we will change this.
+				//TODO: Once we introduce existential types we will change this.
 				return factory.genNewVariable();
 			} else {
 				String dotSignature = dottedTransformation(type);
 				if(vars.contains(dotSignature))
 					return factory.createVariable(dotSignature);
 				else
-					//TODO: Find appropriate types here. Find out if this is Boxed, Primitive, ConstType 
-					
-					return null;//factory.createConst(dotSignature);				
+					return factory.createMonomorphicReferenceType(dotSignature);				
 			}
 		}
 	}
@@ -358,7 +341,7 @@ public class ClassInfo implements Serializable {
 		return string.replace("/", ".");
 	}
 
-	private static Type polyType(String typeErasure, String[] typeParams, Set<String> vars, InitialTypeFactory factory) {
+	private static ReferenceType polyType(String typeErasure, String[] typeParams, Set<String> vars, InitialTypeFactory factory) {
 		String name = Signature.toString(typeErasure);
 		return factory.createPolymorphicType(dottedName(name), types(typeParams, vars, factory));
 	}
@@ -372,7 +355,7 @@ public class ClassInfo implements Serializable {
 		return types;
 	}
 
-	private static Type arrayType(String elementType, int dimension, Set<String> vars, InitialTypeFactory factory) {
+	private static ReferenceType arrayType(String elementType, int dimension, Set<String> vars, InitialTypeFactory factory) {
 		if (dimension > 0){
 			return factory.createPolymorphicType("java.lang.Array", new Type[]{arrayType(elementType, dimension - 1, vars, factory)});	
 		} else {
@@ -387,7 +370,38 @@ public class ClassInfo implements Serializable {
 	private static boolean isArrayType(String type) {
 		return Signature.getArrayCount(type) > 0;
 	}	
+		
+	public List<Declaration> getInstantiatedDeclarations(Type instType, StabileTypeFactory factory) {
+		List<Declaration> decls = new LinkedList<Declaration>();
+		
+		Declaration[] uDecls = getUniqueInstantiatedDeclarations(instType, factory);
+		decls.addAll(Arrays.asList(uDecls));
+		
+		Unifier unify = this.type.unify(instType, factory);
+		
+		for (ReferenceType type: this.inheritedTypes) {
+			ClassInfo classInfo = type.getClassInfo();
+			Type iType = type.apply(unify.getSubs(), factory);
+			decls.addAll(classInfo.getInstantiatedDeclarations(iType, factory));
+		}
+		
+		return decls;
+	}
 
+	public Type[] getInstantiatedInheritedTypes(Type instType, StabileTypeFactory factory) {
+		Unifier unify = instType.unify(type, factory);
+		
+		List<Substitution> subs = unify.getSubs();
+		
+		int length = this.inheritedTypes.length;
+		Type[] uInhTypes = new Type[length];
+		for (int i = 0; i < length; i++) {
+			uInhTypes[i] = this.inheritedTypes[i].apply(subs, factory);
+		}
+		
+		return uInhTypes;
+	}
+	
 	public Declaration[] getUniqueInstantiatedDeclarations(Type instType, StabileTypeFactory factory){
 		
 		Declaration[] uDecls = getUniqueDeclarations();
@@ -419,74 +433,30 @@ public class ClassInfo implements Serializable {
 		}
 		
 		return clones;
-	}
-	
-	//----------------------------------------- Called once we connected types and class-infos -------------------------------------------
-	
-	//TODO: Add a classInfo to each type.
-	private Map<Type, ClassInfo> getInheriedMap() {
-		ClassInfo[] iTypes = getInheritedTypes();
-		Map<Type, ClassInfo> map = new HashMap<Type, ClassInfo>();
-		for(int i = 0; i < this.inheritedTypes.length; i++){
-			Type type = this.inheritedTypes[i];
-			String head = type.getPrefix();
-			
-			for(ClassInfo iType: iTypes){
-				if(iType.name.equals(head)){
-					map.put(type, iType);
-					break;
-				}
-			}
-		}
-		
-		return map;
-	}
-	
-	public List<Declaration> getInstantiatedDeclarations(Type instType, StabileTypeFactory factory) {
-		List<Declaration> decls = new LinkedList<Declaration>();
-		
-		Declaration[] uDecls = getUniqueInstantiatedDeclarations(instType, factory);
-		decls.addAll(Arrays.asList(uDecls));
-		
-		Unifier unify = this.type.unify(instType, factory);
-		Map<Type, ClassInfo> iMap = getInheriedMap();
-		
-		for (Entry<Type, ClassInfo> entry: iMap.entrySet()) {
-			Type type = entry.getKey();
-			ClassInfo classInfo = entry.getValue();
-			Type iType = type.apply(unify.getSubs(), factory);
-			decls.addAll(classInfo.getInstantiatedDeclarations(iType, factory));
-		}
-		
-		return decls;
-	}
-
-	public Type[] getInstantiatedInheritedTypes(Type instType, StabileTypeFactory factory) {
-		Unifier unify = instType.unify(type, factory);
-		
-		List<Substitution> subs = unify.getSubs();
-		
-		int length = this.inheritedTypes.length;
-		Type[] uInhTypes = new Type[length];
-		for (int i = 0; i < length; i++) {
-			uInhTypes[i] = this.inheritedTypes[i].apply(subs, factory);
-		}
-		
-		return uInhTypes;
-	}
+	}	
 	
 	public Declaration[] getUniqueDeclarations() {
 		if(this.udecls == null){
 			Declaration[] decls = getDeclarations();
 			List<Declaration> list = new LinkedList<Declaration>();
 			for (Declaration decl : decls) {
-				if(!isOverriden(decl, getInheritedTypes())){
+				if(!isOverriden(decl, getInheritedClasses())){
 					list.add(decl);
 				}
 			}
 			return this.udecls = list.toArray(new Declaration[list.size()]);
 		} else return this.udecls;
 	}
+	
+	private ClassInfo[] getInheritedClasses(){
+		int length = this.superClasses.length + this.interfaces.length;
+		ClassInfo[] types = new ClassInfo[length];
+
+		System.arraycopy(this.superClasses, 0, types, 0, this.superClasses.length);
+		System.arraycopy(this.interfaces, 0, types, this.superClasses.length, this.interfaces.length);
+
+		return types;
+	}	
 
 	public static boolean isOverriden(Declaration decl, ClassInfo[] classes) {
 		for (ClassInfo clazz : classes) {
@@ -607,10 +577,18 @@ public class ClassInfo implements Serializable {
 		return simpleName;
 	}
 
-	public Type getType() {
+	public ReferenceType getType() {
 		return this.type;
 	}	
 
+	public void setInheritedTypes(ReferenceType[] inheritedTypes) {
+		this.inheritedTypes = inheritedTypes;
+	}	
+
+	public ReferenceType[] getInheritedTypes() {
+		return this.inheritedTypes;
+	}	
+	
 	@Override
 	public String toString() {
 		return "ClassInfo [name=" + name + 
@@ -622,5 +600,5 @@ public class ClassInfo implements Serializable {
 				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
 				"]\n";
 	}
-	
+
 }

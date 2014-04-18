@@ -125,4 +125,8 @@ public class PolymorphicType extends ReferenceType {
 		return false;
 	}
 
+	@Override
+	public boolean isVariable() {
+		return false;
+	}	
 }

@@ -86,9 +86,5 @@ public abstract class ReferenceType extends Type {
 	public boolean isNullType(){
 		return false;
 	}
-	
-	@Override
-	public boolean isVariable() {
-		return false;
-	}
+
 }

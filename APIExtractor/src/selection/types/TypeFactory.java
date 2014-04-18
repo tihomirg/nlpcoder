@@ -1,7 +1,10 @@
 package selection.types;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import definitions.ClassInfo;
 
@@ -15,7 +18,34 @@ public abstract class TypeFactory {
 	
 	private final NoType noType = new NoType();
 	private final NullType nullType = new NullType();
-	
+
+	private static final Set<String> primitiveNames = new HashSet<String>(Arrays.asList(new String[]{"byte", "short", "int", "long", "float", "double", "boolean","char"}));
+
+	private static final Set<String> boxedNames = 
+		new HashSet<String>(Arrays.asList(new String[]{
+			java.lang.Byte.class.getName(), 
+			java.lang.Short.class.getName(),
+			java.lang.Integer.class.getName(),
+			java.lang.Long.class.getName(),
+			java.lang.Float.class.getName(),
+			java.lang.Double.class.getName(),
+			java.lang.Boolean.class.getName(),
+			java.lang.Character.class.getName()}));;
+			
+	private static final Map<String, String> primitiveToBoxed = new HashMap<String, String>(){
+		{
+			put("byte", java.lang.Byte.class.getName());
+			put("short", java.lang.Short.class.getName());
+			put("int", java.lang.Integer.class.getName());
+			put("long", java.lang.Long.class.getName());
+			put("float", java.lang.Float.class.getName());
+			put("double", java.lang.Double.class.getName());
+			put("boolean", java.lang.Boolean.class.getName());
+			put("char", java.lang.Character.class.getName());
+		
+		}
+	};
+			
 	public TypeFactory(NameGenerator nameGen) {
 		this.nameGen = nameGen;
 	}
@@ -63,7 +93,31 @@ public abstract class TypeFactory {
 		PolymorphicType type = new PolymorphicType(name, clazz, params);
 		addReferenceType(type);	
 		return type;
-	}		
+	}
+	
+	//Primitive or Boxed or Const type
+	public Type createMonomorphicType(String name) {
+		if (isPrimitive(name))
+			return createPrimitiveType(name);
+		else 
+			return createMonomorphicReferenceType(name);	
+	}
+	
+	public ReferenceType createMonomorphicReferenceType(String name) {
+		if(isBoxed(name)){
+			return createBoxedType(name);
+		} else {
+			return createConstType(name);
+		}		
+	}	
+
+	public static boolean isBoxed(String name) {
+		return boxedNames.contains(name);
+	}
+
+	public static boolean isPrimitive(String name) {
+		return primitiveNames.contains(name);
+	}
 
 	public Variable createVariable(String name) {
 		return new Variable(name);
@@ -89,8 +143,8 @@ public abstract class TypeFactory {
 		return nullType;
 	}
 	
-	public Type getBoxedType(PrimitiveType primitiveType) {
-		return null;
+	public BoxedType getBoxedType(PrimitiveType primitiveType) {
+		return createBoxedType(primitiveToBoxed.get(primitiveType.getPrefix()));
 	}	
 
 	@Override
