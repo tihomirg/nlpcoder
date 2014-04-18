@@ -21,7 +21,7 @@ import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
 import selection.types.TypeFactory;
 import definitions.ClassInfo;
-import definitions.InitialClassInfoFactory;
+import definitions.factory.InitialClassInfoFactory;
 
 public class TargetSerializer {
 

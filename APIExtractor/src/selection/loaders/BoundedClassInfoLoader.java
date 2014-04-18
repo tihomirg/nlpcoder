@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
-import definitions.InitialClassInfoFactory;
+
+import definitions.factory.InitialClassInfoFactory;
 
 public class BoundedClassInfoLoader extends ClassInfoLoader {
 	

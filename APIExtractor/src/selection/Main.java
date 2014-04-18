@@ -2,7 +2,7 @@ package selection;
 
 import java.util.Scanner;
 
-import definitions.StabileClassInfoFactory;
+import definitions.factory.StabileClassInfoFactory;
 
 import selection.deserializers.Deserializer;
 import selection.deserializers.FrequencyDeserializer;
@@ -33,7 +33,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		Deserializer deserializer = new Deserializer(factory, new StabileClassInfoFactory());
+		Deserializer deserializer = new Deserializer(factory);
 		
 		FrequencyDeserializer fDeserializer = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());
 		

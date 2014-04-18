@@ -1,7 +1,9 @@
-package definitions;
+package definitions.factory;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import definitions.ClassInfo;
 
 public class StabileClassInfoFactory {
 	private final Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();

@@ -16,6 +16,8 @@ import org.apache.bcel.classfile.FieldOrMethod;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.eclipse.jdt.core.Signature;
+
+import definitions.factory.InitialClassInfoFactory;
 import selection.types.InitialTypeFactory;
 import selection.types.StabileTypeFactory;
 import selection.types.Substitution;

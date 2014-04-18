@@ -12,12 +12,12 @@ import selection.types.StabileTypeFactory;
 import selection.types.TypeFactory;
 import declarations.API;
 import definitions.ClassInfo;
-import definitions.StabileClassInfoFactory;
+import definitions.factory.StabileClassInfoFactory;
 
 public class SequenceBoundedScanner extends BoundedScanner {
 	public static void main(String[] args) {
 		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		Deserializer deserializer = new Deserializer(factory, new StabileClassInfoFactory());
+		Deserializer deserializer = new Deserializer(factory);
 		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
 		API api = new API(factory);
 		api.addClasses(classes);

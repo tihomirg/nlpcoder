@@ -11,7 +11,7 @@ import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
 import selection.types.InitialTypeFactory;
 import definitions.ClassInfo;
-import definitions.InitialClassInfoFactory;
+import definitions.factory.InitialClassInfoFactory;
 
 public class TargetJarLoader extends ClassInfoLoader {
 

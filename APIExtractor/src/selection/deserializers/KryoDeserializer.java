@@ -23,7 +23,7 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 
 import definitions.ClassInfo;
-import definitions.StabileClassInfoFactory;
+import definitions.factory.StabileClassInfoFactory;
 
 public class KryoDeserializer {
 	
@@ -35,13 +35,13 @@ public class KryoDeserializer {
 	private final PolymorphicTypeDeserializer polySer;
 	private final VariableDeserializer varSer;
 	
-	public KryoDeserializer(StabileTypeFactory factory, StabileClassInfoFactory cif) {
+	public KryoDeserializer(StabileTypeFactory factory) {
 		this.noTypeSer = new NoTypeDeserializer(factory);
 		this.nullTypeSer = new NullTypeDeserializer(factory);
 		this.primSer = new PrimitiveTypeDeserializer(factory);
-		this.constSer = new ConstTypeDeserializer(factory, cif);
-		this.boxedSer = new BoxedTypeDeserializer(factory, cif);
-		this.polySer = new PolymorphicTypeDeserializer(factory, cif);
+		this.constSer = new ConstTypeDeserializer(factory);
+		this.boxedSer = new BoxedTypeDeserializer(factory);
+		this.polySer = new PolymorphicTypeDeserializer(factory);
 		this.varSer = new VariableDeserializer(factory);
 	}
 

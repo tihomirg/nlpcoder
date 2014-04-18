@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import definitions.ClassInfo;
-import definitions.InitialClassInfoFactory;
+import definitions.factory.InitialClassInfoFactory;
 import selection.Config;
 import selection.DeclarationParserOne;
 import selection.DeclarationParserPipeline;

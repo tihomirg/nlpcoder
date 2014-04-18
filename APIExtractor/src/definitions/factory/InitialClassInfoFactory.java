@@ -1,4 +1,4 @@
-package definitions;
+package definitions.factory;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.bcel.classfile.JavaClass;
+
+import definitions.ClassInfo;
 
 import selection.types.InitialTypeFactory;
 

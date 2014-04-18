@@ -30,8 +30,8 @@ import selection.types.TypeFactory;
 
 
 import definitions.ClassInfo;
-import definitions.InitialClassInfoFactory;
 import definitions.Declaration;
+import definitions.factory.InitialClassInfoFactory;
 
 public class BcelMain {
 	

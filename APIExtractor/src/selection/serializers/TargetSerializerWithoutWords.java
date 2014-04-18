@@ -1,6 +1,6 @@
 package selection.serializers;
 
-import definitions.InitialClassInfoFactory;
+import definitions.factory.InitialClassInfoFactory;
 import selection.Config;
 import selection.WordExtractor;
 import selection.WordExtractorEmpty;

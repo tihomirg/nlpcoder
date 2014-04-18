@@ -21,8 +21,8 @@ import selection.types.Type;
 import selection.types.TypeFactory;
 
 import definitions.ClassInfo;
-import definitions.InitialClassInfoFactory;
 import definitions.Declaration;
+import definitions.factory.InitialClassInfoFactory;
 
 public class TestInheritedClasses {
 	public static void main(String[] args) {
