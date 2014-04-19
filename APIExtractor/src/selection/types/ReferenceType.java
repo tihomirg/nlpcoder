@@ -10,7 +10,7 @@ public abstract class ReferenceType extends Type {
 	private static final long serialVersionUID = -1016449819536737614L;
 
 	protected ClassInfo clazz;
-	protected List<ReferenceType> inheritedTypes;
+	protected List<Type> inheritedTypes;
 	protected List<Type> compatibleTypes;	
 
 	public ReferenceType(String name) {
@@ -35,7 +35,7 @@ public abstract class ReferenceType extends Type {
 	}
 	
 	@Override
-	protected List<ReferenceType> getInheritedTypes(StabileTypeFactory factory) {
+	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
 		if(this.inheritedTypes == null){
 			this.inheritedTypes = factory.getInheritedTypes(this);
 		}

@@ -13,9 +13,9 @@ public class StabileTypeFactory extends TypeFactory {
 
 	protected void addReferenceType(ReferenceType type){}
 
-	public List<ReferenceType> getInheritedTypes(ReferenceType referenceType) {
+	public List<Type> getInheritedTypes(ReferenceType referenceType) {
 		ClassInfo clazz = referenceType.getClassInfo();
-		return Arrays.asList(clazz.getInheritedTypes());  //clazz.getInstantiatedInheritedTypes(referenceType, this);
+		return Arrays.asList(clazz.getAllInharitedTypes(this));  //clazz.getInstantiatedInheritedTypes(referenceType, this);
 	}
 	
 	@Override

@@ -20,6 +20,7 @@ import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
 import selection.types.Substitution;
 import selection.types.Type;
+import selection.types.TypeFactory;
 import selection.types.Unifier;
 
 public class ClassInfo implements Serializable {
@@ -29,11 +30,11 @@ public class ClassInfo implements Serializable {
 	private static final String CONSTRUCTOR_SHORT_NAME = "<init>";
 	
 	private String name;
-	private ClassInfo[] interfaces;
-	private ClassInfo[] superClasses;
 	private boolean isClass;
 	private boolean isPublic;
-
+	
+	private ClassInfo[] interfaces;
+	private ClassInfo[] superClasses;
 	private Declaration[] methods;
 	private Declaration[] fields;
 	private String simpleName;
@@ -41,6 +42,7 @@ public class ClassInfo implements Serializable {
 	private Declaration[] udecls;
 	private ReferenceType type;
 	private ReferenceType[] inheritedTypes;
+	private Type[] allInharitedTypes;
 
 	public ClassInfo(){}
 	
@@ -131,7 +133,7 @@ public class ClassInfo implements Serializable {
 			types[i] = type(params[i], vars, factory);
 		}
 		return types;
-	}	
+	}
 
 	private static int firstIndexOfInheritance(String signature) {
 		if (signature.length() > 0){
@@ -594,8 +596,33 @@ public class ClassInfo implements Serializable {
 
 	public ReferenceType[] getInheritedTypes() {
 		return this.inheritedTypes;
-	}	
+	}
 	
+	public Type[] getAllInharitedTypes(TypeFactory factory){
+		if (this.allInharitedTypes == null){
+			for (ReferenceType iType : this.inheritedTypes) {
+				ClassInfo clazz = iType.getClassInfo();
+				ReferenceType oType = clazz.getType();
+				Unifier unify = oType.unify(iType, factory);
+				this.allInharitedTypes = instantiate(unify, clazz.getAllInharitedTypes(factory), factory);
+			}
+
+		}
+		return this.allInharitedTypes;
+	}
+	
+	private Type[] instantiate(Unifier unifier, Type[] types, TypeFactory factory) {
+		List<Type> list = new LinkedList<Type>();
+		
+		List<Substitution> subs = unifier.getSubs();
+		
+		for (Type type : types) {
+			list.add(type.apply(subs, factory));
+		}
+		
+		return list.toArray(new Type[list.size()]);
+	}
+
 	@Override
 	public String toString() {
 		return "ClassInfo [name=" + name + 

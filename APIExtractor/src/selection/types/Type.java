@@ -20,7 +20,7 @@ public abstract class Type implements Serializable {
 	}
 
 	//Compatible
-	protected abstract List<ReferenceType> getInheritedTypes(StabileTypeFactory factory);
+	protected abstract List<Type> getInheritedTypes(StabileTypeFactory factory);
 	protected abstract List<Type> getCompatibleTypes(StabileTypeFactory factory);
 	public abstract Unifier isCompatible(Type type, StabileTypeFactory factory);
 	
