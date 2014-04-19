@@ -42,9 +42,9 @@ public class TestInheritedClasses {
 			//Deserilaization part
 			StabileTypeFactory sfactory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 			
-			Type[] instantiated = classInfo.getInstantiatedInheritedTypes(instType, sfactory);
+			List<Type> instantiated = classInfo.getInstantiatedInheritedTypes(instType, sfactory);
 			
-			System.out.println(Arrays.toString(instantiated));
+			System.out.println(instantiated);
 			
 			List<Declaration> instDecls = classInfo.getInstantiatedDeclarations(instType, sfactory);
 			

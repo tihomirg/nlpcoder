@@ -75,12 +75,12 @@ public class NoType extends Type {
 
 	@Override
 	public Type apply(Substitution sub, TypeFactory factory) {
-		return this;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Unifier unify(Type type, TypeFactory factory) {
-		return Unifier.True();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

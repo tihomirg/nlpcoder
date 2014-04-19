@@ -45,9 +45,21 @@ public abstract class TypeFactory {
 		
 		}
 	};
-	
-	private final Map<String, ClassInfo> polyNameToClass = new HashMap<String, ClassInfo>();
-			
+
+	private Map<String, String> boxedToPrimitive = new HashMap<String, String>(){
+		{
+			put(java.lang.Byte.class.getName(), "byte");
+			put(java.lang.Short.class.getName(), "short");
+			put(java.lang.Integer.class.getName(), "int");
+			put(java.lang.Long.class.getName(), "long");
+			put(java.lang.Float.class.getName(), "float");
+			put(java.lang.Double.class.getName(), "double");
+			put(java.lang.Boolean.class.getName(), "boolean");
+			put(java.lang.Character.class.getName(), "char");
+		
+		}
+	};	
+		
 	public TypeFactory(NameGenerator nameGen) {
 		this.nameGen = nameGen;
 	}
@@ -146,10 +158,14 @@ public abstract class TypeFactory {
 	
 	public BoxedType getBoxedType(PrimitiveType primitiveType) {
 		return createBoxedType(primitiveToBoxed.get(primitiveType.getPrefix()));
-	}	
+	}
 
+	public PrimitiveType getPrimitiveType(BoxedType boxedType) {
+		return createPrimitiveType(boxedToPrimitive.get(boxedType.getPrefix()));
+	}
+	
 	@Override
 	public String toString() {
 		return "primitive: " + primitive.values();
-	}
+	}	
 }

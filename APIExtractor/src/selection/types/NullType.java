@@ -77,13 +77,12 @@ public class NullType extends Type {
 
 	@Override
 	public Type apply(Substitution sub, TypeFactory factory) {
-		return this;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Unifier unify(Type type, TypeFactory factory) {
-		if(type.isReferenceType() || type.isNullType() || type.isNoType()) return Unifier.True();
-		else return Unifier.False();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

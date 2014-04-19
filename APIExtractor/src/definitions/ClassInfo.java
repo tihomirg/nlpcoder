@@ -391,15 +391,15 @@ public class ClassInfo implements Serializable {
 		return decls;
 	}
 
-	public Type[] getInstantiatedInheritedTypes(Type instType, StabileTypeFactory factory) {
+	public List<Type> getInstantiatedInheritedTypes(Type instType, StabileTypeFactory factory) {
 		Unifier unify = instType.unify(type, factory);
 		
 		List<Substitution> subs = unify.getSubs();
 		
 		int length = this.inheritedTypes.length;
-		Type[] uInhTypes = new Type[length];
+		List<Type> uInhTypes = new LinkedList<Type>();
 		for (int i = 0; i < length; i++) {
-			uInhTypes[i] = this.inheritedTypes[i].apply(subs, factory);
+			uInhTypes.add(this.inheritedTypes[i].apply(subs, factory));
 		}
 		
 		return uInhTypes;

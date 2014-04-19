@@ -10,8 +10,8 @@ public abstract class ReferenceType extends Type {
 	private static final long serialVersionUID = -1016449819536737614L;
 
 	protected ClassInfo clazz;
-	private List<Type> inheritedTypes;
-	private List<Type> compatibleTypes;	
+	protected List<Type> inheritedTypes;
+	protected List<Type> compatibleTypes;	
 
 	public ReferenceType(String name) {
 		super(name);

@@ -7,6 +7,7 @@ public class PrimitiveType extends Type {
 
 	private static final long serialVersionUID = 5449804471090807580L;
 	private List<Type> compatibleTypes;
+	private BoxedType boxedType;
 
 	protected PrimitiveType(String name) {
 		super(name);
@@ -19,10 +20,17 @@ public class PrimitiveType extends Type {
 	public Unifier unify(Type type, TypeFactory factory) {
 		if (this.equals(type)) return Unifier.True();
 		else if (type.isVariable()){
-			return factory.getBoxedType(this).unify(this, factory);
+			return boxedType(factory).unify(type, factory);
 		}
 		
 		return Unifier.False();
+	}
+
+	private BoxedType boxedType(TypeFactory factory) {
+		if (this.boxedType == null){
+			this.boxedType = factory.getBoxedType(this);
+		}
+		return boxedType;
 	}	
 
 	public boolean contains(Type type) {
@@ -34,8 +42,7 @@ public class PrimitiveType extends Type {
 		if (this.compatibleTypes == null) {
 			this.compatibleTypes = new LinkedList<Type>();
 			this.compatibleTypes.add(this);
-			Type boxedType = factory.getBoxedType(this);
-			this.compatibleTypes.addAll(boxedType.getInheritedTypes(factory));
+			this.compatibleTypes.addAll(boxedType(factory).getInheritedTypes(factory));
 		}
 		return compatibleTypes;
 	}
@@ -44,6 +51,8 @@ public class PrimitiveType extends Type {
 	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
 		if (type.isNoType()) return Unifier.True();
 		else {
+			if (type.isNullType()) return Unifier.False();
+			
 			if (type.isBoxedType() && type.getCompatibleTypes(factory).contains(this)) return Unifier.True();
 			else {
 			  return this.unify(type, factory);
