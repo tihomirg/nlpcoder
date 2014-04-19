@@ -1,5 +1,6 @@
 package selection.types;
 
+import java.util.Arrays;
 import java.util.List;
 
 import definitions.ClassInfo;
@@ -12,9 +13,9 @@ public class StabileTypeFactory extends TypeFactory {
 
 	protected void addReferenceType(ReferenceType type){}
 
-	public List<Type> getInheritedTypes(ReferenceType referenceType) {
+	public List<ReferenceType> getInheritedTypes(ReferenceType referenceType) {
 		ClassInfo clazz = referenceType.getClassInfo();
-		return clazz.getInstantiatedInheritedTypes(referenceType, this);
+		return Arrays.asList(clazz.getInheritedTypes());  //clazz.getInstantiatedInheritedTypes(referenceType, this);
 	}
 	
 	@Override

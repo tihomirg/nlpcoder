@@ -10,6 +10,8 @@ public abstract class Type implements Serializable {
 
 	protected static final List<String> EMPTY_STRING_LIST = new LinkedList<String>();
 	protected static final List<Type> EMPTY_TYPE_LIST = new LinkedList<Type>();	
+	protected static final List<ReferenceType> EMPTY_REFERENCE_TYPE_LIST = new LinkedList<ReferenceType>();	
+	
 	
 	protected String name;
 	
@@ -18,7 +20,7 @@ public abstract class Type implements Serializable {
 	}
 
 	//Compatible
-	protected abstract List<Type> getInheritedTypes(StabileTypeFactory factory);
+	protected abstract List<ReferenceType> getInheritedTypes(StabileTypeFactory factory);
 	protected abstract List<Type> getCompatibleTypes(StabileTypeFactory factory);
 	public abstract Unifier isCompatible(Type type, StabileTypeFactory factory);
 	
