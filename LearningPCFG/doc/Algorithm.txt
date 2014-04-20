@@ -1,0 +1,23 @@
+Synthesis Algorithm:
+1) Use words to select the best sequences.
+2) Once we select one sequence, we start building a partial program.
+3) The partial program may have holes.
+4) For a partial program we keep the set of words it covers form the initial set of words.
+5) The holes and the missing words are a good sign that we need more sequences.
+6) A new sequence is chose based on the following constraints:
+ - the type
+ - the words
+ - reads/writes including their positions
+ - conditions (i.e. patterns)
+ - frequency (language model)
+7) For each criteria we build a scorer.
+8) We choose the sequence with the best score 
+10) The process continues until we fill in all holes
+11) There is a high possibility that we will need to polish the code in the end:
+  - fill in the missing holes with the in-synth like algorithm
+  - fill in the literals
+
+For each sequence we collect the words of:
+  - the declaration
+  - type 
+  - characteristic for the location we picked the sequence from: variable name, surrounding method name, potentially some words from java doc comments.
