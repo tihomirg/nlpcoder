@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.bcel.classfile.JavaClass;
 
+import definitions.ArrayClassInfo;
 import definitions.ClassInfo;
 
 import selection.types.InitialTypeFactory;
@@ -16,6 +17,7 @@ public class InitialClassInfoFactory {
 	
 	private final Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();
 	private InitialTypeFactory factory;
+	private ArrayClassInfo aci;
 	
 	public InitialClassInfoFactory(InitialTypeFactory factory) {
 		this.factory = factory;
@@ -32,7 +34,7 @@ public class InitialClassInfoFactory {
 		}
 		
 		return clazz;
-	}	
+	}
 
 	public ClassInfo[] createClassInfos(JavaClass[] javaClassses) {
 		List<ClassInfo> list = new LinkedList<ClassInfo>();
@@ -42,6 +44,11 @@ public class InitialClassInfoFactory {
 		return list.toArray(new ClassInfo[list.size()]);
 	}
 
+	public void createArrayClassInfo(){ 
+		aci = new ArrayClassInfo(factory);
+		classesMap.put(aci.getName(), aci);
+	}
+	
 	public Collection<ClassInfo> getClasses() {
 		return classesMap.values();
 	}
@@ -49,4 +56,9 @@ public class InitialClassInfoFactory {
 	public void connectTypesAndClassInfos() {
 	    factory.connectTypesAndClassInfos(classesMap);
 	}
+
+	public void setArrayClassInfoSuperClasses() {
+		aci.setSuperClasses();
+	}
+	
 }

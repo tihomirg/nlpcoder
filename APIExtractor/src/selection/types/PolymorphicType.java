@@ -107,7 +107,7 @@ public class PolymorphicType extends ReferenceType {
 
 	@Override
 	public String toString() {
-		return "Polymorphic ("+this.getPrefix()+ ", "+ Arrays.toString(params) + ")";
+		return this.getPrefix()+"("+Arrays.toString(params)+ ") "+referenceToString();
 	}
 
 	@Override

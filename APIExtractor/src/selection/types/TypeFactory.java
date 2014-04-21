@@ -124,6 +124,16 @@ public abstract class TypeFactory {
 		}		
 	}	
 
+	public ReferenceType createMonomorphicReferenceAndPrimitiveToBoxedType(String name) {
+		if (isPrimitiveType(name)){
+			return createBoxedType(primitiveToBoxed.get(name));
+		} else if(isBoxedType(name)){
+			return createBoxedType(name);
+		} else {
+			return createConstType(name);
+		}		
+	}	
+	
 	public static boolean isBoxedType(String name) {
 		return boxedNames.contains(name);
 	}

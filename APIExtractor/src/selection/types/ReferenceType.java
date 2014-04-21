@@ -87,4 +87,13 @@ public abstract class ReferenceType extends Type {
 		return false;
 	}
 
+	public String referenceToString(){
+		return "R("+(clazz != null ? clazz.getName(): null)+")";
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString()+" "+referenceToString();
+	}
+
 }

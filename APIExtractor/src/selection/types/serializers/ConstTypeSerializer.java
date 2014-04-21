@@ -7,6 +7,8 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+import definitions.ClassInfo;
+
 public class ConstTypeSerializer extends Serializer<ConstType> {
 
 	@Override
@@ -17,7 +19,7 @@ public class ConstTypeSerializer extends Serializer<ConstType> {
 	@Override
 	public void write(Kryo kryo, Output out, ConstType cons) {
 		out.writeString(cons.getPrefix());
-		kryo.writeObjectOrNull(out, cons.getClassInfo(), cons.getClass());
+		kryo.writeObjectOrNull(out, cons.getClassInfo(), ClassInfo.class);
 	}
 
 }

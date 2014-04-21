@@ -7,6 +7,8 @@ import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+import definitions.ClassInfo;
+
 
 public class PolymorphicTypeSerializer extends Serializer<PolymorphicType> {
 
@@ -18,7 +20,7 @@ public class PolymorphicTypeSerializer extends Serializer<PolymorphicType> {
 	@Override
 	public void write(Kryo kryo, Output out, PolymorphicType poly) {
 		out.writeString(poly.getPrefix());
-		kryo.writeObjectOrNull(out, poly.getClassInfo(), poly.getClass());
+		kryo.writeObjectOrNull(out, poly.getClassInfo(), ClassInfo.class);
 		kryo.writeObject(out, poly.getParams());
 	}
 }

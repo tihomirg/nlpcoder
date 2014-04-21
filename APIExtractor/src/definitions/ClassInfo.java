@@ -130,7 +130,7 @@ public class ClassInfo implements Serializable {
 		int length = params.length;
 		ReferenceType[] types = new ReferenceType[length];
 		for (int i = 0; i < length; i++) {
-			types[i] = type(params[i], vars, factory);
+			types[i] = referenceType(params[i], vars, factory);
 		}
 		return types;
 	}
@@ -297,6 +297,7 @@ public class ClassInfo implements Serializable {
 		if (signature == null){
 			signature = decl.getSignature();
 		}
+		
 		return signature;
 	}
 
@@ -314,8 +315,31 @@ public class ClassInfo implements Serializable {
 		String returnType = Signature.getReturnType(signature);
 		return type(returnType, vars, factory);
 	}
+	
+	private static Type type(String type, Set<String> vars, InitialTypeFactory factory){
+		if (isArrayType(type)){
+			int dimension = Signature.getArrayCount(type);
+			String elementType = Signature.getElementType(type);
+			return arrayType(elementType, dimension, vars, factory);
+		} else if (isPolymorphicType(type)) {
+			String[] typeParams = Signature.getTypeArguments(type);
+			String typeErasure = Signature.getTypeErasure(type);
+			return polyType(typeErasure, typeParams, vars, factory);
+		} else {
+			if (Signature.toString(type).startsWith("?")){
+				//TODO: Once we introduce existential types we will change this.
+				return factory.genNewVariable();
+			} else {
+				String dotSignature = dottedTransformation(type);
+				if(vars.contains(dotSignature))
+					return factory.createVariable(dotSignature);
+				else
+					return factory.createMonomorphicType(dotSignature);				
+			}
+		}		
+	}
 
-	private static ReferenceType type(String type, Set<String> vars, InitialTypeFactory factory) {
+	private static ReferenceType referenceType(String type, Set<String> vars, InitialTypeFactory factory) {
 		if (isArrayType(type)){
 			int dimension = Signature.getArrayCount(type);
 			String elementType = Signature.getElementType(type);
@@ -337,13 +361,36 @@ public class ClassInfo implements Serializable {
 			}
 		}
 	}
+	
+	private static ReferenceType referenceAndPrimitiveToBoxedType(String type, Set<String> vars, InitialTypeFactory factory) {
+		if (isArrayType(type)){
+			int dimension = Signature.getArrayCount(type);
+			String elementType = Signature.getElementType(type);
+			return arrayType(elementType, dimension, vars, factory);
+		} else if (isPolymorphicType(type)) {
+			String[] typeParams = Signature.getTypeArguments(type);
+			String typeErasure = Signature.getTypeErasure(type);
+			return polyType(typeErasure, typeParams, vars, factory);
+		} else {
+			if (Signature.toString(type).startsWith("?")){
+				//TODO: Once we introduce existential types we will change this.
+				return factory.genNewVariable();
+			} else {
+				String dotSignature = dottedTransformation(type);
+				if(vars.contains(dotSignature))
+					return factory.createVariable(dotSignature);
+				else
+					return factory.createMonomorphicReferenceAndPrimitiveToBoxedType(dotSignature);				
+			}
+		}
+	}	
 
-	protected static String dottedTransformation(String type) {		
+	protected static String dottedTransformation(String type) {
 		return dottedName(Signature.toString(type));
 	}
 
 	private static String dottedName(String string) {
-		return string.replace("/", ".");
+		return string.replace(".", "$").replace("/", ".");
 	}
 
 	private static ReferenceType polyType(String typeErasure, String[] typeParams, Set<String> vars, InitialTypeFactory factory) {
@@ -355,7 +402,7 @@ public class ClassInfo implements Serializable {
 		int length = signatures.length;
 		ReferenceType[] types = new ReferenceType[length];
 		for (int i = 0; i < length; i++) {
-			types[i] = type(signatures[i], vars, factory);
+			types[i] = referenceType(signatures[i], vars, factory);
 		}
 		return types;
 	}
@@ -364,7 +411,7 @@ public class ClassInfo implements Serializable {
 		if (dimension > 0){
 			return factory.createPolymorphicType("java.lang.Array", new ReferenceType[]{arrayType(elementType, dimension - 1, vars, factory)});	
 		} else {
-			return type(elementType, vars, factory);
+			return referenceAndPrimitiveToBoxedType(elementType, vars, factory);
 		}
 	}
 
@@ -632,7 +679,7 @@ public class ClassInfo implements Serializable {
 				"isClass=" + isClass+ 
 				", isPublic=" + isPublic + 
 				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
-				"]\n";
+				"]\n\n";
 	}
 
 }

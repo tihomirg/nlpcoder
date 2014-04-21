@@ -12,11 +12,6 @@ public class Variable extends ReferenceType {
 	}
 
 	@Override
-	public String toString() {
-		return "Variable (" + name + ")";
-	}
-
-	@Override
 	public Type apply(Substitution sub, TypeFactory factory) {
 		if (this.equals(sub.getVariable())) {
 			return sub.getType();
@@ -76,5 +71,10 @@ public class Variable extends ReferenceType {
 	@Override
 	public boolean isBoxedType() {
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "Var(" + name + ")";
 	}
 }

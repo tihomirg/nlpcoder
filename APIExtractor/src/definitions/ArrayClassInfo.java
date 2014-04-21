@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.bcel.classfile.Field;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.internal.core.CreateMethodOperation;
 
 import selection.types.ConstType;
@@ -45,7 +46,6 @@ public class ArrayClassInfo extends ClassInfo {
 		ConstType iType = tf.createConstType(java.lang.Object.class.getName());
 
 		this.setInheritedTypes(new ReferenceType[]{iType});
-		this.setSuperClasses(new ClassInfo[]{iType.getClassInfo()});
 		this.setInterfaces(EMPTY_CLASSES);
 
 		String paramName = "VArr";
@@ -55,16 +55,19 @@ public class ArrayClassInfo extends ClassInfo {
 
 		this.setFields(createFields(paramName, tf));
 		this.setMethods(createMethods(paramName, tf));
-
 	}
 
 	private Declaration[] createMethods(String paramName, InitialTypeFactory tf) {
 		return new Declaration[]{createIntConstructor(paramName, tf), createArrayIntConstructor(paramName, tf), createAccessMethod(paramName, tf)};
 	}
 
+	public void setSuperClasses() {
+		setSuperClasses(new ClassInfo[]{this.getInheritedTypes()[0].getClassInfo()});
+	}	
+
 	private Declaration createIntConstructor(String paramName, InitialTypeFactory tf) {
 		Declaration decl = new Declaration();
-		
+
 		String clazzName = this.getName();
 		decl.setClazz(clazzName);
 		decl.setPackageName(this.getPackageName());
@@ -81,13 +84,13 @@ public class ArrayClassInfo extends ClassInfo {
 		Type[] args = new Type[]{tf.createPrimitiveType("int")};
 		decl.setArgType(args);
 		decl.setArgNum(args.length);		
-		
+
 		return decl;
 	}
-	
+
 	private Declaration createArrayIntConstructor(String paramName, InitialTypeFactory tf) {
 		Declaration decl = new Declaration();
-		
+
 		String clazzName = this.getName();
 		decl.setClazz(clazzName);
 		decl.setPackageName(this.getPackageName());
@@ -104,13 +107,13 @@ public class ArrayClassInfo extends ClassInfo {
 		Type[] args = new Type[]{tf.createPolymorphicType(clazzName, this, new Type[]{tf.createBoxedType(java.lang.Integer.class.getName())})};
 		decl.setArgType(args);
 		decl.setArgNum(args.length);		
-		
+
 		return decl;
 	}	
-	
+
 	private Declaration createAccessMethod(String paramName, InitialTypeFactory tf) {
 		Declaration decl = new Declaration();
-		
+
 		String clazzName = this.getName();
 		decl.setClazz(clazzName);
 		decl.setPackageName(this.getPackageName());
@@ -125,11 +128,11 @@ public class ArrayClassInfo extends ClassInfo {
 		List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, tf);
 		decl.setReceiverType(this.getType().apply(classVarSubs, tf));
 		decl.setRetType(classVarSubs.get(0).getVariable());
-		
+
 		Type[] args = new Type[]{tf.createPrimitiveType("int")};
 		decl.setArgType(args);
 		decl.setArgNum(args.length);		
-		
+
 		return decl;
 	}
 
@@ -146,10 +149,10 @@ public class ArrayClassInfo extends ClassInfo {
 		decl.setField(true);
 		decl.setStatic(false);
 		decl.setPublic(true);
-		
+
 		String[] classTypeParams = new String[]{paramName};
 		List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, tf);
-		
+
 		decl.setReceiverType(this.getType().apply(classVarSubs, tf));				
 		decl.setRetType(tf.createPrimitiveType("int"));
 

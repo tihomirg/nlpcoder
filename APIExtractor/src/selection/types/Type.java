@@ -70,4 +70,8 @@ public abstract class Type implements Serializable {
 		return this.name;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
 }

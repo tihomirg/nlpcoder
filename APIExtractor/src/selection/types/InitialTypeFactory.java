@@ -1,15 +1,14 @@
 package selection.types;
 
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 
 import definitions.ClassInfo;
 
 public class InitialTypeFactory extends TypeFactory {
 
-	private final Set<ReferenceType> reference = new HashSet<ReferenceType>();
+	private final List<ReferenceType> reference = new LinkedList<ReferenceType>();
 	
 	public InitialTypeFactory(NameGenerator nameGen) {
 		super(nameGen);

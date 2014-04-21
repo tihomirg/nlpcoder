@@ -261,15 +261,6 @@ public class Declaration implements Serializable, Cloneable {
 		this.id = id;
 	}
 
-	@Override
-	public String toString() {
-		return modifiers()+" name=" + simpleName 
-				+ ", receiver=" + receiverType + ", params="
-				+ Arrays.toString(argType) + ", ret=" + retType 
-				+ ", pkg=" + packageName
-				+ ", words=" + Arrays.toString(words) + "]\n";
-	}
-
 	public boolean isLiteral() {
 		return literal;
 	}
@@ -287,4 +278,13 @@ public class Declaration implements Serializable, Cloneable {
 			return null;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return modifiers()+" name=" + simpleName 
+				+ ", receiver=" + receiverType + ", params="
+				+ Arrays.toString(argType) + ", ret=" + retType
+				+ ", pkg=" + packageName+"\n";
+				//+ ", words=" + Arrays.toString(words) + "\n";
+	}	
 }

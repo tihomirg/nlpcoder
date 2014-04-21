@@ -32,7 +32,7 @@ public class BoundedClassInfoLoader extends ClassInfoLoader {
 
 					file.isDirectory();
 					if (!file.isDirectory() && file.getName().endsWith(".class")){
-						cif.createClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
+						getCif().createClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
 
 						scanned++;
 						if(scanned >= maxToScan){
@@ -45,6 +45,5 @@ public class BoundedClassInfoLoader extends ClassInfoLoader {
 				e.printStackTrace();
 			}
 		}
-	    cif.connectTypesAndClassInfos();
 	}
 }

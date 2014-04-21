@@ -25,7 +25,7 @@ public class PolymorphicTypeDeserializer extends Serializer<PolymorphicType>{
 	public PolymorphicType read(Kryo kryo, Input in, Class<PolymorphicType> arg2) {
 		String name = in.readString();
 		ClassInfo clazz = kryo.readObjectOrNull(in, ClassInfo.class);
-		ReferenceType[] params = kryo.readObject(in, ReferenceType[].class);
+		Type[] params = kryo.readObject(in, Type[].class);
 		return factory.createPolymorphicType(name, clazz, params);
 	}
 

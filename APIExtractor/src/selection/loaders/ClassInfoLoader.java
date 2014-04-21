@@ -8,7 +8,7 @@ import definitions.factory.InitialClassInfoFactory;
 
 public abstract class ClassInfoLoader {
 	
-	protected final InitialClassInfoFactory cif;
+	private final InitialClassInfoFactory cif;
 	
 	public ClassInfoLoader(InitialClassInfoFactory cif) {
 		this.cif = cif;
@@ -18,5 +18,21 @@ public abstract class ClassInfoLoader {
 
 	public Collection<ClassInfo> getClasses() {
 		return cif.getClasses();
-	}	
+	}
+
+	public InitialClassInfoFactory getCif() {
+		return cif;
+	}
+
+	public void loadArrayClassInfo() {
+		cif.createArrayClassInfo();
+	}
+	
+	public void connectTypesAndClassInfos(){
+		cif.connectTypesAndClassInfos();
+	}
+
+	public void setArrayClassInfoSuperClasses() {
+		cif.setArrayClassInfoSuperClasses();
+	}
 }

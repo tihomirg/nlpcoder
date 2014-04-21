@@ -57,24 +57,4 @@ public class KryoSerializer {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void main(String[] args) {
-		TypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		KryoSerializer serializer = new KryoSerializer();
-		
-		String file = "types.kryo";
-//		
-//		Type cons1 = factory.createConst("java.lang.Integer");
-//		Type cons2 = factory.createConst("java.lang.String");
-//		
-//		PolymorphicType poly = factory.createPolymorphic("java.util.List", new Type[]{cons1});
-//		PolymorphicType poly2 = factory.createPolymorphic("java.util.Map", new Type[]{poly, cons2});
-//		
-//		serializer.writeObject(file, poly2);
-//		Object type = serializer.readObject(file, poly2.getClass());
-//		
-//		System.out.println(type);
-//		System.out.println();
-//		System.out.println(factory);
-	}
 }

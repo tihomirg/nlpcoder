@@ -42,7 +42,7 @@ public class TargetJarLoader extends ClassInfoLoader {
 						String pkgName = fullName.substring(0, fullName.lastIndexOf("/")).replace("/", ".");
 						if (this.pkg.contains(pkgName)){
 							System.out.println(file);						
-							cif.createClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
+							getCif().createClassInfo(new ClassParser(jar.getInputStream(file), null).parse());
 
 							scanned++;
 							if(scanned >= maxToScan){
@@ -56,7 +56,5 @@ public class TargetJarLoader extends ClassInfoLoader {
 				e.printStackTrace();
 			}
 		}
-	
-	    cif.connectTypesAndClassInfos();
 	}
 }
