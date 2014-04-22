@@ -551,22 +551,6 @@ public class ClassInfo implements Serializable {
 
 	public Declaration[] getFields() {
 		return fields;
-	}	
-
-	private String interfacesToString(){
-		String s="";
-		for (ClassInfo clazz: interfaces) {
-			s+=" "+clazz.getName();
-		}
-		return s;
-	}
-
-	private String superClassesToString(){
-		String s="";
-		for (ClassInfo clazz: superClasses) {
-			s+=" "+clazz.getName();
-		}
-		return s;
 	}
 
 	public String getName() {
@@ -670,6 +654,23 @@ public class ClassInfo implements Serializable {
 		return list.toArray(new Type[list.size()]);
 	}
 
+
+	private String interfacesToString(){
+		String s="";
+		for (ClassInfo clazz: interfaces) {
+			s+=" "+clazz.getName();
+		}
+		return s;
+	}
+
+	private String superClassesToString(){
+		String s="";
+		for (ClassInfo clazz: superClasses) {
+			s+=" "+clazz.getName();
+		}
+		return s;
+	}	
+	
 	@Override
 	public String toString() {
 		return "ClassInfo [name=" + name + 

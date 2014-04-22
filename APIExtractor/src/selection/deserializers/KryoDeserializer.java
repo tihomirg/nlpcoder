@@ -19,11 +19,7 @@ import selection.types.deserializers.PolymorphicTypeDeserializer;
 import selection.types.deserializers.PrimitiveTypeDeserializer;
 import selection.types.deserializers.VariableDeserializer;
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
-
-import definitions.ClassInfo;
-import definitions.factory.StabileClassInfoFactory;
 
 public class KryoDeserializer {
 	

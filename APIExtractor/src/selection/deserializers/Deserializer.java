@@ -6,7 +6,6 @@ import selection.Config;
 import selection.types.NameGenerator;
 import selection.types.StabileTypeFactory;
 import definitions.ClassInfo;
-import definitions.factory.StabileClassInfoFactory;
 
 public class Deserializer {
 	
@@ -17,8 +16,8 @@ public class Deserializer {
 	}
 
 	public ClassInfo[] deserialize(String storageLocation) {
-		KryoDeserializer serializer = new KryoDeserializer(factory);
-		return (ClassInfo[]) serializer.readObject(storageLocation, ClassInfo[].class);
+		KryoDeserializer deserializer = new KryoDeserializer(factory);
+		return (ClassInfo[]) deserializer.readObject(storageLocation, ClassInfo[].class);
 	}	
 	
 	public static void main(String[] args) {
