@@ -18,7 +18,10 @@ import selection.types.serializers.PolymorphicTypeSerializer;
 import selection.types.serializers.PrimitiveTypeSerializer;
 import selection.types.serializers.VariableSerializer;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Output;
+
+import definitions.ClassInfo;
 
 public class KryoSerializer {
 	
@@ -29,6 +32,7 @@ public class KryoSerializer {
 	private final BoxedTypeSerializer boxedSer = new BoxedTypeSerializer();
 	private final PolymorphicTypeSerializer polySer = new PolymorphicTypeSerializer();
 	private final VariableSerializer varSer = new VariableSerializer();
+	private final ClassInfoSerializer classSer = new ClassInfoSerializer();
 
 	public void writeObject(String file, Object obj) {
 		try {
@@ -42,6 +46,7 @@ public class KryoSerializer {
 			kryo.register(BoxedType.class, boxedSer);
 			kryo.register(PolymorphicType.class, polySer);
 			kryo.register(Variable.class, varSer);
+			kryo.register(ClassInfo.class, classSer);
 			
 			kryo.writeObject(out, obj);
 

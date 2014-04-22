@@ -3,6 +3,7 @@ package selection.deserializers;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
 import selection.types.BoxedType;
 import selection.types.ConstType;
 import selection.types.NoType;
@@ -19,7 +20,10 @@ import selection.types.deserializers.PolymorphicTypeDeserializer;
 import selection.types.deserializers.PrimitiveTypeDeserializer;
 import selection.types.deserializers.VariableDeserializer;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
+
+import definitions.ClassInfo;
 
 public class KryoDeserializer {
 	
@@ -30,6 +34,7 @@ public class KryoDeserializer {
 	private final BoxedTypeDeserializer boxedSer;
 	private final PolymorphicTypeDeserializer polySer;
 	private final VariableDeserializer varSer;
+	private final ClassInfoDeserializer classSer;
 	
 	public KryoDeserializer(StabileTypeFactory factory) {
 		this.noTypeSer = new NoTypeDeserializer(factory);
@@ -39,6 +44,7 @@ public class KryoDeserializer {
 		this.boxedSer = new BoxedTypeDeserializer(factory);
 		this.polySer = new PolymorphicTypeDeserializer(factory);
 		this.varSer = new VariableDeserializer(factory);
+		this.classSer = new ClassInfoDeserializer();
 	}
 
 	public Object readObject(String file, Class type) {
@@ -56,6 +62,7 @@ public class KryoDeserializer {
 			kryo.register(BoxedType.class, boxedSer);
 			kryo.register(PolymorphicType.class, polySer);
 			kryo.register(Variable.class, varSer);			
+			kryo.register(ClassInfo.class, classSer);
 			
 			obj = kryo.readObject(in, type);
 			

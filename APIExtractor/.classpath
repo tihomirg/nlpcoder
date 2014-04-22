@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/eclipse/org.eclipse.equinox.preferences_3.4.2.v20120111-2020.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/eclipse/org.eclipse.jdt.core_3.7.3.v20120119-1537.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/eclipse/org.eclipse.osgi_3.7.2.v20120110-1415.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

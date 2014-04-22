@@ -30,18 +30,23 @@ public class ClassInfo implements Serializable {
 	private static final String CONSTRUCTOR_SHORT_NAME = "<init>";
 	
 	private String name;
+	private String simpleName;
+	private String packageName;
 	private boolean isClass;
 	private boolean isPublic;
+
+	private ReferenceType type;
+	
+	private Declaration[] methods;
+	private Declaration[] fields;	
 	
 	private ClassInfo[] interfaces;
 	private ClassInfo[] superClasses;
-	private Declaration[] methods;
-	private Declaration[] fields;
-	private String simpleName;
-	private String packageName;
-	private Declaration[] udecls;
-	private ReferenceType type;
+
 	private ReferenceType[] inheritedTypes;
+
+	//null's when class is initialized
+	private Declaration[] udecls;
 	private Type[] allInharitedTypes;
 
 	public ClassInfo(){}
@@ -674,8 +679,9 @@ public class ClassInfo implements Serializable {
 	@Override
 	public String toString() {
 		return "ClassInfo [name=" + name + 
-				", superClasses=["+ superClassesToString() + "]"+
-				", interfaces=["+interfacesToString()+"],"+
+//				", superClasses=["+ superClassesToString() + "]"+
+//				", interfaces=["+interfacesToString()+"],"+
+				", type="+this.type +
 				", ["+Arrays.toString(this.inheritedTypes)+"],"+
 				"isClass=" + isClass+ 
 				", isPublic=" + isPublic + 
