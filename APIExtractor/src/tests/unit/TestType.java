@@ -40,6 +40,11 @@ public class TestType {
 		PrimitiveType primitiveInt = factory.createPrimitiveType("int");
 		
 		List<Type> compatible = primitiveInt.getCompatibleTypes(factory);
+		
+		//TODO: Some bugs in the Class Info needs to be fixed. It seams that not all
+		//inherited types and classes are created.
+		//TODO: Refactoring
+		
 		System.out.println(compatible);
 		
 		Assert.isTrue(boxedInt.isCompatible(primitiveInt, factory).isSuccess());

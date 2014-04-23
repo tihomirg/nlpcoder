@@ -93,8 +93,8 @@ public class ClassInfo implements Serializable {
 
 		String[] classTypeParams = typeParameters(signature);
 		this.type = getClazzType(classTypeParams, this.name, factory);
-		
-		this.inheritedTypes = getInheritedTypes(signature, new HashSet<String>(Arrays.asList(classTypeParams)), factory);
+				
+		this.inheritedTypes = getInheritedTypes(signature, clazz, new HashSet<String>(Arrays.asList(classTypeParams)), factory);
 		return classTypeParams;
 	}
 
@@ -126,8 +126,22 @@ public class ClassInfo implements Serializable {
 		return vars;
 	}
 
-	private static ReferenceType[] getInheritedTypes(String signature, Set<String> vars, InitialTypeFactory factory) {
-		if (signature == null) return new ReferenceType[0];
+	private static ReferenceType[] getInheritedTypes(String signature, JavaClass clazz, Set<String> vars, InitialTypeFactory factory) {
+		if (signature == null) {
+		
+			String[] interfaceNames = clazz.getInterfaceNames();
+			int length = interfaceNames.length;
+			String[] names = new String[length + 1];
+			names[0] = clazz.getSuperclassName();
+			System.arraycopy(interfaceNames, 0, names, 1, length);
+			
+			ReferenceType[] types = new ReferenceType[length + 1];
+			for (int i = 0; i < length + 1; i++) {
+				types[i] = factory.createMonomorphicReferenceType(names[i]);
+			}
+			
+			return types;
+		}
 		
 		int firstIndex = firstIndexOfInheritance(signature);
 		String inheiritanceList = signature.substring(firstIndex);		

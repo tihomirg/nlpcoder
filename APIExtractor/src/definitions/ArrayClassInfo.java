@@ -127,7 +127,7 @@ public class ArrayClassInfo extends ClassInfo {
 		String[] classTypeParams = new String[]{paramName};
 		List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, tf);
 		decl.setReceiverType(this.getType().apply(classVarSubs, tf));
-		decl.setRetType(classVarSubs.get(0).getVariable());
+		decl.setRetType(classVarSubs.get(0).getType());
 
 		Type[] args = new Type[]{tf.createPrimitiveType("int")};
 		decl.setArgType(args);
