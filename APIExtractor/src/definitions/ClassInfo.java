@@ -641,6 +641,7 @@ public class ClassInfo implements Serializable {
 				ClassInfo clazz = iType.getClassInfo();
 				ReferenceType oType = clazz.getType();
 				Unifier unify = oType.unify(iType, factory);
+				types.add(iType);
 				types.addAll(instantiate(unify, clazz.getAllInharitedTypes(factory), factory));
 			}
 			this.allInharitedTypes = types.toArray(new Type[types.size()]);
