@@ -14,16 +14,16 @@ public abstract class ReferenceType extends Type {
 	protected List<Type> compatibleTypes;	
 
 	public ReferenceType(){}
-	
+
 	public ReferenceType(String name) {
 		super(name);
 	}
-	
+
 	public ReferenceType(String name, ClassInfo clazz) {
 		super(name);
 		this.clazz = clazz;
 	}	
-	
+
 	public ClassInfo getClassInfo() {
 		return clazz;
 	}
@@ -31,11 +31,11 @@ public abstract class ReferenceType extends Type {
 	public void setClassInfo(ClassInfo clazz) {
 		this.clazz = clazz;
 	}
-	
+
 	public boolean hasClassInfo(){
 		return this.clazz != null;
 	}
-	
+
 	@Override
 	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
 		if(this.inheritedTypes == null){
@@ -43,7 +43,7 @@ public abstract class ReferenceType extends Type {
 		}
 		return this.inheritedTypes;
 	}
-	
+
 	@Override
 	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		if (this.compatibleTypes == null) {
@@ -53,32 +53,34 @@ public abstract class ReferenceType extends Type {
 		}
 		return compatibleTypes;
 	}
-	
+
 	@Override
 	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
+		if(type.isVoidType()) return Unifier.False();
+
 		if(type.isNoType() || type.isNullType()) return Unifier.True();
-		else {
-			List<Type> cTypes = type.getCompatibleTypes(factory);
-			for (Type cType : cTypes) {
-				Unifier unify = this.unify(cType, factory);
-				if(unify.isSuccess()){
-					return unify;
-				}
+		
+		List<Type> cTypes = type.getCompatibleTypes(factory);
+		for (Type cType : cTypes) {
+			Unifier unifier = this.unify(cType, factory);
+			if(unifier.isSuccess()){
+				return unifier;
 			}
 		}
+		
 		return Unifier.False();
 	}	
-	
+
 	@Override
 	public boolean isReferenceType() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isPrimitiveType() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isNoType() {
 		return false;
@@ -89,10 +91,15 @@ public abstract class ReferenceType extends Type {
 		return false;
 	}
 
+	@Override
+	public boolean isVoidType() {
+		return false;
+	}
+
 	public String referenceToString(){
 		return "R("+(clazz != null ? clazz.getName(): null)+")";
 	}
-	
+
 	@Override
 	public String toString() {
 		return super.toString()+" "+referenceToString();

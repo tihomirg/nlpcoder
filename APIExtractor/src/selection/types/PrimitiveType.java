@@ -53,15 +53,13 @@ public class PrimitiveType extends Type {
 
 	@Override
 	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
+		if (type.isNullType() || type.isVoidType()) return Unifier.False();
+		
 		if (type.isNoType()) return Unifier.True();
-		else {
-			if (type.isNullType()) return Unifier.False();
+		
+	    if (type.isBoxedType() && type.getCompatibleTypes(factory).contains(this)) return Unifier.True();
 			
-			if (type.isBoxedType() && type.getCompatibleTypes(factory).contains(this)) return Unifier.True();
-			else {
-			  return this.unify(type, factory);
-			}
-		}
+	    return this.unify(type, factory);
 	}
 
 	@Override
@@ -107,5 +105,10 @@ public class PrimitiveType extends Type {
 	@Override
 	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
+	}
+
+	@Override
+	public boolean isVoidType() {
+		return false;
 	}
 }

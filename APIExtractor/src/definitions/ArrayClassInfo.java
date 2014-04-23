@@ -155,7 +155,8 @@ public class ArrayClassInfo extends ClassInfo {
 
 		decl.setReceiverType(this.getType().apply(classVarSubs, tf));				
 		decl.setRetType(tf.createPrimitiveType("int"));
-
+		decl.setArgType(EMPTY_TYPE_ARRAY);
+		
 		return decl;
 	}
 

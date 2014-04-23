@@ -10,6 +10,8 @@ import definitions.ClassInfo;
 
 public abstract class TypeFactory {
 
+	private static final String VOID = "void";
+
 	private NameGenerator nameGen;
 	
 	protected Map<String, ConstType> cons = new HashMap<String, ConstType>();
@@ -18,6 +20,7 @@ public abstract class TypeFactory {
 	
 	private NoType noType = new NoType();
 	private NullType nullType = new NullType();
+	private VoidType voidType = new VoidType();
 
 	private static final Set<String> primitiveNames = new HashSet<String>(Arrays.asList(new String[]{"byte", "short", "int", "long", "float", "double", "boolean","char"}));
 
@@ -114,10 +117,16 @@ public abstract class TypeFactory {
 	public Type createMonomorphicType(String name) {
 		if (isPrimitiveType(name))
 			return createPrimitiveType(name);
+		else if(isVoidType(name))
+			return voidType;
 		else 
 			return createMonomorphicReferenceType(name);	
 	}
 	
+	private boolean isVoidType(String name) {
+		return name.equals(VOID);
+	}
+
 	public ReferenceType createMonomorphicReferenceType(String name) {
 		if(isBoxedType(name)){
 			return createBoxedType(name);
@@ -220,5 +229,4 @@ public abstract class TypeFactory {
 	public void setNullType(NullType nullType) {
 		this.nullType = nullType;
 	}
-		
 }

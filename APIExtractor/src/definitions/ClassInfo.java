@@ -28,6 +28,7 @@ public class ClassInfo implements Serializable {
 	protected static final ClassInfo[] EMPTY_CLASSES = new ClassInfo[0];
 	private static final long serialVersionUID = -8473504638929013042L;	
 	private static final String CONSTRUCTOR_SHORT_NAME = "<init>";
+	protected static final Type[] EMPTY_TYPE_ARRAY = new Type[0];
 
 	private String name;
 	private String simpleName;
@@ -262,7 +263,9 @@ public class ClassInfo implements Serializable {
 
 	//Gives the priority to methodVarSubs cause they might hide some classVars.
 	private static Type returnType(String signature, List<Substitution> classVarSubs, List<Substitution> methodVarSubs, Set<String> vars, InitialTypeFactory factory) {
-		return returnType(signature, vars, factory).apply(methodVarSubs, factory).apply(classVarSubs, factory);
+		Type returnType = returnType(signature, vars, factory);
+		if (returnType.isVoidType()) return returnType;
+		return returnType.apply(methodVarSubs, factory).apply(classVarSubs, factory);
 	}
 
 	protected static List<Substitution> getUniqueVarNames(String[] typeParameters, InitialTypeFactory factory) {
@@ -296,6 +299,7 @@ public class ClassInfo implements Serializable {
 
 				decl.setReceiverType(type.apply(classVarSubs, factory));				
 				decl.setRetType(fieldType(signature, classVarSubs, vars, factory));
+				decl.setArgType(EMPTY_TYPE_ARRAY);
 
 				decls.add(decl);
 			}

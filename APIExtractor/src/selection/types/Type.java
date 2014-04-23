@@ -30,6 +30,7 @@ public abstract class Type implements Serializable {
 	public abstract boolean isPrimitiveType();
 	public abstract boolean isNullType();
 	public abstract boolean isNoType();
+	public abstract boolean isVoidType();
 	public abstract boolean isVariable();
 	public abstract boolean isReferenceType();	
 	public abstract boolean isPolymorphicType();

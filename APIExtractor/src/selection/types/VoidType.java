@@ -2,15 +2,15 @@ package selection.types;
 
 import java.util.List;
 
+public class VoidType extends Type {
 
-public class NoType extends Type {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1235629510779552691L;
 
-	private static final long serialVersionUID = 8943437847372860249L;
-
-	private static final String NO_TYPE = "NoType";
-
-	public NoType() {
-		super(NO_TYPE);
+	public VoidType(){
+		super("voidType");
 	}
 	
 	@Override
@@ -19,15 +19,13 @@ public class NoType extends Type {
 	}	
 	
 	@Override
-	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
+	protected List<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}
 
 	@Override
 	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
-		if(type.isVoidType()) return Unifier.False();
-		
-		return Unifier.True();
+		return Unifier.False();
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class NoType extends Type {
 
 	@Override
 	public boolean isNoType() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -87,6 +85,7 @@ public class NoType extends Type {
 
 	@Override
 	public boolean isVoidType() {
-		return false;
+		return true;
 	}
+
 }

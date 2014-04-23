@@ -51,6 +51,8 @@ public class Variable extends ReferenceType {
 
 	@Override
 	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
+		if (type.isVoidType()) return Unifier.False();
+		
 		if (type.isNoType() || type.isNullType()) return Unifier.True();
 		else return this.unify(type, factory);
 	}
