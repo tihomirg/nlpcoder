@@ -28,7 +28,7 @@ public class ClassInfo implements Serializable {
 	protected static final ClassInfo[] EMPTY_CLASSES = new ClassInfo[0];
 	private static final long serialVersionUID = -8473504638929013042L;	
 	private static final String CONSTRUCTOR_SHORT_NAME = "<init>";
-	
+
 	private String name;
 	private String simpleName;
 	private String packageName;
@@ -36,10 +36,10 @@ public class ClassInfo implements Serializable {
 	private boolean isPublic;
 
 	private ReferenceType type;
-	
+
 	private Declaration[] methods;
 	private Declaration[] fields;	
-	
+
 	private ClassInfo[] interfaces;
 	private ClassInfo[] superClasses;
 
@@ -50,7 +50,7 @@ public class ClassInfo implements Serializable {
 	private Type[] allInharitedTypes;
 
 	public ClassInfo(){}
-	
+
 	public ClassInfo(JavaClass clazz, InitialTypeFactory factory, InitialClassInfoFactory cif) {
 		this.name = clazz.getClassName();
 		this.packageName = clazz.getPackageName();
@@ -63,7 +63,7 @@ public class ClassInfo implements Serializable {
 
 		this.methods = initMethods(clazz, typeParameters, factory);
 		this.fields = initFields(clazz, typeParameters, factory);
-		
+
 		try {
 			this.interfaces = cif.createClassInfos(clazz.getInterfaces());
 		} catch (Exception e) {
@@ -78,9 +78,9 @@ public class ClassInfo implements Serializable {
 			System.out.println("*******************************************************************************************");
 			this.superClasses = EMPTY_CLASSES;
 		}
-		
+
 	}
-		
+
 	private String[] typeParametersAndInheritedTypes(JavaClass clazz, InitialTypeFactory factory) {
 		Attribute[] attributes = clazz.getAttributes();
 		String signature = null;
@@ -93,7 +93,7 @@ public class ClassInfo implements Serializable {
 
 		String[] classTypeParams = typeParameters(signature);
 		this.type = getClazzType(classTypeParams, this.name, factory);
-				
+
 		this.inheritedTypes = getInheritedTypes(signature, clazz, new HashSet<String>(Arrays.asList(classTypeParams)), factory);
 		return classTypeParams;
 	}
@@ -104,13 +104,13 @@ public class ClassInfo implements Serializable {
 		for (int i = 0; i < length; i++) {
 			typeParam[i] = factory.createVariable(typeParameters[i]);
 		}
-		
+
 		if (length > 0) {
-		    return factory.createPolymorphicType(name, typeParam);			
+			return factory.createPolymorphicType(name, typeParam);			
 		} else {
-		    return factory.createMonomorphicReferenceType(name);
+			return factory.createMonomorphicReferenceType(name);
 		}
-		
+
 	}
 
 	private static String[] typeParameters(String signature) {
@@ -127,31 +127,34 @@ public class ClassInfo implements Serializable {
 	}
 
 	private static ReferenceType[] getInheritedTypes(String signature, JavaClass clazz, Set<String> vars, InitialTypeFactory factory) {
-		if (signature == null) {
+		if (clazz.getClassName().equals(java.lang.Object.class.getName())) return new ReferenceType[0];
 		
+		if (signature == null) {
+
 			String[] interfaceNames = clazz.getInterfaceNames();
 			int length = interfaceNames.length;
 			String[] names = new String[length + 1];
 			names[0] = clazz.getSuperclassName();
 			System.arraycopy(interfaceNames, 0, names, 1, length);
-			
+
 			ReferenceType[] types = new ReferenceType[length + 1];
 			for (int i = 0; i < length + 1; i++) {
 				types[i] = factory.createMonomorphicReferenceType(names[i]);
 			}
-			
+
+			return types;
+		} else {
+
+			int firstIndex = firstIndexOfInheritance(signature);
+			String inheiritanceList = signature.substring(firstIndex);		
+			String[] params = Signature.getParameterTypes("("+inheiritanceList+")V");
+			int length = params.length;
+			ReferenceType[] types = new ReferenceType[length];
+			for (int i = 0; i < length; i++) {
+				types[i] = referenceType(params[i], vars, factory);
+			}
 			return types;
 		}
-		
-		int firstIndex = firstIndexOfInheritance(signature);
-		String inheiritanceList = signature.substring(firstIndex);		
-		String[] params = Signature.getParameterTypes("("+inheiritanceList+")V");
-		int length = params.length;
-		ReferenceType[] types = new ReferenceType[length];
-		for (int i = 0; i < length; i++) {
-			types[i] = referenceType(params[i], vars, factory);
-		}
-		return types;
 	}
 
 	private static int firstIndexOfInheritance(String signature) {
@@ -197,7 +200,7 @@ public class ClassInfo implements Serializable {
 				Declaration decl = new Declaration();
 				decl.setClazz(className);
 				decl.setPackageName(pkg);
-				
+
 				String name = method.getName();
 				if (name.equals(CONSTRUCTOR_SHORT_NAME)){
 					String clazzName = clazz.getClassName();
@@ -217,19 +220,19 @@ public class ClassInfo implements Serializable {
 				String[] methodTypeParams = typeParameters(signature);
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, factory);
 				List<Substitution> methodVarSubs = getUniqueVarNames(methodTypeParams, factory);
-				
+
 				if (!decl.isConstructor()){
 					decl.setReceiverType(type.apply(classVarSubs, factory));
 				}
-				
+
 				Set<String> vars = createVariables(methodTypeParams, classTypeParams);
-				
+
 				if (!decl.isConstructor()){				
 					decl.setRetType(returnType(signature, classVarSubs, methodVarSubs, vars, factory));
 				} else {
 					decl.setRetType(type.apply(classVarSubs, factory));
 				}
-				
+
 				decl.setArgType(parameterTypes(signature, classVarSubs, methodVarSubs, vars, factory));
 
 				decls.add(decl);				
@@ -245,7 +248,7 @@ public class ClassInfo implements Serializable {
 		vars.addAll(Arrays.asList(clazzTypeParams));
 		return vars;
 	}
-	
+
 	private static Type[] parameterTypes(String signature, List<Substitution> classVarSubs, List<Substitution> methodVarSubs, Set<String> vars, InitialTypeFactory factory) {
 		Type[] parameterTypes = parameterTypes(signature, vars, factory);
 		int length = parameterTypes.length;
@@ -285,15 +288,15 @@ public class ClassInfo implements Serializable {
 				decl.setField(true);
 				decl.setStatic(field.isStatic());
 				decl.setPublic(field.isPublic());
-				
+
 				String signature = getSignature(field);
-				
+
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, factory);
 				Set<String> vars = new HashSet<String>(Arrays.asList(classTypeParams));
-				
+
 				decl.setReceiverType(type.apply(classVarSubs, factory));				
 				decl.setRetType(fieldType(signature, classVarSubs, vars, factory));
-				
+
 				decls.add(decl);
 			}
 		}
@@ -312,11 +315,11 @@ public class ClassInfo implements Serializable {
 				break;
 			}
 		}
-		
+
 		if (signature == null){
 			signature = decl.getSignature();
 		}
-		
+
 		return signature;
 	}
 
@@ -334,7 +337,7 @@ public class ClassInfo implements Serializable {
 		String returnType = Signature.getReturnType(signature);
 		return type(returnType, vars, factory);
 	}
-	
+
 	private static Type type(String type, Set<String> vars, InitialTypeFactory factory){
 		if (isArrayType(type)){
 			int dimension = Signature.getArrayCount(type);
@@ -380,7 +383,7 @@ public class ClassInfo implements Serializable {
 			}
 		}
 	}
-	
+
 	private static ReferenceType referenceAndPrimitiveToBoxedType(String type, Set<String> vars, InitialTypeFactory factory) {
 		if (isArrayType(type)){
 			int dimension = Signature.getArrayCount(type);
@@ -441,40 +444,40 @@ public class ClassInfo implements Serializable {
 	private static boolean isArrayType(String type) {
 		return Signature.getArrayCount(type) > 0;
 	}	
-		
+
 	public List<Declaration> getInstantiatedDeclarations(Type instType, StabileTypeFactory factory) {
 		List<Declaration> decls = new LinkedList<Declaration>();
-		
+
 		Declaration[] uDecls = getUniqueInstantiatedDeclarations(instType, factory);
 		decls.addAll(Arrays.asList(uDecls));
-		
+
 		Unifier unify = this.type.unify(instType, factory);
-		
+
 		for (ReferenceType type: this.inheritedTypes) {
 			ClassInfo classInfo = type.getClassInfo();
 			Type iType = type.apply(unify.getSubs(), factory);
 			decls.addAll(classInfo.getInstantiatedDeclarations(iType, factory));
 		}
-		
+
 		return decls;
 	}
 
 	public List<Type> getInstantiatedInheritedTypes(Type instType, StabileTypeFactory factory) {
 		Unifier unify = instType.unify(type, factory);
-		
+
 		List<Substitution> subs = unify.getSubs();
-		
+
 		int length = this.inheritedTypes.length;
 		List<Type> uInhTypes = new LinkedList<Type>();
 		for (int i = 0; i < length; i++) {
 			uInhTypes.add(this.inheritedTypes[i].apply(subs, factory));
 		}
-		
+
 		return uInhTypes;
 	}
-	
+
 	public Declaration[] getUniqueInstantiatedDeclarations(Type instType, StabileTypeFactory factory){
-		
+
 		Declaration[] uDecls = getUniqueDeclarations();
 		int length = uDecls.length;
 		Declaration[] clones = new Declaration[length];
@@ -489,23 +492,23 @@ public class ClassInfo implements Serializable {
 				Type receiverType = clone.getReceiverType();
 				unify = instType.unify(receiverType, factory);
 				clone.setReceiverType(instType);
-				
+
 				Type retType = clone.getRetType();
 				clone.setRetType(retType.apply(unify.getSubs(), factory));
 			}
-			
+
 			Type[] argTypes = clone.getArgTypes();
 			List<Substitution> subs = unify.getSubs();
 			for(int j=0; j < argTypes.length; j++){
 				argTypes[j] = argTypes[j].apply(subs, factory);
 			}
-			
+
 			clones[i] = clone;
 		}
-		
+
 		return clones;
 	}	
-	
+
 	public Declaration[] getUniqueDeclarations() {
 		if(this.udecls == null){
 			Declaration[] decls = getDeclarations();
@@ -518,7 +521,7 @@ public class ClassInfo implements Serializable {
 			return this.udecls = list.toArray(new Declaration[list.size()]);
 		} else return this.udecls;
 	}
-	
+
 	private ClassInfo[] getInheritedClasses(){
 		int length = this.superClasses.length + this.interfaces.length;
 		ClassInfo[] types = new ClassInfo[length];
@@ -559,7 +562,7 @@ public class ClassInfo implements Serializable {
 		}
 		return false;
 	}	
-	
+
 	public Declaration[] getMethods() {
 		return methods;
 	}
@@ -635,7 +638,7 @@ public class ClassInfo implements Serializable {
 	public void setType(ReferenceType type) {
 		this.type = type;
 	}
-	
+
 	public ReferenceType getType() {
 		return this.type;
 	}	
@@ -647,7 +650,7 @@ public class ClassInfo implements Serializable {
 	public ReferenceType[] getInheritedTypes() {
 		return this.inheritedTypes;
 	}
-	
+
 	public Type[] getAllInharitedTypes(TypeFactory factory){
 		if (this.allInharitedTypes == null){
 			List<Type> types = new LinkedList<Type>();
@@ -662,16 +665,16 @@ public class ClassInfo implements Serializable {
 		}
 		return this.allInharitedTypes;
 	}
-	
+
 	private List<Type> instantiate(Unifier unifier, Type[] types, TypeFactory factory) {
 		List<Type> list = new LinkedList<Type>();
-		
+
 		List<Substitution> subs = unifier.getSubs();
-		
+
 		for (Type type : types) {
 			list.add(type.apply(subs, factory));
 		}
-		
+
 		return list;
 	}
 
@@ -691,12 +694,12 @@ public class ClassInfo implements Serializable {
 		}
 		return s;
 	}	
-	
+
 	@Override
 	public String toString() {
 		return "ClassInfo [name=" + name + 
-//				", superClasses=["+ superClassesToString() + "]"+
-//				", interfaces=["+interfacesToString()+"],"+
+				//				", superClasses=["+ superClassesToString() + "]"+
+				//				", interfaces=["+interfacesToString()+"],"+
 				", type="+this.type +
 				", ["+Arrays.toString(this.inheritedTypes)+"],"+
 				"isClass=" + isClass+ 
