@@ -7,7 +7,9 @@ public class Variable extends ReferenceType {
 
 	private static final long serialVersionUID = 2312467056934914968L;	
 
-	protected Variable(String name) {
+	public Variable(){}
+	
+	public Variable(String name) {
 		super(name);
 	}
 

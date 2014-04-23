@@ -27,7 +27,14 @@ public class ClassInfoDeserializer extends Serializer<ClassInfo>{
 		
 		Registration type = kryo.readClass(in);
 		
-		clazz.setType((ReferenceType) kryo.readObject(in, type.getType()));
+		Object readObject = kryo.readObject(in, type.getType());
+		ReferenceType obj = (ReferenceType) readObject;
+		clazz.setType(obj);
+		
+		if (clazz.getName().equals(java.lang.Number.class.getName())){
+			System.out.println("***************************************  "+readObject +"   "+type);
+		}
+		
 		clazz.setMethods(kryo.readObject(in, Declaration[].class));
 		clazz.setFields(kryo.readObject(in, Declaration[].class));
 		clazz.setInheritedTypes(kryo.readObject(in, ReferenceType[].class));

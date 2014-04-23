@@ -24,7 +24,12 @@ public class ClassInfoSerializer extends com.esotericsoftware.kryo.Serializer<Cl
 		out.writeBoolean(clazz.isClass());
 	
 		ReferenceType type = clazz.getType();
-		kryo.writeClass(out, type.getClass());		
+		kryo.writeClass(out, type.getClass());
+		
+		if (clazz.getName().equals(java.lang.Number.class.getName())){
+			System.out.println("***************************************  "+type +"   "+type.getClass());
+		}
+		
 		kryo.writeObject(out, type);
 		kryo.writeObject(out, clazz.getMethods());
 		kryo.writeObject(out, clazz.getFields());

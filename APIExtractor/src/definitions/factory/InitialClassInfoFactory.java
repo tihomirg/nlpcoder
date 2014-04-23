@@ -15,9 +15,11 @@ import selection.types.InitialTypeFactory;
 
 public class InitialClassInfoFactory {
 	
-	private final Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();
+	private Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();
 	private InitialTypeFactory factory;
 	private ArrayClassInfo aci;
+	
+	public InitialClassInfoFactory() {}
 	
 	public InitialClassInfoFactory(InitialTypeFactory factory) {
 		this.factory = factory;
@@ -60,5 +62,31 @@ public class InitialClassInfoFactory {
 	public void setArrayClassInfoSuperClasses() {
 		aci.setSuperClasses();
 	}
+
+	public Map<String, ClassInfo> getClassesMap() {
+		return classesMap;
+	}
+
+	public void setClassesMap(Map<String, ClassInfo> classesMap) {
+		this.classesMap = classesMap;
+	}
+
+	public InitialTypeFactory getFactory() {
+		return factory;
+	}
+
+	public void setFactory(InitialTypeFactory factory) {
+		this.factory = factory;
+	}
+
+	public ArrayClassInfo getAci() {
+		return aci;
+	}
+
+	public void setAci(ArrayClassInfo aci) {
+		this.aci = aci;
+	}
+	
+	
 	
 }

@@ -636,18 +636,19 @@ public class ClassInfo implements Serializable {
 	
 	public Type[] getAllInharitedTypes(TypeFactory factory){
 		if (this.allInharitedTypes == null){
+			List<Type> types = new LinkedList<Type>();
 			for (ReferenceType iType : this.inheritedTypes) {
 				ClassInfo clazz = iType.getClassInfo();
 				ReferenceType oType = clazz.getType();
 				Unifier unify = oType.unify(iType, factory);
-				this.allInharitedTypes = instantiate(unify, clazz.getAllInharitedTypes(factory), factory);
+				types.addAll(instantiate(unify, clazz.getAllInharitedTypes(factory), factory));
 			}
-
+			this.allInharitedTypes = types.toArray(new Type[types.size()]);
 		}
 		return this.allInharitedTypes;
 	}
 	
-	private Type[] instantiate(Unifier unifier, Type[] types, TypeFactory factory) {
+	private List<Type> instantiate(Unifier unifier, Type[] types, TypeFactory factory) {
 		List<Type> list = new LinkedList<Type>();
 		
 		List<Substitution> subs = unifier.getSubs();
@@ -656,7 +657,7 @@ public class ClassInfo implements Serializable {
 			list.add(type.apply(subs, factory));
 		}
 		
-		return list.toArray(new Type[list.size()]);
+		return list;
 	}
 
 

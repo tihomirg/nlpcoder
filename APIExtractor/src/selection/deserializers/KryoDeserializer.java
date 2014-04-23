@@ -55,16 +55,18 @@ public class KryoDeserializer {
 			Input in = new Input(new BufferedInputStream(new FileInputStream(file)));			
 
 			Kryo kryo = new Kryo();
-			kryo.register(NoType.class, noTypeSer);
-			kryo.register(NullType.class,nullTypeSer);
-			kryo.register(PrimitiveType.class, primSer);
-			kryo.register(ConstType.class, constSer);
-			kryo.register(BoxedType.class, boxedSer);
-			kryo.register(PolymorphicType.class, polySer);
-			kryo.register(Variable.class, varSer);			
-			kryo.register(ClassInfo.class, classSer);
+//			kryo.register(NoType.class, noTypeSer);
+//			kryo.register(NullType.class,nullTypeSer);
+//			kryo.register(PrimitiveType.class, primSer);
+//			kryo.register(ConstType.class, constSer);
+//			kryo.register(BoxedType.class, boxedSer);
+//			kryo.register(PolymorphicType.class, polySer);
+//			kryo.register(Variable.class, varSer);			
+			//kryo.register(ClassInfo.class, classSer);
 			
 			obj = kryo.readObject(in, type);
+			
+			//in.close();
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

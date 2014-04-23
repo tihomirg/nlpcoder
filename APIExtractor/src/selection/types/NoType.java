@@ -9,7 +9,7 @@ public class NoType extends Type {
 
 	private static final String NO_TYPE = "NoType";
 
-	protected NoType() {
+	public NoType() {
 		super(NO_TYPE);
 	}
 

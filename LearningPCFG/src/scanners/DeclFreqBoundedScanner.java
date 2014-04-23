@@ -1,6 +1,7 @@
 package scanners;
 
 import java.io.File;
+import java.util.Collection;
 
 import builders.DeclFreqBuilder;
 import builders.IBuilder;
@@ -17,7 +18,7 @@ public class DeclFreqBoundedScanner extends BoundedScanner {
 	public static void main(String[] args) {
 		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer(factory);
-		ClassInfo[] classes = deserializer.deserialize(Config.getStorageLocation());
+		Collection<ClassInfo> classes = deserializer.deserialize(Config.getStorageLocation()).getClasses();
 		API api = new API(factory);
 		api.addClasses(classes);
 		

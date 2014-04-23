@@ -3,6 +3,8 @@ package selection.serializers;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+
 import selection.types.BoxedType;
 import selection.types.ConstType;
 import selection.types.NoType;
@@ -18,8 +20,10 @@ import selection.types.serializers.PolymorphicTypeSerializer;
 import selection.types.serializers.PrimitiveTypeSerializer;
 import selection.types.serializers.VariableSerializer;
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.ReferenceResolver;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.util.MapReferenceResolver;
 
 import definitions.ClassInfo;
 
@@ -35,27 +39,50 @@ public class KryoSerializer {
 	private final ClassInfoSerializer classSer = new ClassInfoSerializer();
 
 	public void writeObject(String file, Object obj) {
+		FileOutputStream fos = null;
+		BufferedOutputStream bos = null;
+		Output out = null;
 		try {
-			Output out = new Output(new BufferedOutputStream(new FileOutputStream(file)));
+			fos = new FileOutputStream(file);
+			bos = new BufferedOutputStream(fos);
+			out = new Output(bos);
 
 			Kryo kryo = new Kryo();
-			kryo.register(NoType.class, noTypeSer);
-			kryo.register(NullType.class,nullTypeSer);
-			kryo.register(PrimitiveType.class, primSer);
-			kryo.register(ConstType.class, constSer);
-			kryo.register(BoxedType.class, boxedSer);
-			kryo.register(PolymorphicType.class, polySer);
-			kryo.register(Variable.class, varSer);
-			kryo.register(ClassInfo.class, classSer);
+//			kryo.register(NoType.class, noTypeSer);
+//			kryo.register(NullType.class,nullTypeSer);
+//			kryo.register(PrimitiveType.class, primSer);
+//			kryo.register(ConstType.class, constSer);
+//			kryo.register(BoxedType.class, boxedSer);
+//			kryo.register(PolymorphicType.class, polySer);
+//			kryo.register(Variable.class, varSer);
+			//kryo.register(ClassInfo.class, classSer);
 			
 			kryo.writeObject(out, obj);
-
-			out.flush();
-			out.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally{
+			if (out != null) {
+				
+				try {
+					if (fos != null){
+						fos.flush();
+						//fos.close();
+					}
+					
+					if (bos != null) {
+						bos.flush();
+						//bos.close();
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				out.flush();
+				out.close();
+			}
 		}
 	}
 }

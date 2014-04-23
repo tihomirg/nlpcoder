@@ -12,14 +12,16 @@ public class PolymorphicType extends ReferenceType {
 	 * 
 	 */
 	private static final long serialVersionUID = 8410671184621593335L;
-	private final Type[] params;
+	private Type[] params;
 	
-	protected PolymorphicType(String name, Type[] params) {
+	public PolymorphicType() {}
+	
+	public PolymorphicType(String name, Type[] params) {
 		super(name);
 		this.params = params;
 	}	
 	
-	protected PolymorphicType(String name, ClassInfo clazz, Type[] params) {
+	public PolymorphicType(String name, ClassInfo clazz, Type[] params) {
 		super(name, clazz);
 		this.params = params;
 	}

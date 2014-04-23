@@ -11,6 +11,8 @@ public class BoxedType extends ConstType {
 
 	private PrimitiveType primitiveType;
 	
+	public BoxedType() {}
+	
 	public BoxedType(String name) {
 		super(name);
 	}

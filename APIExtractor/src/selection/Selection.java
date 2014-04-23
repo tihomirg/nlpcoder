@@ -1,5 +1,6 @@
 package selection;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,10 +38,10 @@ public class Selection {
 		this.fMap = new DeclFreqMap();
 	}
 
-	public void add(ClassInfo[] classes, int maxWords, double nullProbs){
-		createDeclFreq(findTotalDeclNum(classes));
+	public void add(Collection<ClassInfo> collection, int maxWords, double nullProbs){
+		createDeclFreq(findTotalDeclNum(collection));
 		
-		for (ClassInfo clazz : classes) {
+		for (ClassInfo clazz : collection) {
 			add(clazz, maxWords, nullProbs);
 		}
 		//makeFrequencies();
@@ -50,9 +51,9 @@ public class Selection {
 		addAll(clazz.getUniqueDeclarations(), nullProbs);
 	}
 	
-	private int findTotalDeclNum(ClassInfo[] classes){
+	private int findTotalDeclNum(Collection<ClassInfo> collection){
 		int num = 0;
-		for (ClassInfo classInfo : classes) {
+		for (ClassInfo classInfo : collection) {
 			num += classInfo.getUniqueDeclarations().length;
 		}
 		return num;

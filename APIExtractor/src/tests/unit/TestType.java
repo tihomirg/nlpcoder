@@ -7,7 +7,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import definitions.ClassInfo;
+import definitions.factory.StabileClassInfoFactory;
 
 import selection.Config;
 import selection.deserializers.Deserializer;
@@ -20,13 +20,14 @@ import selection.types.Type;
 public class TestType {
 
 	private static StabileTypeFactory factory;
-	private static ClassInfo[] classInfos;
+	private static StabileClassInfoFactory scif;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
+		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
 		Deserializer deserializer = new Deserializer(factory);
-		classInfos = deserializer.deserialize(Config.getStorageLocation());
+		scif = new StabileClassInfoFactory(deserializer.deserialize(Config.getStorageLocation()), nameGen);
+		factory = scif.getStf();
 	}
 
 	@AfterClass
@@ -38,7 +39,7 @@ public class TestType {
 		BoxedType boxedInt = factory.createBoxedType(java.lang.Integer.class.getName());
 		PrimitiveType primitiveInt = factory.createPrimitiveType("int");
 		
-		List<Type> compatible = boxedInt.getCompatibleTypes(factory);
+		List<Type> compatible = primitiveInt.getCompatibleTypes(factory);
 		System.out.println(compatible);
 		
 		Assert.isTrue(boxedInt.isCompatible(primitiveInt, factory).isSuccess());

@@ -10,6 +10,10 @@ public class InitialTypeFactory extends TypeFactory {
 
 	private final List<ReferenceType> reference = new LinkedList<ReferenceType>();
 	
+	public InitialTypeFactory() {
+		super();
+	}
+	
 	public InitialTypeFactory(NameGenerator nameGen) {
 		super(nameGen);
 	}

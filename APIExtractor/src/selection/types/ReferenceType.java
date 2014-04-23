@@ -13,9 +13,7 @@ public abstract class ReferenceType extends Type {
 	protected List<Type> inheritedTypes;
 	protected List<Type> compatibleTypes;	
 
-	public ReferenceType(){
-		this(null);
-	}
+	public ReferenceType(){}
 	
 	public ReferenceType(String name) {
 		super(name);

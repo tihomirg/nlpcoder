@@ -2,6 +2,9 @@ package selection.serializers;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import definitions.ClassInfo;
 import definitions.factory.InitialClassInfoFactory;
 import selection.Config;
@@ -40,7 +43,8 @@ public class Serializer {
 			extractor.addWords(classes);
 			
 			KryoSerializer serializer = new KryoSerializer();
-			serializer.writeObject(storageLocation, classes.toArray(new ClassInfo[classes.size()]));
+			
+			serializer.writeObject(storageLocation, cil.getCif());//classes.toArray(new ClassInfo[classes.size()]));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

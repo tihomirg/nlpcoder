@@ -1,11 +1,9 @@
 package selection.deserializers;
 
-import java.util.Arrays;
-
 import selection.Config;
 import selection.types.NameGenerator;
 import selection.types.StabileTypeFactory;
-import definitions.ClassInfo;
+import definitions.factory.InitialClassInfoFactory;
 
 public class Deserializer {
 	
@@ -15,16 +13,17 @@ public class Deserializer {
 		this.factory = factory;
 	}
 
-	public ClassInfo[] deserialize(String storageLocation) {
+	public InitialClassInfoFactory deserialize(String storageLocation) {
 		KryoDeserializer deserializer = new KryoDeserializer(factory);
-		return (ClassInfo[]) deserializer.readObject(storageLocation, ClassInfo[].class);
+		return (InitialClassInfoFactory) deserializer.readObject(storageLocation, InitialClassInfoFactory.class);
 	}	
 	
 	public static void main(String[] args) {
 		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer(factory);
 		
-		System.out.println(Arrays.toString(deserializer.deserialize(Config.getStorageLocation())));
+		InitialClassInfoFactory cif = deserializer.deserialize(Config.getStorageLocation());
+		System.out.println(cif.getClasses());
 		
 	}
 }

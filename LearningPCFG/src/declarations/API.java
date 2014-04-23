@@ -1,6 +1,7 @@
 package declarations;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -47,8 +48,8 @@ public class API {
 		imported.addDecls(decls);
 	}
 
-	public void addClasses(ClassInfo[] classes){
-		for (ClassInfo clazz : classes) {
+	public void addClasses(Collection<ClassInfo> classes2){
+		for (ClassInfo clazz : classes2) {
 			addClass(clazz);
 		}
 	}

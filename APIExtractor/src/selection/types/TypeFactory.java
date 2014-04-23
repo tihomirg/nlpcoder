@@ -12,12 +12,12 @@ public abstract class TypeFactory {
 
 	private NameGenerator nameGen;
 	
-	protected final Map<String, ConstType> cons = new HashMap<String, ConstType>();
-	protected final Map<String, BoxedType> boxed = new HashMap<String, BoxedType>();
-	protected final Map<String, PrimitiveType> primitive = new HashMap<String, PrimitiveType>();
+	protected Map<String, ConstType> cons = new HashMap<String, ConstType>();
+	protected Map<String, BoxedType> boxed = new HashMap<String, BoxedType>();
+	protected Map<String, PrimitiveType> primitive = new HashMap<String, PrimitiveType>();
 	
-	private final NoType noType = new NoType();
-	private final NullType nullType = new NullType();
+	private NoType noType = new NoType();
+	private NullType nullType = new NullType();
 
 	private static final Set<String> primitiveNames = new HashSet<String>(Arrays.asList(new String[]{"byte", "short", "int", "long", "float", "double", "boolean","char"}));
 
@@ -46,7 +46,7 @@ public abstract class TypeFactory {
 		}
 	};
 
-	private Map<String, String> boxedToPrimitive = new HashMap<String, String>(){
+	private static Map<String, String> boxedToPrimitive = new HashMap<String, String>(){
 		{
 			put(java.lang.Byte.class.getName(), "byte");
 			put(java.lang.Short.class.getName(), "short");
@@ -59,7 +59,9 @@ public abstract class TypeFactory {
 		
 		}
 	};	
-		
+	
+	public TypeFactory() {}	
+	
 	public TypeFactory(NameGenerator nameGen) {
 		this.nameGen = nameGen;
 	}
@@ -177,5 +179,46 @@ public abstract class TypeFactory {
 	@Override
 	public String toString() {
 		return "primitive: " + primitive.values();
-	}	
+	}
+
+	public Map<String, ConstType> getCons() {
+		return cons;
+	}
+
+	public void setCons(Map<String, ConstType> cons) {
+		this.cons = cons;
+	}
+
+	public Map<String, BoxedType> getBoxed() {
+		return boxed;
+	}
+
+	public void setBoxed(Map<String, BoxedType> boxed) {
+		this.boxed = boxed;
+	}
+
+	public Map<String, PrimitiveType> getPrimitive() {
+		return primitive;
+	}
+
+	public void setPrimitive(Map<String, PrimitiveType> primitive) {
+		this.primitive = primitive;
+	}
+
+	public NoType getNoType() {
+		return noType;
+	}
+
+	public void setNoType(NoType noType) {
+		this.noType = noType;
+	}
+
+	public NullType getNullType() {
+		return nullType;
+	}
+
+	public void setNullType(NullType nullType) {
+		this.nullType = nullType;
+	}
+		
 }

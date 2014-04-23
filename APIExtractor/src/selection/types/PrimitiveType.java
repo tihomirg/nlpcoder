@@ -9,7 +9,9 @@ public class PrimitiveType extends Type {
 	private List<Type> compatibleTypes;
 	private BoxedType boxedType;
 
-	protected PrimitiveType(String name) {
+	public PrimitiveType(){}
+	
+	public PrimitiveType(String name) {
 		super(name);
 	}
 	
@@ -38,11 +40,13 @@ public class PrimitiveType extends Type {
 	}
 
 	@Override
-	protected List<Type> getCompatibleTypes(StabileTypeFactory factory) {
+	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		if (this.compatibleTypes == null) {
 			this.compatibleTypes = new LinkedList<Type>();
 			this.compatibleTypes.add(this);
-			this.compatibleTypes.addAll(boxedType(factory).getInheritedTypes(factory));
+			BoxedType boxedType = boxedType(factory);
+			this.compatibleTypes.add(boxedType);
+			this.compatibleTypes.addAll(boxedType.getInheritedTypes(factory));
 		}
 		return compatibleTypes;
 	}

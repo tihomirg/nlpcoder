@@ -15,6 +15,8 @@ public abstract class Type implements Serializable {
 	
 	protected String name;
 	
+	protected Type(){}
+	
 	protected Type(String name) {
 		this.name = name;
 	}

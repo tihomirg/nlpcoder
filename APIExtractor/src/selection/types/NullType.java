@@ -10,7 +10,7 @@ public class NullType extends Type {
 	private static final long serialVersionUID = 7584472897250915114L;	
 	private static final String NULL_TYPE = "NullType";
 
-	protected NullType() {
+	public NullType() {
 		super(NULL_TYPE);
 	}
 

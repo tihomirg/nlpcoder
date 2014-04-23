@@ -10,6 +10,8 @@ public class ConstType extends ReferenceType {
 	 */
 	private static final long serialVersionUID = -1898401502500691232L;
 
+	public ConstType(){}
+	
 	public ConstType(String name) {
 		super(name);
 	}

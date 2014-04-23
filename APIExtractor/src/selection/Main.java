@@ -38,7 +38,7 @@ public class Main {
 		FrequencyDeserializer fDeserializer = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());
 		
 		Selection selection = new Selection(Config.topSelectedLength(), fDeserializer.getFreq());
-		selection.add(deserializer.deserialize(Config.getStorageLocation()), Config.getMaxWords(), Config.getNullProbability());
+		selection.add(deserializer.deserialize(Config.getStorageLocation()).getClasses(), Config.getMaxWords(), Config.getNullProbability());
 		
 		Scanner scanner = new Scanner(System.in);
 		WordProcessor wordProcessor = new WordProcessor();
