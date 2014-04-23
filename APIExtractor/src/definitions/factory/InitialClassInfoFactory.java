@@ -26,6 +26,8 @@ public class InitialClassInfoFactory {
 	}
 
 	public ClassInfo createClassInfo(JavaClass javaClass){
+		if (!javaClass.isPublic()) return null;
+		
 		ClassInfo clazz = null;
 		String className = javaClass.getClassName();		
 		if (classesMap.containsKey(className)){
@@ -41,7 +43,8 @@ public class InitialClassInfoFactory {
 	public ClassInfo[] createClassInfos(JavaClass[] javaClassses) {
 		List<ClassInfo> list = new LinkedList<ClassInfo>();
 		for (JavaClass javaClass: javaClassses) {
-			list.add(createClassInfo(javaClass));
+			ClassInfo clazz = createClassInfo(javaClass);
+			if (clazz != null) list.add(clazz);
 		}
 		return list.toArray(new ClassInfo[list.size()]);
 	}

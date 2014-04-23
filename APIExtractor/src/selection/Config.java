@@ -9,6 +9,7 @@ public class Config {
 	
 	//Folder where we keep corpus
 	private static final String jarFolder = "C:/Users/gvero/git/jars";
+	//private static final String jarFolder = "C:/Users/gvero/git/nlpcoder/APIExtractor/bin/test";
 	private static final int maxFilesToScan = 100000;
 	
 	//serialization

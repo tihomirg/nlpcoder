@@ -229,4 +229,13 @@ public abstract class TypeFactory {
 	public void setNullType(NullType nullType) {
 		this.nullType = nullType;
 	}
+
+	public VoidType getVoidType() {
+		return voidType;
+	}
+
+	public void setVoidType(VoidType voidType) {
+		this.voidType = voidType;
+	}
+		
 }

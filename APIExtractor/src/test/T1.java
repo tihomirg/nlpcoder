@@ -22,6 +22,8 @@ class T2<T>{
 
 public class T1<A> extends T2<List<A>>{
 	
+	static final class E<A> extends T3<A>{}
+	
 	public A[] m1() {
 		return null;
 	}

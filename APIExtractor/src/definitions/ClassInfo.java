@@ -222,7 +222,7 @@ public class ClassInfo implements Serializable {
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, factory);
 				List<Substitution> methodVarSubs = getUniqueVarNames(methodTypeParams, factory);
 
-				if (!decl.isConstructor()){
+				if (!decl.isConstructor() && !method.isStatic()){
 					decl.setReceiverType(type.apply(classVarSubs, factory));
 				}
 
@@ -297,7 +297,8 @@ public class ClassInfo implements Serializable {
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, factory);
 				Set<String> vars = new HashSet<String>(Arrays.asList(classTypeParams));
 
-				decl.setReceiverType(type.apply(classVarSubs, factory));				
+				if(!field.isStatic()) decl.setReceiverType(type.apply(classVarSubs, factory));
+				
 				decl.setRetType(fieldType(signature, classVarSubs, vars, factory));
 				decl.setArgType(EMPTY_TYPE_ARRAY);
 
@@ -705,8 +706,8 @@ public class ClassInfo implements Serializable {
 				//				", superClasses=["+ superClassesToString() + "]"+
 				//				", interfaces=["+interfacesToString()+"],"+
 				", type="+this.type +
-				", ["+Arrays.toString(this.inheritedTypes)+"],"+
-				"isClass=" + isClass+ 
+				", inherited="+Arrays.toString(this.inheritedTypes)+
+				", isClass=" + isClass+ 
 				", isPublic=" + isPublic + 
 				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
 				"]\n\n";
