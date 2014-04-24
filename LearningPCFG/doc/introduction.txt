@@ -1,0 +1,5 @@
+Two kinds of users:
+1) experienced user - types a couple of words and expects long(er) meaningful output. Useful, since process of typing and memorizing right sequence is tedious.
+Technique that help: Sequence extraction, sorting by frequency, sequence context in training data (variable names), sequence context in a user code.
+2) inexperienced user - types a discourse and expects meaningful output. Useful, since the user never typed the sequence before.
+Techniques that help: discourse to group of list of declaration's groups, anaphora resolution.

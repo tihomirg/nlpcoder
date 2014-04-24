@@ -1,0 +1,1 @@
+Transform a discourse to a list of declaration's groups.
