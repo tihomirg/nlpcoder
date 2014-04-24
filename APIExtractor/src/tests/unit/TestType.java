@@ -87,6 +87,9 @@ public class TestType {
 	public void testIsCompatiblePolyType3(){
 		Type[] params = new Type[]{factory.createConstType(java.lang.String.class), factory.createBoxedType(java.lang.Integer.class)};
 		ClassInfo classInfo = scif.getClassesMap().get(java.util.HashMap.class.getName());
+		
+		System.out.println(classInfo.getType());
+		
 		PolymorphicType type = factory.createPolymorphicType(java.util.HashMap.class, classInfo, params);
 			
 		Type[] params2 = new Type[]{factory.createNewVariable(), factory.createNewVariable()};

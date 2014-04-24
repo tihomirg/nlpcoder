@@ -65,6 +65,9 @@ public class ClassInfo implements Serializable {
 		this.methods = initMethods(clazz, typeParameters, factory);
 		this.fields = initFields(clazz, typeParameters, factory);
 
+		//After we set 'methods' and 'fields' we can change variables in the type. This is due to the receiver.		
+		renameTypeVars(factory, typeParameters);
+		
 		try {
 			this.interfaces = cif.createClassInfos(clazz.getInterfaces());
 		} catch (Exception e) {
@@ -79,7 +82,16 @@ public class ClassInfo implements Serializable {
 			System.out.println("*******************************************************************************************");
 			this.superClasses = EMPTY_CLASSES;
 		}
+		
+	}
 
+	private void renameTypeVars(InitialTypeFactory factory, String[] typeParameters) {
+		List<Substitution> uniqueVarParams = getUniqueVarNames(typeParameters, factory);
+		this.type = (ReferenceType) this.type.apply(uniqueVarParams, factory);
+		
+		for (int i = 0; i < this.inheritedTypes.length; i++) {
+			this.inheritedTypes[i] = (ReferenceType) this.inheritedTypes[i].apply(uniqueVarParams, factory);
+		}
 	}
 
 	private String[] typeParametersAndInheritedTypes(JavaClass clazz, InitialTypeFactory factory) {
@@ -672,7 +684,8 @@ public class ClassInfo implements Serializable {
 	}
 	
 	public Set<Type> getAllInstantiatedInheritedType(Type instType, TypeFactory factory) {
-		Unifier unify = instType.unify(type, factory);
+		//Should put more general type always as the argument of unify
+		Unifier unify = type.unify(instType, factory);
 		List<Substitution> subs = unify.getSubs();
 		
 		Set<Type> inharited = this.getAllInharitedTypes(factory);
