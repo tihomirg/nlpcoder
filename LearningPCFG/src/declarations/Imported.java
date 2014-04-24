@@ -11,6 +11,8 @@ import definitions.Declaration;
 public class Imported {
 	
 	private Map<String, Set<ClassInfo>> classes;
+	private Map<String, ClassInfo> types;	
+	
 	private Map<String, Set<Declaration>> fields;
 	private Map<String, Map<Integer, Set<Declaration>>> methods;
 	private Map<String, Map<Integer, Set<Declaration>>> cons;
@@ -20,12 +22,17 @@ public class Imported {
 		this.fields = new HashMap<String, Set<Declaration>>();
 		this.methods = new HashMap<String, Map<Integer,Set<Declaration>>>();
 		this.cons = new HashMap<String, Map<Integer,Set<Declaration>>>();
+		this.types = new HashMap<String, ClassInfo>();
 	}
 	
 	public boolean isImportedClass(String type) {
 		return classes.containsKey(type);
 	}
 
+	public boolean isImportedType(String type) {
+		return types.containsKey(type);
+	}
+	
 	public boolean isImportedField(String name) {
 		return fields.containsKey(name);
 	}
@@ -49,6 +56,16 @@ public class Imported {
 			addClass(clazz);
 		}
 	}
+	
+	public void addTypes(Set<ClassInfo> classes) {
+		for (ClassInfo clazz : classes) {
+			addType(clazz);
+		}
+	}
+
+	private void addType(ClassInfo clazz) {
+		types.put(clazz.getSimpleName(), clazz);
+	}
 
 	public void addClass(ClassInfo clazz) {
 		getClasses(clazz.getSimpleName()).add(clazz);
@@ -56,6 +73,10 @@ public class Imported {
 
 	public Set<ClassInfo> getClasses(String name) {
 		return getSet(name, classes);
+	}
+	
+	public ClassInfo getFirstType(String name) {
+		return types.get(name);
 	}
 
 	public Set<Declaration> getFields(String name) {

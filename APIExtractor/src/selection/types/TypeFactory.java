@@ -7,9 +7,13 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.core.dom.TypeParameter;
+
 import definitions.ClassInfo;
 
 public abstract class TypeFactory {
+
+	private static final String NO_VAR_CONST = "noVarConst";
 
 	private static final String VOID = "void";
 
@@ -22,6 +26,8 @@ public abstract class TypeFactory {
 	private NoType noType = new NoType();
 	private NullType nullType = new NullType();
 	private VoidType voidType = new VoidType();
+
+	private ConstType noVarConst = new ConstType(NO_VAR_CONST);
 
 	private static final Set<String> primitiveNames = new HashSet<String>(Arrays.asList(new String[]{"byte", "short", "int", "long", "float", "double", "boolean","char"}));
 
@@ -249,6 +255,10 @@ public abstract class TypeFactory {
 
 	public void setVoidType(VoidType voidType) {
 		this.voidType = voidType;
+	}
+
+	public ConstType createNoVariableType() {
+		return this.noVarConst;
 	}
 		
 }
