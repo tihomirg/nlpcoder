@@ -2,6 +2,7 @@ package selection.types;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Variable extends ReferenceType {
 
@@ -40,17 +41,17 @@ public class Variable extends ReferenceType {
 	}
 
 	@Override
-	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
+	protected Set<Type> getInheritedTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}	
 	
 	@Override
-	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
+	public Set<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}
 
 	@Override
-	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
+	public Unifier checkCompatible(Type type, StabileTypeFactory factory) {
 		if (type.isVoidType()) return Unifier.False();
 		
 		if (type.isNoType() || type.isNullType()) return Unifier.True();

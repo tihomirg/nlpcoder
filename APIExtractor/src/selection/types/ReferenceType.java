@@ -1,7 +1,9 @@
 package selection.types;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import definitions.ClassInfo;
 
@@ -10,8 +12,8 @@ public abstract class ReferenceType extends Type {
 	private static final long serialVersionUID = -1016449819536737614L;
 
 	protected ClassInfo clazz;
-	protected List<Type> inheritedTypes;
-	protected List<Type> compatibleTypes;	
+	protected Set<Type> inheritedTypes;
+	protected Set<Type> compatibleTypes;	
 
 	public ReferenceType(){}
 
@@ -37,7 +39,7 @@ public abstract class ReferenceType extends Type {
 	}
 
 	@Override
-	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
+	protected Set<Type> getInheritedTypes(StabileTypeFactory factory) {
 		if(this.inheritedTypes == null){
 			this.inheritedTypes = factory.getInheritedTypes(this);
 		}
@@ -45,9 +47,9 @@ public abstract class ReferenceType extends Type {
 	}
 
 	@Override
-	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
+	public Set<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		if (this.compatibleTypes == null) {
-			this.compatibleTypes = new LinkedList<Type>();
+			this.compatibleTypes = new HashSet<Type>();
 			this.compatibleTypes.add(this);
 			this.compatibleTypes.addAll(getInheritedTypes(factory));
 		}
@@ -55,12 +57,12 @@ public abstract class ReferenceType extends Type {
 	}
 
 	@Override
-	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
+	public Unifier checkCompatible(Type type, StabileTypeFactory factory) {
 		if(type.isVoidType()) return Unifier.False();
 
 		if(type.isNoType() || type.isNullType()) return Unifier.True();
 		
-		List<Type> cTypes = type.getCompatibleTypes(factory);
+		Set<Type> cTypes = type.getCompatibleTypes(factory);
 		for (Type cType : cTypes) {
 			Unifier unifier = this.unify(cType, factory);
 			if(unifier.isSuccess()){

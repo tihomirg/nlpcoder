@@ -1,7 +1,9 @@
 package selection.types;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import definitions.ClassInfo;
 
@@ -13,14 +15,14 @@ public class StabileTypeFactory extends TypeFactory {
 
 	protected void addReferenceType(ReferenceType type){}
 
-	public List<Type> getInheritedTypes(ReferenceType referenceType) {
+	public Set<Type> getInheritedTypes(ReferenceType referenceType) {
 		ClassInfo clazz = referenceType.getClassInfo();
-		return Arrays.asList(clazz.getAllInharitedTypes(this));  //clazz.getInstantiatedInheritedTypes(referenceType, this);
+		return clazz.getAllInstantiatedInheritedType(referenceType, this);
 	}
 	
 	@Override
 	public String toString() {
 		return "primitive: " + primitive.values();
-	}	
+	}
 
 }

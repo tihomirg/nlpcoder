@@ -1,16 +1,18 @@
 package selection.types;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Type implements Serializable {
 
 	private static final long serialVersionUID = -900979897015622962L;
 
 	protected static final List<String> EMPTY_STRING_LIST = new LinkedList<String>();
-	protected static final List<Type> EMPTY_TYPE_LIST = new LinkedList<Type>();	
-	protected static final List<ReferenceType> EMPTY_REFERENCE_TYPE_LIST = new LinkedList<ReferenceType>();	
+	protected static final Set<Type> EMPTY_TYPE_LIST = new HashSet<Type>();	
+	//protected static final List<ReferenceType> EMPTY_REFERENCE_TYPE_LIST = new LinkedList<ReferenceType>();	
 	
 	
 	protected String name;
@@ -22,9 +24,13 @@ public abstract class Type implements Serializable {
 	}
 
 	//Compatible
-	protected abstract List<Type> getInheritedTypes(StabileTypeFactory factory);
-	protected abstract List<Type> getCompatibleTypes(StabileTypeFactory factory);
-	public abstract Unifier isCompatible(Type type, StabileTypeFactory factory);
+	protected abstract Set<Type> getInheritedTypes(StabileTypeFactory factory);
+	protected abstract Set<Type> getCompatibleTypes(StabileTypeFactory factory);
+	public abstract Unifier checkCompatible(Type type, StabileTypeFactory factory);
+	
+	public boolean isCompatible(Type type, StabileTypeFactory factory) {
+		return checkCompatible(type, factory).isSuccess();
+	}
 	
 	//Type kind
 	public abstract boolean isPrimitiveType();

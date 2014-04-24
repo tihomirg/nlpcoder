@@ -1,12 +1,14 @@
 package selection.types;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class PrimitiveType extends Type {
 
 	private static final long serialVersionUID = 5449804471090807580L;
-	private List<Type> compatibleTypes;
+	private Set<Type> compatibleTypes;
 	private BoxedType boxedType;
 
 	public PrimitiveType(){}
@@ -40,9 +42,9 @@ public class PrimitiveType extends Type {
 	}
 
 	@Override
-	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
+	public Set<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		if (this.compatibleTypes == null) {
-			this.compatibleTypes = new LinkedList<Type>();
+			this.compatibleTypes = new HashSet<Type>();
 			this.compatibleTypes.add(this);
 			BoxedType boxedType = boxedType(factory);
 			this.compatibleTypes.add(boxedType);
@@ -52,7 +54,7 @@ public class PrimitiveType extends Type {
 	}
 
 	@Override
-	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
+	public Unifier checkCompatible(Type type, StabileTypeFactory factory) {
 		if (type.isNullType() || type.isVoidType()) return Unifier.False();
 		
 		if (type.isNoType()) return Unifier.True();
@@ -103,7 +105,7 @@ public class PrimitiveType extends Type {
 	}
 
 	@Override
-	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
+	protected Set<Type> getInheritedTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}
 

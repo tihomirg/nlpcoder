@@ -3,6 +3,7 @@ package selection.types;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,8 +76,16 @@ public abstract class TypeFactory {
 		return createBoxedType(name, null);
 	}
 	
+	public BoxedType createBoxedType(Class<?> type) {
+		return createBoxedType(type.getName());
+	}	
+	
 	public ConstType createConstType(String name) {
 		return createConstType(name, null);
+	}
+	
+	public ConstType createConstType(Class<?> type) {
+		return createConstType(type.getName());
 	}	
 	
 	public PrimitiveType createPrimitiveType(String name) {
@@ -113,6 +122,10 @@ public abstract class TypeFactory {
 		addReferenceType(type);
 		return type;
 	}
+	
+	public PolymorphicType createPolymorphicType(Class<?> type, ClassInfo classInfo, Type[] params) {
+		return createPolymorphicType(type.getName(), classInfo, params);
+	}	
 
 	public Type createMonomorphicType(String name) {
 		if (isPrimitiveType(name))
@@ -158,10 +171,10 @@ public abstract class TypeFactory {
 	}
 	
 	public Substitution varToNewVar(String oldName){
-		return new Substitution(createVariable(oldName), genNewVariable());
+		return new Substitution(createVariable(oldName), createNewVariable());
 	}
 	
-	public Variable genNewVariable(){
+	public Variable createNewVariable(){
 		return createVariable(nameGen.genNewName());
 	}
 	

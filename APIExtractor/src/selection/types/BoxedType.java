@@ -1,7 +1,9 @@
 package selection.types;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import definitions.ClassInfo;
 
@@ -29,9 +31,9 @@ public class BoxedType extends ConstType {
 	}
 	
 	@Override
-	public List<Type> getCompatibleTypes(StabileTypeFactory factory) {
+	public Set<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		if (this.compatibleTypes == null) {
-			this.compatibleTypes = new LinkedList<Type>();
+			this.compatibleTypes = new HashSet<Type>();
 			this.compatibleTypes.add(this);
 			this.compatibleTypes.add(primitiveType(factory));
 			this.compatibleTypes.addAll(this.getInheritedTypes(factory));

@@ -1,6 +1,7 @@
 package selection.types;
 
 import java.util.List;
+import java.util.Set;
 
 public class VoidType extends Type {
 
@@ -14,17 +15,17 @@ public class VoidType extends Type {
 	}
 	
 	@Override
-	protected List<Type> getInheritedTypes(StabileTypeFactory factory) {
+	protected Set<Type> getInheritedTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}	
 	
 	@Override
-	protected List<Type> getCompatibleTypes(StabileTypeFactory factory) {
+	protected Set<Type> getCompatibleTypes(StabileTypeFactory factory) {
 		return EMPTY_TYPE_LIST;
 	}
 
 	@Override
-	public Unifier isCompatible(Type type, StabileTypeFactory factory) {
+	public Unifier checkCompatible(Type type, StabileTypeFactory factory) {
 		return Unifier.False();
 	}
 

@@ -48,7 +48,7 @@ public class ClassInfo implements Serializable {
 
 	//null's when class is initialized
 	private Declaration[] udecls;
-	private Type[] allInharitedTypes;
+	private Set<Type> allInharitedTypes;
 
 	public ClassInfo(){}
 
@@ -355,7 +355,7 @@ public class ClassInfo implements Serializable {
 		} else {
 			if (Signature.toString(type).startsWith("?")){
 				//TODO: Once we introduce existential types we will change this.
-				return factory.genNewVariable();
+				return factory.createNewVariable();
 			} else {
 				String dotSignature = dottedTransformation(type);
 				if(vars.contains(dotSignature))
@@ -378,7 +378,7 @@ public class ClassInfo implements Serializable {
 		} else {
 			if (Signature.toString(type).startsWith("?")){
 				//TODO: Once we introduce existential types we will change this.
-				return factory.genNewVariable();
+				return factory.createNewVariable();
 			} else {
 				String dotSignature = dottedTransformation(type);
 				if(vars.contains(dotSignature))
@@ -401,7 +401,7 @@ public class ClassInfo implements Serializable {
 		} else {
 			if (Signature.toString(type).startsWith("?")){
 				//TODO: Once we introduce existential types we will change this.
-				return factory.genNewVariable();
+				return factory.createNewVariable();
 			} else {
 				String dotSignature = dottedTransformation(type);
 				if(vars.contains(dotSignature))
@@ -656,9 +656,9 @@ public class ClassInfo implements Serializable {
 		return this.inheritedTypes;
 	}
 
-	public Type[] getAllInharitedTypes(TypeFactory factory){
+	public Set<Type> getAllInharitedTypes(TypeFactory factory){
 		if (this.allInharitedTypes == null){
-			List<Type> types = new LinkedList<Type>();
+			Set<Type> types = new HashSet<Type>();
 			for (ReferenceType iType : this.inheritedTypes) {
 				ClassInfo clazz = iType.getClassInfo();
 				ReferenceType oType = clazz.getType();
@@ -666,21 +666,34 @@ public class ClassInfo implements Serializable {
 				types.add(iType);
 				types.addAll(instantiate(unify, clazz.getAllInharitedTypes(factory), factory));
 			}
-			this.allInharitedTypes = types.toArray(new Type[types.size()]);
+			this.allInharitedTypes = types;
 		}
 		return this.allInharitedTypes;
 	}
+	
+	public Set<Type> getAllInstantiatedInheritedType(Type instType, TypeFactory factory) {
+		Unifier unify = instType.unify(type, factory);
+		List<Substitution> subs = unify.getSubs();
+		
+		Set<Type> inharited = this.getAllInharitedTypes(factory);
+		Set<Type> uInhTypes = new HashSet<Type>();
+		for (Type type : inharited) {
+			uInhTypes.add(type.apply(subs, factory));
+		}
 
-	private List<Type> instantiate(Unifier unifier, Type[] types, TypeFactory factory) {
-		List<Type> list = new LinkedList<Type>();
+		return uInhTypes;
+	}
+
+	private Set<Type> instantiate(Unifier unifier, Set<Type> types, TypeFactory factory) {
+		Set<Type> set = new HashSet<Type>();
 
 		List<Substitution> subs = unifier.getSubs();
 
 		for (Type type : types) {
-			list.add(type.apply(subs, factory));
+			set.add(type.apply(subs, factory));
 		}
 
-		return list;
+		return set;
 	}
 
 
