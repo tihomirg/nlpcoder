@@ -1,1 +1,16 @@
 Transform a discourse to a list of declaration's groups.
+1) Use NL parser to process a sentence.
+2) Extract a verb.
+3) For each verb find a group of nouns, that can influence name, arguments and retur type.
+4) Form a group that contains verb and those auxiliary words.
+
+Later we use those groups to select sequences and declarations.
+
+Anaphora resolution:
+1) Do some simple processing. Pronouns, articles, matching words, synonyms.
+
+Plural resolution:
+1) If a word is in a plural, that is a good indicator that we need a loop.
+
+Manually connect some of the constructs with a set of words.
+Key words should be connected to a specific words (e.g. "for", "while", should be connected with word "loop").
