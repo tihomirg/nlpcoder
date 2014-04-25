@@ -45,9 +45,9 @@ Long form read (LFR):
 
 Long form write (LFW):
 
-1) var = LF
-2) var.field = LF
-3) var[SF] = LF
+1) var = LFR
+2) var.field = LFR
+3) var[SF] = LFR
 
 LF = LFR \cup LFW
 
