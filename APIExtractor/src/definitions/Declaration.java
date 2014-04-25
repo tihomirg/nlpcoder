@@ -219,7 +219,7 @@ public class Declaration implements Serializable, Cloneable {
 		this.packageName = packageName;
 	}
 
-	public boolean overrides(Declaration decl) {
+	public boolean equivalent(Declaration decl) {
 		return simpleName.equals(decl.simpleName);
 	}
 
@@ -286,5 +286,5 @@ public class Declaration implements Serializable, Cloneable {
 				+ Arrays.toString(argType) + ", ret=" + retType
 				+ ", pkg=" + packageName+"\n";
 				//+ ", words=" + Arrays.toString(words) + "\n";
-	}	
+	}
 }

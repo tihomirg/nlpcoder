@@ -3,6 +3,7 @@ package definitions;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class ClassInfo implements Serializable {
 
 	private ReferenceType type;
 
+	private Declaration[] constructors;	
 	private Declaration[] methods;
 	private Declaration[] fields;	
 
@@ -62,12 +64,12 @@ public class ClassInfo implements Serializable {
 
 		String[] typeParameters = typeParametersAndInheritedTypes(clazz, factory);
 
-		this.methods = initMethods(clazz, typeParameters, factory);
-		this.fields = initFields(clazz, typeParameters, factory);
+		initMethods(clazz, typeParameters, factory);
+		initFields(clazz, typeParameters, factory);
 
 		//After we set 'methods' and 'fields' we can change variables in the type. This is due to the receiver.		
 		renameTypeVars(factory, typeParameters);
-		
+
 		try {
 			this.interfaces = cif.createClassInfos(clazz.getInterfaces());
 		} catch (Exception e) {
@@ -82,13 +84,13 @@ public class ClassInfo implements Serializable {
 			System.out.println("*******************************************************************************************");
 			this.superClasses = EMPTY_CLASSES;
 		}
-		
+
 	}
 
 	private void renameTypeVars(InitialTypeFactory factory, String[] typeParameters) {
 		List<Substitution> uniqueVarParams = getUniqueVarNames(typeParameters, factory);
 		this.type = (ReferenceType) this.type.apply(uniqueVarParams, factory);
-		
+
 		for (int i = 0; i < this.inheritedTypes.length; i++) {
 			this.inheritedTypes[i] = (ReferenceType) this.inheritedTypes[i].apply(uniqueVarParams, factory);
 		}
@@ -141,7 +143,7 @@ public class ClassInfo implements Serializable {
 
 	private static ReferenceType[] getInheritedTypes(String signature, JavaClass clazz, Set<String> vars, InitialTypeFactory factory) {
 		if (clazz.getClassName().equals(java.lang.Object.class.getName())) return new ReferenceType[0];
-		
+
 		if (signature == null) {
 
 			String[] interfaceNames = clazz.getInterfaceNames();
@@ -193,48 +195,52 @@ public class ClassInfo implements Serializable {
 	}
 
 	public Declaration[] getDeclarations(){
-		int length = this.methods.length + this.fields.length;
+		int length = this.constructors.length 
+				+ this.methods.length + 
+				this.fields.length;
 		Declaration[] decls = new Declaration[length];
 
-		System.arraycopy(this.methods, 0, decls, 0, this.methods.length);
-		System.arraycopy(this.fields, 0, decls, this.methods.length, this.fields.length);	
+		System.arraycopy(this.constructors, 0, decls, 0, this.constructors.length);
+		System.arraycopy(this.methods, 0, decls, this.constructors.length, this.methods.length);
+		System.arraycopy(this.fields, 0, decls, this.constructors.length + this.methods.length, this.fields.length);	
 
 		return decls;
 	}
 
-	private Declaration[] initMethods(JavaClass clazz, String[] classTypeParams, InitialTypeFactory factory) {
-		Method[] methods = clazz.getMethods();
+	private void initMethods(JavaClass clazz, String[] classTypeParams, InitialTypeFactory factory) {
+		Method[] javaDecls = clazz.getMethods();
 		String className = clazz.getClassName();
 		String pkg = clazz.getPackageName();
-		List<Declaration> decls = new ArrayList<Declaration>();
+		List<Declaration> methods = new LinkedList<Declaration>();
+		List<Declaration> consts = new LinkedList<Declaration>();
 
-		for(Method method: methods){
-			if(method.isPublic()){
+		for(Method javaDecl: javaDecls){
+			if(javaDecl.isPublic()){
 				Declaration decl = new Declaration();
 				decl.setClazz(className);
 				decl.setPackageName(pkg);
 
-				String name = method.getName();
+				String name = javaDecl.getName();
 				if (name.equals(CONSTRUCTOR_SHORT_NAME)){
 					String clazzName = clazz.getClassName();
 					decl.setName("new "+clazzName.substring(clazzName.lastIndexOf('.')+1, clazzName.length()));
 					decl.setConstructor(true);
 					decl.setMethod(true);		
 				} else {
-					decl.setName(method.getName());
+					decl.setName(javaDecl.getName());
 					decl.setMethod(true);
 				}
 
-				decl.setStatic(method.isStatic());
-				decl.setPublic(method.isPublic());		
-				decl.setArgNum(method.getArgumentTypes().length);
+				decl.setStatic(javaDecl.isStatic());
+				decl.setPublic(javaDecl.isPublic());		
+				decl.setArgNum(javaDecl.getArgumentTypes().length);
 
-				String signature = getSignature(method);
+				String signature = getSignature(javaDecl);
 				String[] methodTypeParams = typeParameters(signature);
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, factory);
 				List<Substitution> methodVarSubs = getUniqueVarNames(methodTypeParams, factory);
 
-				if (!decl.isConstructor() && !method.isStatic()){
+				if (!decl.isConstructor() && !javaDecl.isStatic()){
 					decl.setReceiverType(type.apply(classVarSubs, factory));
 				}
 
@@ -248,11 +254,18 @@ public class ClassInfo implements Serializable {
 
 				decl.setArgType(parameterTypes(signature, classVarSubs, methodVarSubs, vars, factory));
 
-				decls.add(decl);				
+
+				if (decl.isConstructor()){
+					consts.add(decl);
+				} else {
+					methods.add(decl);
+				}
 			}
 		}
 
-		return decls.toArray(new Declaration[decls.size()]);
+		this.constructors = consts.toArray(new Declaration[consts.size()]);
+		this.methods = methods.toArray(new Declaration[methods.size()]);
+
 	}
 
 	private static Set<String> createVariables(String[] methodTypeParams, String[] clazzTypeParams) {
@@ -288,36 +301,37 @@ public class ClassInfo implements Serializable {
 		return list;
 	}
 
-	private Declaration[] initFields(JavaClass clazz, String[] classTypeParams, InitialTypeFactory factory) {
-		Field[] fields = clazz.getFields();
+	private void initFields(JavaClass clazz, String[] classTypeParams, InitialTypeFactory factory) {
+		Field[] javaDecls = clazz.getFields();
 		String className = clazz.getClassName();
 		String pkg = clazz.getPackageName();
 		List<Declaration> decls = new ArrayList<Declaration>();
 
-		for(Field field: fields){
-			if(field.isPublic()){
+		for(Field javaDecl: javaDecls){
+			if(javaDecl.isPublic()){
 				Declaration decl = new Declaration();
-				decl.setName(field.getName());
+				decl.setName(javaDecl.getName());
 				decl.setClazz(className);
 				decl.setPackageName(pkg);
 				decl.setField(true);
-				decl.setStatic(field.isStatic());
-				decl.setPublic(field.isPublic());
+				decl.setStatic(javaDecl.isStatic());
+				decl.setPublic(javaDecl.isPublic());
 
-				String signature = getSignature(field);
+				String signature = getSignature(javaDecl);
 
 				List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, factory);
 				Set<String> vars = new HashSet<String>(Arrays.asList(classTypeParams));
 
-				if(!field.isStatic()) decl.setReceiverType(type.apply(classVarSubs, factory));
-				
+				if(!javaDecl.isStatic()) decl.setReceiverType(type.apply(classVarSubs, factory));
+
 				decl.setRetType(fieldType(signature, classVarSubs, vars, factory));
 				decl.setArgType(EMPTY_TYPE_ARRAY);
 
 				decls.add(decl);
 			}
 		}
-		return decls.toArray(new Declaration[decls.size()]);
+
+		this.fields = decls.toArray(new Declaration[decls.size()]);
 	}
 
 	private Type fieldType(String signature, List<Substitution> classVarSubs, Set<String> vars, InitialTypeFactory factory) {
@@ -524,20 +538,56 @@ public class ClassInfo implements Serializable {
 		}
 
 		return clones;
-	}	
+	}
 
 	public Declaration[] getUniqueDeclarations() {
 		if(this.udecls == null){
-			Declaration[] decls = getDeclarations();
 			List<Declaration> list = new LinkedList<Declaration>();
-			for (Declaration decl : decls) {
-				if(!isOverriden(decl, getInheritedClasses())){
-					list.add(decl);
-				}
-			}
+			list.addAll(Arrays.asList(this.constructors));
+			ClassInfo[] inheritedClasses = getInheritedClasses();
+			list.addAll(getUniqueFields(inheritedClasses));
+			list.addAll(getUniqueMethods(inheritedClasses));
 			return this.udecls = list.toArray(new Declaration[list.size()]);
 		} else return this.udecls;
 	}
+
+	private List<Declaration> getUniqueFields(ClassInfo[] inheritedClasses) {
+		List<Declaration> list = new LinkedList<Declaration>();
+
+		for (Declaration field : this.fields) {
+			if(!containsEquivalentField(inheritedClasses, field)) list.add(field);
+		}
+		return list;
+	}
+
+	private List<Declaration> getUniqueMethods(ClassInfo[] inheritedClasses) {
+		List<Declaration> list = new LinkedList<Declaration>();
+
+		for (Declaration method : this.methods) {
+			if (!containsEquivalentMethod(inheritedClasses, method)) list.add(method);
+		}
+		return list;
+	}
+
+	private boolean containsEquivalentMethod(ClassInfo[] inheritedClasses, Declaration method) {
+		for (ClassInfo clazz : inheritedClasses) {
+			if (clazz.containsEquivalentMethod(method)){
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean containsEquivalentField(ClassInfo[] inheritedClasses, Declaration field) {
+		for (ClassInfo clazz : inheritedClasses) {
+			if (clazz.containsEquivalentField(field)){
+				return true;
+			}
+		}
+
+		return false;
+	}	
 
 	private ClassInfo[] getInheritedClasses(){
 		int length = this.superClasses.length + this.interfaces.length;
@@ -549,36 +599,19 @@ public class ClassInfo implements Serializable {
 		return types;
 	}	
 
-	public static boolean isOverriden(Declaration decl, ClassInfo[] classes) {
-		for (ClassInfo clazz : classes) {
-			if(clazz.isOverriden(decl)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isOverriden(Declaration decl){
-		if (decl.isMethod()) {
-			return isOverridenMethod(decl);
-		} else {
-			return isOverridenField(decl);
-		}
-	}
-
-	private boolean isOverridenField(Declaration decl) {
+	private boolean containsEquivalentField(Declaration decl) {
 		for (Declaration field: fields) {
-			if (decl.overrides(field)) return true;
+			if (field.equivalent(decl)) return true;
 		}
 		return false;
 	}
 
-	private boolean isOverridenMethod(Declaration decl) {
+	private boolean containsEquivalentMethod(Declaration decl) {
 		for (Declaration method: methods) {
-			if (decl.overrides(method)) return true;
+			if (method.equivalent(decl)) return true;
 		}
 		return false;
-	}	
+	}
 
 	public Declaration[] getMethods() {
 		return methods;
@@ -682,12 +715,12 @@ public class ClassInfo implements Serializable {
 		}
 		return this.allInharitedTypes;
 	}
-	
+
 	public Set<Type> getAllInstantiatedInheritedType(Type instType, TypeFactory factory) {
 		//Should put more general type always as the argument of unify
 		Unifier unify = type.unify(instType, factory);
 		List<Substitution> subs = unify.getSubs();
-		
+
 		Set<Type> inharited = this.getAllInharitedTypes(factory);
 		Set<Type> uInhTypes = new HashSet<Type>();
 		for (Type type : inharited) {
@@ -726,6 +759,14 @@ public class ClassInfo implements Serializable {
 		return s;
 	}	
 
+	public Declaration[] getConstructors() {
+		return constructors;
+	}
+
+	public void setConstructors(Declaration[] constructors) {
+		this.constructors = constructors;
+	}	
+
 	@Override
 	public String toString() {
 		return "ClassInfo [name=" + name + 
@@ -738,5 +779,4 @@ public class ClassInfo implements Serializable {
 				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
 				"]\n\n";
 	}
-
 }

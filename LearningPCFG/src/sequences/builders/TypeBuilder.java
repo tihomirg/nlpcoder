@@ -1,6 +1,5 @@
 package sequences.builders;
 
-
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.ParameterizedType;
@@ -9,9 +8,8 @@ import org.eclipse.jdt.core.dom.QualifiedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.WildcardType;
-
 import declarations.Imported;
-
+import selection.types.ReferenceType;
 import selection.types.Type;
 import selection.types.TypeFactory;
 
@@ -48,6 +46,10 @@ public class TypeBuilder extends ASTVisitor {
 		type.accept(this);
 		return this.getResult();
 	}
+	
+	public ReferenceType createReferenceType(org.eclipse.jdt.core.dom.Type type) {
+		return this.rtb.createReferenceType(type);
+	}	
 
 	public boolean visit(PrimitiveType node) {
 		result = factory.createPrimitiveType(node.toString());

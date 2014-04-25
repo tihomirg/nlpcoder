@@ -23,8 +23,11 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 
+import definitions.ClassInfo;
+
 import builders.FalseBuilder;
 
+import selection.types.ReferenceType;
 import selection.types.Type;
 import selection.types.TypeFactory;
 import sequences.trees.Expr;
@@ -63,19 +66,23 @@ public class ExpressionBuilder extends FalseBuilder {
 	private Expr expr;
 	private ExprFactory expFactory;
 	private TypeFactory typeFactory;
-	
 	private TypeBuilder typeBuilder;
 
 	private Expr getExpr(ASTNode exp){
 		if (expr != null)
 			exp.accept(this);
 		else 
-			this.expr = expFactory.getHole(); 
+			this.expr = expFactory.getHole();
 		return this.expr;
 	}
 	
 	public boolean visit(ClassInstanceCreation node){
-		Type type = typeBuilder.createType(node.getType());
+		ReferenceType type = typeBuilder.createReferenceType(node.getType());
+		
+		ClassInfo classInfo = type.getClassInfo();
+		
+		classInfo.getConstructors();
+		
 		Expr[] args = getExprs(node.arguments());
 		this.expr = expFactory.createConstructorInvocation(type, args);
 		return false; 

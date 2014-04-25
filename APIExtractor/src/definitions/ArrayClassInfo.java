@@ -53,13 +53,18 @@ public class ArrayClassInfo extends ClassInfo {
 
 		this.setType(tf.createPolymorphicType(name, this, new ReferenceType[]{var}));
 
+		this.setConstructors(createConstructors(paramName, tf));
 		this.setFields(createFields(paramName, tf));
 		this.setMethods(createMethods(paramName, tf));
 	}
 
 	private Declaration[] createMethods(String paramName, InitialTypeFactory tf) {
-		return new Declaration[]{createIntConstructor(paramName, tf), createArrayIntConstructor(paramName, tf), createAccessMethod(paramName, tf)};
+		return new Declaration[]{createAccessMethod(paramName, tf)};
 	}
+	
+	private Declaration[] createConstructors(String paramName, InitialTypeFactory tf) {
+		return new Declaration[]{createIntConstructor(paramName, tf), createArrayIntConstructor(paramName, tf)};
+	}	
 
 	public void setSuperClasses() {
 		setSuperClasses(new ClassInfo[]{this.getInheritedTypes()[0].getClassInfo()});
