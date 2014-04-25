@@ -252,7 +252,7 @@ public class ClassInfo implements Serializable {
 					decl.setRetType(type.apply(classVarSubs, factory));
 				}
 
-				decl.setArgType(parameterTypes(signature, classVarSubs, methodVarSubs, vars, factory));
+				decl.setArgTypes(parameterTypes(signature, classVarSubs, methodVarSubs, vars, factory));
 
 
 				if (decl.isConstructor()){
@@ -325,7 +325,7 @@ public class ClassInfo implements Serializable {
 				if(!javaDecl.isStatic()) decl.setReceiverType(type.apply(classVarSubs, factory));
 
 				decl.setRetType(fieldType(signature, classVarSubs, vars, factory));
-				decl.setArgType(EMPTY_TYPE_ARRAY);
+				decl.setArgTypes(EMPTY_TYPE_ARRAY);
 
 				decls.add(decl);
 			}

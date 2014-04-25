@@ -1,5 +1,6 @@
 package sequences.trees;
 
+import definitions.Declaration;
 import selection.types.Type;
 import selection.types.TypeFactory;
 
@@ -14,21 +15,21 @@ public class ExprFactory {
 		this.hole = new Hole(typeFactory.createNoType());
 	}
 	
-	public Expr getHole() {
+	public Expr createHole() {
 		return hole;
 	}
 
-	public Expr createFieldAccess(String name, Expr exp, Type type) {
-		return new InstanceFieldAccess(name, exp, type);
+	public Expr createFieldAccess(Declaration field, Expr exp, Type type) {
+		return new InstanceFieldAccess(field, exp, type);
 		
 	}
 
-	public Expr createMethodInvocation(String name, Expr exp, Expr[] args, Type type) {
-		return new InstanceMethodInvocation(name, exp, args, type);
+	public Expr createMethodInvocation(Declaration method, Expr exp, Expr[] args) {
+		return new InstanceMethodInvocation(method, exp, args);
 	}
 
-	public Expr createConstructorInvocation(Type type, Expr[] args) {
-		return new ConstructorInvocation(type, args);
+	public Expr createConstructorInvocation(Declaration cons, Expr[] args) {
+		return new ConstructorInvocation(cons, args);
 	}
 
 	public Expr createLiteral(String literal, Type type) {

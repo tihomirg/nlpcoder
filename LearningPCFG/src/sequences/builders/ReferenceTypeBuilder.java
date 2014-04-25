@@ -53,21 +53,24 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 
 	public boolean visit(ParameterizedType node) {
 		org.eclipse.jdt.core.dom.Type type = node.getType();
-		List<org.eclipse.jdt.core.dom.Type> typeArguments = node.typeArguments();
 
 		String name = type.toString();
+		if (imported.isImportedType(name)) {
+			ClassInfo clazz = imported.getFirstType(name);
+			
+			List<org.eclipse.jdt.core.dom.Type> typeArguments = node.typeArguments();
+			int size = typeArguments.size();
 
-		int size = typeArguments.size();
-		Type[] types = new Type[size];
+			Type[] types = new Type[size];
+			for(int i = 0; i < size; i++){
+				types[i] = createReferenceType(typeArguments.get(i));	
+			}
 
-		for(int i = 0; i < size; i++){
-			types[i] = createReferenceType(typeArguments.get(i));	
-		}
-
-		result = factory.createPolymorphicType(name, types);	
+			result = factory.createPolymorphicType(clazz, types);
+		} else result = factory.createNoVariableType();
 		return false;
 	}
-	
+
 	public ReferenceType createParameterizedType(ParameterizedType node) {
 		this.result = null;
 		visit(node);
@@ -79,19 +82,19 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 		type.accept(this);
 		return this.getResult();
 	}
-	
+
 	public ReferenceType createArrayType(ArrayType node){
 		this.result = null;
 		visit(node);
 		return this.getResult();
 	}
-	
+
 	public ReferenceType createQualifiedType(QualifiedType node) {
 		this.result = null;
 		visit(node);
 		return this.getResult();
 	}
-	
+
 	public ReferenceType createTypeParameter(TypeParameter node) {
 		this.result = null;
 		visit(node);
@@ -109,7 +112,7 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 		visit(node);
 		return this.getResult();
 	}	
-	
+
 	public boolean visit(PrimitiveType node) {
 		result = factory.createBoxedType(node.toString());
 		return false;

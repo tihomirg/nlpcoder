@@ -1,20 +1,21 @@
 package sequences.trees;
 
+import definitions.Declaration;
 import selection.types.Type;
 
 public class InstanceFieldAccess extends Expr{
-	private String name;
+	private Declaration field;
 	private Expr exp;
 	
-	public InstanceFieldAccess(String name, Expr exp, Type type) {
-		super(type);
-		this.name = name;
+	public InstanceFieldAccess(Declaration field, Expr exp, Type type) {
+		super(field.getRetType());
+		this.field = field;
 		this.exp = exp;
 	}
 
 	@Override
 	public String toString() {
-		return exp +"."+name;
+		return exp +"."+field;
 	}
 	
 	

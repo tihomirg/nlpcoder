@@ -5,51 +5,52 @@ import java.util.Arrays;
 import java.util.List;
 
 import selection.parser.one.Word;
+import selection.types.StabileTypeFactory;
 import selection.types.Type;
 
 public class Declaration implements Serializable, Cloneable {
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6849217608815581633L;
-	
+
 	private static int idGen = 0; 
 	private int id = idGen++;
-	
+
 	private String name;
 	private int argNum;
 	private boolean isStatic;
 	private boolean isPublic;
 
 	private Type retType;
-	private Type[] argType;
+	private Type[] argTypes;
 	private Type receiverType;
-	
+
 	private boolean method;
 	private boolean constructor;
 	private boolean field;
 	private boolean literal;
 
 	private String clazz;
-	
+
 	private Word[] words;
 
 	private String simpleName;
 	private String packageName;
-	
+
 	public Declaration(){}	
 
 	public Declaration(String name, Type retType, boolean isLiteral) {
-		
+
 		this.name = name;
 		this.retType = retType;
-		
+
 		if(isLiteral){
 			this.literal = isLiteral;
 			this.isPublic = true;
 		}
-		
+
 	}
 
 	public String getName() {
@@ -60,7 +61,7 @@ public class Declaration implements Serializable, Cloneable {
 		this.name = name;
 		this.simpleName = getShortName(name);
 	}
-	
+
 	private String getShortName(String name) {
 		return name.substring(name.lastIndexOf(".")+1);
 	}	
@@ -90,11 +91,11 @@ public class Declaration implements Serializable, Cloneable {
 	}
 
 	public Type[] getArgTypes() {
-		return argType;
+		return argTypes;
 	}
 
-	public void setArgType(Type[] paramTypes) {
-		this.argType = paramTypes;
+	public void setArgTypes(Type[] argTypes) {
+		this.argTypes = argTypes;
 	}
 
 	public boolean isMethod() {
@@ -136,42 +137,42 @@ public class Declaration implements Serializable, Cloneable {
 	public void setWords(Word[] words) {
 		this.words = words;
 	}
-	
+
 	public String getSignature() {
 		String signature = this.name+(this.retType != null? " "+typeToSentence(this.retType):"");
 
-        if(clazz != null && (!constructor || isStatic)) {
-            signature += " "+shortType(clazz);
-         }		
-		
-		if (this.argType != null)
-			for (Type argType : this.argType) {
+		if(clazz != null && (!constructor || isStatic)) {
+			signature += " "+shortType(clazz);
+		}		
+
+		if (this.argTypes != null)
+			for (Type argType : this.argTypes) {
 				signature += (argType != null? " "+typeToSentence(argType):"");
 			}
-		
+
 		return signature;
 	}
-	
+
 	private String groupOne(){
 		String one = this.simpleName;
-		
+
 		one += (this.retType != null? " "+typeToSentence(this.retType):"");
-        
+
 		if(clazz != null && (!constructor || isStatic)) {
-            one += " "+shortType(clazz);
-        }
-		
+			one += " "+shortType(clazz);
+		}
+
 		return one;
 	}
-	
+
 	private String groupTwo(){
 		String two = "";
 
-		if (this.argType != null)
-			for (Type argType : this.argType) {
+		if (this.argTypes != null)
+			for (Type argType : this.argTypes) {
 				two += (argType != null? " "+typeToSentence(argType):"");
 			}
-		
+
 		return two;
 	}
 
@@ -186,7 +187,7 @@ public class Declaration implements Serializable, Cloneable {
 		}
 		return prefix + name;
 	}
-	
+
 	public String[] getCaracteristicWordGroups(){
 		return new String[]{groupOne(), groupTwo()};
 	}
@@ -198,7 +199,7 @@ public class Declaration implements Serializable, Cloneable {
 	private String toString(List<String> words) {
 		String s = "";
 		for (String word : words) {
-		  	s += " "+word; 
+			s += " "+word; 
 		}
 		return s;
 	}
@@ -230,7 +231,7 @@ public class Declaration implements Serializable, Cloneable {
 	public Type getReceiverType() {
 		return receiverType;
 	}
-	
+
 	public boolean hasReceiver(){
 		return receiverType != null;
 	}
@@ -252,7 +253,7 @@ public class Declaration implements Serializable, Cloneable {
 			return "field";
 		} else return "error";
 	}
-		
+
 	public int getId() {
 		return id;
 	}
@@ -268,7 +269,7 @@ public class Declaration implements Serializable, Cloneable {
 	public void setLiteral(boolean literal) {
 		this.literal = literal;
 	}
-	
+
 	@Override
 	public Declaration clone() {
 		try {
@@ -278,13 +279,62 @@ public class Declaration implements Serializable, Cloneable {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return modifiers()+" name=" + simpleName 
 				+ ", receiver=" + receiverType + ", params="
-				+ Arrays.toString(argType) + ", ret=" + retType
+				+ Arrays.toString(argTypes) + ", ret=" + retType
 				+ ", pkg=" + packageName+"\n";
-				//+ ", words=" + Arrays.toString(words) + "\n";
+		//+ ", words=" + Arrays.toString(words) + "\n";
 	}
+
+	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {
+		int length = this.argTypes.length;
+		if (length != argTypes.length) return false;
+
+		for (int i = 0; i < length; i++) {
+			if(!this.argTypes[i].isCompatible(argTypes[i], factory)) return false;
+		}
+
+		return true;
+	}
+	
+//	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {
+//		if (this.method){
+//			//no receiver
+//			if(this.constructor || this.isStatic){
+//				int length = this.argTypes.length;
+//				if (length != argTypes.length) return false;
+//				
+//				for (int i = 0; i < length; i++) {
+//					if(!this.argTypes[i].isCompatible(argTypes[i], factory)) return false;
+//				}
+//				
+//				return true;
+//			} else {
+//				int length = this.argTypes.length;
+//				if (length + 1 != argTypes.length) return false;
+//				
+//				if(!this.receiverType.isCompatible(argTypes[0], factory)) return false;
+//				
+//				for (int i = 1; i < length; i++) {
+//					if(!this.argTypes[i].isCompatible(argTypes[i], factory)) return false;
+//				}
+//				
+//				return true;				
+//			}
+//		} else {
+//			//field
+//			if (this.isStatic){
+//				return argTypes.length == 0;
+//			} else {
+//				if (argTypes.length != 1) return false;
+//				
+//				if(!this.receiverType.isCompatible(argTypes[0], factory)) return false;
+//				
+//				return true;
+//			}
+//		}
+//	}	
 }

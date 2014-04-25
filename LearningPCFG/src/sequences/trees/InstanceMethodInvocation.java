@@ -2,23 +2,25 @@ package sequences.trees;
 
 import java.util.Arrays;
 
+import definitions.Declaration;
+
 import selection.types.Type;
 
 public class InstanceMethodInvocation extends Expr{
 
-	private String name;
+	private Declaration method;
 	private Expr exp;
 	private Expr[] args;
 	
-	public InstanceMethodInvocation(String name, Expr exp, Expr[] args, Type type) {
-		super(type);
-		this.name = name;
+	public InstanceMethodInvocation(Declaration method, Expr exp, Expr[] args) {
+		super(method.getRetType());
+		this.method = method;
 		this.exp = exp;
 		this.args = args;
 	}
 
 	@Override
 	public String toString() {
-		return exp+"."+name+ "("+Arrays.toString(args) + ")";
+		return exp+"."+method+ "("+Arrays.toString(args) + ")";
 	}
 }

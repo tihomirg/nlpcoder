@@ -34,16 +34,21 @@ public class ArrayClassInfo extends ClassInfo {
 	//	private ReferenceType[] inheritedTypes;
 
 
+	public static final String ACCESS = "access";
+	public static final String SHORT_NAME = "Array";
+	public static final String PKG_NAME = "java.lang";
+	public static final String LONG_NAME = PKG_NAME+"."+SHORT_NAME;
+
 	public ArrayClassInfo(){}
 
 	public ArrayClassInfo(InitialTypeFactory tf) {
-		String name = "java.lang.Array";
+		String name = LONG_NAME;
 		this.setName(name);
 		this.setClass(true);
 		this.setPublic(true);
-		this.setSimpleName("Array");
-		this.setPackageName("java.lang");
-		ConstType iType = tf.createConstType(java.lang.Object.class.getName());
+		this.setSimpleName(SHORT_NAME);
+		this.setPackageName(PKG_NAME);
+		ConstType iType = tf.createConstType(java.lang.Object.class);
 
 		this.setInheritedTypes(new ReferenceType[]{iType});
 		this.setInterfaces(EMPTY_CLASSES);
@@ -76,7 +81,7 @@ public class ArrayClassInfo extends ClassInfo {
 		String clazzName = this.getName();
 		decl.setClazz(clazzName);
 		decl.setPackageName(this.getPackageName());
-		decl.setName("new Array");
+		decl.setName("new "+SHORT_NAME);
 		decl.setConstructor(true);
 		decl.setMethod(true);
 
@@ -87,7 +92,7 @@ public class ArrayClassInfo extends ClassInfo {
 		List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, tf);
 		decl.setRetType(this.getType().apply(classVarSubs, tf));
 		Type[] args = new Type[]{tf.createPrimitiveType("int")};
-		decl.setArgType(args);
+		decl.setArgTypes(args);
 		decl.setArgNum(args.length);		
 
 		return decl;
@@ -99,7 +104,7 @@ public class ArrayClassInfo extends ClassInfo {
 		String clazzName = this.getName();
 		decl.setClazz(clazzName);
 		decl.setPackageName(this.getPackageName());
-		decl.setName("new Array");
+		decl.setName("new "+SHORT_NAME);
 		decl.setConstructor(true);
 		decl.setMethod(true);
 
@@ -109,8 +114,8 @@ public class ArrayClassInfo extends ClassInfo {
 		String[] classTypeParams = new String[]{paramName};
 		List<Substitution> classVarSubs = getUniqueVarNames(classTypeParams, tf);
 		decl.setRetType(this.getType().apply(classVarSubs, tf));
-		Type[] args = new Type[]{tf.createPolymorphicType(clazzName, this, new Type[]{tf.createBoxedType(java.lang.Integer.class.getName())})};
-		decl.setArgType(args);
+		Type[] args = new Type[]{tf.createPolymorphicType(clazzName, this, new Type[]{tf.createBoxedType(java.lang.Integer.class)})};
+		decl.setArgTypes(args);
 		decl.setArgNum(args.length);		
 
 		return decl;
@@ -122,7 +127,7 @@ public class ArrayClassInfo extends ClassInfo {
 		String clazzName = this.getName();
 		decl.setClazz(clazzName);
 		decl.setPackageName(this.getPackageName());
-		decl.setName("access");
+		decl.setName(ACCESS);
 		decl.setConstructor(false);
 		decl.setMethod(true);
 
@@ -135,7 +140,7 @@ public class ArrayClassInfo extends ClassInfo {
 		decl.setRetType(classVarSubs.get(0).getType());
 
 		Type[] args = new Type[]{tf.createPrimitiveType("int")};
-		decl.setArgType(args);
+		decl.setArgTypes(args);
 		decl.setArgNum(args.length);		
 
 		return decl;
@@ -160,7 +165,7 @@ public class ArrayClassInfo extends ClassInfo {
 
 		decl.setReceiverType(this.getType().apply(classVarSubs, tf));				
 		decl.setRetType(tf.createPrimitiveType("int"));
-		decl.setArgType(EMPTY_TYPE_ARRAY);
+		decl.setArgTypes(EMPTY_TYPE_ARRAY);
 		
 		return decl;
 	}

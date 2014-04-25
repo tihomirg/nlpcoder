@@ -123,6 +123,10 @@ public abstract class TypeFactory {
 	    return createPolymorphicType(name, null, params);
 	}
 	
+	public PolymorphicType createPolymorphicType(ClassInfo clazz, Type[] params) {
+	    return createPolymorphicType(clazz.getName(), clazz, params);
+	}	
+	
 	public PolymorphicType createPolymorphicType(String name, ClassInfo clazz, Type[] params) {
 		PolymorphicType type = new PolymorphicType(name, clazz, params);
 		addReferenceType(type);
