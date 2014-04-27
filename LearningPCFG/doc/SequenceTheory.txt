@@ -116,3 +116,27 @@ We start recording variables
 
 
 ------------------------------------------------- Constructs ------------------------------------------------
+
+
+--------------------------------------------- Why such sequences? -------------------------------------------
+This should also appear in the evaluation section.
+
+After initial examination we decide to go with such a model. We can build such a model because it involves
+API only and the connection among different "API" objects. The exceptions are static declarations and literals.
+However, they appear so often in the code that we can not neglect them. We treat them as separate elements,
+and save the important data, i.e., with what methods they appear often.
+
+Q: How many new sequences do we 
+
+------------------------------------------- Sequence Holes as Types ------------------------------------------
+All "read" conditions can be encoded as constant types. We will create selection structure for the sequences 
+based on those types. Also, conditions can be encoded in the same way.
+
+Think how to encode location. (depends on the way we save it.)
+
+------------------------------------------- Saving parameter sequences ---------------------------------------
+
+Parameter sequences can be used to connect local variables. Another way to connect local variables is to extract
+their sequences, use them as key and find the complete sequences. This is orthogonal, but important.
+
+

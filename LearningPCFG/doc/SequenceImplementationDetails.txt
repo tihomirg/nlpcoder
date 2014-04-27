@@ -34,7 +34,7 @@ We keep simple sequences:
 - NL stuff:
   - construct keywords and words should be connected
   - names of the variables should be connected with sequences
-      
+
 Ex.
 
 BufferedInputStream bis = new BufferedInputStream(fis);
