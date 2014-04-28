@@ -78,10 +78,8 @@ public class ExpressionBuilder extends FalseBuilder {
 	private Imported imported;
 
 	private Expr getExpr(ASTNode exp){
-		if (expr != null)
-			exp.accept(this);
-		else 
-			this.expr = expFactory.createHole();
+		if (expr != null) exp.accept(this);
+		else setExprToHole();
 		return this.expr;
 	}
 
@@ -92,8 +90,8 @@ public class ExpressionBuilder extends FalseBuilder {
 		Type rightType = rightExp.getType();
 		
 		if (leftType.isCompatible(rightType, typeFactory)){
-			this.expr = this.expFactory.createAssignment(node.getOperator(), leftExp, rightExp);
-		} else this.expr = this.expFactory.createHole();
+			setExpr(this.expFactory.createAssignment(node.getOperator(), leftExp, rightExp));
+		} else setExprToHole();
 		
 		return false;
 	}
@@ -101,7 +99,6 @@ public class ExpressionBuilder extends FalseBuilder {
 	public boolean visit(ConditionalExpression node){
 
 		Expr exp = getExpr(node.getExpression());
-		
 		Type type = exp.getType();
 		
 		if (compatibleWitBooleanType(type)){
@@ -112,10 +109,10 @@ public class ExpressionBuilder extends FalseBuilder {
 			Type thenType = thenExp.getType();
 			
 			if (elseType.isCompatible(thenType, typeFactory) && thenType.isCompatible(elseType, typeFactory)){
-				this.expr = this.expFactory.createCondExpr(exp, thenExp, elseExp);
-			} else this.expr = this.expFactory.createHole();
+				setExpr(this.expFactory.createCondExpr(exp, thenExp, elseExp));
+			} else setExprToHole();
 			
-		} else this.expr = expFactory.createHole();
+		} else setExprToHole();
 		
 		return false;
 	}
@@ -123,37 +120,37 @@ public class ExpressionBuilder extends FalseBuilder {
 	public boolean visit(InstanceofExpression node) {
 		Expr exp = getExpr(node.getLeftOperand());
 		ReferenceType referenceType = this.typeBuilder.createReferenceType(node.getRightOperand());
-		this.expr = this.expFactory.createInstOfExpr(exp, referenceType);
+		setExpr(this.expFactory.createInstOfExpr(exp, referenceType));
 		
 		return false;
 	}	
 	
 	public boolean visit(ParenthesizedExpression node) {
-		this.expr = getExpr(node.getExpression());
+		setExpr(getExpr(node.getExpression()));
 		return false;
 	}
 
 	public boolean visit(SuperFieldAccess node) {
-		this.expr = expFactory.createHole();
+		setExprToHole();
 		return false;
 	}	
 
 	public boolean visit(SuperMethodInvocation node) {
-		this.expr = expFactory.createHole();		
+		setExprToHole();
 		return false;
 	}	
 	
 	//Initializer of the for statement, basically the outer expression.
 	//Will come back to it when loops come into play.
 	public boolean visit(VariableDeclarationExpression node){
-		this.expr = expFactory.createHole();
+		setExprToHole();
 		return false;
 	}
 
 	public boolean visit(CastExpression node) {
 		Expr exp = getExpr(node.getExpression());
 		ReferenceType referenceType = this.typeBuilder.createReferenceType(node.getType());
-		this.expr = this.expFactory.createCastExpr(referenceType, exp);
+		setExpr(this.expFactory.createCastExpr(referenceType, exp));
 		
 		return false;
 	}	
@@ -172,8 +169,8 @@ public class ExpressionBuilder extends FalseBuilder {
 			Type[] argTypes = getTypes(args);
 
 			Declaration cons = getFirstCompatible(constructors, argTypes, typeFactory);
-			this.expr = expFactory.createConstructorInvocation(cons, args);
-		} else this.expr = expFactory.createHole();
+			setExpr(expFactory.createConstructorInvocation(cons, args));
+		} else setExprToHole();
 
 		return false;
 	}
@@ -209,11 +206,11 @@ public class ExpressionBuilder extends FalseBuilder {
 				Declaration[] fields = classInfo.getFields();
 				
 				Declaration field = getFirstCompatible(fields, name);
-				this.expr = expFactory.createFieldAccess(field, exp, typeFactory.createNoType());
+				setExpr(expFactory.createFieldAccess(field, exp, typeFactory.createNoType()));
 
-			} else this.expr = expFactory.createHole();
+			} else setExprToHole();
 
-		} else this.expr = expFactory.createHole();
+		} else setExprToHole();
 
 		return false;
 	}
@@ -255,11 +252,11 @@ public class ExpressionBuilder extends FalseBuilder {
 				Type[] argTypes = getTypes(args);
 				Declaration method = getFirstCompatible(compatible, argTypes, typeFactory);
 				
-				this.expr = expFactory.createMethodInvocation(method, exp, args);
+				setExpr(expFactory.createMethodInvocation(method, exp, args));
 
-			} else this.expr = expFactory.createHole();
+			} else setExprToHole();
 
-		} else this.expr = expFactory.createHole();		
+		} else setExprToHole();
 		
 
 		return false;
@@ -276,52 +273,52 @@ public class ExpressionBuilder extends FalseBuilder {
 
 	public boolean visit(BooleanLiteral node) {
 		boolean val = node.booleanValue();
-		this.expr = expFactory.createLiteral(Boolean.toString(val), typeFactory.createPrimitiveType("boolean"));
+		setExpr(expFactory.createLiteral(Boolean.toString(val), typeFactory.createPrimitiveType("boolean")));
 		return false;
 	}
 
 	public boolean visit(CharacterLiteral node) {
 		char val = node.charValue();
-		this.expr = expFactory.createLiteral(Character.toString(val), typeFactory.createPrimitiveType("char"));
+		setExpr(expFactory.createLiteral(Character.toString(val), typeFactory.createPrimitiveType("char")));
 		return false;
 	}
 
 	public boolean visit(NullLiteral node){
-		this.expr = expFactory.createLiteral("null", typeFactory.createNullType());
+		setExpr(expFactory.createLiteral("null", typeFactory.createNullType()));
 		return false;
 	}
 
 	//Find exactly which number literal, i.e., its type.
 	public boolean visit(NumberLiteral node){
-		this.expr = expFactory.createLiteral(node.getToken(), typeFactory.createConstType("java.lang.Object"));
+		setExpr(expFactory.createLiteral(node.getToken(), typeFactory.createConstType("java.lang.Object")));
 		return false;
 	}
 
 	public boolean visit(StringLiteral node) {
-		this.expr = expFactory.createLiteral(node.getEscapedValue(), typeFactory.createConstType("java.lang.String"));		
+		setExpr(expFactory.createLiteral(node.getEscapedValue(), typeFactory.createConstType("java.lang.String")));		
 		return false;
 	}	
 
     //TODO: Variables vs field, method, params,..
 	public boolean visit(SimpleName node){
 		String name = node.getIdentifier();
-		this.expr = expFactory.createVariable(name, typeFactory.createNoType());
+		setExpr(expFactory.createVariable(name, typeFactory.createNoType()));
 		return false;
 	}
 
 	//Static methods, fields.
 	public boolean visit(QualifiedName node) {
-		this.expr = expFactory.createHole();
+		setExprToHole();
 		return false;
 	}
 
 	public boolean visit(ConstructorInvocation node) {
-		this.expr = expFactory.createHole();
+		setExprToHole();
 		return false;
 	}
 
 	public boolean visit(EmptyStatement node) {
-		this.expr = expFactory.createHole();
+		setExprToHole();
 		return false;
 	}	
 	public boolean visit(ArrayAccess node) {
@@ -338,13 +335,17 @@ public class ExpressionBuilder extends FalseBuilder {
 				Type[] argTypes = new Type[]{index.getType()};
 				Declaration method = getFirstCompatible(compatible, argTypes, typeFactory);
 				
-				this.expr = expFactory.createMethodInvocation(method, exp, new Expr[]{index});
+				setExpr(expFactory.createMethodInvocation(method, exp, new Expr[]{index}));
 				
-			} else this.expr = expFactory.createHole();
+			} else setExprToHole();
 
-		} else this.expr = expFactory.createHole();		
+		} else setExprToHole();		
 
 		return false;
+	}
+
+	private void setExprToHole() {
+		setExpr(expFactory.createHole());
 	}
 
 	public boolean visit(ArrayCreation node) {
@@ -358,11 +359,11 @@ public class ExpressionBuilder extends FalseBuilder {
 			
 			if(argTypes.length == 1){
 				Declaration cons = aci.getConstructors()[0];
-				this.expr = expFactory.createConstructorInvocation(cons, args);
+				setExpr(expFactory.createConstructorInvocation(cons, args));
 				
 			} else {
 				Declaration cons = aci.getConstructors()[1];
-				this.expr = expFactory.createConstructorInvocation(cons, args);				
+				setExpr(expFactory.createConstructorInvocation(cons, args));				
 			}
 		} else {
 			
@@ -396,7 +397,11 @@ public class ExpressionBuilder extends FalseBuilder {
 	}
 
 	public boolean visit(ArrayInitializer node) {
-		this.expr = expFactory.createHole();
+		setExprToHole();
 		return false;
 	}
+
+	public void setExpr(Expr expr) {
+		this.expr = expr;
+	}	
 }
