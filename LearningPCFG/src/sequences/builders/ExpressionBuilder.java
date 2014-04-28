@@ -7,35 +7,37 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayAccess;
 import org.eclipse.jdt.core.dom.ArrayCreation;
 import org.eclipse.jdt.core.dom.ArrayInitializer;
-import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
+import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.ConditionalExpression;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldAccess;
-import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.NumberLiteral;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
-import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
+import org.eclipse.jdt.core.dom.SuperFieldAccess;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 
 import declarations.Imported;
 import definitions.ArrayClassInfo;
 import definitions.ClassInfo;
 import definitions.Declaration;
-
 import builders.FalseBuilder;
-
 import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
 import selection.types.Type;
-import selection.types.TypeFactory;
 import sequences.trees.Expr;
 import sequences.trees.ExprFactory;
 
@@ -83,6 +85,79 @@ public class ExpressionBuilder extends FalseBuilder {
 		return this.expr;
 	}
 
+	public boolean visit(Assignment node) {
+		Expr leftExp = getExpr(node.getLeftHandSide());
+		Type leftType = leftExp.getType();
+		Expr rightExp = getExpr(node.getRightHandSide());
+		Type rightType = rightExp.getType();
+		
+		if (leftType.isCompatible(rightType, typeFactory)){
+			this.expr = this.expFactory.createAssignment(node.getOperator(), leftExp, rightExp);
+		} else this.expr = this.expFactory.createHole();
+		
+		return false;
+	}
+	
+	public boolean visit(ConditionalExpression node){
+
+		Expr exp = getExpr(node.getExpression());
+		
+		Type type = exp.getType();
+		
+		if (compatibleWitBooleanType(type)){
+			Expr elseExp = getExpr(node.getElseExpression());
+			Expr thenExp = getExpr(node.getThenExpression());
+			
+			Type elseType = elseExp.getType();
+			Type thenType = thenExp.getType();
+			
+			if (elseType.isCompatible(thenType, typeFactory) && thenType.isCompatible(elseType, typeFactory)){
+				this.expr = this.expFactory.createCondExpr(exp, thenExp, elseExp);
+			} else this.expr = this.expFactory.createHole();
+			
+		} else this.expr = expFactory.createHole();
+		
+		return false;
+	}
+	
+	public boolean visit(InstanceofExpression node) {
+		Expr exp = getExpr(node.getLeftOperand());
+		ReferenceType referenceType = this.typeBuilder.createReferenceType(node.getRightOperand());
+		this.expr = this.expFactory.createInstOfExpr(exp, referenceType);
+		
+		return false;
+	}	
+	
+	public boolean visit(ParenthesizedExpression node) {
+		this.expr = getExpr(node.getExpression());
+		return false;
+	}
+
+	public boolean visit(SuperFieldAccess node) {
+		this.expr = expFactory.createHole();
+		return false;
+	}	
+
+	public boolean visit(SuperMethodInvocation node) {
+		this.expr = expFactory.createHole();		
+		return false;
+	}	
+	
+	//Initializer of the for statement, basically the outer expression.
+	//Will come back to it when loops come into play.
+	public boolean visit(VariableDeclarationExpression node){
+		this.expr = expFactory.createHole();
+		return false;
+	}
+
+	public boolean visit(CastExpression node) {
+		Expr exp = getExpr(node.getExpression());
+		ReferenceType referenceType = this.typeBuilder.createReferenceType(node.getType());
+		this.expr = this.expFactory.createCastExpr(referenceType, exp);
+		
+		return false;
+	}	
+	
 	public boolean visit(ClassInstanceCreation node){
 
 		//We need to cover a case when constructor of a user class is invoked
@@ -268,7 +343,6 @@ public class ExpressionBuilder extends FalseBuilder {
 			} else this.expr = expFactory.createHole();
 
 		} else this.expr = expFactory.createHole();		
-		
 
 		return false;
 	}
@@ -283,14 +357,11 @@ public class ExpressionBuilder extends FalseBuilder {
 			ClassInfo aci = imported.getFirstType(ArrayClassInfo.SHORT_NAME);
 			
 			if(argTypes.length == 1){
-				
 				Declaration cons = aci.getConstructors()[0];
-				
 				this.expr = expFactory.createConstructorInvocation(cons, args);
 				
 			} else {
 				Declaration cons = aci.getConstructors()[1];
-				
 				this.expr = expFactory.createConstructorInvocation(cons, args);				
 			}
 		} else {
@@ -300,6 +371,20 @@ public class ExpressionBuilder extends FalseBuilder {
 		return false;
 	}
 
+	private boolean compatibleWitBooleanType(Type[] argTypes) {
+		PrimitiveType boolType = typeFactory.createPrimitiveType("boolean");
+		
+		for (Type type : argTypes) {
+			if(!boolType.isCompatible(type, typeFactory)) return false;
+		}
+		
+		return true;
+	}	
+	
+	private boolean compatibleWitBooleanType(Type type) {
+		return typeFactory.createPrimitiveType("boolean").isCompatible(type, typeFactory);
+	}
+	
 	private boolean compatibleWithIntType(Type[] argTypes) {
 		PrimitiveType intType = typeFactory.createPrimitiveType("int");
 		

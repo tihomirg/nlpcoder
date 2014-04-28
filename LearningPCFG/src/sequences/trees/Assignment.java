@@ -1,18 +1,20 @@
 package sequences.trees;
 
-import selection.types.Type;
+import org.eclipse.jdt.core.dom.Assignment.Operator;
 
 public class Assignment extends Expr {
 
 	private Expr lexp;
 	private Expr rexp;
-	private String op;
-	
-	public Assignment(String op, Expr lexp, Expr rexp, Type type) {
-		super(type);
-		this.op = op;
-		this.lexp = lexp;
-		this.rexp = rexp;
+	private Operator op;
+
+	public Assignment(Operator operator, Expr leftExp, Expr rightExp) {
+		super(leftExp.getType());
+
+		this.op = operator;
+		this.lexp = leftExp;
+		this.rexp = rightExp;
+		
 	}
 
 	@Override

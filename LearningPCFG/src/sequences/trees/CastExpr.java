@@ -2,11 +2,11 @@ package sequences.trees;
 
 import selection.types.Type;
 
-public class Cast extends Expr {
+public class CastExpr extends Expr {
 
 	private Expr exp;
 
-	public Cast(Type type, Expr exp) {
+	public CastExpr(Type type, Expr exp) {
 		super(type);
 		this.exp = exp;
 	}
