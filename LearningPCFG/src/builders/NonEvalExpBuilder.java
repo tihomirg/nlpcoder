@@ -27,7 +27,7 @@ import scopes.ScopesKeyValue;
 import symbol.Factory;
 import symbol.Symbol;
 
-public class NonEvalExpBuilder extends FalseBuilder {
+public class NonEvalExpBuilder extends SingleNodeVisitor {
 
 	private Factory factory;
 	private Symbol symbol;

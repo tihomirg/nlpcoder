@@ -89,6 +89,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 import api.Imported;
 import api.StabileAPI;
+import builders.SingleNodeVisitor;
 import builders.IBuilder;
 import definitions.Declaration;
 import scopes.NameScopes;
@@ -96,7 +97,7 @@ import scopes.ScopeKeyValue;
 import scopes.SimpleEvalScopes;
 import statistics.SequenceStatistics;
 
-public class SequenceBuilder extends ASTVisitor implements IBuilder {
+public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 
 	private SequenceStatistics statistics;
 	private NameScopes methods;

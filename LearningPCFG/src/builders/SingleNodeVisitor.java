@@ -85,7 +85,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
-public abstract class FalseBuilder extends ASTVisitor {
+public abstract class SingleNodeVisitor extends ASTVisitor {
 
 
 
@@ -1446,6 +1446,10 @@ public abstract class FalseBuilder extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(WildcardType node) {
+		return false;
+	}
+	
+	public boolean visit(Javadoc node){
 		return false;
 	}
 }

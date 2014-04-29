@@ -27,7 +27,7 @@ import scopes.ScopesKeyValue;
 import symbol.Factory;
 import symbol.Symbol;
 
-public class EvalExpBuilder extends FalseBuilder {
+public class EvalExpBuilder extends SingleNodeVisitor {
 
 	private Factory factory;
 	private ScopesKeyValue<String, Symbol> locals;

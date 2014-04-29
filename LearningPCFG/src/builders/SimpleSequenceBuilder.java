@@ -96,7 +96,7 @@ import scopes.SimpleEvalScopes;
 import statistics.SequenceStatistics;
 
 
-public class SimpleSequenceBuilder extends FalseBuilder implements IBuilder {
+public class SimpleSequenceBuilder extends SingleNodeVisitor implements IBuilder {
 
 	private SequenceStatistics statistics;
 	private NameScopes methods;

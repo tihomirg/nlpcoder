@@ -36,7 +36,7 @@ import definitions.ArrayClassInfo;
 import definitions.ClassInfo;
 import definitions.Declaration;
 import api.Imported;
-import builders.FalseBuilder;
+import builders.SingleNodeVisitor;
 import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
@@ -73,7 +73,7 @@ import sequences.one.exprs.ExprFactory;
 //TypeLiteral,
 //VariableDeclarationExpression
 
-public class ExpressionBuilder extends FalseBuilder {
+public class ExpressionBuilder extends SingleNodeVisitor {
 
 	private ExprFactory expFactory;
 	private Expr expr;
