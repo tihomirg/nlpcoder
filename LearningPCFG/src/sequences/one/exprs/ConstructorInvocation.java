@@ -19,5 +19,16 @@ public class ConstructorInvocation extends Expr{
 	@Override
 	public String toString() {
 		return "new " + type + "("+ Arrays.toString(args) + ")";
+	}
+
+	//TODO: later we will change this with 
+	@Override
+	public String shortRep() {
+		return ExprConsts.ConstructorInvocation+"("+cons.getName()+")";
+	}
+	
+	@Override
+	protected String representation() {
+		return shortReps(args);
 	}	
 }

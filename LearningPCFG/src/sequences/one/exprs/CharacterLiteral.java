@@ -15,4 +15,14 @@ public class CharacterLiteral extends Expr {
 	public String toString() {
 		return Character.toString(value);
 	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.CharacterLiteral;
+	}
+
+	@Override
+	protected String representation() {
+		return Character.toString(value);
+	}
 }

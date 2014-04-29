@@ -18,10 +18,10 @@ import selection.types.TypeFactory;
 public class TypeBuilder extends ASTVisitor {
 
 	private TypeFactory factory;
-	
-	private Type result;
 	private ReferenceTypeBuilder rtb;
 		
+	private Type result;
+	
 	public TypeBuilder(TypeFactory factory, Imported imported) {
 		this.factory = factory;
 		this.rtb = new ReferenceTypeBuilder(factory, imported);

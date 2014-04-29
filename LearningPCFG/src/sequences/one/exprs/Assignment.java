@@ -21,4 +21,15 @@ public class Assignment extends Expr {
 	public String toString() {
 		return lexp +" "+op+" "+ rexp;
 	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.Assignment+"("+op+")";
+	}
+
+	@Override
+	protected String representation() {
+		return shortReps(lexp, rexp);
+	}
+	
 }

@@ -21,6 +21,19 @@ public class InstanceMethodInvocation extends Expr{
 
 	@Override
 	public String toString() {
-		return exp+"."+method+ "("+Arrays.toString(args) + ")";
+		return exp+"."+method.getName()+ "("+Arrays.toString(args) + ")";
+	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.InstanceMethodInvocation+"("+method.getName()+")";
+	}
+
+	@Override
+	protected String representation() {
+		Expr[] exprs = new Expr[args.length+1];
+		exprs[0] = exp;
+		System.arraycopy(args, 0, exprs, 1, args.length);
+		return shortReps(exprs);
 	}
 }

@@ -1,20 +1,29 @@
 package sequences.one.exprs;
 
+import definitions.Declaration;
 import selection.types.Type;
 
 public class StaticFieldAccess extends Expr {
 
-	private String name;
-	private String className;
+	private Declaration decl;
 	
-	public StaticFieldAccess(String name, String className, Type type) {
+	public StaticFieldAccess(Declaration decl, Type type) {
 		super(type);
-		this.name = name;
-		this.className = className;
+		this.decl = decl;
 	}
 
 	@Override
 	public String toString() {
-		return className+"."+name;
+		return decl.getClazz()+"."+decl.getName();
+	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.StaticFieldAccess+"("+decl.getName()+")";
+	}
+
+	@Override
+	protected String representation() {
+		return "";
 	}
 }

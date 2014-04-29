@@ -8,17 +8,13 @@ import definitions.Declaration;
 import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.Type;
-import selection.types.TypeFactory;
+import selection.types.StabileTypeFactory;
 
 public class ExprFactory {
-	
-	//private TypeFactory typeFactory;
-	
 	private final Expr hole;
 	private final Type boolType;
 	
-	public ExprFactory(TypeFactory typeFactory) {
-//		this.typeFactory = typeFactory;
+	public ExprFactory(StabileTypeFactory typeFactory) {
 		this.hole = new Hole(typeFactory.createNoType());
 		this.boolType = typeFactory.createPrimitiveType("boolean");
 	}
@@ -80,7 +76,7 @@ public class ExprFactory {
 	}
 
 	public Expr createNullLiteral(Type type) {
-		return new NullLitera(type);
+		return new NullLiteral(type);
 	}
 
 	public Expr createNumberLiteral(String number, Type type) {

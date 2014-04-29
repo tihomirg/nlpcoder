@@ -15,6 +15,15 @@ public class CastExpr extends Expr {
 	public String toString() {
 		return "("+type+")"+ exp;
 	}
-	
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.CastExpr+"("+type.getPrefix()+")";
+	}
+
+	@Override
+	protected String representation() {
+		return exp.shortRep();
+	}
 	
 }

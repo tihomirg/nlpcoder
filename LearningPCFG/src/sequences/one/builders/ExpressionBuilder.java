@@ -74,17 +74,30 @@ import sequences.one.exprs.ExprFactory;
 //VariableDeclarationExpression
 
 public class ExpressionBuilder extends SingleNodeVisitor {
-
-	private ExprFactory expFactory;
-	private Expr expr;
 	
 	private Imported imported;
-	
-	private TypeBuilder typeBuilder;
 	private StabileTypeFactory typeFactory;
+	
+	private ExprFactory expFactory;
+	private TypeBuilder typeBuilder;	
+
+	private Expr expr;	
+	
+	public ExpressionBuilder(Imported imported, StabileTypeFactory typeFactory) {
+		this.imported = imported;
+		this.typeFactory = typeFactory;
+		this.expFactory = new ExprFactory(typeFactory);
+		this.typeBuilder = new TypeBuilder(typeFactory, imported);
+	}
 
 	public void setExpr(Expr expr) {
 		this.expr = expr;
+	}
+	
+	public Expr getExpr(ASTNode exp){
+		if (expr != null) exp.accept(this);
+		else setExprToHole();
+		return this.expr;
 	}
 
 	public boolean visit(ArrayAccess node) {
@@ -416,12 +429,6 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		}
 		
 		return list.toArray(new Declaration[list.size()]);
-	}
-
-	private Expr getExpr(ASTNode exp){
-		if (expr != null) exp.accept(this);
-		else setExprToHole();
-		return this.expr;
 	}	
 	
 	private Expr[] getExprs(List<ASTNode> arguments) {

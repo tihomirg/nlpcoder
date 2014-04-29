@@ -42,4 +42,14 @@ public class CondExpr extends Expr {
 	public String toString() {
 		return exp + " ? " + thenExp + " : "+ elseExp;
 	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.CondExpr;
+	}
+
+	@Override
+	protected String representation() {
+		return shortReps(exp, thenExp, elseExp);
+	}
 }

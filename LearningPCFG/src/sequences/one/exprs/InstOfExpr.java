@@ -25,4 +25,14 @@ public class InstOfExpr extends Expr {
 	public String toString() {
 		return exp +" instanceof "+checkType;
 	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.InstOfExpr+"("+checkType.getPrefix()+")";
+	}
+
+	@Override
+	protected String representation() {
+		return exp.shortRep();
+	}
 }

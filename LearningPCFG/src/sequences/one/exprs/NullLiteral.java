@@ -2,27 +2,24 @@ package sequences.one.exprs;
 
 import selection.types.Type;
 
-public class StringLiteral extends Expr {
+public class NullLiteral extends Expr {
 
-	private String value;
-
-	public StringLiteral(String value, Type type) {
+	public NullLiteral(Type type) {
 		super(type);
-		this.value = value;
 	}
 
 	@Override
 	public String toString() {
-		return value;
+		return ExprConsts.NullLiteral;
 	}
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.StringLiteral;
+		return ExprConsts.NullLiteral;
 	}
 
 	@Override
 	protected String representation() {
-		return "("+value+")";
+		return ExprConsts.NullLiteral;
 	}
 }

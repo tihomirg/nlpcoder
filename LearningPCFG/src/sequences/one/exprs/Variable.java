@@ -13,5 +13,15 @@ public class Variable extends Expr {
 	@Override
 	public String toString() {
 		return "v("+name+", "+type+")";
+	}
+
+	@Override
+	public String shortRep() {
+		return name;
+	}
+
+	@Override
+	protected String representation() {
+		return name;
 	}	
 }

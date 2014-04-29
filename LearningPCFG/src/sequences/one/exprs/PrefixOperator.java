@@ -18,4 +18,14 @@ public class PrefixOperator extends Expr {
 	public String toString() {
 		return op +" "+exp;
 	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.PrefixOperator+"("+op+")";
+	}
+
+	@Override
+	protected String representation() {
+		return exp.shortRep();
+	}
 }

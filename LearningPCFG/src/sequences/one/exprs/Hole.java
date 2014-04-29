@@ -14,7 +14,17 @@ public class Hole extends Expr{
 
 	@Override
 	public String toString() {
-		return "h("+type+")";
+		return "hole("+type+")";
+	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.Hole;
+	}
+
+	@Override
+	protected String representation() {
+		return "";
 	}	
 	
 }

@@ -14,5 +14,15 @@ public class NumberLiteral extends Expr {
 	@Override
 	public String toString() {
 		return number;
+	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.NumberLiteral;
+	}
+
+	@Override
+	protected String representation() {
+		return number;
 	}	
 }

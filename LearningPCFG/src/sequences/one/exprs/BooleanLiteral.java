@@ -15,4 +15,15 @@ public class BooleanLiteral extends Expr {
 	public String toString() {
 		return Boolean.toString(value);
 	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.BooleanLiteral;
+	}
+
+	@Override
+	protected String representation() {
+		return Boolean.toString(this.value);
+	}
+	
 }

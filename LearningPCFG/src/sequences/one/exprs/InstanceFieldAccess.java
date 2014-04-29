@@ -15,8 +15,17 @@ public class InstanceFieldAccess extends Expr{
 
 	@Override
 	public String toString() {
-		return exp +"."+field;
+		return exp +"."+field.getName();
 	}
-	
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.InstanceFieldAccess+"("+field.getName()+")";
+	}
+
+	@Override
+	protected String representation() {
+		return exp.shortRep();
+	}
 	
 }

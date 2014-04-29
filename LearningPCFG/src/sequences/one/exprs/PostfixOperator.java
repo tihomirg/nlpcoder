@@ -5,16 +5,26 @@ import org.eclipse.jdt.core.dom.PostfixExpression.Operator;
 public class PostfixOperator extends Expr {
 
 	private Expr expr;
-	private Operator operator;
+	private Operator op;
 	
 	public PostfixOperator(Operator operator, Expr expr) {
 		super(expr.getType());
 		this.expr = expr;
-		this.operator = operator;
+		this.op = operator;
 	}
 
 	@Override
 	public String toString() {
-		return expr + " " + operator;
+		return expr + " " + op;
+	}
+
+	@Override
+	public String shortRep() {
+		return ExprConsts.PostfixOperator+"("+op+")";		
+	}
+
+	@Override
+	protected String representation() {
+		return expr.shortRep();
 	}
 }

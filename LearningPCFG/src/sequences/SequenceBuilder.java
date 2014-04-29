@@ -41,6 +41,8 @@ import builders.IBuilder;
 import scopes.NameScopes;
 import scopes.ScopeKeyValue;
 import scopes.SimpleEvalScopes;
+import sequences.one.builders.ExpressionBuilder;
+import sequences.one.exprs.Expr;
 import statistics.SequenceStatistics;
 
 public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
@@ -52,6 +54,7 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 	private SimpleEvalScopes locals;
 	private NameScopes params;
 	private StabileAPI api;
+	private ExpressionBuilder expBuilder;
 
 	public SequenceBuilder(StabileAPI api) {
 		this.statistics  = new SequenceStatistics();
@@ -70,10 +73,6 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 	public void print(PrintStream out) {
 		statistics.print(out);
 		//statistics.print(api.getDeclMap(), out);	
-	}
-
-	public boolean visit(Assignment node) {
-		return true;
 	}
 	
 	@Override
@@ -108,17 +107,21 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 	}	
 	
 	public boolean visit(IfStatement node){
-		Expression expression = node.getExpression();
-		if(expression != null){
-			locals.pushLocation("if("+expression+")");
-			expression.accept(this);
+		Expression exp = node.getExpression();
+		if(exp != null){
+			locals.pushLocation("if("+expBuilder.getExpr(exp)+")");
+			
+			//TODO:
+			//1) transform expr into VNF
+			//2) transform into pattern and list of subs
+			
 			locals.popLocation();
 		}
 		
 		Statement thenStatement = node.getThenStatement();
 		if (thenStatement != null) {
 			locals.pushLocation("if then");
-			locals.push();		
+			locals.push();
 			thenStatement.accept(this);
 			popAndSaveLocals();
 			locals.popLocation();
@@ -137,24 +140,28 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 	}
 	
 	public boolean visit(EnhancedForStatement node) {
-		Expression expression = node.getExpression();
-		if(expression != null){
-			locals.pushLocation("for2("+expression+")");
-			expression.accept(this);
+		Expression exp = node.getExpression();
+		if(exp != null){
+			locals.pushLocation("forE("+expBuilder.getExpr(exp)+")");
+
+			//TODO:
+			//1) transform expr into VNF
+			//2) transform into pattern and list of subs			
+			
 			locals.popLocation();
 		}
 		
 		locals.push();
 		SingleVariableDeclaration parameter = node.getParameter();
 		if (parameter != null) {
-			locals.pushLocation("for2 param");
+			locals.pushLocation("forE param");
 			parameter.accept(this);	
 			locals.popLocation();
 		}
 		
 		Statement body = node.getBody();
 		if (body != null) {
-			locals.pushLocation("for2 body");
+			locals.pushLocation("forE body");
 			body.accept(this);
 			locals.popLocation();	
 		}
@@ -164,25 +171,25 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 	}
 
 	public boolean visit(ForStatement node){
-		Expression expression = node.getExpression();
-		if(expression != null){
-			locals.pushLocation("for1("+expression+")");
-			expression.accept(this);
+		Expression exp = node.getExpression();
+		if(exp != null){
+			locals.pushLocation("for("+expBuilder.getExpr(exp)+")");
+
 			locals.popLocation();
 		}
 		
 		locals.push();
-		locals.pushLocation("for1 init");
+		locals.pushLocation("for init");
 		accept(node.initializers());
 		locals.popLocation();
 		
-		locals.pushLocation("for1 update");
+		locals.pushLocation("for update");
 		accept(node.updaters());
 		locals.popLocation();
 		
 		Statement body = node.getBody();
 		if (body != null) {
-			locals.pushLocation("for1 body");
+			locals.pushLocation("for body");
 			body.accept(this);
 			locals.popLocation();	
 		}
@@ -192,10 +199,9 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 	}
 	
 	public boolean visit(WhileStatement node){
-		Expression expression = node.getExpression();
-		if(expression != null){
-			locals.pushLocation("while("+expression+")");
-			expression.accept(this);
+		Expression exp = node.getExpression();
+		if(exp != null){
+			locals.pushLocation("while("+expBuilder.getExpr(exp)+")");
 			locals.popLocation();
 		}
 		
@@ -318,6 +324,7 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 
 	public boolean visit(CompilationUnit node) {
 		this.imported = api.createImported();
+		this.expBuilder = new ExpressionBuilder(this.imported, api.getStf());
 		return true;
 	}
 

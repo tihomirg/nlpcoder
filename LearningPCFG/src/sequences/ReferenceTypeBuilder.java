@@ -24,9 +24,9 @@ import selection.types.TypeFactory;
 public class ReferenceTypeBuilder extends ASTVisitor {
 
 	private TypeFactory factory;
-
-	private ReferenceType result;
 	private Imported imported;
+	
+	private ReferenceType result;
 
 	public ReferenceTypeBuilder(TypeFactory factory, Imported imported) {
 		this.factory = factory;
