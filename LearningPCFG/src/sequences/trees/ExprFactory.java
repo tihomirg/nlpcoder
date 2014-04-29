@@ -5,8 +5,6 @@ import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import definitions.Declaration;
-import selection.types.ConstType;
-import selection.types.NullType;
 import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.Type;

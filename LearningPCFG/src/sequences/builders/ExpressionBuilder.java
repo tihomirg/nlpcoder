@@ -333,7 +333,21 @@ public class ExpressionBuilder extends FalseBuilder {
 	//TODO: Variables vs field, method, params,..
 	public boolean visit(SimpleName node){
 		String name = node.getIdentifier();
-		setExpr(expFactory.createVariable(name, typeFactory.createNoType()));
+		if (!isParam(name)){
+			if (isLocalVariable(name)){
+				setExpr(expFactory.createVariable(name, typeFactory.createNoType()));				
+			}
+		}
+		return false;
+	}
+
+	//TODO: Implement
+	private boolean isLocalVariable(String name) {
+		return true;
+	}
+
+	//TODO: Implement
+	private boolean isParam(String name) {
 		return false;
 	}
 
