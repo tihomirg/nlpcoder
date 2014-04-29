@@ -1,8 +1,13 @@
 package sequences.trees;
 
 import org.eclipse.jdt.core.dom.Assignment.Operator;
-
+import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression;
 import definitions.Declaration;
+import selection.types.ConstType;
+import selection.types.NullType;
+import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.Type;
 import selection.types.TypeFactory;
@@ -36,10 +41,6 @@ public class ExprFactory {
 		return new ConstructorInvocation(cons, args);
 	}
 
-	public Expr createLiteral(String literal, Type type) {
-		return new Literal(literal, type);
-	}
-
 	public Expr createVariable(String name, Type type) {
 		return new Variable(name, type);
 	}
@@ -58,5 +59,37 @@ public class ExprFactory {
 
 	public Expr createCastExpr(ReferenceType referenceType, Expr exp) {
 		return new CastExpr(referenceType, exp);
+	}
+
+	public Expr createInfixOperator(InfixExpression.Operator operator, Expr leftExpr, Expr rightExpr) {
+		return new InfixOperator(operator, leftExpr, rightExpr);
+	}
+
+	public Expr createPostfixOperator(PostfixExpression.Operator operator, Expr expr) {
+		return new PostfixOperator(operator, expr);
+	}
+
+	public Expr createPrefixOperator(PrefixExpression.Operator operator, Expr expr) {
+		return new PrefixOperator(operator, expr);
+	}
+
+	public Expr createBooleanLiteral(boolean val, PrimitiveType type) {
+		return new BooleanLiteral(val, type);
+	}
+
+	public Expr createCharacterLiteral(char value, PrimitiveType type) {
+		return new CharacterLiteral(value, type);
+	}
+
+	public Expr createNullLiteral(Type type) {
+		return new NullLitera(type);
+	}
+
+	public Expr createNumberLiteral(String number, Type type) {
+		return new NumberLiteral(number, type);
+	}
+
+	public Expr createStringLiteral(String value, Type type) {
+		return new StringLiteral(value, type);
 	}
 }

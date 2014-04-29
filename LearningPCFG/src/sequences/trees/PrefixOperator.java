@@ -1,15 +1,17 @@
 package sequences.trees;
 
-import selection.types.Type;
+import org.eclipse.jdt.core.dom.PrefixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
+
 
 public class PrefixOperator extends Expr {
-	private String op;
+	private Operator op;
 	private Expr exp;
 	
-	public PrefixOperator(String op, Expr exp, Type type) {
-		super(type);
-		this.op = op;
-		this.exp = exp;
+	public PrefixOperator(PrefixExpression.Operator operator, Expr expr) {
+		super(expr.getType());
+		this.op = operator;
+		this.exp = expr;
 	}
 
 	@Override

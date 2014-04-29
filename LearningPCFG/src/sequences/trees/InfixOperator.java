@@ -1,17 +1,17 @@
 package sequences.trees;
 
-import selection.types.Type;
+import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 
 public class InfixOperator extends Expr{
-	private String op;
+	private Operator op;
 	private Expr lexp;
 	private Expr rexp;
-	
-	public InfixOperator(String op, Expr lexp, Expr rexp, Type type) {
-		super(type);
-		this.op = op;
-		this.lexp = lexp;
-		this.rexp = rexp;
+
+	public InfixOperator(Operator operator, Expr leftExpr, Expr rightExpr) {
+		super(leftExpr.getType());
+		this.op = operator;
+		this.lexp = leftExpr;
+		this.rexp = rightExpr;
 	}
 
 	@Override
