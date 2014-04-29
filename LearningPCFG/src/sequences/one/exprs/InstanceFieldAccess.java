@@ -1,4 +1,4 @@
-package sequences.trees;
+package sequences.one.exprs;
 
 import definitions.Declaration;
 import selection.types.Type;

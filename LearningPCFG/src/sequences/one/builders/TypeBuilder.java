@@ -1,4 +1,4 @@
-package sequences.builders;
+package sequences.one.builders;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ArrayType;

@@ -1,4 +1,4 @@
-package sequences.trees;
+package sequences.one.exprs;
 
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression.Operator;

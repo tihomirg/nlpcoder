@@ -1,4 +1,4 @@
-package sequences.trees;
+package sequences.one.exprs;
 
 import java.util.Arrays;
 

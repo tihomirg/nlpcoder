@@ -1,4 +1,4 @@
-package sequences.builders;
+package sequences.one.builders;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -13,8 +13,8 @@ import builders.IBuilder;
 import scopes.NameScopes;
 import scopes.SimpleEvalScopes;
 import selection.types.Type;
-import sequences.builders.SequenceBuilder.TempExpression;
-import sequences.builders.SequenceBuilder.TempVariable;
+import sequences.one.builders.SequenceBuilder.TempExpression;
+import sequences.one.builders.SequenceBuilder.TempVariable;
 import statistics.SequenceStatistics;
 import declarations.API;
 import declarations.Imported;

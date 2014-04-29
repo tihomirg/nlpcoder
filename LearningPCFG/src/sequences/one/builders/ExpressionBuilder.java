@@ -1,4 +1,4 @@
-package sequences.builders;
+package sequences.one.builders;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,8 +41,8 @@ import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
 import selection.types.Type;
-import sequences.trees.Expr;
-import sequences.trees.ExprFactory;
+import sequences.one.exprs.Expr;
+import sequences.one.exprs.ExprFactory;
 
 //Expression:	
 //Annotation,

@@ -1,4 +1,4 @@
-package sequences.trees;
+package sequences.one.exprs;
 
 public class CondExpr extends Expr {
 
