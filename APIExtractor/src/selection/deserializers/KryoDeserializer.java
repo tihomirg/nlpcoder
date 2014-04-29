@@ -27,26 +27,6 @@ import definitions.ClassInfo;
 
 public class KryoDeserializer {
 	
-	private final NoTypeDeserializer noTypeSer;
-	private final NullTypeDeserializer nullTypeSer;
-	private final PrimitiveTypeDeserializer primSer;
-	private final ConstTypeDeserializer constSer;
-	private final BoxedTypeDeserializer boxedSer;
-	private final PolymorphicTypeDeserializer polySer;
-	private final VariableDeserializer varSer;
-	private final ClassInfoDeserializer classSer;
-	
-	public KryoDeserializer(StabileTypeFactory factory) {
-		this.noTypeSer = new NoTypeDeserializer(factory);
-		this.nullTypeSer = new NullTypeDeserializer(factory);
-		this.primSer = new PrimitiveTypeDeserializer(factory);
-		this.constSer = new ConstTypeDeserializer(factory);
-		this.boxedSer = new BoxedTypeDeserializer(factory);
-		this.polySer = new PolymorphicTypeDeserializer(factory);
-		this.varSer = new VariableDeserializer(factory);
-		this.classSer = new ClassInfoDeserializer();
-	}
-
 	public Object readObject(String file, Class type) {
 		
 		Object obj = null;

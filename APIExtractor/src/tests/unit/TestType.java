@@ -1,8 +1,5 @@
 package tests.unit;
 
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.core.runtime.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -29,7 +26,7 @@ public class TestType {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
-		Deserializer deserializer = new Deserializer(factory);
+		Deserializer deserializer = new Deserializer();
 		scif = new StabileClassInfoFactory(deserializer.deserialize(Config.getStorageLocation()), nameGen);
 		factory = scif.getStf();
 	}

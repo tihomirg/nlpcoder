@@ -121,6 +121,9 @@ public class API {
 		return new HashSet<ClassInfo>();
 	}
 
+	
+//--------------------------- obsolete ------------------------------------------------------	
+	
 	public Declaration getTrueBooleanLiteral() {
 		return new Declaration("true", factory.createPrimitiveType("boolean"), true);
 	}

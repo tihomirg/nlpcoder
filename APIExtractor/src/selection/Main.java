@@ -2,8 +2,6 @@ package selection;
 
 import java.util.Scanner;
 
-import definitions.factory.StabileClassInfoFactory;
-
 import selection.deserializers.Deserializer;
 import selection.deserializers.FrequencyDeserializer;
 import selection.parser.minusone.ParserMinusOne;
@@ -14,10 +12,6 @@ import selection.parser.two.ConstituentTwo;
 import selection.parser.two.ParserTwo;
 import selection.parser.two.SentenceTwo;
 import selection.probability.designers.ScoreDesigner;
-import selection.types.InitialTypeFactory;
-import selection.types.NameGenerator;
-import selection.types.StabileTypeFactory;
-import selection.types.TypeFactory;
 
 public class Main {
 	private static SentenceTwo parse(String sentence, WordProcessor wordProcessor) {
@@ -32,8 +26,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		Deserializer deserializer = new Deserializer(factory);
+		Deserializer deserializer = new Deserializer();
 		
 		FrequencyDeserializer fDeserializer = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());
 		

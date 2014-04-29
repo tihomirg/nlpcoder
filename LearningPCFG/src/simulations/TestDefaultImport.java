@@ -18,7 +18,7 @@ import selection.types.TypeFactory;
 public class TestDefaultImport {
 	public static void main(String[] args) {
 		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		Deserializer deserializer = new Deserializer(factory);
+		Deserializer deserializer = new Deserializer();
 		Collection<ClassInfo> classes = deserializer.deserialize(Config.getStorageLocation()).getClasses();
 		API api = new API(factory);
 		api.addClasses(classes);

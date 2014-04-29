@@ -3,22 +3,27 @@ package scanners;
 import java.io.File;
 import java.util.Collection;
 
-import builders.DeclFreqBuilder;
 import builders.IBuilder;
 import builders.SimpleSequenceBuilder;
 import selection.Config;
 import selection.deserializers.Deserializer;
 import selection.types.NameGenerator;
 import selection.types.StabileTypeFactory;
-import selection.types.TypeFactory;
 import declarations.API;
 import definitions.ClassInfo;
+import definitions.factory.InitialClassInfoFactory;
 import definitions.factory.StabileClassInfoFactory;
 
 public class SequenceBoundedScanner extends BoundedScanner {
 	public static void main(String[] args) {
-		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
-		Deserializer deserializer = new Deserializer(factory);
+		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
+		StabileTypeFactory factory = new StabileTypeFactory(nameGen);
+		Deserializer deserializer = new Deserializer();
+		InitialClassInfoFactory icif = deserializer.deserialize(Config.getStorageLocation());
+		
+		StabileClassInfoFactory scif = new StabileClassInfoFactory(icif, nameGen);
+		
+		
 		Collection<ClassInfo> classes = deserializer.deserialize(Config.getStorageLocation()).getClasses();
 		API api = new API(factory);
 		api.addClasses(classes);

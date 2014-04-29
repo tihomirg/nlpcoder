@@ -77,7 +77,9 @@ public class ExpressionBuilder extends FalseBuilder {
 
 	private ExprFactory expFactory;
 	private Expr expr;
+	
 	private Imported imported;
+	
 	private TypeBuilder typeBuilder;
 	private StabileTypeFactory typeFactory;
 
