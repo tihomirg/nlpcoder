@@ -1,13 +1,13 @@
 package builders;
 
 import java.io.PrintStream;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import org.eclipse.jdt.core.dom.ASTVisitor;
+public interface IBuilder {
 
-public abstract class IBuilder extends ASTVisitor {
-
-	public abstract void print(PrintStream out);
+	void print(PrintStream out);
 	
-	public abstract void releaseUnder(int percent);
+    void releaseUnder(int percent);
 	
+    void build(CompilationUnit node);
 }

@@ -151,7 +151,7 @@ public class BoundedScanner {
 		return !(testCheck && name.toLowerCase().contains("test"));
 	}
 
-	public static void scan(String fileName, ASTVisitor builder) {
+	public static void scan(String fileName, IBuilder builder) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		char[] fileContent = readFile(fileName);
 		
@@ -165,7 +165,7 @@ public class BoundedScanner {
 		
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		
-		cu.accept(builder);
+		builder.build(cu);
 	}
 
 	private static char[] readFile(String fileName){

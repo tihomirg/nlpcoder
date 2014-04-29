@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -95,7 +96,7 @@ import scopes.ScopeKeyValue;
 import scopes.SimpleEvalScopes;
 import statistics.SequenceStatistics;
 
-public class SequenceBuilder extends IBuilder {
+public class SequenceBuilder extends ASTVisitor implements IBuilder {
 
 	private SequenceStatistics statistics;
 	private NameScopes methods;
@@ -113,6 +114,10 @@ public class SequenceBuilder extends IBuilder {
 		this.params = new NameScopes();
 		this.api = api;
 	}
+	
+	public void build(CompilationUnit node){
+		node.accept(this);
+	}	
 
 	@Override
 	public void print(PrintStream out) {

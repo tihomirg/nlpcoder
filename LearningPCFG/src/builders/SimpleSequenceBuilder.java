@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -95,7 +96,7 @@ import scopes.SimpleEvalScopes;
 import statistics.SequenceStatistics;
 
 
-public class SimpleSequenceBuilder extends IBuilder {
+public class SimpleSequenceBuilder extends FalseBuilder implements IBuilder {
 
 	private SequenceStatistics statistics;
 	private NameScopes methods;
@@ -113,6 +114,10 @@ public class SimpleSequenceBuilder extends IBuilder {
 		this.params = new NameScopes();
 		this.api = api2;
 	}
+	
+	public void build(CompilationUnit node){
+		node.accept(this);
+	}	
 
 	@Override
 	public void print(PrintStream out) {
@@ -708,14 +713,6 @@ public class SimpleSequenceBuilder extends IBuilder {
 		return true;
 	}
 
-	public boolean visit(TagElement node) {
-		return false;
-	}
-
-	public boolean visit(TextElement node) {
-		return false;
-	}
-
 	public boolean visit(TypeDeclaration node) {
 		methods.push();
 		fields.push();
@@ -744,23 +741,7 @@ public class SimpleSequenceBuilder extends IBuilder {
 		return false;
 	}
 
-	public void endVisit(TypeDeclaration node) {
-
-	}
-
 	public boolean visit(TypeDeclarationStatement node) {
-		return true;
-	}
-
-	public boolean visit(ArrayAccess node) {
-		return true;
-	}
-
-	public boolean visit(ArrayCreation node) {
-		return true;
-	}
-
-	public boolean visit(ArrayInitializer node) {
 		return true;
 	}	
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -87,7 +88,7 @@ import definitions.Declaration;
 import scopes.NameScopes;
 import statistics.DeclCountStatistics;
 
-public class DeclFreqBuilder extends IBuilder {
+public class DeclFreqBuilder extends ASTVisitor implements IBuilder {
 	
 	private DeclCountStatistics statistics;
 	private NameScopes methods;
@@ -100,6 +101,10 @@ public class DeclFreqBuilder extends IBuilder {
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
 		this.api = api2;
+	}
+	
+	public void build(CompilationUnit node){
+		node.accept(this);
 	}
 	
 	@Override

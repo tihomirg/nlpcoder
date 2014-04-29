@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Assignment.Operator;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BlockComment;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
@@ -96,7 +97,7 @@ import statistics.Statistics;
 import symbol.Factory;
 import symbol.Symbol;
 
-public class PCFGBuilder extends IBuilder {
+public class PCFGBuilder extends ASTVisitor implements IBuilder {
 
 	private NonEvalExpBuilder nonEvaluator;
 	private EvalExpBuilder evaluator;
@@ -121,6 +122,10 @@ public class PCFGBuilder extends IBuilder {
 		this.nonEvaluator = new NonEvalExpBuilder(factory, locals, methods, fields, params);
 		this.evaluator = new EvalExpBuilder(factory, locals, methods, fields, params);
 	}
+	
+	public void build(CompilationUnit node){
+		node.accept(this);
+	}	
 	
 	@Override
 	public void print(PrintStream out) {
