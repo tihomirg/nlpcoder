@@ -81,15 +81,11 @@ import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.WildcardType;
-
-import declarations.API;
-import declarations.Imported;
+import api.Imported;
+import api.StabileAPI;
 import definitions.Declaration;
-
 import scopes.NameScopes;
 import statistics.DeclCountStatistics;
-
-
 
 public class DeclFreqBuilder extends IBuilder {
 	
@@ -97,13 +93,13 @@ public class DeclFreqBuilder extends IBuilder {
 	private NameScopes methods;
 	private NameScopes fields;
 	private Imported imported;
-	private API api;
+	private StabileAPI api;
 	
-	public DeclFreqBuilder(API api) {
+	public DeclFreqBuilder(StabileAPI api2) {
 		this.statistics  = new DeclCountStatistics();
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
-		this.api = api;
+		this.api = api2;
 	}
 	
 	@Override

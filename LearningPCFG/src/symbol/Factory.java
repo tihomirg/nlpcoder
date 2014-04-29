@@ -5,10 +5,8 @@ import java.util.Set;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
-
-import declarations.API;
+import api.StabileAPI;
 import definitions.Declaration;
-
 import symbol.temp.DeclarationSet;
 
 public class Factory {
@@ -20,12 +18,12 @@ public class Factory {
     private final Symbol CharacterLiteral;
     private final Symbol NumberLiteral;
 	
-	public Factory(API api){
-		this.TRUE = new Decl(api.getTrueBooleanLiteral());
-		this.FALSE = new Decl(api.getFalseBooleanLiteral());
-		this.StringLiteral = new Decl(api.getStringLiteral());
-		this.CharacterLiteral = new Decl(api.getCharacterLiteral());
-		this.NumberLiteral = new Decl(api.getNumberLiteral());
+	public Factory(StabileAPI stabileAPI){
+		this.TRUE = null; //new Decl(stabileAPI.getTrueBooleanLiteral());
+		this.FALSE = null; //new Decl(stabileAPI.getFalseBooleanLiteral());
+		this.StringLiteral = null; //new Decl(stabileAPI.getStringLiteral());
+		this.CharacterLiteral = null; //new Decl(stabileAPI.getCharacterLiteral());
+		this.NumberLiteral = null; //new Decl(stabileAPI.getNumberLiteral());
 	}
 	
     public Symbol createHole(){

@@ -1,27 +1,16 @@
 package simulations;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
-import declarations.API;
-import declarations.Imported;
+import api.Imported;
+import api.StabileAPI;
 import definitions.ClassInfo;
-import definitions.Declaration;
-import definitions.factory.StabileClassInfoFactory;
 import selection.Config;
 import selection.deserializers.Deserializer;
 import selection.types.NameGenerator;
-import selection.types.StabileTypeFactory;
-import selection.types.TypeFactory;
 
 public class TestDefaultImport {
 	public static void main(String[] args) {
-		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer();
-		Collection<ClassInfo> classes = deserializer.deserialize(Config.getStorageLocation()).getClasses();
-		API api = new API(factory);
-		api.addClasses(classes);
+		StabileAPI api = new StabileAPI( deserializer.deserialize(Config.getStorageLocation()), new NameGenerator(Config.getDeserializerVariablePrefix()));
 		
 		Imported java = api.createImported();
 		api.load(java, "java.util.List", true);

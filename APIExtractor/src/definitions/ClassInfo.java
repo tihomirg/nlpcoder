@@ -15,7 +15,8 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.eclipse.jdt.core.Signature;
 
-import definitions.factory.InitialClassInfoFactory;
+import api.InitialAPI;
+
 import selection.types.InitialTypeFactory;
 import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
@@ -54,7 +55,7 @@ public class ClassInfo implements Serializable {
 
 	public ClassInfo(){}
 
-	public ClassInfo(JavaClass clazz, InitialTypeFactory factory, InitialClassInfoFactory cif) {
+	public ClassInfo(JavaClass clazz, InitialTypeFactory factory, InitialAPI cif) {
 		this.name = clazz.getClassName();
 		this.packageName = clazz.getPackageName();
 		this.simpleName = getShortName(this.name);

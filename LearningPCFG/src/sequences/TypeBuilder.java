@@ -8,7 +8,9 @@ import org.eclipse.jdt.core.dom.QualifiedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.WildcardType;
-import declarations.Imported;
+
+import api.Imported;
+
 import selection.types.ReferenceType;
 import selection.types.Type;
 import selection.types.TypeFactory;

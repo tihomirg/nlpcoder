@@ -11,6 +11,8 @@ import java.util.Map;
 
 import org.apache.bcel.classfile.ClassParser;
 
+import api.InitialAPI;
+
 import selection.Config;
 import selection.WordExtractorEmpty;
 import selection.types.InitialTypeFactory;
@@ -22,7 +24,6 @@ import selection.types.TypeFactory;
 
 import definitions.ClassInfo;
 import definitions.Declaration;
-import definitions.factory.InitialClassInfoFactory;
 
 public class TestInheritedClasses {
 	public static void main(String[] args) {
@@ -33,7 +34,7 @@ public class TestInheritedClasses {
 
 			InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
 						
-			InitialClassInfoFactory cif = new InitialClassInfoFactory(factory);
+			InitialAPI cif = new InitialAPI(factory);
 			ClassInfo classInfo = cif.createClassInfo(new ClassParser(bis, null).parse());
 			
 			Type instType = factory.createPolymorphicType(classInfo.getName(), classInfo, new Type[]{factory.createPrimitiveType("java.lang.Integer")});

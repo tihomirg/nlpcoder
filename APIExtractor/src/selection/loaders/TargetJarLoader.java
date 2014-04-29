@@ -9,9 +9,10 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
+
+import api.InitialAPI;
 import selection.types.InitialTypeFactory;
 import definitions.ClassInfo;
-import definitions.factory.InitialClassInfoFactory;
 
 public class TargetJarLoader extends ClassInfoLoader {
 
@@ -19,7 +20,7 @@ public class TargetJarLoader extends ClassInfoLoader {
 	private int scanned = 0;
 	private Set<String> pkg;
 
-	public TargetJarLoader(int maxToScan, String[] pkg, InitialClassInfoFactory cif) {
+	public TargetJarLoader(int maxToScan, String[] pkg, InitialAPI cif) {
 		super(cif);
 		this.maxToScan = maxToScan;
 		this.pkg = new HashSet<String>(Arrays.asList(pkg));

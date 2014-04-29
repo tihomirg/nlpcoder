@@ -3,13 +3,14 @@ package selection.types.deserializers;
 import selection.types.BoxedType;
 import selection.types.StabileTypeFactory;
 
+import api.StabileAPI;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 import definitions.ClassInfo;
-import definitions.factory.StabileClassInfoFactory;
 
 public class BoxedTypeDeserializer extends Serializer<BoxedType>{
 

@@ -86,17 +86,13 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
-
-import declarations.API;
-import declarations.Imported;
+import api.Imported;
+import api.StabileAPI;
 import definitions.Declaration;
-
 import scopes.NameScopes;
 import scopes.ScopeKeyValue;
 import scopes.SimpleEvalScopes;
-import statistics.DeclCountStatistics;
 import statistics.SequenceStatistics;
-
 
 
 public class SimpleSequenceBuilder extends IBuilder {
@@ -107,15 +103,15 @@ public class SimpleSequenceBuilder extends IBuilder {
 	private Imported imported;
 	private SimpleEvalScopes locals;
 	private NameScopes params;
-	private API api;
+	private StabileAPI api;
 
-	public SimpleSequenceBuilder(API api) {
+	public SimpleSequenceBuilder(StabileAPI api2) {
 		this.statistics  = new SequenceStatistics();
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
 		this.locals =  new SimpleEvalScopes();
 		this.params = new NameScopes();
-		this.api = api;
+		this.api = api2;
 	}
 
 	@Override

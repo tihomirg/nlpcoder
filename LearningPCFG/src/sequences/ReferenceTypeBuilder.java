@@ -12,7 +12,8 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.WildcardType;
 
-import declarations.Imported;
+import api.Imported;
+
 import definitions.ClassInfo;
 
 import selection.types.PolymorphicType;

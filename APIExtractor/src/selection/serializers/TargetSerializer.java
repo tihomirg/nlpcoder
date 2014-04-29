@@ -1,5 +1,6 @@
 package selection.serializers;
 
+import api.InitialAPI;
 import selection.Config;
 import selection.DeclarationParserOne;
 import selection.DeclarationParserPipeline;
@@ -12,13 +13,12 @@ import selection.loaders.TargetJarLoader;
 import selection.serializers.config.TargetConfig;
 import selection.types.InitialTypeFactory;
 import selection.types.NameGenerator;
-import definitions.factory.InitialClassInfoFactory;
 
 public class TargetSerializer {
 	
 	public static void main(String[] args) {
 		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		InitialClassInfoFactory cif = new InitialClassInfoFactory(factory);
+		InitialAPI cif = new InitialAPI(factory);
 		ClassInfoLoader cil = new TargetJarLoader(Config.getMaxFilesToScan(), TargetConfig.getTarget(), cif);
 		Serializer loader = new Serializer(cil);
 		

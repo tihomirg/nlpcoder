@@ -1,19 +1,19 @@
 package selection.deserializers;
 
+import api.InitialAPI;
 import selection.Config;
-import definitions.factory.InitialClassInfoFactory;
 
 public class Deserializer {
 
-	public InitialClassInfoFactory deserialize(String storageLocation) {
+	public InitialAPI deserialize(String storageLocation) {
 		KryoDeserializer deserializer = new KryoDeserializer();
-		return (InitialClassInfoFactory) deserializer.readObject(storageLocation, InitialClassInfoFactory.class);
+		return (InitialAPI) deserializer.readObject(storageLocation, InitialAPI.class);
 	}	
 	
 	public static void main(String[] args) {
 		Deserializer deserializer = new Deserializer();
 		
-		InitialClassInfoFactory cif = deserializer.deserialize(Config.getStorageLocation());
+		InitialAPI cif = deserializer.deserialize(Config.getStorageLocation());
 		System.out.println(cif.getClasses());
 		
 	}

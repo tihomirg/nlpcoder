@@ -3,22 +3,17 @@ package scanners;
 import java.io.File;
 import java.util.Collection;
 
+import api.StabileAPI;
 import builders.DeclFreqBuilder;
 import builders.IBuilder;
 import selection.Config;
 import selection.deserializers.Deserializer;
 import selection.types.NameGenerator;
-import selection.types.StabileTypeFactory;
-import declarations.API;
-import definitions.ClassInfo;
 
 public class DeclFreqBoundedScanner extends BoundedScanner {
 	public static void main(String[] args) {
-		StabileTypeFactory factory = new StabileTypeFactory(new NameGenerator(Config.getDeserializerVariablePrefix()));
 		Deserializer deserializer = new Deserializer();
-		Collection<ClassInfo> classes = deserializer.deserialize(Config.getStorageLocation()).getClasses();
-		API api = new API(factory);
-		api.addClasses(classes);
+		StabileAPI api = new StabileAPI( deserializer.deserialize(Config.getStorageLocation()), new NameGenerator(Config.getDeserializerVariablePrefix()));
 		
 		System.out.println("Classes are added!");
 		

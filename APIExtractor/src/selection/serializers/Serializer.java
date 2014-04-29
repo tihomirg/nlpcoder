@@ -5,8 +5,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import api.InitialAPI;
+
 import definitions.ClassInfo;
-import definitions.factory.InitialClassInfoFactory;
 import selection.Config;
 import selection.DeclarationParserOne;
 import selection.DeclarationParserPipeline;
@@ -54,7 +55,7 @@ public class Serializer {
 	
 	public static void main(String[] args) {
 		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		InitialClassInfoFactory cif = new InitialClassInfoFactory(factory);
+		InitialAPI cif = new InitialAPI(factory);
 		BoundedClassInfoLoader bcil = new BoundedClassInfoLoader(Config.getMaxFilesToScan(), cif);
 		
 		Serializer loader = new Serializer(bcil);

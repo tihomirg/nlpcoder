@@ -5,13 +5,14 @@ import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
 import selection.types.Type;
 
+import api.StabileAPI;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 import definitions.ClassInfo;
-import definitions.factory.StabileClassInfoFactory;
 
 public class PolymorphicTypeDeserializer extends Serializer<PolymorphicType>{
 

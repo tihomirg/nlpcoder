@@ -1,6 +1,6 @@
 package selection.serializers;
 
-import definitions.factory.InitialClassInfoFactory;
+import api.InitialAPI;
 import selection.Config;
 import selection.WordExtractor;
 import selection.WordExtractorEmpty;
@@ -13,7 +13,7 @@ import selection.types.NameGenerator;
 public class TargetSerializerWithoutWords {
 	public static void main(String[] args) {
 		InitialTypeFactory factory = new InitialTypeFactory(new NameGenerator(Config.getSerializationVariablePrefix()));
-		InitialClassInfoFactory cif = new InitialClassInfoFactory(factory);
+		InitialAPI cif = new InitialAPI(factory);
 		ClassInfoLoader cil =  new TargetJarLoader(Config.getMaxFilesToScan(), TargetConfig.getTarget(), cif);
 		Serializer loader = new Serializer(cil);
 		

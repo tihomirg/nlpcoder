@@ -7,14 +7,15 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
 
-import definitions.factory.InitialClassInfoFactory;
+import api.InitialAPI;
+
 
 public class BoundedClassInfoLoader extends ClassInfoLoader {
 	
 	private int maxToScan = 1000;
 	private int scanned = 0;
 	
-	public BoundedClassInfoLoader(int maxToScan, InitialClassInfoFactory cif) {
+	public BoundedClassInfoLoader(int maxToScan, InitialAPI cif) {
 		super(cif);
 		this.maxToScan = maxToScan;
 	}

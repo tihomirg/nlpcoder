@@ -85,11 +85,9 @@ import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.WildcardType;
-
-import declarations.API;
-import declarations.Imported;
+import api.Imported;
+import api.StabileAPI;
 import definitions.Declaration;
-
 import scopes.NameScopes;
 import scopes.EvalScopes;
 import scopes.ScopesKeyValue;
@@ -97,7 +95,6 @@ import selection.types.TypeFactory;
 import statistics.Statistics;
 import symbol.Factory;
 import symbol.Symbol;
-
 
 public class PCFGBuilder extends IBuilder {
 
@@ -111,16 +108,16 @@ public class PCFGBuilder extends IBuilder {
 	private NameScopes fields;
 	private NameScopes params;
 	private Imported imported;
-	private API api;
+	private StabileAPI api;
 	
-	public PCFGBuilder(API api, TypeFactory tFactory) {
+	public PCFGBuilder(StabileAPI stabileAPI, TypeFactory tFactory) {
 		this.statistics  = new Statistics();
 		this.locals = new EvalScopes();
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
 		this.params = new NameScopes();
-		this.api = api;
-		this.factory = new Factory(api);
+		this.api = stabileAPI;
+		this.factory = new Factory(stabileAPI);
 		this.nonEvaluator = new NonEvalExpBuilder(factory, locals, methods, fields, params);
 		this.evaluator = new EvalExpBuilder(factory, locals, methods, fields, params);
 	}
@@ -355,9 +352,9 @@ public class PCFGBuilder extends IBuilder {
 	private Set<Symbol> findArgument(Declaration head, int i, Set<Declaration> argDecls) {
 		Set<Symbol> arguments = new HashSet<Symbol>();
 		for (Declaration arg : argDecls) {
-			if(api.canBeArgument(head, i, arg)){
-				arguments.add(factory.createDecl(arg));
-			}
+//			if(api.canBeArgument(head, i, arg)){
+//				arguments.add(factory.createDecl(arg));
+//			}
 		}
 		return arguments;
 	}
@@ -365,9 +362,9 @@ public class PCFGBuilder extends IBuilder {
 	private Set<Symbol> findRecievers(Declaration head, Set<Declaration> receiverDecls) {
 		Set<Symbol> receivers = new HashSet<Symbol>();
 		for (Declaration receiver : receiverDecls) {
-			if(api.canBeReceiver(head, receiver)){
-				receivers.add(factory.createDecl(receiver));
-			}
+//			if(api.canBeReceiver(head, receiver)){
+//				receivers.add(factory.createDecl(receiver));
+//			}
 		}
 		return receivers;
 	}

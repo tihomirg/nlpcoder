@@ -3,16 +3,17 @@ package selection.loaders;
 import java.util.Collection;
 import java.util.List;
 
+import api.InitialAPI;
+
 import definitions.ClassInfo;
-import definitions.factory.InitialClassInfoFactory;
 
 public abstract class ClassInfoLoader {
 	
-	private InitialClassInfoFactory cif;
+	private InitialAPI cif;
 	
 	public ClassInfoLoader(){}
 	
-	public ClassInfoLoader(InitialClassInfoFactory cif) {
+	public ClassInfoLoader(InitialAPI cif) {
 		this.cif = cif;
 	}
 
@@ -22,11 +23,11 @@ public abstract class ClassInfoLoader {
 		return cif.getClasses();
 	}
 
-	public InitialClassInfoFactory getCif() {
+	public InitialAPI getCif() {
 		return cif;
 	}
 
-	public void setCif(InitialClassInfoFactory cif) {
+	public void setCif(InitialAPI cif) {
 		this.cif = cif;
 	}
 

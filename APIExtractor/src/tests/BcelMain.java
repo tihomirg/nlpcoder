@@ -21,6 +21,8 @@ import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.ReferenceType;
 import org.eclipse.jdt.core.Signature;
 
+import api.InitialAPI;
+
 import selection.Config;
 import selection.WordExtractorEmpty;
 import selection.types.InitialTypeFactory;
@@ -31,7 +33,6 @@ import selection.types.TypeFactory;
 
 import definitions.ClassInfo;
 import definitions.Declaration;
-import definitions.factory.InitialClassInfoFactory;
 
 public class BcelMain {
 	
@@ -47,7 +48,7 @@ public class BcelMain {
 			ClassParser cp = new ClassParser(fileName);
 			JavaClass parsed = cp.parse();
 			
-			InitialClassInfoFactory cif = new InitialClassInfoFactory(factory);			
+			InitialAPI cif = new InitialAPI(factory);			
 			cif.createClassInfo(parsed);
 					
 			for (ClassInfo classInfo : cif.getClasses()) {

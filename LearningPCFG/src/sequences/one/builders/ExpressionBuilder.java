@@ -32,10 +32,10 @@ import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 
-import declarations.Imported;
 import definitions.ArrayClassInfo;
 import definitions.ClassInfo;
 import definitions.Declaration;
+import api.Imported;
 import builders.FalseBuilder;
 import selection.types.PrimitiveType;
 import selection.types.ReferenceType;

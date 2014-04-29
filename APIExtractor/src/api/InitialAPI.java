@@ -1,4 +1,4 @@
-package definitions.factory;
+package api;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,15 +13,15 @@ import definitions.ClassInfo;
 
 import selection.types.InitialTypeFactory;
 
-public class InitialClassInfoFactory {
+public class InitialAPI {
 	
 	private Map<String, ClassInfo> classesMap = new HashMap<String, ClassInfo>();
 	private InitialTypeFactory factory;
 	private ArrayClassInfo aci;
 	
-	public InitialClassInfoFactory() {}
+	public InitialAPI() {}
 	
-	public InitialClassInfoFactory(InitialTypeFactory factory) {
+	public InitialAPI(InitialTypeFactory factory) {
 		this.factory = factory;
 	}
 

@@ -7,11 +7,12 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.bcel.classfile.ClassParser;
 
-import definitions.factory.InitialClassInfoFactory;
+import api.InitialAPI;
+
 
 public class FullClassInfoLoader extends ClassInfoLoader {
 
-	public FullClassInfoLoader(InitialClassInfoFactory cif) {
+	public FullClassInfoLoader(InitialAPI cif) {
 		super(cif);
 	}
 

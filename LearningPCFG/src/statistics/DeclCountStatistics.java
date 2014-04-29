@@ -8,8 +8,6 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import selection.DeclMap;
-
 import definitions.Declaration;
 
 public class DeclCountStatistics {
@@ -42,17 +40,7 @@ public class DeclCountStatistics {
 			Entry<Integer, Integer> first = pq.remove();
 			out.println(first.getValue() +" : "+first.getKey());
 		}
-	}	
-	
-	public void print(DeclMap map, PrintStream out){
-		PriorityQueue<Entry<Integer, Integer>> pq = new PriorityQueue<Map.Entry<Integer,Integer>>(InitialCap, COMPARATOR);
-		pq.addAll(decls.entrySet());
-		while (!pq.isEmpty()) {
-			Entry<Integer, Integer> first = pq.remove();
-			out.print(first.getValue() +" : "+map.getDecl(first.getKey()));
-		}
 	}
-	
 }
 
 class EComparator implements Comparator<Entry<Integer, Integer>> {

@@ -5,8 +5,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import api.StabileAPI;
+
 import definitions.ClassInfo;
-import definitions.factory.StabileClassInfoFactory;
 
 import selection.Config;
 import selection.deserializers.Deserializer;
@@ -21,13 +22,13 @@ import selection.types.Type;
 public class TestType {
 
 	private static StabileTypeFactory factory;
-	private static StabileClassInfoFactory scif;
+	private static StabileAPI scif;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
 		Deserializer deserializer = new Deserializer();
-		scif = new StabileClassInfoFactory(deserializer.deserialize(Config.getStorageLocation()), nameGen);
+		scif = new StabileAPI(deserializer.deserialize(Config.getStorageLocation()), nameGen);
 		factory = scif.getStf();
 	}
 

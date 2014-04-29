@@ -19,7 +19,8 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 
-import declarations.Imported;
+import api.Imported;
+
 
 import scopes.NameScopes;
 import scopes.ScopesKeyValue;

@@ -1,4 +1,4 @@
-package declarations;
+package api;
 
 import java.util.HashMap;
 import java.util.HashSet;
