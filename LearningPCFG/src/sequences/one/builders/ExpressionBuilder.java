@@ -41,6 +41,7 @@ import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
 import selection.types.Type;
+import sequences.TypeBuilder;
 import sequences.one.exprs.Expr;
 import sequences.one.exprs.ExprFactory;
 

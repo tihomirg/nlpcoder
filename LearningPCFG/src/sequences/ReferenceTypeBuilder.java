@@ -1,4 +1,4 @@
-package sequences.one.builders;
+package sequences;
 
 import java.util.List;
 import java.util.Set;
