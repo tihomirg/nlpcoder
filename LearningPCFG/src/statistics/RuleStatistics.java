@@ -8,8 +8,12 @@ public class RuleStatistics {
 	private int count;
 	
 	public RuleStatistics(Symbol symbol){
-		this.rule = symbol.toString();
+		this(symbol.toString());
 	}
+	
+	public RuleStatistics(String rule){
+		this.rule = rule;
+	}	
 	
 	public void incCount(){
 		count++;

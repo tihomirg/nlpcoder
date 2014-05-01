@@ -1,6 +1,10 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.PostfixExpression.Operator;
+
+import util.Pair;
 
 public class PostfixOperator extends Expr {
 
@@ -27,4 +31,9 @@ public class PostfixOperator extends Expr {
 	protected String representation() {
 		return expr.shortRep();
 	}
+	
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+		list.addAll(expr.longReps());
+	}	
 }

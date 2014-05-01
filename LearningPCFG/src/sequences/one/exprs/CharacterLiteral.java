@@ -1,6 +1,9 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
 import selection.types.PrimitiveType;
+import util.Pair;
 
 public class CharacterLiteral extends Expr {
 
@@ -25,4 +28,8 @@ public class CharacterLiteral extends Expr {
 	protected String representation() {
 		return Character.toString(value);
 	}
+	
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+	}	
 }

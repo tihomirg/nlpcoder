@@ -1,10 +1,12 @@
 package sequences.one.exprs;
 
 import java.util.Arrays;
+import java.util.List;
 
 import definitions.Declaration;
 
 import selection.types.Type;
+import util.Pair;
 
 public class ConstructorInvocation extends Expr{
 	private Expr[] args;
@@ -30,5 +32,12 @@ public class ConstructorInvocation extends Expr{
 	@Override
 	protected String representation() {
 		return shortReps(args);
+	}
+	
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+		for (Expr arg : args) {
+			list.addAll(arg.longReps());	
+		}
 	}	
 }

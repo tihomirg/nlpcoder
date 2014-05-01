@@ -1,6 +1,9 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
 import selection.types.Type;
+import util.Pair;
 
 public class BooleanLiteral extends Expr {
 
@@ -24,6 +27,10 @@ public class BooleanLiteral extends Expr {
 	@Override
 	protected String representation() {
 		return Boolean.toString(this.value);
+	}
+
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
 	}
 	
 }

@@ -1,6 +1,9 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
 import selection.types.Type;
+import util.Pair;
 
 public class Hole extends Expr{
 
@@ -25,6 +28,9 @@ public class Hole extends Expr{
 	@Override
 	protected String representation() {
 		return "";
+	}
+
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
 	}	
-	
 }

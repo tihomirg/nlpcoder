@@ -1,7 +1,11 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
+
+import util.Pair;
 
 
 public class PrefixOperator extends Expr {
@@ -28,4 +32,9 @@ public class PrefixOperator extends Expr {
 	protected String representation() {
 		return exp.shortRep();
 	}
+
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+		list.addAll(exp.longReps());
+	}	
 }

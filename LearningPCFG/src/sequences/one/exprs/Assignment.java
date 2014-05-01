@@ -1,6 +1,11 @@
 package sequences.one.exprs;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.Assignment.Operator;
+
+import util.Pair;
 
 public class Assignment extends Expr {
 
@@ -30,6 +35,12 @@ public class Assignment extends Expr {
 	@Override
 	protected String representation() {
 		return shortReps(lexp, rexp);
+	}
+
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+		list.addAll(lexp.longReps());
+		list.addAll(rexp.longReps());
 	}
 	
 }

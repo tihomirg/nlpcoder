@@ -1,10 +1,12 @@
 package sequences.one.exprs;
 
 import java.util.Arrays;
+import java.util.List;
 
 import definitions.Declaration;
 
 import selection.types.Type;
+import util.Pair;
 
 public class InstanceMethodInvocation extends Expr{
 
@@ -36,4 +38,13 @@ public class InstanceMethodInvocation extends Expr{
 		System.arraycopy(args, 0, exprs, 1, args.length);
 		return shortReps(exprs);
 	}
+	
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+		list.addAll(exp.longReps());
+		
+		for (Expr arg : args) {
+			list.addAll(arg.longReps());
+		}
+	}	
 }

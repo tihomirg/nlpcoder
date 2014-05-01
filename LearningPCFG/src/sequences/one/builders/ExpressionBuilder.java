@@ -83,11 +83,11 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 
 	private Expr expr;	
 	
-	public ExpressionBuilder(Imported imported, StabileTypeFactory typeFactory) {
+	public ExpressionBuilder(Imported imported, StabileTypeFactory typeFactory, TypeBuilder typeBuilder) {
 		this.imported = imported;
 		this.typeFactory = typeFactory;
 		this.expFactory = new ExprFactory(typeFactory);
-		this.typeBuilder = new TypeBuilder(typeFactory, imported);
+		this.typeBuilder = typeBuilder;
 	}
 
 	public void setExpr(Expr expr) {

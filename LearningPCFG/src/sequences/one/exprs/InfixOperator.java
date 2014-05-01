@@ -1,6 +1,10 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
+
+import util.Pair;
 
 public class InfixOperator extends Expr{
 	private Operator op;
@@ -27,5 +31,11 @@ public class InfixOperator extends Expr{
 	@Override
 	protected String representation() {
 		return shortReps(lexp, rexp);
+	}
+
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+		list.addAll(lexp.longReps());
+		list.addAll(rexp.longReps());
 	}
 }

@@ -1,5 +1,9 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
+import util.Pair;
+
 public class CondExpr extends Expr {
 
 	private Expr exp;
@@ -52,4 +56,11 @@ public class CondExpr extends Expr {
 	protected String representation() {
 		return shortReps(exp, thenExp, elseExp);
 	}
+	
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+		list.addAll(exp.longReps());
+		list.addAll(thenExp.longReps());
+		list.addAll(elseExp.longReps());
+	}	
 }

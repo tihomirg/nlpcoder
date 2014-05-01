@@ -1,6 +1,9 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
 import selection.types.Type;
+import util.Pair;
 
 public class NullLiteral extends Expr {
 
@@ -22,4 +25,8 @@ public class NullLiteral extends Expr {
 	protected String representation() {
 		return ExprConsts.NullLiteral;
 	}
+	
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+	}	
 }

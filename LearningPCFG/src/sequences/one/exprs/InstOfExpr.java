@@ -1,6 +1,9 @@
 package sequences.one.exprs;
 
+import java.util.List;
+
 import selection.types.Type;
+import util.Pair;
 
 public class InstOfExpr extends Expr {
 
@@ -35,4 +38,9 @@ public class InstOfExpr extends Expr {
 	protected String representation() {
 		return exp.shortRep();
 	}
+	
+	@Override
+	protected void representations(List<Pair<String, String>> list) {
+		list.addAll(exp.longReps());
+	}	
 }
