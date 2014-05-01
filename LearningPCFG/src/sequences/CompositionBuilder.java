@@ -49,7 +49,7 @@ import statistics.CompositionStatistics;
 import symbol.Symbol;
 import util.Pair;
 
-public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
+public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 
 	private CompositionStatistics statistics;
 	private NameScopes methods;
@@ -61,7 +61,7 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 	private ExpressionBuilder expBuilder;
 	private TypeBuilder typeBuilder;
 
-	public SequenceBuilder(StabileAPI api) {
+	public CompositionBuilder(StabileAPI api) {
 		this.statistics  = new CompositionStatistics();
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
@@ -261,7 +261,7 @@ public class SequenceBuilder extends SingleNodeVisitor implements IBuilder {
 		this.imported = api.createImported();
 		StabileTypeFactory stf = api.getStf();
 		this.typeBuilder = new TypeBuilder(stf, imported);
-		this.expBuilder = new ExpressionBuilder(imported, stf, this.typeBuilder);
+		this.expBuilder = new ExpressionBuilder(imported, stf, this.typeBuilder, params, locals);
 		return true;
 	}
 

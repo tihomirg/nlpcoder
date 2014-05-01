@@ -37,6 +37,8 @@ import definitions.ClassInfo;
 import definitions.Declaration;
 import api.Imported;
 import builders.SingleNodeVisitor;
+import scopes.NameScopes;
+import scopes.ScopesKeyValue;
 import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
@@ -44,6 +46,7 @@ import selection.types.Type;
 import sequences.TypeBuilder;
 import sequences.one.exprs.Expr;
 import sequences.one.exprs.ExprFactory;
+import util.Pair;
 
 //Expression:	
 //Annotation,
@@ -80,14 +83,19 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 	
 	private ExprFactory expFactory;
 	private TypeBuilder typeBuilder;	
+	
+	private ScopesKeyValue<String, Pair<String, selection.types.Type>> locals;
+	private NameScopes params;
 
 	private Expr expr;	
 	
-	public ExpressionBuilder(Imported imported, StabileTypeFactory typeFactory, TypeBuilder typeBuilder) {
+	public ExpressionBuilder(Imported imported, StabileTypeFactory typeFactory, TypeBuilder typeBuilder, NameScopes params, ScopesKeyValue<String, Pair<String, Type>> locals) {
 		this.imported = imported;
 		this.typeFactory = typeFactory;
 		this.expFactory = new ExprFactory(typeFactory);
 		this.typeBuilder = typeBuilder;
+		this.params = params;
+		this.locals = locals;
 	}
 
 	public void setExpr(Expr expr) {
@@ -351,20 +359,21 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		String name = node.getIdentifier();
 		if (!isParam(name)){
 			if (isLocalVariable(name)){
-				setExpr(expFactory.createVariable(name, typeFactory.createNoType()));				
-			}
-		}
+				Pair<String, Type> value = locals.get(name);
+				setExpr(expFactory.createVariable(value.getFirst(), value.getSecond()));
+			} else setExprToHole();
+		} else setExprToHole();
 		return false;
 	}
 
 	//TODO: Implement
 	private boolean isLocalVariable(String name) {
-		return true;
+		return locals.contains(name);
 	}
 
 	//TODO: Implement
 	private boolean isParam(String name) {
-		return false;
+		return params.contains(name);
 	}
 
 	public boolean visit(StringLiteral node) {
