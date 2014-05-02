@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
@@ -100,13 +101,14 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 	}
 
 	public boolean visit(ExpressionStatement node) {
-		return true;
+		eval(node.getExpression());
+		return false;
 	}
 	
 	public boolean visit(IfStatement node){
 		Expression exp = node.getExpression();
 		if(exp != null){
-			eval(exp);			
+			eval(exp);		
 		}
 		
 		Statement thenStatement = node.getThenStatement();
@@ -152,12 +154,12 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 		
 		accept(node.initializers());
 		
-		accept(node.updaters());
-		
 		Statement body = node.getBody();
 		if (body != null) {
 			body.accept(this);
 		}
+		
+		accept(node.updaters());		
 		
 		locals.pop();
 		
@@ -224,6 +226,24 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 		
 		return false;
 	}
+	
+	//Initializer of the for statement, basically the outer expression.
+	//Will come back to it when loops come into play.
+	public boolean visit(VariableDeclarationExpression node){
+		List<ASTNode> fragments = node.fragments();
+		
+		for (ASTNode astNode : fragments) {
+			if (astNode instanceof VariableDeclarationFragment){
+				VariableDeclarationFragment fragment = (VariableDeclarationFragment) astNode;
+				Type type = node.getType();
+				selection.types.Type type2 = typeBuilder.createType(type);
+
+				locals.put(fragment.getName().getIdentifier(), new Pair(eval(fragment.getInitializer()), type2));				
+			}
+		}
+		
+		return false;
+	}	
 
 	private String eval(Expression exp) {
 		Expr expr = expBuilder.getExpr(exp);

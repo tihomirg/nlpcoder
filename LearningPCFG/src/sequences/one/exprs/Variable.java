@@ -6,10 +6,20 @@ import selection.types.Type;
 import util.Pair;
 
 public class Variable extends Expr {
+	private String value;
 	private String name;
 
-	public Variable(String name, Type type) {
+	public Variable(String name, String value, Type type) {
 		super(type);
+		this.name = name;
+		this.value = value;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -20,7 +30,7 @@ public class Variable extends Expr {
 
 	@Override
 	public String shortRep() {
-		return name;
+		return value;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.dom.ArrayAccess;
 import org.eclipse.jdt.core.dom.ArrayCreation;
 import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Assignment.Operator;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
@@ -46,6 +47,7 @@ import selection.types.Type;
 import sequences.TypeBuilder;
 import sequences.one.exprs.Expr;
 import sequences.one.exprs.ExprFactory;
+import sequences.one.exprs.Variable;
 import util.Pair;
 
 //Expression:	
@@ -168,9 +170,19 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		Type rightType = rightExp.getType();
 		
 		if (leftType.isCompatible(rightType, typeFactory)){
-			setExpr(this.expFactory.createAssignment(node.getOperator(), leftExp, rightExp));
+			Operator operator = node.getOperator();
+			setExpr(this.expFactory.createAssignment(operator, leftExp, rightExp));
+			if (operator.equals(Operator.ASSIGN)){
+				if (leftExp instanceof Variable){
+					Variable var = (Variable) leftExp;
+					
+					Pair<String, Type> pair = locals.get(var.getName());
+					pair.setFirst(var.shortRep());
+					pair.setSecond(var.getType());
+				}
+				
+			}
 		} else setExprToHole();
-		
 		return false;
 	}	
 	
@@ -360,7 +372,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		if (!isParam(name)){
 			if (isLocalVariable(name)){
 				Pair<String, Type> value = locals.get(name);
-				setExpr(expFactory.createVariable(value.getFirst(), value.getSecond()));
+				setExpr(expFactory.createVariable(name, value.getFirst(), value.getSecond()));
 			} else setExprToHole();
 		} else setExprToHole();
 		return false;
@@ -396,8 +408,6 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		return false;
 	}
 
-	//Initializer of the for statement, basically the outer expression.
-	//Will come back to it when loops come into play.
 	public boolean visit(VariableDeclarationExpression node){
 		setExprToHole();
 		return false;

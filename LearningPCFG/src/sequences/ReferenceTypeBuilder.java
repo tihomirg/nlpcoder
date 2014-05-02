@@ -27,10 +27,13 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 	private Imported imported;
 	
 	private ReferenceType result;
+	private ClassInfo arrayClazz;
 
 	public ReferenceTypeBuilder(TypeFactory factory, Imported imported) {
 		this.factory = factory;
 		this.imported = imported;
+		
+		this.arrayClazz = imported.getFirstType("Array");
 	}	
 
 	//------------------------------------------------------ Types ------------------------------------------------------
@@ -42,7 +45,7 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 
 	private ReferenceType createArrayType(int dimensions, org.eclipse.jdt.core.dom.Type elementType) {
 		if (dimensions > 0){
-			return factory.createPolymorphicType("java.lang.Array", new Type[]{createArrayType(dimensions, elementType)});
+			return factory.createPolymorphicType("java.lang.Array", arrayClazz, new Type[]{createArrayType(dimensions, elementType)});
 		} else {
 			return createReferenceType(elementType);
 		}
@@ -129,8 +132,7 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 	}	
 
 	private String makeQualifiedName(QualifiedType node) {
-		Type type = createReferenceType(node.getQualifier());
-		return type.getPrefix() +"$"+node.getName().getIdentifier();
+		return node.getQualifier() +"$"+node.getName().getIdentifier();
 	}
 
 	public boolean visit(SimpleType node) {

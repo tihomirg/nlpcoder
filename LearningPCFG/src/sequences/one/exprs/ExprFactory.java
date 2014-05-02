@@ -35,8 +35,8 @@ public class ExprFactory {
 		return new ConstructorInvocation(cons, args);
 	}
 
-	public Expr createVariable(String name, Type type) {
-		return new Variable(name, type);
+	public Expr createVariable(String name, String value, Type type) {
+		return new Variable(name, value, type);
 	}
 
 	public Expr createCondExpr(Expr exp, Expr thenExp, Expr elseExp) {
