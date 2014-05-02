@@ -118,7 +118,7 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 	}	
 
 	public boolean visit(PrimitiveType node) {
-		result = factory.createBoxedType(node.toString());
+		result = factory.createMonomorphicReferenceAndPrimitiveToBoxedType(node.toString());
 		return false;
 	}
 

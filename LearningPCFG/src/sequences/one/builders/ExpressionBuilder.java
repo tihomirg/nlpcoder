@@ -219,11 +219,11 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 			Declaration[] constructors = classInfo.getConstructors();
 			Expr[] args = getExprs(node.arguments());
 			
-			System.out.println(classInfo.getName() +"  "+Arrays.toString(args));			
+//			System.out.println(classInfo.getName() +"  "+Arrays.toString(args));			
 			
 			Type[] argTypes = getTypes(args);
 
-			System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
+//			System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
 			
 			Declaration cons = getFirstCompatible(constructors, argTypes, typeFactory);
 			setExpr(expFactory.createConstructorInvocation(cons, args));
@@ -272,7 +272,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 			ReferenceType refType = (ReferenceType) type;
 			ClassInfo classInfo = refType.getClassInfo();
 			if(classInfo != null){
-				Declaration[] fields = classInfo.getFields();
+				Declaration[] fields = classInfo.getAllFields();
 				
 				Declaration field = getFirstCompatible(fields, name);
 				setExpr(expFactory.createFieldAccess(field, exp, typeFactory.createNoType()));
@@ -318,11 +318,15 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 			ReferenceType refType = (ReferenceType) type;
 			ClassInfo classInfo = refType.getClassInfo();
 			if(classInfo != null){
-				Declaration[] methods = classInfo.getMethods();
+				Declaration[] methods = classInfo.getAllMethods();
 				Declaration[] compatible = getAllCompatible(methods, name);
 				Expr[] args = getExprs(node.arguments());
 				Type[] argTypes = getTypes(args);
 				Declaration method = getFirstCompatible(compatible, argTypes, typeFactory);
+
+				System.out.println(Arrays.toString(compatible));
+				
+				System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
 				
 				setExpr(expFactory.createMethodInvocation(method, exp, args));
 

@@ -52,6 +52,8 @@ public class ClassInfo implements Serializable {
 	//null's when class is initialized
 	private Declaration[] udecls;
 	private Set<Type> allInharitedTypes;
+	private Declaration[] allMethods;
+	private Declaration[] allFields;
 
 	public ClassInfo(){}
 
@@ -541,6 +543,7 @@ public class ClassInfo implements Serializable {
 		return clones;
 	}
 
+	//TODO: Make a getDeclarations such that we include unique + inherited
 	public Declaration[] getUniqueDeclarations() {
 		if(this.udecls == null){
 			List<Declaration> list = new LinkedList<Declaration>();
@@ -552,6 +555,36 @@ public class ClassInfo implements Serializable {
 		} else return this.udecls;
 	}
 
+	public Declaration[] getAllMethods(){
+		if (this.allMethods == null){
+			List<Declaration> decls = new LinkedList<Declaration>();
+			ClassInfo[] inheritedClasses = getInheritedClasses();
+			for(ClassInfo inh: inheritedClasses){
+				ClassInfo[] inheritedClasses2 = inh.getInheritedClasses();
+				decls.addAll(inh.getUniqueMethods(inheritedClasses2));
+			}
+
+			decls.addAll(getUniqueFields(inheritedClasses));
+
+			return this.allMethods = decls.toArray(new Declaration[decls.size()]);
+		} else return this.allMethods;
+	}
+
+	public Declaration[] getAllFields(){
+		if (this.allFields == null){
+			List<Declaration> decls = new LinkedList<Declaration>();
+			ClassInfo[] inheritedClasses = getInheritedClasses();
+			for(ClassInfo inh: inheritedClasses){
+				ClassInfo[] inheritedClasses2 = inh.getInheritedClasses();
+				decls.addAll(inh.getUniqueFields(inheritedClasses2));
+			}
+
+			decls.addAll(getUniqueFields(inheritedClasses));
+
+			return this.allFields = decls.toArray(new Declaration[decls.size()]);
+		} else return this.allFields;
+	}	
+	
 	private List<Declaration> getUniqueFields(ClassInfo[] inheritedClasses) {
 		List<Declaration> list = new LinkedList<Declaration>();
 
