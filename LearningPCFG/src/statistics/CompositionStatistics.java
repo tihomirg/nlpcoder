@@ -16,9 +16,7 @@ public class CompositionStatistics {
 	private Map<String, Integer> getRuleStatistics(Pair<String, String> pair){
 		String leftSide = pair.getFirst();
 		if(!ruleToStatistics.containsKey(leftSide)){
-			Map<String, Integer> map = new HashMap<String, Integer>();
-			map.put(pair.getSecond(), 0);
-			ruleToStatistics.put(leftSide, map);
+			ruleToStatistics.put(leftSide, new HashMap<String, Integer>());
 		}
 
 		return ruleToStatistics.get(leftSide);
@@ -32,21 +30,28 @@ public class CompositionStatistics {
 
 	public void inc(Pair<String, String> pair){
 		Map<String, Integer> statistics = getRuleStatistics(pair);
-		Integer integer = statistics.get(pair.getSecond());
-		statistics.put(pair.getSecond(), integer + 1);
+		
+		String second = pair.getSecond();
+		if(! statistics.containsKey(second)){
+			statistics.put(second, 0);
+		}
+		
+		int val = statistics.get(second);
+		statistics.put(second, val + 1);
 	}
 
 	public void print(PrintStream out){
 		for (Entry<String, Map<String, Integer>> entry : ruleToStatistics.entrySet()) {
 			String key = entry.getKey();
+			out.println("-----------------------------------------------------------------------------------------------");
 			out.println("Head: "+key);
-
+			out.println();
 			Map<String, Integer> value = entry.getValue();
 
 			PriorityQueue<Entry<String, Integer>> pq = new PriorityQueue<Map.Entry<String, Integer>>(100, EntryComparator1.DESC);
 			pq.addAll(value.entrySet());		
 
-			int length = ruleToStatistics.size();
+			int length = value.size();
 
 			for(int i=0; i< length; i++){
 				Entry<String, Integer> curr = pq.remove();

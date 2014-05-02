@@ -1,5 +1,6 @@
 package sequences.one.exprs;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import selection.types.Type;
@@ -32,6 +33,10 @@ public class Variable extends Expr {
 	public String shortRep() {
 		return value;
 	}
+	
+	public List<Pair<String, String>> longReps(){
+		return new LinkedList<Pair<String, String>>();
+	}	
 
 	@Override
 	protected String representation() {

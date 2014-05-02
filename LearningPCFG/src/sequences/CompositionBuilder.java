@@ -297,6 +297,9 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 
 	public boolean visit(ImportDeclaration node) {
 		String imp = node.getName().toString();
+		
+		System.out.println(imp);
+		
 		api.load(imported, imp, node.isOnDemand());
 		return false;
 	}

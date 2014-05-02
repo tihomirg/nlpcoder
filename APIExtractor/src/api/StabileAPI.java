@@ -38,6 +38,7 @@ public class StabileAPI {
         Set<Declaration> decls = getDecls(classes);
 		
 		imported.addClasses(classes);
+		imported.addTypes(classes);
 		imported.addDecls(decls);
 	}
 

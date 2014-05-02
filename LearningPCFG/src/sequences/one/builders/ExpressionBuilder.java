@@ -105,7 +105,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 	}
 	
 	public Expr getExpr(ASTNode exp){
-		if (expr != null) exp.accept(this);
+		if (exp != null) exp.accept(this);
 		else setExprToHole();
 		return this.expr;
 	}
