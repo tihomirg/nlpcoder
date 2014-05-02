@@ -1,5 +1,6 @@
 package selection.types;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -47,7 +48,7 @@ public class Variable extends ReferenceType {
 	
 	@Override
 	public Set<Type> getCompatibleTypes(StabileTypeFactory factory) {
-		return EMPTY_TYPE_LIST;
+		return new HashSet<Type>(){{add(Variable.this);}};
 	}
 
 	@Override

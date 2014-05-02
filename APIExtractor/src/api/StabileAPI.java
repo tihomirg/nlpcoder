@@ -27,7 +27,7 @@ public class StabileAPI {
 
 	public Imported createImported() {
 		Imported imported = new Imported();
-		load(imported, JAVA_LANG, false);
+		load(imported, JAVA_LANG, true);
 		return imported;
 	}
 	

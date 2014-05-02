@@ -7,7 +7,9 @@ public class T1 {
 
   public static void main(String args[]) {
     try {
-      FileInputStream fis = new FileInputStream(args[0]);
+    	
+      String[] name = new String[10];
+      FileInputStream fis = new FileInputStream(name[0]);
 
       BufferedInputStream bis = new BufferedInputStream(fis);
 

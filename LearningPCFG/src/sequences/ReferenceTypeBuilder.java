@@ -45,7 +45,7 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 
 	private ReferenceType createArrayType(int dimensions, org.eclipse.jdt.core.dom.Type elementType) {
 		if (dimensions > 0){
-			return factory.createPolymorphicType("java.lang.Array", arrayClazz, new Type[]{createArrayType(dimensions, elementType)});
+			return factory.createPolymorphicType("java.lang.Array", arrayClazz, new Type[]{createArrayType(dimensions - 1, elementType)});
 		} else {
 			return createReferenceType(elementType);
 		}

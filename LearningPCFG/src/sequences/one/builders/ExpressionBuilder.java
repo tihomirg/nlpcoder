@@ -1,5 +1,6 @@
 package sequences.one.builders;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -217,8 +218,13 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		if (classInfo != null){
 			Declaration[] constructors = classInfo.getConstructors();
 			Expr[] args = getExprs(node.arguments());
+			
+			System.out.println(classInfo.getName() +"  "+Arrays.toString(args));			
+			
 			Type[] argTypes = getTypes(args);
 
+			System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
+			
 			Declaration cons = getFirstCompatible(constructors, argTypes, typeFactory);
 			setExpr(expFactory.createConstructorInvocation(cons, args));
 		} else setExprToHole();
@@ -389,7 +395,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 	}
 
 	public boolean visit(StringLiteral node) {
-		setExpr(expFactory.createStringLiteral(node.getEscapedValue(), typeFactory.createConstType("java.lang.String")));		
+		setExpr(expFactory.createStringLiteral(node.getEscapedValue(), typeFactory.createConstType(java.lang.String.class.getName())));		
 		return false;
 	}
 
