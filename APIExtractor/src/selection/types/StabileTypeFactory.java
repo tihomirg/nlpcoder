@@ -1,8 +1,5 @@
 package selection.types;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import definitions.ClassInfo;
@@ -17,7 +14,9 @@ public class StabileTypeFactory extends TypeFactory {
 
 	public Set<Type> getInheritedTypes(ReferenceType referenceType) {
 		ClassInfo clazz = referenceType.getClassInfo();
-		return clazz.getAllInstantiatedInheritedType(referenceType, this);
+		
+		if (clazz != null) return clazz.getAllInstantiatedInheritedType(referenceType, this);
+		else return Type.EMPTY_TYPE_SET;
 	}
 	
 	@Override

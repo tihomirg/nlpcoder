@@ -17,12 +17,12 @@ public class NullType extends Type {
 
 	@Override
 	protected Set<Type> getInheritedTypes(StabileTypeFactory factory) {
-		return EMPTY_TYPE_LIST;
+		return EMPTY_TYPE_SET;
 	}	
 	
 	@Override
 	protected Set<Type> getCompatibleTypes(StabileTypeFactory factory) {
-		return EMPTY_TYPE_LIST;
+		return EMPTY_TYPE_SET;
 	}
 
 	@Override

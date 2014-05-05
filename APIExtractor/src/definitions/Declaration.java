@@ -220,8 +220,24 @@ public class Declaration implements Serializable, Cloneable {
 		this.packageName = packageName;
 	}
 
-	public boolean equivalent(Declaration decl) {
-		return simpleName.equals(decl.simpleName);
+	/*
+	 * We invoke this method in context of inheritance graph.
+	 */
+	public boolean equivalentTo(Declaration decl) {
+		//same simple name
+		if (!simpleName.equals(decl.simpleName)) return false;
+		Type[] thatArgTypes = decl.argTypes;
+		int length = thatArgTypes.length;		
+		if (length != this.argTypes.length) return false;
+		
+		for (int i=0; i < length ; i++) {
+			Type thatType = thatArgTypes[i];
+			Type thisType = this.argTypes[i];
+			
+			if (thatType.getPrefix() != thisType.getPrefix()) return false;
+		}
+		
+		return true;
 	}
 
 	public void setReceiverType(Type receiverType) {

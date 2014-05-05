@@ -23,8 +23,8 @@ public class ExprFactory {
 		return hole;
 	}
 
-	public Expr createFieldAccess(Declaration field, Expr exp, Type type) {
-		return new InstanceFieldAccess(field, exp, type);
+	public Expr createFieldAccess(Declaration field, Expr exp) {
+		return new InstanceFieldAccess(field, exp);
 	}
 
 	public Expr createMethodInvocation(Declaration method, Expr exp, Expr[] args) {

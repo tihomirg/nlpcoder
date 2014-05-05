@@ -54,6 +54,8 @@ public class ClassInfo implements Serializable {
 	private Set<Type> allInharitedTypes;
 	private Declaration[] allMethods;
 	private Declaration[] allFields;
+	private Declaration[] uniqueFields;
+	private Declaration[] uniqueMethods;
 
 	public ClassInfo(){}
 
@@ -543,14 +545,12 @@ public class ClassInfo implements Serializable {
 		return clones;
 	}
 
-	//TODO: Make a getDeclarations such that we include unique + inherited
 	public Declaration[] getUniqueDeclarations() {
 		if(this.udecls == null){
 			List<Declaration> list = new LinkedList<Declaration>();
 			list.addAll(Arrays.asList(this.constructors));
-			ClassInfo[] inheritedClasses = getInheritedClasses();
-			list.addAll(getUniqueFields(inheritedClasses));
-			list.addAll(getUniqueMethods(inheritedClasses));
+			list.addAll(Arrays.asList(getUniqueFields()));
+			list.addAll(Arrays.asList(getUniqueMethods()));
 			return this.udecls = list.toArray(new Declaration[list.size()]);
 		} else return this.udecls;
 	}
@@ -560,11 +560,10 @@ public class ClassInfo implements Serializable {
 			List<Declaration> decls = new LinkedList<Declaration>();
 			ClassInfo[] inheritedClasses = getInheritedClasses();
 			for(ClassInfo inh: inheritedClasses){
-				ClassInfo[] inheritedClasses2 = inh.getInheritedClasses();
-				decls.addAll(inh.getUniqueMethods(inheritedClasses2));
+				decls.addAll(Arrays.asList(inh.getUniqueMethods()));
 			}
 
-			decls.addAll(getUniqueFields(inheritedClasses));
+			decls.addAll(Arrays.asList(getUniqueMethods()));
 
 			return this.allMethods = decls.toArray(new Declaration[decls.size()]);
 		} else return this.allMethods;
@@ -575,37 +574,43 @@ public class ClassInfo implements Serializable {
 			List<Declaration> decls = new LinkedList<Declaration>();
 			ClassInfo[] inheritedClasses = getInheritedClasses();
 			for(ClassInfo inh: inheritedClasses){
-				ClassInfo[] inheritedClasses2 = inh.getInheritedClasses();
-				decls.addAll(inh.getUniqueFields(inheritedClasses2));
+				decls.addAll(Arrays.asList(inh.getUniqueFields()));
 			}
 
-			decls.addAll(getUniqueFields(inheritedClasses));
+			decls.addAll(Arrays.asList(getUniqueFields()));
 
 			return this.allFields = decls.toArray(new Declaration[decls.size()]);
 		} else return this.allFields;
 	}	
-	
-	private List<Declaration> getUniqueFields(ClassInfo[] inheritedClasses) {
-		List<Declaration> list = new LinkedList<Declaration>();
 
-		for (Declaration field : this.fields) {
-			if(!containsEquivalentField(inheritedClasses, field)) list.add(field);
-		}
-		return list;
+	private Declaration[] getUniqueFields() {
+		if (this.uniqueFields == null){
+			List<Declaration> list = new LinkedList<Declaration>();
+
+			for (Declaration field : this.fields) {
+				if(!containsInheritedFieldEquivalentTo(field)) list.add(field);
+			}
+
+			return this.uniqueFields = list.toArray(new Declaration[list.size()]);
+		} else return this.uniqueFields;
 	}
 
-	private List<Declaration> getUniqueMethods(ClassInfo[] inheritedClasses) {
-		List<Declaration> list = new LinkedList<Declaration>();
+	private Declaration[] getUniqueMethods() {
+		if (this.uniqueMethods == null){
+			List<Declaration> list = new LinkedList<Declaration>();
 
-		for (Declaration method : this.methods) {
-			if (!containsEquivalentMethod(inheritedClasses, method)) list.add(method);
-		}
-		return list;
+			for (Declaration method : this.methods) {
+				if(!containsInheritedMethodEquivalentTo(method)) list.add(method);
+			}
+
+			return this.uniqueMethods = list.toArray(new Declaration[list.size()]);
+		} else return this.uniqueMethods;
 	}
 
-	private boolean containsEquivalentMethod(ClassInfo[] inheritedClasses, Declaration method) {
+	private boolean containsInheritedMethodEquivalentTo(Declaration method) {
+		ClassInfo[] inheritedClasses = getInheritedClasses();	
 		for (ClassInfo clazz : inheritedClasses) {
-			if (clazz.containsEquivalentMethod(method)){
+			if (clazz.containsMethodEquivalentTo(method)){
 				return true;
 			}
 		}
@@ -613,9 +618,10 @@ public class ClassInfo implements Serializable {
 		return false;
 	}
 
-	private boolean containsEquivalentField(ClassInfo[] inheritedClasses, Declaration field) {
+	private boolean containsInheritedFieldEquivalentTo(Declaration field) {
+		ClassInfo[] inheritedClasses = getInheritedClasses();
 		for (ClassInfo clazz : inheritedClasses) {
-			if (clazz.containsEquivalentField(field)){
+			if (clazz.containsFieldEquivalentTo(field)){
 				return true;
 			}
 		}
@@ -633,16 +639,16 @@ public class ClassInfo implements Serializable {
 		return types;
 	}	
 
-	private boolean containsEquivalentField(Declaration decl) {
+	private boolean containsFieldEquivalentTo(Declaration decl) {
 		for (Declaration field: fields) {
-			if (field.equivalent(decl)) return true;
+			if (field.equivalentTo(decl)) return true;
 		}
 		return false;
 	}
 
-	private boolean containsEquivalentMethod(Declaration decl) {
+	private boolean containsMethodEquivalentTo(Declaration decl) {
 		for (Declaration method: methods) {
-			if (method.equivalent(decl)) return true;
+			if (method.equivalentTo(decl)) return true;
 		}
 		return false;
 	}

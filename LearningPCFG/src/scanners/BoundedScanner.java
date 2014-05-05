@@ -164,6 +164,11 @@ public class BoundedScanner {
 		parser.setStatementsRecovery(true);	
 		
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+	
+//		if (fileName.endsWith("arraylist\\T10.java")){
+			System.out.println("Scanning: "+fileName);
+//			builder.build(cu);		
+//		}
 		
 		builder.build(cu);
 	}

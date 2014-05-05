@@ -16,12 +16,12 @@ public class NoType extends Type {
 	
 	@Override
 	protected Set<Type> getInheritedTypes(StabileTypeFactory factory) {
-		return EMPTY_TYPE_LIST;
+		return EMPTY_TYPE_SET;
 	}	
 	
 	@Override
 	public Set<Type> getCompatibleTypes(StabileTypeFactory factory) {
-		return EMPTY_TYPE_LIST;
+		return EMPTY_TYPE_SET;
 	}
 
 	@Override

@@ -48,4 +48,8 @@ public abstract class Expr {
 		}
 		return s;
 	}
+
+	public boolean isVariable() {
+		return false;
+	}
 }

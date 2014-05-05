@@ -11,9 +11,8 @@ public abstract class Type implements Serializable {
 	private static final long serialVersionUID = -900979897015622962L;
 
 	protected static final List<String> EMPTY_STRING_LIST = new LinkedList<String>();
-	protected static final Set<Type> EMPTY_TYPE_LIST = new HashSet<Type>();	
-	//protected static final List<ReferenceType> EMPTY_REFERENCE_TYPE_LIST = new LinkedList<ReferenceType>();	
-	
+	protected static final Set<Type> EMPTY_TYPE_SET = new HashSet<Type>();	
+	//protected static final List<ReferenceType> EMPTY_REFERENCE_TYPE_LIST = new LinkedList<ReferenceType>();		
 	
 	protected String name;
 	

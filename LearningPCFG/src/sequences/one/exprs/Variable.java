@@ -47,4 +47,9 @@ public class Variable extends Expr {
 	protected void representations(List<Pair<String, String>> list) {
 			
 	}
+	
+	@Override
+	public boolean isVariable() {
+		return true;
+	}
 }

@@ -139,7 +139,15 @@ public class ReferenceTypeBuilder extends ASTVisitor {
 		String name = node.toString();
 		if (imported.isImportedType(name)) {
 			ClassInfo clazz = imported.getFirstType(name);
-			result = factory.createConstType(clazz.getName());
+	
+			result = clazz.getType();
+			
+//			if (clazz.getType().isPolymorphicType()){
+//				result = factory.cre
+//				
+//			} else {
+//			  result = factory.createMonomorphicReferenceType(clazz.getName());
+//			}
 		} else result = factory.createNoVariableType();
 
 		return false;

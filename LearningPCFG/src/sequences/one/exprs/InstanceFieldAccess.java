@@ -10,7 +10,7 @@ public class InstanceFieldAccess extends Expr{
 	private Declaration field;
 	private Expr exp;
 	
-	public InstanceFieldAccess(Declaration field, Expr exp, Type type) {
+	public InstanceFieldAccess(Declaration field, Expr exp) {
 		super(field.getRetType());
 		this.field = field;
 		this.exp = exp;

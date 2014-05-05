@@ -43,7 +43,7 @@ public class Variable extends ReferenceType {
 
 	@Override
 	protected Set<Type> getInheritedTypes(StabileTypeFactory factory) {
-		return EMPTY_TYPE_LIST;
+		return EMPTY_TYPE_SET;
 	}	
 	
 	@Override

@@ -220,7 +220,12 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 				Type type = node.getType();
 				selection.types.Type type2 = typeBuilder.createType(type);
 
-				locals.put(fragment.getName().getIdentifier(), new Pair(eval(fragment.getInitializer()), type2));				
+				Pair value = new Pair(eval(fragment.getInitializer()), type2);
+				String name = fragment.getName().getIdentifier();
+				
+				System.out.println(name+" = "+value);				
+				
+				locals.put(name, value);					
 			}
 		}
 		
@@ -238,7 +243,12 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 				Type type = node.getType();
 				selection.types.Type type2 = typeBuilder.createType(type);
 
-				locals.put(fragment.getName().getIdentifier(), new Pair(eval(fragment.getInitializer()), type2));				
+				Pair value = new Pair(eval(fragment.getInitializer()), type2);
+				String name = fragment.getName().getIdentifier();
+				
+				System.out.println(name+" = "+value);				
+				
+				locals.put(name, value);				
 			}
 		}
 		
@@ -247,28 +257,35 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 
 	private String eval(Expression exp) {
 		Expr expr = expBuilder.getExpr(exp);
-		List<Pair<String, String>> compos = expr.longReps();
-		statistics.inc(compos);
 		
-		return compos.get(0).getFirst();
+		if (!expr.isVariable()){
+		
+		List<Pair<String, String>> compos = expr.longReps();
+		
+		  statistics.inc(compos);
+	      return compos.get(0).getFirst();
+		} return expr.shortRep();
 	}
 
 	//This is where variables are born
 	public boolean visit(VariableDeclarationFragment node) {
-		String name = node.getName().getIdentifier();
-
-		ASTNode parent = node.getParent();
-		if (parent instanceof VariableDeclarationStatement){
-			VariableDeclarationStatement vds = (VariableDeclarationStatement) parent;
-
-			Type type = vds.getType();
-			selection.types.Type type2 = typeBuilder.createType(type);
-			
-			locals.put(node.getName().getIdentifier(), new Pair(eval(node.getInitializer()), type2));	
-			
-		}
-
-		return false;
+//		ASTNode parent = node.getParent();
+//		if (parent instanceof VariableDeclarationStatement){
+//			VariableDeclarationStatement vds = (VariableDeclarationStatement) parent;
+//
+//			Type type = vds.getType();
+//			selection.types.Type type2 = typeBuilder.createType(type);
+//			
+//			String name = node.getName().getIdentifier();
+//			
+//			Pair value = new Pair(eval(node.getInitializer()), type2);
+//			
+//			System.out.println(name+" = "+value);
+//			
+//			locals.put(name, value);	
+//		}
+//		return false;		
+		throw new UnsupportedOperationException();
 	}
 
 	//-------------------------------------------------------  Rest --------------------------------------------------------	

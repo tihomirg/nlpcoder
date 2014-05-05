@@ -170,6 +170,8 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		Expr rightExp = getExpr(node.getRightHandSide());
 		Type rightType = rightExp.getType();
 		
+		System.out.println(leftType +"             "+rightType);
+		
 		if (leftType.isCompatible(rightType, typeFactory)){
 			Operator operator = node.getOperator();
 			setExpr(this.expFactory.createAssignment(operator, leftExp, rightExp));
@@ -226,7 +228,13 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 //			System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
 			
 			Declaration cons = getFirstCompatible(constructors, argTypes, typeFactory);
+			
+			//TODO: Fix
+			if (cons != null)
 			setExpr(expFactory.createConstructorInvocation(cons, args));
+			else {
+				setExprToHole();
+			}
 		} else setExprToHole();
 
 		return false;
@@ -275,7 +283,14 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 				Declaration[] fields = classInfo.getAllFields();
 				
 				Declaration field = getFirstCompatible(fields, name);
-				setExpr(expFactory.createFieldAccess(field, exp, typeFactory.createNoType()));
+				
+				//TODO: Fix this such that field "null"
+				//This might be because many methods have same name diff args and they are filtered/masked
+				if (field != null){
+					setExpr(expFactory.createFieldAccess(field, exp));
+				} else {
+					setExprToHole();
+				}
 
 			} else setExprToHole();
 
@@ -324,12 +339,16 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 				Type[] argTypes = getTypes(args);
 				Declaration method = getFirstCompatible(compatible, argTypes, typeFactory);
 
-				System.out.println(Arrays.toString(compatible));
 				
-				System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
+				//System.out.println("Name: "+name);
+				//System.out.println(Arrays.toString(compatible));
 				
-				setExpr(expFactory.createMethodInvocation(method, exp, args));
-
+				//System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
+				
+				//TODO: Fix this such that method is never "null"
+				if (method != null)
+				   setExpr(expFactory.createMethodInvocation(method, exp, args));
+				else setExprToHole();
 			} else setExprToHole();
 
 		} else setExprToHole();
