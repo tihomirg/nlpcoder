@@ -34,8 +34,6 @@ public class ClassInfoSerializer extends com.esotericsoftware.kryo.Serializer<Cl
 		kryo.writeObject(out, clazz.getMethods());
 		kryo.writeObject(out, clazz.getFields());
 		kryo.writeObject(out, clazz.getInheritedTypes());
-		kryo.writeObject(out, clazz.getSuperClasses());
-		kryo.writeObject(out, clazz.getInterfaces());
 	}
 
 }

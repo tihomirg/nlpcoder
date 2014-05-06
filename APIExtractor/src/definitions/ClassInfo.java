@@ -42,10 +42,7 @@ public class ClassInfo implements Serializable {
 
 	private Declaration[] constructors;	
 	private Declaration[] methods;
-	private Declaration[] fields;	
-
-	private ClassInfo[] interfaces;
-	private ClassInfo[] superClasses;
+	private Declaration[] fields;
 
 	private ReferenceType[] inheritedTypes;
 
@@ -56,6 +53,7 @@ public class ClassInfo implements Serializable {
 	private Declaration[] allFields;
 	private Declaration[] uniqueFields;
 	private Declaration[] uniqueMethods;
+	private ClassInfo[] allInheritedClasses;
 
 	public ClassInfo(){}
 
@@ -74,21 +72,6 @@ public class ClassInfo implements Serializable {
 
 		//After we set 'methods' and 'fields' we can change variables in the type. This is due to the receiver.		
 		renameTypeVars(factory, typeParameters);
-
-		try {
-			this.interfaces = cif.createClassInfos(clazz.getInterfaces());
-		} catch (Exception e) {
-			System.out.println("*******************************************************************************************");
-			this.interfaces = EMPTY_CLASSES;
-		}
-
-		try {
-
-			this.superClasses = cif.createClassInfos(clazz.getSuperClasses());		
-		} catch (Exception e) {
-			System.out.println("*******************************************************************************************");
-			this.superClasses = EMPTY_CLASSES;
-		}
 
 	}
 
@@ -558,7 +541,7 @@ public class ClassInfo implements Serializable {
 	public Declaration[] getAllMethods(){
 		if (this.allMethods == null){
 			List<Declaration> decls = new LinkedList<Declaration>();
-			ClassInfo[] inheritedClasses = getInheritedClasses();
+			ClassInfo[] inheritedClasses = getAllInheritedClasses();
 			for(ClassInfo inh: inheritedClasses){
 				decls.addAll(Arrays.asList(inh.getUniqueMethods()));
 			}
@@ -572,7 +555,7 @@ public class ClassInfo implements Serializable {
 	public Declaration[] getAllFields(){
 		if (this.allFields == null){
 			List<Declaration> decls = new LinkedList<Declaration>();
-			ClassInfo[] inheritedClasses = getInheritedClasses();
+			ClassInfo[] inheritedClasses = getAllInheritedClasses();
 			for(ClassInfo inh: inheritedClasses){
 				decls.addAll(Arrays.asList(inh.getUniqueFields()));
 			}
@@ -608,7 +591,7 @@ public class ClassInfo implements Serializable {
 	}
 
 	private boolean containsInheritedMethodEquivalentTo(Declaration method) {
-		ClassInfo[] inheritedClasses = getInheritedClasses();	
+		ClassInfo[] inheritedClasses = getAllInheritedClasses();	
 		for (ClassInfo clazz : inheritedClasses) {
 			if (clazz.containsMethodEquivalentTo(method)){
 				return true;
@@ -619,7 +602,7 @@ public class ClassInfo implements Serializable {
 	}
 
 	private boolean containsInheritedFieldEquivalentTo(Declaration field) {
-		ClassInfo[] inheritedClasses = getInheritedClasses();
+		ClassInfo[] inheritedClasses = getAllInheritedClasses();
 		for (ClassInfo clazz : inheritedClasses) {
 			if (clazz.containsFieldEquivalentTo(field)){
 				return true;
@@ -629,14 +612,19 @@ public class ClassInfo implements Serializable {
 		return false;
 	}	
 
-	private ClassInfo[] getInheritedClasses(){
-		int length = this.superClasses.length + this.interfaces.length;
-		ClassInfo[] types = new ClassInfo[length];
+	public ClassInfo[] getAllInheritedClasses(){
+		if (allInheritedClasses == null){
+			Set<ClassInfo> classes = new HashSet<ClassInfo>();
 
-		System.arraycopy(this.superClasses, 0, types, 0, this.superClasses.length);
-		System.arraycopy(this.interfaces, 0, types, this.superClasses.length, this.interfaces.length);
+			for (ReferenceType type : inheritedTypes) {
+				ClassInfo clazz = type.getClassInfo();
 
-		return types;
+				if (clazz != null){
+					classes.addAll(Arrays.asList(clazz.getAllInheritedClasses()));
+				}
+			}
+			return this.allInheritedClasses = classes.toArray(new ClassInfo[classes.size()]);
+		} else return this.allInheritedClasses;
 	}	
 
 	private boolean containsFieldEquivalentTo(Declaration decl) {
@@ -671,22 +659,6 @@ public class ClassInfo implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public ClassInfo[] getInterfaces() {
-		return interfaces;
-	}
-
-	public void setInterfaces(ClassInfo[] interfaces) {
-		this.interfaces = interfaces;
-	}
-
-	public ClassInfo[] getSuperClasses() {
-		return superClasses;
-	}
-
-	public void setSuperClasses(ClassInfo[] superClasses) {
-		this.superClasses = superClasses;
 	}
 
 	public boolean isClass() {
@@ -746,10 +718,12 @@ public class ClassInfo implements Serializable {
 			Set<Type> types = new HashSet<Type>();
 			for (ReferenceType iType : this.inheritedTypes) {
 				ClassInfo clazz = iType.getClassInfo();
-				ReferenceType oType = clazz.getType();
-				Unifier unify = oType.unify(iType, factory);
-				types.add(iType);
-				types.addAll(instantiate(unify, clazz.getAllInharitedTypes(factory), factory));
+				types.add(iType);				
+				if (clazz != null){
+					ReferenceType oType = clazz.getType();
+					Unifier unify = oType.unify(iType, factory);
+					types.addAll(instantiate(unify, clazz.getAllInharitedTypes(factory), factory));
+				}
 			}
 			this.allInharitedTypes = types;
 		}
@@ -781,23 +755,6 @@ public class ClassInfo implements Serializable {
 
 		return set;
 	}
-
-
-	private String interfacesToString(){
-		String s="";
-		for (ClassInfo clazz: interfaces) {
-			s+=" "+clazz.getName();
-		}
-		return s;
-	}
-
-	private String superClassesToString(){
-		String s="";
-		for (ClassInfo clazz: superClasses) {
-			s+=" "+clazz.getName();
-		}
-		return s;
-	}	
 
 	public Declaration[] getConstructors() {
 		return constructors;

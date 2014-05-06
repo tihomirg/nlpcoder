@@ -202,10 +202,6 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 
 	//------------------------------------------------------ Special ------------------------------------------------------	
 
-	private boolean isParam(String variable) {
-		return params.contains(variable);
-	}
-
 	public boolean visit(QualifiedName node) {
 		return false;
 	}
@@ -369,40 +365,4 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 	public boolean visit(TypeDeclarationStatement node) {
 		return true;
 	}
-
-	//-------------------------------------- auxiliary methods ---------------------------------------------
-	
-	private String getTypeName(Type type) {
-		if (type.isParameterizedType()) {
-			ParameterizedType paramType = (ParameterizedType) type;
-			return paramType.getType().toString();
-		} else if (type.isArrayType()) {
-			ArrayType arrayType = (ArrayType) type;
-			return arrayType.getElementType().toString();
-		} else return type.toString();
-	}
-
-	private boolean isImportedCons(String name, int argNum) {
-		return imported.isImporteddConstructor(name, argNum);
-	}
-
-	private boolean isImportedField(String name) {
-		return imported.isImportedField(name);
-	}
-
-	private boolean isOwnerField(String name) {
-		return fields.contains(name);
-	}
-
-	private boolean isLocal(String name) {
-		return locals.contains(name);
-	}
-
-	private boolean isImportedMethod(String name, int argNum) {
-		return imported.isImportedMethod(name, argNum);
-	}
-
-	private boolean isOwnerMethod(String name) {
-		return methods.contains(name);
-	}	
 }

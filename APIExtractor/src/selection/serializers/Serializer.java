@@ -35,7 +35,6 @@ public class Serializer {
 			cil.load(new FolderLoader().getJars(new File(folderName)));
 			cil.loadArrayClassInfo();
 			cil.connectTypesAndClassInfos();
-			cil.setArrayClassInfoSuperClasses();
 			
 			Collection<ClassInfo> classes = cil.getClasses();
 			

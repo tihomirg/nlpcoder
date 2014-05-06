@@ -51,7 +51,6 @@ public class ArrayClassInfo extends ClassInfo {
 		ConstType iType = tf.createConstType(java.lang.Object.class);
 
 		this.setInheritedTypes(new ReferenceType[]{iType});
-		this.setInterfaces(EMPTY_CLASSES);
 
 		String paramName = "VArr";
 		Variable var = tf.createVariable(paramName);
@@ -69,10 +68,6 @@ public class ArrayClassInfo extends ClassInfo {
 	
 	private Declaration[] createConstructors(String paramName, InitialTypeFactory tf) {
 		return new Declaration[]{createIntConstructor(paramName, tf), createArrayIntConstructor(paramName, tf)};
-	}	
-
-	public void setSuperClasses() {
-		setSuperClasses(new ClassInfo[]{this.getInheritedTypes()[0].getClassInfo()});
 	}	
 
 	private Declaration createIntConstructor(String paramName, InitialTypeFactory tf) {

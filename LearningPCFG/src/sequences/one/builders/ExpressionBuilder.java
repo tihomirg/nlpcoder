@@ -402,9 +402,16 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 			if (isLocalVariable(name)){
 				Pair<String, Type> value = locals.get(name);
 				setExpr(expFactory.createVariable(name, value.getFirst(), value.getSecond()));
+			} else if (isImportedType(name)){  //Should cover static fields/methods
+				ClassInfo firstType = imported.getFirstType(name);
+				setExpr(expFactory.createVariable(name, name, firstType.getType()));				
 			} else setExprToHole();
 		} else setExprToHole();
 		return false;
+	}
+
+	private boolean isImportedType(String name) {
+		return imported.isImportedType(name);
 	}
 
 	//TODO: Implement

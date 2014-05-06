@@ -38,8 +38,6 @@ public class ClassInfoDeserializer extends Serializer<ClassInfo>{
 		clazz.setMethods(kryo.readObject(in, Declaration[].class));
 		clazz.setFields(kryo.readObject(in, Declaration[].class));
 		clazz.setInheritedTypes(kryo.readObject(in, ReferenceType[].class));
-		clazz.setSuperClasses(kryo.readObject(in, ClassInfo[].class));
-		clazz.setInterfaces(kryo.readObject(in, ClassInfo[].class));
 		
 		return clazz;
 	}

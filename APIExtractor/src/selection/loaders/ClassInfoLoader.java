@@ -38,8 +38,4 @@ public abstract class ClassInfoLoader {
 	public void connectTypesAndClassInfos(){
 		cif.connectTypesAndClassInfos();
 	}
-
-	public void setArrayClassInfoSuperClasses() {
-		cif.setArrayClassInfoSuperClasses();
-	}
 }

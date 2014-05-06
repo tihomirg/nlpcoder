@@ -66,12 +66,10 @@ public class StabileAPI {
 		return packages.get(pkg);
 	}
 
-	//TODO: Include interfaces.
 	private static Set<ClassInfo> getSuperClasses(Set<ClassInfo> classes) {
 		Set<ClassInfo> set = new HashSet<ClassInfo>();
 		for (ClassInfo clazz : classes) {
-			set.addAll(Arrays.asList(clazz.getSuperClasses()));
-			//set.addAll(Arrays.asList(clazz.getInterfaces()));
+			set.addAll(Arrays.asList(clazz.getAllInheritedClasses()));
 		}
 		return set;
 	}

@@ -62,10 +62,6 @@ public class InitialAPI {
 	    factory.connectTypesAndClassInfos(classesMap);
 	}
 
-	public void setArrayClassInfoSuperClasses() {
-		aci.setSuperClasses();
-	}
-
 	public Map<String, ClassInfo> getClassesMap() {
 		return classesMap;
 	}

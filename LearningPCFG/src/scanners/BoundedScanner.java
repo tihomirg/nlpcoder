@@ -165,12 +165,12 @@ public class BoundedScanner {
 		
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 	
-//		if (fileName.endsWith("arraylist\\T10.java")){
+		if (fileName.endsWith("filepermission\\T2.java")){
 			System.out.println("Scanning: "+fileName);
-//			builder.build(cu);		
-//		}
+			builder.build(cu);		
+		}
 		
-		builder.build(cu);
+		//builder.build(cu);
 	}
 
 	private static char[] readFile(String fileName){
