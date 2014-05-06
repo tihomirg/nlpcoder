@@ -18,9 +18,11 @@ public class CompositionBoundedScanner extends BoundedScanner {
 		
 		IBuilder builder = new CompositionBuilder(api);
 		
-		File input = new File("C:\\Users\\gvero\\git\\nlpcoder\\Benchmarks");//new File("C:\\Users\\gvero\\java_projects\\java_projects");
+		//File input = new File("C:\\Users\\gvero\\git\\nlpcoder\\Benchmarks");
+		
+		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 		File output = new File("stat.txt");
 		
-		scan(builder, input, output, 1000, 10, true);		
+		scan(builder, input, output, 10000, 10, true);		
 	}
 }

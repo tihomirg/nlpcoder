@@ -171,7 +171,7 @@ public class BoundedScanner {
 //		}
 //		
 		
-		System.out.println("Scanning: "+fileName);		
+//		System.out.println("Scanning: "+fileName);		
 		builder.build(cu);
 	}
 

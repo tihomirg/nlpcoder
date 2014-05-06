@@ -170,7 +170,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		Expr rightExp = getExpr(node.getRightHandSide());
 		Type rightType = rightExp.getType();
 		
-		System.out.println(leftType +"             "+rightType);
+		//System.out.println(leftType +"             "+rightType);
 		
 		if (leftType.isCompatible(rightType, typeFactory)){
 			Operator operator = node.getOperator();

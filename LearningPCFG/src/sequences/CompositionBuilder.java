@@ -364,7 +364,7 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 				Pair value = new Pair(eval(fragment.getInitializer()), type2);
 				String name = fragment.getName().getIdentifier();
 				
-				System.out.println(name+" = "+value);				
+				//System.out.println(name+" = "+value);				
 				
 				locals.put(name, value);					
 			}
@@ -390,7 +390,7 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 				Pair value = new Pair(eval(fragment.getInitializer()), type2);
 				String name = fragment.getName().getIdentifier();
 				
-				System.out.println(name+" = "+value);				
+				//System.out.println(name+" = "+value);				
 				
 				locals.put(name, value);				
 			}
@@ -457,7 +457,7 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 	public boolean visit(ImportDeclaration node) {
 		String imp = node.getName().toString();
 		
-		System.out.println(imp);
+		//System.out.println(imp);
 		
 		api.load(imported, imp, node.isOnDemand());
 		return false;
