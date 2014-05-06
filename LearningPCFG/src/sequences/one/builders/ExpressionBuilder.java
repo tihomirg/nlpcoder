@@ -259,17 +259,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		} else setExprToHole();
 		
 		return false;
-	}	
-	
-	public boolean visit(ConstructorInvocation node) {
-		setExprToHole();
-		return false;
 	}
-
-	public boolean visit(EmptyStatement node) {
-		setExprToHole();
-		return false;
-	}	
 	
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();

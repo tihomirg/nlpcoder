@@ -4,12 +4,21 @@ import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ArrayAccess;
+import org.eclipse.jdt.core.dom.ArrayCreation;
+import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
+import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.CatchClause;
+import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ConditionalExpression;
+import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
@@ -18,23 +27,39 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.NullLiteral;
+import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.ParameterizedType;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.SuperFieldAccess;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.core.dom.SynchronizedStatement;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
+import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
+import org.eclipse.jdt.core.dom.Assignment.Operator;
+
+import definitions.ArrayClassInfo;
+import definitions.ClassInfo;
+import definitions.Declaration;
 import api.Imported;
 import api.StabileAPI;
 import builders.SingleNodeVisitor;
@@ -43,9 +68,11 @@ import scopes.NameScopes;
 import scopes.ScopeKeyValue;
 import scopes.ScopesKeyValue;
 import scopes.SimpleEvalScopes;
+import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
 import sequences.one.builders.ExpressionBuilder;
 import sequences.one.exprs.Expr;
+import sequences.one.exprs.Variable;
 import statistics.CompositionStatistics;
 import symbol.Symbol;
 import util.Pair;
@@ -85,6 +112,123 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 	public void releaseUnder(int percentage) {
 		//statistics.releaseUnder(percentage);
 	}
+	
+    //----------------------------------------------------- Expressions -----------------------------------------------------
+	
+	public boolean visit(ArrayAccess node) {
+		eval(node);
+		return false;
+	}
+	
+	public boolean visit(ArrayCreation node) {
+		eval(node);
+		return false;
+	}
+	
+	public boolean visit(ArrayInitializer node) {
+		eval(node);
+		return false;
+	}	
+
+	public boolean visit(Assignment node) {
+		eval(node);
+		return false;
+	}	
+	
+	public boolean visit(BooleanLiteral node) {
+		eval(node);
+		return false;
+	}
+	
+	public boolean visit(CastExpression node) {
+		eval(node);
+		return false;
+	}
+	
+	public boolean visit(CharacterLiteral node) {
+		eval(node);
+		return false;
+	}
+
+	public boolean visit(ClassInstanceCreation node){
+		eval(node);
+		return false;
+	}	
+
+	public boolean visit(ConditionalExpression node){
+		eval(node);
+		return false;
+	}	
+	
+	public boolean visit(FieldAccess node) {
+		eval(node);
+		return false;
+	}
+
+	public boolean visit(InfixExpression node){
+		eval(node);		
+		return false;
+	}
+
+	public boolean visit(InstanceofExpression node) {
+		eval(node);		
+		return false;
+	}
+
+	public boolean visit(MethodInvocation node) {
+		eval(node);		
+		return false;
+	}
+
+	public boolean visit(NullLiteral node){
+		eval(node);		
+		return false;
+	}
+	
+	public boolean visit(NumberLiteral node){
+		eval(node);		
+		return false;
+	}	
+
+	public boolean visit(ParenthesizedExpression node) {
+		eval(node);		
+		return false;
+	}
+
+	public boolean visit(PostfixExpression node) {
+		eval(node);		
+		return false;
+	}
+
+	public boolean visit(PrefixExpression node) {	
+		eval(node);		
+		return false;
+	}
+
+	public boolean visit(SimpleName node){
+		eval(node);		
+		return false;
+	}
+
+	public boolean visit(StringLiteral node) {
+		eval(node);		
+		return false;
+	}
+
+	public boolean visit(SuperFieldAccess node) {
+		eval(node);		
+		return false;
+	}	
+
+    public boolean visit(SuperMethodInvocation node) {
+		eval(node);		
+    	return false;
+	}
+
+	public boolean visit(TypeLiteral node){
+		eval(node);		
+		return false;
+	}	
 
 	//------------------------------------------------------ Statements ------------------------------------------------------	
 
@@ -214,7 +358,8 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 			if (astNode instanceof VariableDeclarationFragment){
 				VariableDeclarationFragment fragment = (VariableDeclarationFragment) astNode;
 				Type type = node.getType();
-				selection.types.Type type2 = typeBuilder.createType(type);
+				int dimensions = fragment.getExtraDimensions();				
+				selection.types.Type type2 = typeBuilder.createArrayType(type, dimensions);
 
 				Pair value = new Pair(eval(fragment.getInitializer()), type2);
 				String name = fragment.getName().getIdentifier();
@@ -236,9 +381,12 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 		for (ASTNode astNode : fragments) {
 			if (astNode instanceof VariableDeclarationFragment){
 				VariableDeclarationFragment fragment = (VariableDeclarationFragment) astNode;
+				
+				int dimensions = fragment.getExtraDimensions();
+				
 				Type type = node.getType();
-				selection.types.Type type2 = typeBuilder.createType(type);
-
+				selection.types.Type type2 = typeBuilder.createArrayType(type, dimensions);
+				
 				Pair value = new Pair(eval(fragment.getInitializer()), type2);
 				String name = fragment.getName().getIdentifier();
 				
@@ -255,11 +403,9 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 		Expr expr = expBuilder.getExpr(exp);
 		
 		if (!expr.isVariable()){
-		
-		List<Pair<String, String>> compos = expr.longReps();
-		
-		  statistics.inc(compos);
-	      return compos.get(0).getFirst();
+			List<Pair<String, String>> compos = expr.longReps();
+			statistics.inc(compos);
+			return compos.get(0).getFirst();
 		} return expr.shortRep();
 	}
 
@@ -365,4 +511,12 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 	public boolean visit(TypeDeclarationStatement node) {
 		return true;
 	}
+	
+	public boolean visit(ConstructorInvocation node) {
+		return false;
+	}
+
+	public boolean visit(EmptyStatement node) {
+		return false;
+	}	
 }

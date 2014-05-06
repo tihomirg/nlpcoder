@@ -76,5 +76,9 @@ public class TypeBuilder extends ASTVisitor {
 	public boolean visit(WildcardType node) {
 		result = rtb.createWildcardType(node);
 		return false;
-	}	
+	}
+
+	public selection.types.Type createArrayType(org.eclipse.jdt.core.dom.Type type, int dimensions) {
+		return this.rtb.createArrayType(dimensions, type);
+	}
 }

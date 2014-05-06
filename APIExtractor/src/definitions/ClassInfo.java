@@ -776,4 +776,8 @@ public class ClassInfo implements Serializable {
 				"\ndeclarations=\n"+ Arrays.toString(getDeclarations())+
 				"]\n\n";
 	}
+
+	public void setAllInheritedClasses(ClassInfo[] allInheritedClasses) {
+		this.allInheritedClasses = allInheritedClasses;
+	}
 }
