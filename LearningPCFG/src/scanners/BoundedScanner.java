@@ -164,15 +164,15 @@ public class BoundedScanner {
 		parser.setStatementsRecovery(true);	
 		
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-	
-		if (fileName.endsWith("arrays\\T30.java")){
-			System.out.println("Scanning: "+fileName);
-			builder.build(cu);		
-		}
+//	
+//		if (fileName.endsWith("arrays\\T30.java")){
+//			System.out.println("Scanning: "+fileName);
+//			builder.build(cu);		
+//		}
+//		
 		
-		
-//		System.out.println("Scanning: "+fileName);		
-//		builder.build(cu);
+		System.out.println("Scanning: "+fileName);		
+		builder.build(cu);
 	}
 
 	private static char[] readFile(String fileName){
