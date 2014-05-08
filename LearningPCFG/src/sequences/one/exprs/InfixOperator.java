@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 
+import selection.types.Type;
 import util.Pair;
 
 public class InfixOperator extends Expr{
@@ -11,8 +12,8 @@ public class InfixOperator extends Expr{
 	private Expr lexp;
 	private Expr rexp;
 
-	public InfixOperator(Operator operator, Expr leftExpr, Expr rightExpr) {
-		super(leftExpr.getType());
+	public InfixOperator(Operator operator, Expr leftExpr, Expr rightExpr, Type type) {
+		super(type);
 		this.op = operator;
 		this.lexp = leftExpr;
 		this.rexp = rightExpr;
@@ -25,7 +26,7 @@ public class InfixOperator extends Expr{
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.InfixOperator+"("+op+")";
+		return ExprConsts.InfixOperator+"("+op+")("+type+")";
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package sequences.one.exprs;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jdt.core.dom.Assignment.Operator;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.PostfixExpression;
@@ -14,9 +17,24 @@ public class ExprFactory {
 	private final Expr hole;
 	private final Type boolType;
 	
+	private final Set<InfixExpression.Operator> boolOperators;
+	
 	public ExprFactory(StabileTypeFactory typeFactory) {
 		this.hole = new Hole(typeFactory.createNoType());
 		this.boolType = typeFactory.createPrimitiveType("boolean");
+		
+		this.boolOperators = new HashSet<InfixExpression.Operator>(){
+			{
+				add(InfixExpression.Operator.CONDITIONAL_AND);
+				add(InfixExpression.Operator.CONDITIONAL_OR);
+				add(InfixExpression.Operator.EQUALS);
+				add(InfixExpression.Operator.GREATER);
+				add(InfixExpression.Operator.GREATER_EQUALS);
+				add(InfixExpression.Operator.LESS);
+				add(InfixExpression.Operator.LESS_EQUALS);
+				add(InfixExpression.Operator.NOT_EQUALS);	
+			}
+		};
 	}
 	
 	public Expr createHole() {
@@ -56,7 +74,15 @@ public class ExprFactory {
 	}
 
 	public Expr createInfixOperator(InfixExpression.Operator operator, Expr leftExpr, Expr rightExpr) {
-		return new InfixOperator(operator, leftExpr, rightExpr);
+		return new InfixOperator(operator, leftExpr, rightExpr, getInfixOpType(operator, leftExpr));
+	}
+
+	private Type getInfixOpType(InfixExpression.Operator operator, Expr leftExpr) {
+		if (boolOperators.contains(operator)){
+			return boolType;
+		} else {
+			return leftExpr.getType();
+		}
 	}
 
 	public Expr createPostfixOperator(PostfixExpression.Operator operator, Expr expr) {
@@ -64,7 +90,15 @@ public class ExprFactory {
 	}
 
 	public Expr createPrefixOperator(PrefixExpression.Operator operator, Expr expr) {
-		return new PrefixOperator(operator, expr);
+		return new PrefixOperator(operator, expr, getPrefixOpType(operator, expr));
+	}
+
+	private Type getPrefixOpType(PrefixExpression.Operator operator, Expr expr) {
+		if(operator.equals(PrefixExpression.Operator.NOT)){
+			return boolType;
+		} else{
+			return expr.getType();
+		}
 	}
 
 	public Expr createBooleanLiteral(boolean val, PrimitiveType type) {

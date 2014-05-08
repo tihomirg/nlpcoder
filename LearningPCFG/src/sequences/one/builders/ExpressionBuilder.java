@@ -1,9 +1,7 @@
 package sequences.one.builders;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayAccess;
 import org.eclipse.jdt.core.dom.ArrayCreation;
@@ -15,8 +13,6 @@ import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.ConditionalExpression;
-import org.eclipse.jdt.core.dom.ConstructorInvocation;
-import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
@@ -51,47 +47,20 @@ import sequences.one.exprs.ExprFactory;
 import sequences.one.exprs.Variable;
 import util.Pair;
 
-//Expression:	
-//Annotation,
-//ArrayAccess,
-//ArrayCreation,
-//ArrayInitializer,
-//Assignment,
-//BooleanLiteral,
-//CastExpression,
-//CharacterLiteral,
-//ClassInstanceCreation,
-//ConditionalExpression,
-//FieldAccess,
-//InfixExpression,
-//InstanceofExpression,
-//MethodInvocation,
-//Name,
-//NullLiteral,
-//NumberLiteral,
-//ParenthesizedExpression,
-//PostfixExpression,
-//PrefixExpression,
-//StringLiteral,
-//SuperFieldAccess,
-//SuperMethodInvocation,
-//ThisExpression,
-//TypeLiteral,
-//VariableDeclarationExpression
 
 public class ExpressionBuilder extends SingleNodeVisitor {
-	
+
 	private Imported imported;
 	private StabileTypeFactory typeFactory;
-	
+
 	private ExprFactory expFactory;
 	private TypeBuilder typeBuilder;	
-	
+
 	private ScopesKeyValue<String, Pair<String, selection.types.Type>> locals;
 	private NameScopes params;
 
 	private Expr expr;	
-	
+
 	public ExpressionBuilder(Imported imported, StabileTypeFactory typeFactory, TypeBuilder typeBuilder, NameScopes params, ScopesKeyValue<String, Pair<String, Type>> locals) {
 		this.imported = imported;
 		this.typeFactory = typeFactory;
@@ -104,7 +73,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 	public void setExpr(Expr expr) {
 		this.expr = expr;
 	}
-	
+
 	public Expr getExpr(ASTNode exp){
 		if (exp != null) exp.accept(this);
 		else setExprToHole();
@@ -114,7 +83,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 	public boolean visit(ArrayAccess node) {
 		Expr exp = getExpr(node.getArray());		
 		Type type = exp.getType();
-		
+
 		if (type instanceof ReferenceType){
 			ReferenceType refType = (ReferenceType) type;
 			ClassInfo classInfo = refType.getClassInfo();
@@ -124,30 +93,33 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 				Expr index = getExpr(node.getIndex());
 				Type[] argTypes = new Type[]{index.getType()};
 				Declaration method = getFirstCompatible(compatible, argTypes, typeFactory);
-				
-				setExpr(expFactory.createMethodInvocation(method, exp, new Expr[]{index}));
-				
+
+				if (method != null){
+					setExpr(expFactory.createMethodInvocation(method, exp, new Expr[]{index}));
+				} else {
+					setExprToHole();
+				}
 			} else setExprToHole();
 
 		} else setExprToHole();		
 
 		return false;
 	}
-	
+
 	public boolean visit(ArrayCreation node) {
 		//Type type = typeBuilder.createType(node.getType());
 		Expr[] args = getExprs(node.dimensions());
 		Type[] argTypes = getTypes(args);
-		
+
 		if(compatibleWithIntType(argTypes)){
 			ClassInfo aci = imported.getFirstType(ArrayClassInfo.SHORT_NAME);
-			
+
 			if(argTypes.length == 1){
 				Declaration cons = aci.getConstructors()[0];
 				setExpr(expFactory.createConstructorInvocation(cons, args));
 			} else {
 				Declaration cons = aci.getConstructors()[1];
-				
+
 				//TODO: Create another array, or come up with the alternative solution
 				//Go up to n-dimensional array.
 				setExpr(expFactory.createConstructorInvocation(cons, args));				
@@ -155,10 +127,10 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		} else {
 			setExprToHole();
 		}
-		
+
 		return false;
 	}
-	
+
 	public boolean visit(ArrayInitializer node) {
 		setExprToHole();
 		return false;
@@ -169,40 +141,43 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		Type leftType = leftExp.getType();
 		Expr rightExp = getExpr(node.getRightHandSide());
 		Type rightType = rightExp.getType();
-		
+
 		//System.out.println(leftType +"             "+rightType);
-		
+
 		if (leftType.isCompatible(rightType, typeFactory)){
 			Operator operator = node.getOperator();
 			setExpr(this.expFactory.createAssignment(operator, leftExp, rightExp));
 			if (operator.equals(Operator.ASSIGN)){
 				if (leftExp instanceof Variable){
 					Variable var = (Variable) leftExp;
-					
-					Pair<String, Type> pair = locals.get(var.getName());
-					pair.setFirst(var.shortRep());
-					pair.setSecond(var.getType());
+
+					String name = var.getName();
+					if (isLocalVariable(name)){
+						Pair<String, Type> pair = locals.get(name);
+						pair.setFirst(var.shortRep());
+						pair.setSecond(var.getType());
+					}
 				}
-				
+
 			}
 		} else setExprToHole();
 		return false;
 	}	
-	
+
 	public boolean visit(BooleanLiteral node) {
 		boolean val = node.booleanValue();
 		setExpr(expFactory.createBooleanLiteral(val, typeFactory.createPrimitiveType("boolean")));
 		return false;
 	}
-	
+
 	public boolean visit(CastExpression node) {
 		Expr exp = getExpr(node.getExpression());
 		ReferenceType referenceType = this.typeBuilder.createReferenceType(node.getType());
 		setExpr(this.expFactory.createCastExpr(referenceType, exp));
-		
+
 		return false;
 	}
-	
+
 	public boolean visit(CharacterLiteral node) {
 		char val = node.charValue();
 		setExpr(expFactory.createCharacterLiteral(val, typeFactory.createPrimitiveType("char")));
@@ -220,18 +195,18 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		if (classInfo != null){
 			Declaration[] constructors = classInfo.getConstructors();
 			Expr[] args = getExprs(node.arguments());
-			
-//			System.out.println(classInfo.getName() +"  "+Arrays.toString(args));			
-			
+
+			//			System.out.println(classInfo.getName() +"  "+Arrays.toString(args));			
+
 			Type[] argTypes = getTypes(args);
 
-//			System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
-			
+			//			System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
+
 			Declaration cons = getFirstCompatible(constructors, argTypes, typeFactory);
-			
+
 			//TODO: Fix
 			if (cons != null)
-			setExpr(expFactory.createConstructorInvocation(cons, args));
+				setExpr(expFactory.createConstructorInvocation(cons, args));
 			else {
 				setExprToHole();
 			}
@@ -244,23 +219,23 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 
 		Expr exp = getExpr(node.getExpression());
 		Type type = exp.getType();
-		
+
 		if (compatibleWitBooleanType(type)){
 			Expr elseExp = getExpr(node.getElseExpression());
 			Expr thenExp = getExpr(node.getThenExpression());
-			
+
 			Type elseType = elseExp.getType();
 			Type thenType = thenExp.getType();
-			
+
 			if (elseType.isCompatible(thenType, typeFactory) && thenType.isCompatible(elseType, typeFactory)){
 				setExpr(this.expFactory.createCondExpr(exp, thenExp, elseExp));
 			} else setExprToHole();
-			
+
 		} else setExprToHole();
-		
+
 		return false;
 	}
-	
+
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
 		Expr exp = getExpr(node.getExpression());
@@ -271,9 +246,9 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 			ClassInfo classInfo = refType.getClassInfo();
 			if(classInfo != null){
 				Declaration[] fields = classInfo.getAllFields();
-				
+
 				Declaration field = getFirstCompatible(fields, name);
-				
+
 				//TODO: Fix this such that field "null"
 				//This might be because many methods have same name diff args and they are filtered/masked
 				if (field != null){
@@ -292,16 +267,16 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 	public boolean visit(InfixExpression node){
 		Expr leftExpr = getExpr(node.getLeftOperand());
 		Expr rightExpr = getExpr(node.getRightOperand());
-		
+
 		Type leftType = leftExpr.getType();
 		Type rightType = rightExpr.getType();
-		
+
 		if(leftType.isCompatible(rightType, typeFactory) && rightType.isCompatible(leftType, typeFactory)){
 			InfixExpression.Operator operator = node.getOperator();
 
 			setExpr(this.expFactory.createInfixOperator(operator, leftExpr, rightExpr));
 		} else setExprToHole();
-		
+
 		return false;
 	}
 
@@ -309,16 +284,16 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		Expr exp = getExpr(node.getLeftOperand());
 		ReferenceType referenceType = this.typeBuilder.createReferenceType(node.getRightOperand());
 		setExpr(this.expFactory.createInstOfExpr(exp, referenceType));
-		
+
 		return false;
 	}
 
 	public boolean visit(MethodInvocation node) {
 		String name = node.getName().getIdentifier();
 		Expr exp = getExpr(node.getExpression());
-		
+
 		Type type = exp.getType();
-		
+
 		if (type instanceof ReferenceType){
 			ReferenceType refType = (ReferenceType) type;
 			ClassInfo classInfo = refType.getClassInfo();
@@ -329,20 +304,22 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 				Type[] argTypes = getTypes(args);
 				Declaration method = getFirstCompatible(compatible, argTypes, typeFactory);
 
-				
+
 				//System.out.println("Name: "+name);
 				//System.out.println(Arrays.toString(compatible));
-				
+
 				//System.out.println(classInfo.getName() +"  "+Arrays.toString(argTypes));
-				
+
 				//TODO: Fix this such that method is never "null"
 				if (method != null)
-				   setExpr(expFactory.createMethodInvocation(method, exp, args));
-				else setExprToHole();
+					setExpr(expFactory.createMethodInvocation(method, exp, args));
+				else {
+					setExprToHole();
+				}
 			} else setExprToHole();
 
 		} else setExprToHole();
-		
+
 
 		return false;
 	}
@@ -351,7 +328,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		setExpr(expFactory.createNullLiteral(typeFactory.createNullType()));
 		return false;
 	}
-	
+
 	//Find exactly which number literal, i.e., its type.
 	public boolean visit(NumberLiteral node){
 		setExpr(expFactory.createNumberLiteral(node.getToken(), typeFactory.createPrimitiveType("int")));
@@ -424,7 +401,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		return false;
 	}	
 
-    public boolean visit(SuperMethodInvocation node) {
+	public boolean visit(SuperMethodInvocation node) {
 		setExprToHole();
 		return false;
 	}
@@ -438,44 +415,44 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		setExprToHole();
 		return false;
 	}
-	
-// ---------------------------------------------------------------------- private methods ---------------------------------------------------------------	
+
+	// ---------------------------------------------------------------------- private methods ---------------------------------------------------------------	
 
 	private boolean compatibleWitBooleanType(Type type) {
 		return typeFactory.createPrimitiveType("boolean").isCompatible(type, typeFactory);
 	}	
 	private boolean compatibleWitBooleanType(Type[] argTypes) {
 		PrimitiveType boolType = typeFactory.createPrimitiveType("boolean");
-		
+
 		for (Type type : argTypes) {
 			if(!boolType.isCompatible(type, typeFactory)) return false;
 		}
-		
+
 		return true;
 	}
 
 	private boolean compatibleWithIntType(Type[] argTypes) {
 		PrimitiveType intType = typeFactory.createPrimitiveType("int");
-		
+
 		for (Type type : argTypes) {
 			if(!intType.isCompatible(intType, typeFactory)) return false;
 		}
-		
+
 		return true;
 	}
 
 	private Declaration[] getAllCompatible(Declaration[] decls, String name) {
 		List<Declaration> list = new LinkedList<Declaration>();
-		
+
 		for (Declaration decl : decls) {
 			if (decl.getSimpleName().equals(name)){
 				list.add(decl);
 			}
 		}
-		
+
 		return list.toArray(new Declaration[list.size()]);
 	}	
-	
+
 	private Expr[] getExprs(List<ASTNode> arguments) {
 		int size = arguments.size();
 		Expr[] args = new Expr[size];
@@ -484,13 +461,13 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		}
 		return args;
 	}
-	
+
 	private Declaration getFirstCompatible(Declaration[] decls, String name) {
-		
+
 		for (Declaration decl : decls) {
 			if (decl.getSimpleName().equals(name)) return decl;
 		}
-		
+
 		return null;
 	}
 
@@ -502,7 +479,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 		}
 		return null;
 	}
-	
+
 	private Type[] getTypes(Expr[] exprs) {
 		Type[] types = new Type[exprs.length];
 

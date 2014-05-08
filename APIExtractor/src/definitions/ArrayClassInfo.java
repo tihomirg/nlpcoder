@@ -1,15 +1,6 @@
 package definitions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import org.apache.bcel.classfile.Field;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.internal.core.CreateMethodOperation;
-
 import selection.types.ConstType;
 import selection.types.InitialTypeFactory;
 import selection.types.ReferenceType;

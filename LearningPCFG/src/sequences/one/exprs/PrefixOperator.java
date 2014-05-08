@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
 
+import selection.types.Type;
 import util.Pair;
 
 
@@ -12,8 +13,8 @@ public class PrefixOperator extends Expr {
 	private Operator op;
 	private Expr exp;
 	
-	public PrefixOperator(PrefixExpression.Operator operator, Expr expr) {
-		super(expr.getType());
+	public PrefixOperator(PrefixExpression.Operator operator, Expr expr, Type type) {
+		super(type);
 		this.op = operator;
 		this.exp = expr;
 	}
@@ -25,7 +26,7 @@ public class PrefixOperator extends Expr {
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.PrefixOperator+"("+op+")";
+		return ExprConsts.PrefixOperator+"("+op+")("+type+")";
 	}
 
 	@Override

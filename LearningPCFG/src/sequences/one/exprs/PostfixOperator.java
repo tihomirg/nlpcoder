@@ -24,7 +24,7 @@ public class PostfixOperator extends Expr {
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.PostfixOperator+"("+op+")";		
+		return ExprConsts.PostfixOperator+"("+op+")("+type+")";		
 	}
 
 	@Override

@@ -23,12 +23,12 @@ public class InstanceMethodInvocation extends Expr{
 
 	@Override
 	public String toString() {
-		return exp+"."+method.getName()+ "("+Arrays.toString(args) + ")";
+		return exp+"."+method.getLongName()+ "("+Arrays.toString(args) + ")";
 	}
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.InstanceMethodInvocation+"("+method.getName()+")";
+		return ExprConsts.InstanceMethodInvocation+"("+method.getLongName()+")";
 	}
 
 	@Override

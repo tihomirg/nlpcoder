@@ -64,7 +64,11 @@ public class Declaration implements Serializable, Cloneable {
 
 	private String getShortName(String name) {
 		return name.substring(name.lastIndexOf(".")+1);
-	}	
+	}
+	
+	public String getLongName(){
+		return this.clazz +"."+ this.name;
+	}
 
 	public int getArgNum() {
 		return argNum;

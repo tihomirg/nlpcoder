@@ -23,6 +23,6 @@ public class CompositionBoundedScanner extends BoundedScanner {
 		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
 		File output = new File("stat.txt");
 		
-		scan(builder, input, output, 10000, 10, true);		
+		scan(builder, input, output, 100000, 10, true);		
 	}
 }
