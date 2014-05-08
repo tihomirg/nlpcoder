@@ -3,7 +3,7 @@ package instructions;
 import java.util.LinkedList;
 import java.util.List;
 
-import selection.types.Type;
+import types.Type;
 import util.Pair;
 
 public abstract class Expr {

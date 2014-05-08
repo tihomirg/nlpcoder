@@ -5,8 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
 
 public class Group {
 	private Map<String, RichDeclarations> map = new HashMap<String, RichDeclarations>();

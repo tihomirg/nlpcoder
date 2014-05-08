@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.dom.PostfixExpression.Operator;
 
-import selection.types.Type;
+import types.Type;
 import definitions.Declaration;
 
 public class PostfixOperator extends Symbol {

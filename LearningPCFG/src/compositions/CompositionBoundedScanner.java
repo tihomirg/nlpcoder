@@ -1,12 +1,14 @@
 package compositions;
 
 import java.io.File;
+
+import config.Config;
+
+import deserializers.Deserializer;
 import api.StabileAPI;
 import builders.IBuilder;
 import scanners.BoundedScanner;
-import selection.Config;
-import selection.deserializers.Deserializer;
-import selection.types.NameGenerator;
+import types.NameGenerator;
 
 public class CompositionBoundedScanner extends BoundedScanner {
 	public static void main(String[] args) {

@@ -5,7 +5,7 @@ import java.util.List;
 
 import definitions.Declaration;
 
-import selection.types.Type;
+import types.Type;
 import util.Pair;
 
 public class ConstructorInvocation extends Expr{

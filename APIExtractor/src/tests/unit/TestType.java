@@ -5,19 +5,20 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import config.Config;
+
 import api.StabileAPI;
 
 import definitions.ClassInfo;
+import deserializers.Deserializer;
 
-import selection.Config;
-import selection.deserializers.Deserializer;
-import selection.types.BoxedType;
-import selection.types.ConstType;
-import selection.types.NameGenerator;
-import selection.types.PolymorphicType;
-import selection.types.PrimitiveType;
-import selection.types.StabileTypeFactory;
-import selection.types.Type;
+import types.BoxedType;
+import types.ConstType;
+import types.NameGenerator;
+import types.PolymorphicType;
+import types.PrimitiveType;
+import types.StabileTypeFactory;
+import types.Type;
 
 public class TestType {
 

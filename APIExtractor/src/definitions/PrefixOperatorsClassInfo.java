@@ -2,10 +2,10 @@ package definitions;
 
 import org.eclipse.jdt.core.dom.PostfixExpression.Operator;
 
-import selection.types.InitialTypeFactory;
-import selection.types.ReferenceType;
-import selection.types.Type;
-import selection.types.Variable;
+import types.InitialTypeFactory;
+import types.ReferenceType;
+import types.Type;
+import types.Variable;
 
 public class PrefixOperatorsClassInfo extends ClassInfo {
 	

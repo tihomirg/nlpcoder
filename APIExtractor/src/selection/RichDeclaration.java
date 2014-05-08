@@ -1,6 +1,6 @@
 package selection;
 
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
 import selection.scorers.Scorer;
 
 import definitions.Declaration;

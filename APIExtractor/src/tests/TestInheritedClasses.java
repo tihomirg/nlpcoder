@@ -9,18 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nlp.extractors.WordExtractorEmpty;
+
 import org.apache.bcel.classfile.ClassParser;
+
+import config.Config;
 
 import api.InitialAPI;
 
-import selection.Config;
-import selection.WordExtractorEmpty;
-import selection.types.InitialTypeFactory;
-import selection.types.NameGenerator;
-import selection.types.PolymorphicType;
-import selection.types.StabileTypeFactory;
-import selection.types.Type;
-import selection.types.TypeFactory;
+import types.InitialTypeFactory;
+import types.NameGenerator;
+import types.PolymorphicType;
+import types.StabileTypeFactory;
+import types.Type;
+import types.TypeFactory;
 
 import definitions.ClassInfo;
 import definitions.Declaration;

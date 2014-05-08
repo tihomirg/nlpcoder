@@ -1,12 +1,13 @@
 package definitions;
 
 import java.util.List;
-import selection.types.ConstType;
-import selection.types.InitialTypeFactory;
-import selection.types.ReferenceType;
-import selection.types.Substitution;
-import selection.types.Type;
-import selection.types.Variable;
+
+import types.ConstType;
+import types.InitialTypeFactory;
+import types.ReferenceType;
+import types.Substitution;
+import types.Type;
+import types.Variable;
 
 public class ArrayClassInfo extends ClassInfo {
 

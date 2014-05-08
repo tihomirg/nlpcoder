@@ -1,6 +1,6 @@
 package selection.scorers;
 
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
 
 public class DeclFreqModelScorer extends Scorer {
 

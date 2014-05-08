@@ -1,6 +1,6 @@
 package selection.scorers;
 
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
 
 public abstract class DecorateScorer extends Scorer {
 

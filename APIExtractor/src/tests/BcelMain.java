@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nlp.extractors.WordExtractorEmpty;
+
 import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.Field;
@@ -21,14 +23,14 @@ import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.ReferenceType;
 import org.eclipse.jdt.core.Signature;
 
+import config.Config;
+
 import api.InitialAPI;
 
-import selection.Config;
-import selection.WordExtractorEmpty;
-import selection.types.InitialTypeFactory;
-import selection.types.NameGenerator;
-import selection.types.Type;
-import selection.types.TypeFactory;
+import types.InitialTypeFactory;
+import types.NameGenerator;
+import types.Type;
+import types.TypeFactory;
 
 
 import definitions.ClassInfo;

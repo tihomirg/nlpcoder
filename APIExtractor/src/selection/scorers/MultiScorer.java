@@ -2,7 +2,8 @@ package selection.scorers;
 
 import java.util.Arrays;
 
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
+
 
 public class MultiScorer extends Scorer{
 	private Scorer[] scorers;

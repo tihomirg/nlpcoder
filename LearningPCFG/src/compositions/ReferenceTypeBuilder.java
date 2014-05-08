@@ -16,10 +16,10 @@ import api.Imported;
 
 import definitions.ClassInfo;
 
-import selection.types.PolymorphicType;
-import selection.types.ReferenceType;
-import selection.types.Type;
-import selection.types.TypeFactory;
+import types.PolymorphicType;
+import types.ReferenceType;
+import types.Type;
+import types.TypeFactory;
 
 public class ReferenceTypeBuilder extends ASTVisitor {
 

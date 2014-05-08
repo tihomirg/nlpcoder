@@ -3,7 +3,7 @@ package statistics.definition;
 import java.util.LinkedList;
 import java.util.List;
 
-import selection.types.Type;
+import types.Type;
 
 public class Sequence {
 

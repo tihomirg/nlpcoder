@@ -8,18 +8,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
 
 public class GroupScorer extends Scorer {
-
+	
 	private Map<String, List<Word>> lemmas;
 	private Map<Integer, Map<Integer, Set<Integer>>> hits; 
 	private Map<Integer, Double> scores;
 
-	public GroupScorer(Word[] words, Map<Integer, Double> scores) {
+	public GroupScorer(Word[] words) {
 		this.lemmas = make(words);
 		this.hits = new HashMap<Integer, Map<Integer,Set<Integer>>>();
-		this.scores = scores;
+		this.scores = new HashMap<Integer, Double>(){ {put(0, 5.0); put(1, 1.0);}};
 	}
 
 	private Map<String, List<Word>> make(Word[] words) {

@@ -6,8 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import selection.parser.one.Word;
-import selection.parser.two.ConstituentTwo;
+import config.Config;
+
+import nlp.parser.one.Word;
+import nlp.parser.two.ConstituentTwo;
+
 import selection.scorers.DeclFreqModelScorer;
 import selection.scorers.FrequencyScorer;
 import selection.scorers.GroupScorer;
@@ -74,7 +77,7 @@ public class Selection {
 		RichDeclaration rd = new RichDeclaration(decl, 
 				new MultiScorer(new Scorer[]{
 						new IntervalScorer(),
-						new GroupScorer(words, selection.scorers.config.Config.getScores()),
+						new GroupScorer(words), //Set group priorities in this constructor
 						new MissScorer(new HitScorer(), Config.getNullProbability(), words.length),
 						new DeclFreqModelScorer(fMap.getProbability(decl.getId()))		
 				})

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 
-import selection.types.Type;
+import types.Type;
 import definitions.Declaration;
 
 public class InfixOperator extends Symbol {

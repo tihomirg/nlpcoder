@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import definitions.Declaration;
-
 public class DeclFreqMap {
 
 	private Map<Integer, Double> freq; 

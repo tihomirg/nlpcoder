@@ -3,12 +3,14 @@ package scanners;
 import java.io.File;
 import java.util.Collection;
 
+import config.Config;
+
+import deserializers.Deserializer;
+
 import api.StabileAPI;
 import builders.DeclFreqBuilder;
 import builders.IBuilder;
-import selection.Config;
-import selection.deserializers.Deserializer;
-import selection.types.NameGenerator;
+import types.NameGenerator;
 
 public class DeclFreqBoundedScanner extends BoundedScanner {
 	public static void main(String[] args) {

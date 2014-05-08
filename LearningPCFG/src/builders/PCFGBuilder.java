@@ -92,10 +92,10 @@ import definitions.Declaration;
 import scopes.NameScopes;
 import scopes.EvalScopes;
 import scopes.ScopesKeyValue;
-import selection.types.TypeFactory;
 import statistics.Statistics;
 import symbol.Factory;
 import symbol.Symbol;
+import types.TypeFactory;
 
 public class PCFGBuilder extends ASTVisitor implements IBuilder {
 

@@ -5,7 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
+
 
 public class HitScorer extends Scorer {
 

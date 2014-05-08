@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import nlp.parser.one.Word;
+
 import definitions.Declaration;
 
 import edu.mit.jwi.item.POS;
 
-import selection.parser.one.Word;
 
 public class Table {
 	private Map<POS,Group> groups;

@@ -1,7 +1,7 @@
 package symbol;
 import java.util.Set;
 
-import selection.types.Type;
+import types.Type;
 import definitions.Declaration;
 
 public abstract class Symbol {

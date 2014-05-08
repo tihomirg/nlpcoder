@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import nlp.parser.one.Word;
+
 import edu.mit.jwi.item.POS;
-import selection.parser.one.Word;
 
 public class FrequencyScorer extends Scorer {
 	

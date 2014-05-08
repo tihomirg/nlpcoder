@@ -8,10 +8,10 @@ import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import definitions.Declaration;
-import selection.types.PrimitiveType;
-import selection.types.ReferenceType;
-import selection.types.Type;
-import selection.types.StabileTypeFactory;
+import types.PrimitiveType;
+import types.ReferenceType;
+import types.StabileTypeFactory;
+import types.Type;
 
 public class ExprFactory {
 	private final Expr hole;

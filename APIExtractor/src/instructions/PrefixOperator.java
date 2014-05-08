@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
 
-import selection.types.Type;
+import types.Type;
 import util.Pair;
 
 

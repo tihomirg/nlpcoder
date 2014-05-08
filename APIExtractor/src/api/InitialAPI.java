@@ -11,7 +11,7 @@ import org.apache.bcel.classfile.JavaClass;
 import definitions.ArrayClassInfo;
 import definitions.ClassInfo;
 
-import selection.types.InitialTypeFactory;
+import types.InitialTypeFactory;
 
 public class InitialAPI {
 	

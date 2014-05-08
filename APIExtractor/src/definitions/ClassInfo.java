@@ -17,13 +17,13 @@ import org.eclipse.jdt.core.Signature;
 
 import api.InitialAPI;
 
-import selection.types.InitialTypeFactory;
-import selection.types.ReferenceType;
-import selection.types.StabileTypeFactory;
-import selection.types.Substitution;
-import selection.types.Type;
-import selection.types.TypeFactory;
-import selection.types.Unifier;
+import types.InitialTypeFactory;
+import types.ReferenceType;
+import types.StabileTypeFactory;
+import types.Substitution;
+import types.Type;
+import types.TypeFactory;
+import types.Unifier;
 
 public class ClassInfo implements Serializable {
 

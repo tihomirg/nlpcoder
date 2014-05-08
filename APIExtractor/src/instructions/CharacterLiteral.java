@@ -2,7 +2,7 @@ package instructions;
 
 import java.util.List;
 
-import selection.types.PrimitiveType;
+import types.PrimitiveType;
 import util.Pair;
 
 public class CharacterLiteral extends Expr {

@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import selection.parser.one.Word;
-import selection.types.StabileTypeFactory;
-import selection.types.Type;
+import nlp.parser.one.Word;
+
+import types.StabileTypeFactory;
+import types.Type;
 
 public class Declaration implements Serializable, Cloneable {
 

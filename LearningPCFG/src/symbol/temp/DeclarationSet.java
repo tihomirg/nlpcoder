@@ -4,8 +4,8 @@ import java.util.Set;
 
 import definitions.Declaration;
 
-import selection.types.Type;
 import symbol.Symbol;
+import types.Type;
 
 public class DeclarationSet extends Symbol {
 

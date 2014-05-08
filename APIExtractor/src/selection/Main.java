@@ -2,16 +2,22 @@ package selection;
 
 import java.util.Scanner;
 
-import selection.deserializers.Deserializer;
-import selection.deserializers.FrequencyDeserializer;
-import selection.parser.minusone.ParserMinusOne;
-import selection.parser.minusone.SentenceMinusOne;
-import selection.parser.one.ParserOne;
-import selection.parser.three.ParserThree;
-import selection.parser.two.ConstituentTwo;
-import selection.parser.two.ParserTwo;
-import selection.parser.two.SentenceTwo;
-import selection.probability.designers.ScoreDesigner;
+import config.Config;
+
+import nlp.parser.IParser;
+import nlp.parser.ParserPipeline;
+import nlp.parser.minusone.ParserMinusOne;
+import nlp.parser.minusone.SentenceMinusOne;
+import nlp.parser.one.ParserOne;
+import nlp.parser.three.ParserThree;
+import nlp.parser.two.ConstituentTwo;
+import nlp.parser.two.ParserTwo;
+import nlp.parser.two.SentenceTwo;
+import nlp.processors.WordProcessor;
+
+import deserializers.Deserializer;
+import deserializers.FrequencyDeserializer;
+
 
 public class Main {
 	private static SentenceTwo parse(String sentence, WordProcessor wordProcessor) {

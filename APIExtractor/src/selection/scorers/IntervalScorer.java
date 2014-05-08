@@ -4,8 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import nlp.parser.one.Word;
 
-import selection.parser.one.Word;
+
 
 public class IntervalScorer extends Scorer{
 

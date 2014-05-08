@@ -11,9 +11,9 @@ import org.eclipse.jdt.core.dom.WildcardType;
 
 import api.Imported;
 
-import selection.types.ReferenceType;
-import selection.types.Type;
-import selection.types.TypeFactory;
+import types.ReferenceType;
+import types.Type;
+import types.TypeFactory;
 
 public class TypeBuilder extends ASTVisitor {
 
@@ -78,7 +78,7 @@ public class TypeBuilder extends ASTVisitor {
 		return false;
 	}
 
-	public selection.types.Type createArrayType(org.eclipse.jdt.core.dom.Type type, int dimensions) {
+	public types.Type createArrayType(org.eclipse.jdt.core.dom.Type type, int dimensions) {
 		return this.rtb.createArrayType(dimensions, type);
 	}
 }

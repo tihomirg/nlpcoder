@@ -5,8 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import selection.parser.one.Word;
-import selection.parser.two.ConstituentTwo;
+import nlp.parser.one.Word;
+import nlp.parser.two.ConstituentTwo;
+
 
 public class TopList {
 

@@ -1,11 +1,12 @@
 package simulations;
 import java.util.Arrays;
+
+import config.Config;
 import api.Imported;
 import api.StabileAPI;
 import definitions.ClassInfo;
-import selection.Config;
-import selection.deserializers.Deserializer;
-import selection.types.NameGenerator;
+import deserializers.Deserializer;
+import types.NameGenerator;
 
 public class TestDefaultImport {
 	public static void main(String[] args) {

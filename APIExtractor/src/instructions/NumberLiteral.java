@@ -2,7 +2,7 @@ package instructions;
 
 import java.util.List;
 
-import selection.types.Type;
+import types.Type;
 import util.Pair;
 
 public class NumberLiteral extends Expr {

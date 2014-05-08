@@ -41,10 +41,10 @@ import api.Imported;
 import builders.SingleNodeVisitor;
 import scopes.NameScopes;
 import scopes.ScopesKeyValue;
-import selection.types.PrimitiveType;
-import selection.types.ReferenceType;
-import selection.types.StabileTypeFactory;
-import selection.types.Type;
+import types.PrimitiveType;
+import types.ReferenceType;
+import types.StabileTypeFactory;
+import types.Type;
 import util.Pair;
 
 
@@ -56,7 +56,7 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 	private ExprFactory expFactory;
 	private TypeBuilder typeBuilder;	
 
-	private ScopesKeyValue<String, Pair<String, selection.types.Type>> locals;
+	private ScopesKeyValue<String, Pair<String, types.Type>> locals;
 	private NameScopes params;
 
 	private Expr expr;	

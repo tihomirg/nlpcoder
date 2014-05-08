@@ -6,9 +6,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import selection.types.InitialTypeFactory;
-import selection.types.NameGenerator;
-import selection.types.StabileTypeFactory;
+
+import types.InitialTypeFactory;
+import types.NameGenerator;
+import types.StabileTypeFactory;
 import definitions.ClassInfo;
 import definitions.Declaration;
 

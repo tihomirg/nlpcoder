@@ -3,7 +3,8 @@ package selection;
 import java.util.HashSet;
 import java.util.Set;
 
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
+
 
 public class RichDeclarations {
 	

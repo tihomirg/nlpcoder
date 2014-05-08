@@ -71,10 +71,10 @@ import scopes.NameScopes;
 import scopes.ScopeKeyValue;
 import scopes.ScopesKeyValue;
 import scopes.SimpleEvalScopes;
-import selection.types.ReferenceType;
-import selection.types.StabileTypeFactory;
 import statistics.CompositionStatistics;
 import symbol.Symbol;
+import types.ReferenceType;
+import types.StabileTypeFactory;
 import util.Pair;
 
 public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
@@ -83,7 +83,7 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 	private NameScopes methods;
 	private NameScopes fields;
 	private Imported imported;
-	private ScopesKeyValue<String, Pair<String, selection.types.Type>> locals;
+	private ScopesKeyValue<String, Pair<String, types.Type>> locals;
 	private NameScopes params;
 	private StabileAPI api;
 	private ExpressionBuilder expBuilder;
@@ -93,7 +93,7 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 		this.statistics  = new CompositionStatistics();
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
-		this.locals = new ScopesKeyValue<String, Pair<String, selection.types.Type>>();
+		this.locals = new ScopesKeyValue<String, Pair<String, types.Type>>();
 		this.params = new NameScopes();
 		this.api = api;
 	}
@@ -359,7 +359,7 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 				VariableDeclarationFragment fragment = (VariableDeclarationFragment) astNode;
 				Type type = node.getType();
 				int dimensions = fragment.getExtraDimensions();				
-				selection.types.Type type2 = typeBuilder.createArrayType(type, dimensions);
+				types.Type type2 = typeBuilder.createArrayType(type, dimensions);
 
 				Pair value = new Pair(eval(fragment.getInitializer()), type2);
 				String name = fragment.getName().getIdentifier();
@@ -385,7 +385,7 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 				int dimensions = fragment.getExtraDimensions();
 				
 				Type type = node.getType();
-				selection.types.Type type2 = typeBuilder.createArrayType(type, dimensions);
+				types.Type type2 = typeBuilder.createArrayType(type, dimensions);
 				
 				Pair value = new Pair(eval(fragment.getInitializer()), type2);
 				String name = fragment.getName().getIdentifier();

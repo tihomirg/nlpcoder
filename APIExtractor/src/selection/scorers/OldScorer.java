@@ -3,7 +3,8 @@ package selection.scorers;
 import java.util.HashMap;
 import java.util.Map;
 
-import selection.parser.one.Word;
+import nlp.parser.one.Word;
+
 
 public class OldScorer extends Scorer {
 
