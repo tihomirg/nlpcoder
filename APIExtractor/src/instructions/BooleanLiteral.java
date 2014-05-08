@@ -1,32 +1,36 @@
-package sequences.one.exprs;
+package instructions;
 
 import java.util.List;
 
 import selection.types.Type;
 import util.Pair;
 
-public class NullLiteral extends Expr {
+public class BooleanLiteral extends Expr {
 
-	public NullLiteral(Type type) {
+	private boolean value;
+
+	public BooleanLiteral(boolean value, Type type) {
 		super(type);
+		this.value = value;
 	}
 
 	@Override
 	public String toString() {
-		return ExprConsts.NullLiteral;
+		return Boolean.toString(value);
 	}
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.NullLiteral;
+		return ExprConsts.BooleanLiteral;
 	}
 
 	@Override
 	protected String representation() {
-		return ExprConsts.NullLiteral;
+		return Boolean.toString(this.value);
 	}
-	
+
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
-	}	
+	}
+	
 }

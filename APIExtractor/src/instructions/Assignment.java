@@ -1,32 +1,35 @@
-package sequences.one.exprs;
+package instructions;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.InfixExpression.Operator;
+import org.eclipse.jdt.core.dom.Assignment.Operator;
 
-import selection.types.Type;
 import util.Pair;
 
-public class InfixOperator extends Expr{
-	private Operator op;
+public class Assignment extends Expr {
+
 	private Expr lexp;
 	private Expr rexp;
+	private Operator op;
 
-	public InfixOperator(Operator operator, Expr leftExpr, Expr rightExpr, Type type) {
-		super(type);
+	public Assignment(Operator operator, Expr leftExp, Expr rightExp) {
+		super(leftExp.getType());
+
 		this.op = operator;
-		this.lexp = leftExpr;
-		this.rexp = rightExpr;
+		this.lexp = leftExp;
+		this.rexp = rightExp;
+		
 	}
 
 	@Override
 	public String toString() {
-		return lexp + " " + op + " " + rexp;
+		return lexp +" "+op+" "+ rexp;
 	}
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.InfixOperator+"("+op+")("+type+")";
+		return ExprConsts.Assignment+"("+op+")";
 	}
 
 	@Override
@@ -39,4 +42,5 @@ public class InfixOperator extends Expr{
 		list.addAll(lexp.longReps());
 		list.addAll(rexp.longReps());
 	}
+	
 }

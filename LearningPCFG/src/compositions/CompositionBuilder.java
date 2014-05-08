@@ -1,4 +1,7 @@
-package sequences;
+package compositions;
+
+import instructions.Expr;
+import instructions.Variable;
 
 import java.io.PrintStream;
 import java.util.LinkedList;
@@ -70,9 +73,6 @@ import scopes.ScopesKeyValue;
 import scopes.SimpleEvalScopes;
 import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
-import sequences.one.builders.ExpressionBuilder;
-import sequences.one.exprs.Expr;
-import sequences.one.exprs.Variable;
 import statistics.CompositionStatistics;
 import symbol.Symbol;
 import util.Pair;

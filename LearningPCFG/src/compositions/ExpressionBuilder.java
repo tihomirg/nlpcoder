@@ -1,4 +1,8 @@
-package sequences.one.builders;
+package compositions;
+
+import instructions.Expr;
+import instructions.ExprFactory;
+import instructions.Variable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,10 +45,6 @@ import selection.types.PrimitiveType;
 import selection.types.ReferenceType;
 import selection.types.StabileTypeFactory;
 import selection.types.Type;
-import sequences.TypeBuilder;
-import sequences.one.exprs.Expr;
-import sequences.one.exprs.ExprFactory;
-import sequences.one.exprs.Variable;
 import util.Pair;
 
 

@@ -1,4 +1,4 @@
-package sequences;
+package compositions;
 
 import java.io.File;
 import api.StabileAPI;

@@ -1,32 +1,32 @@
-package sequences.one.exprs;
+package instructions;
 
 import java.util.List;
 
-import selection.types.PrimitiveType;
+import selection.types.Type;
 import util.Pair;
 
-public class CharacterLiteral extends Expr {
+public class StringLiteral extends Expr {
 
-	private char value;
+	private String value;
 
-	public CharacterLiteral(char value, PrimitiveType type) {
+	public StringLiteral(String value, Type type) {
 		super(type);
 		this.value = value;
 	}
 
 	@Override
 	public String toString() {
-		return Character.toString(value);
+		return value;
 	}
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.CharacterLiteral;
+		return ExprConsts.StringLiteral;
 	}
 
 	@Override
 	protected String representation() {
-		return Character.toString(value);
+		return "("+value+")";
 	}
 	
 	@Override

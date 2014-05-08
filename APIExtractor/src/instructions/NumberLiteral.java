@@ -1,35 +1,34 @@
-package sequences.one.exprs;
+package instructions;
 
 import java.util.List;
 
 import selection.types.Type;
 import util.Pair;
 
-public class Hole extends Expr{
+public class NumberLiteral extends Expr {
 
-	public Hole(){
-		super(null);
-	}
-	
-	public Hole(Type type) {
+	private String number;
+
+	public NumberLiteral(String number, Type type) {
 		super(type);
+		this.number = number;
 	}
 
 	@Override
 	public String toString() {
-		return "hole("+type+")";
+		return number;
 	}
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.Hole;
+		return ExprConsts.NumberLiteral;
 	}
 
 	@Override
 	protected String representation() {
-		return "";
-	}
-
+		return number;
+	}	
+	
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
 	}	

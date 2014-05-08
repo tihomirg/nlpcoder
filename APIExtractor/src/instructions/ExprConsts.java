@@ -1,4 +1,4 @@
-package sequences.one.exprs;
+package instructions;
 
 public class ExprConsts {
 

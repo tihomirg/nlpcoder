@@ -1,37 +1,46 @@
-package sequences.one.exprs;
+package instructions;
 
 import java.util.List;
 
 import selection.types.Type;
 import util.Pair;
 
-public class CastExpr extends Expr {
+public class InstOfExpr extends Expr {
 
 	private Expr exp;
+	private Type checkType;
 
-	public CastExpr(Type type, Expr exp) {
+	public InstOfExpr(Expr exp, Type checkType, Type type) {
 		super(type);
+		this.exp = exp;
+		this.checkType = checkType;
+	}
+
+	public Expr getExp() {
+		return exp;
+	}
+
+	public void setExp(Expr exp) {
 		this.exp = exp;
 	}
 
 	@Override
 	public String toString() {
-		return "("+type+")"+ exp;
+		return exp +" instanceof "+checkType;
 	}
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.CastExpr+"("+type.getPrefix()+")";
+		return ExprConsts.InstOfExpr+"("+checkType.getPrefix()+")";
 	}
 
 	@Override
 	protected String representation() {
 		return exp.shortRep();
 	}
-
+	
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
 		list.addAll(exp.longReps());
-	}
-	
+	}	
 }
