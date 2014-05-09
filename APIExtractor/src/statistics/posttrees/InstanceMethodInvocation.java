@@ -4,13 +4,13 @@ import java.util.List;
 
 import definitions.Declaration;
 
-public class InstanceFieldAccess extends Expr {
+public class InstanceMethodInvocation extends Expr {
 
 	private Declaration decl;
 	private Expr exp;
-	private List<Expr> args;
-
-	public InstanceFieldAccess(Declaration decl) {
+	private List<Expr> args;	
+	
+	public InstanceMethodInvocation(Declaration decl) {
 		this.decl = decl;
 	}
 

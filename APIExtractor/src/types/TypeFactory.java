@@ -27,6 +27,8 @@ public abstract class TypeFactory {
 	private NullType nullType = new NullType();
 	private VoidType voidType = new VoidType();
 
+	protected Map<String, ClassInfo> polyPrefixToClasses = new HashMap<String, ClassInfo>();
+	
 	private ConstType noVarConst = new ConstType(NO_VAR_CONST);
 
 	private static final Set<String> primitiveNames = new HashSet<String>(Arrays.asList(new String[]{"byte", "short", "int", "long", "float", "double", "boolean","char"}));
@@ -119,6 +121,51 @@ public abstract class TypeFactory {
 		return cons.get(name);
 	}
 
+	public Type createTypeByTypePrefix(String typePrefix) {
+		if (isPrimitiveType(typePrefix))
+			return createPrimitiveType(typePrefix);
+		else if(isVoidType(typePrefix))
+			return voidType;
+		else if(isNoType(typePrefix))
+			return noType;
+		else if(isNullType(typePrefix))
+			return nullType;
+		else if(isNoVarConst(typePrefix))
+			return noVarConst;
+		else if(isBoxedType(typePrefix))
+			return createBoxedType(typePrefix);
+		else if(isConstType(typePrefix))
+			return createConstType(typePrefix);
+		else if(isPolyTypeByPrefix(typePrefix)){
+			return createPolyTypeByTypePrefix(typePrefix);
+		} else 
+			return createVariable(typePrefix);
+	}
+	
+	private Type createPolyTypeByTypePrefix(String typePrefix) {
+		return polyPrefixToClasses.get(typePrefix).getType();
+	}
+
+	private boolean isPolyTypeByPrefix(String typePrefix) {
+		return polyPrefixToClasses.containsKey(typePrefix);
+	}
+
+	private boolean isConstType(String typePrefix) {
+		return cons.containsKey(typePrefix);
+	}
+	
+	private boolean isNoVarConst(String typePrefix) {
+		return noVarConst.getPrefix().equals(typePrefix);
+	}
+
+	private boolean isNoType(String typePrefix) {
+		return noType.getPrefix().equals(typePrefix);
+	}
+
+	private boolean isNullType(String typePrefix) {
+		return nullType.getPrefix().equals(typePrefix);
+	}
+	
 	public PolymorphicType createPolymorphicType(String name, Type[] params) {
 	    return createPolymorphicType(name, null, params);
 	}

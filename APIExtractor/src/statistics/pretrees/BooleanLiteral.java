@@ -3,8 +3,10 @@ package statistics.pretrees;
 import static statistics.parsers.Parser.*;
 import java.util.List;
 import statistics.Names;
+import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
 import statistics.parsers.StringResult;
+import types.StabileTypeFactory;
 import types.Type;
 import util.Pair;
 
@@ -28,16 +30,16 @@ public class BooleanLiteral extends Expr {
 	}
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		return Boolean.toString(this.value);
 	}
 
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 	}
 
-	public static SingleResult parseShort(String string) {
-		return new SingleResult(new statistics.posttrees.BooleanLiteral(), removeBooleanLiteral(string));
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
+		return new SingleResult(Parser.createBooleanLiteral(), removeBooleanLiteral(string));
 	}
 	
 }

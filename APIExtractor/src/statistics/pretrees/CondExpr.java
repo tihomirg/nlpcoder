@@ -1,10 +1,13 @@
 package statistics.pretrees;
 
-import java.util.List;
+import static statistics.parsers.Parser.*;
 
+import java.util.List;
 import statistics.Names;
-import statistics.parsers.Result;
+import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
+import statistics.parsers.StringResult;
+import types.StabileTypeFactory;
 import util.Pair;
 
 public class CondExpr extends Expr {
@@ -56,19 +59,18 @@ public class CondExpr extends Expr {
 	}
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		return shortReps(exp, thenExp, elseExp);
 	}
 	
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 		list.addAll(exp.longReps());
 		list.addAll(thenExp.longReps());
 		list.addAll(elseExp.longReps());
 	}
 
-	public static SingleResult parseShort(String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
+		return new SingleResult(createCondExpr(), removeCondExpr(string));
 	}	
 }

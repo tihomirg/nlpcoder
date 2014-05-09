@@ -18,6 +18,7 @@ public class Names {
 	public static final String PostfixOperator = "PostfixOp";
 	public static final String PrefixOperator = "PrefixOp";
 	public static final String StringLiteral = "String";
+	public static final String Variable = "Var";
 	
 	public static final String LPar = "(";
 	public static final String RPar = ")";

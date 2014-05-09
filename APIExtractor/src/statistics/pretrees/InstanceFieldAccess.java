@@ -6,9 +6,11 @@ import java.util.List;
 
 import definitions.Declaration;
 import statistics.Names;
+import statistics.parsers.Parser;
 import statistics.parsers.Result;
 import statistics.parsers.SingleResult;
 import statistics.parsers.StringResult;
+import types.StabileTypeFactory;
 import types.Type;
 import util.Pair;
 
@@ -33,20 +35,20 @@ public class InstanceFieldAccess extends Expr{
 	}
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		return exp.shortRep();
 	}
 
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 		list.addAll(exp.longReps());
 	}
 
-	public static SingleResult parseShort(String string) {
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		String rest = removeLPar(removeInstanceFieldAccess(string));
 		StringResult result = parseStringTillRPar(rest);
 		String fieldName = result.getString();
 		rest = removeRPar(result.getRest());
-		return new SingleResult(new statistics.posttrees.InstanceFieldAccess(fieldName), rest);		
+		return new SingleResult(Parser.createInstanceFieldAccess(fieldName), rest);		
 	}
 }

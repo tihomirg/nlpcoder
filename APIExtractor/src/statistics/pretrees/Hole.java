@@ -1,10 +1,11 @@
 package statistics.pretrees;
 
+import static statistics.parsers.Parser.*;
 import java.util.List;
-
 import statistics.Names;
-import statistics.parsers.Result;
+import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
+import types.StabileTypeFactory;
 import types.Type;
 import util.Pair;
 
@@ -29,16 +30,15 @@ public class Hole extends Expr{
 	}
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		return "";
 	}
 
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 	}
 	
-	public static SingleResult parseShort(String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
+		return new SingleResult(Parser.createHole(), removeHole(string));
 	}	
 }

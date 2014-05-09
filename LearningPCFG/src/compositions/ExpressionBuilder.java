@@ -154,9 +154,16 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 					String name = var.getName();
 					if (isLocalVariable(name)){
 						Pair<String, Type> pair = locals.get(name);
-						pair.setFirst(var.shortRep());
+						pair.setFirst(rightExp.shortRep());
 						pair.setSecond(var.getType());
 					}
+					
+//					if (isLocalVariable(name)){
+//						Pair<String, Type> pair = locals.get(name);
+//						pair.setFirst(var.shortRep());
+//						pair.setSecond(var.getType());
+//					}					
+					
 				}
 
 			}

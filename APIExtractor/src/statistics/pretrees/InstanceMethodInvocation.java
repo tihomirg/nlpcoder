@@ -1,9 +1,6 @@
 package statistics.pretrees;
 
-import static statistics.parsers.Parser.parseStringTillRPar;
-import static statistics.parsers.Parser.removeInstanceFieldAccess;
-import static statistics.parsers.Parser.removeLPar;
-import static statistics.parsers.Parser.removeRPar;
+import static statistics.parsers.Parser.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,9 +8,11 @@ import java.util.List;
 import definitions.Declaration;
 
 import statistics.Names;
+import statistics.parsers.Parser;
 import statistics.parsers.Result;
 import statistics.parsers.SingleResult;
 import statistics.parsers.StringResult;
+import types.StabileTypeFactory;
 import types.Type;
 import util.Pair;
 
@@ -41,7 +40,7 @@ public class InstanceMethodInvocation extends Expr{
 	}
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		Expr[] exprs = new Expr[args.length+1];
 		exprs[0] = exp;
 		System.arraycopy(args, 0, exprs, 1, args.length);
@@ -49,7 +48,7 @@ public class InstanceMethodInvocation extends Expr{
 	}
 	
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 		list.addAll(exp.longReps());
 		
 		for (Expr arg : args) {
@@ -57,11 +56,11 @@ public class InstanceMethodInvocation extends Expr{
 		}
 	}
 
-	public static SingleResult parseShort(String string) {
-		String rest = removeLPar(removeInstanceFieldAccess(string));
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
+		String rest = removeLPar(removeInstanceMethodInvocation(string));
 		StringResult result = parseStringTillRPar(rest);
-		String fieldName = result.getString();
+		String methodName = result.getString();
 		rest = removeRPar(result.getRest());
-		return new SingleResult(new statistics.posttrees.InstanceFieldAccess(fieldName), rest);		
+		return new SingleResult(Parser.createInstanceMethodInvocation(methodName), rest);		
 	}
 }

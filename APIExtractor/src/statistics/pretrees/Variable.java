@@ -2,7 +2,6 @@ package statistics.pretrees;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import types.Type;
 import util.Pair;
 
@@ -39,17 +38,17 @@ public class Variable extends Expr {
 	}	
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		return "";
 	}
 	
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 			
 	}
 	
 	@Override
 	public boolean isVariable() {
 		return true;
-	}
+	}	
 }

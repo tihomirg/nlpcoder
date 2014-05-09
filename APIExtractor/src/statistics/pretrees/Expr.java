@@ -7,6 +7,7 @@ import statistics.Names;
 import statistics.parsers.CompositeResult;
 import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
+import types.StabileTypeFactory;
 import types.Type;
 import util.Pair;
 
@@ -28,19 +29,19 @@ public abstract class Expr {
 	public abstract String shortRep();
 	
 	public Pair<String, String> longRep(){
-		return new Pair(shortRep(), shortRep()+Names.LPar+representation()+Names.RPar);
+		return new Pair(shortRep(), shortRep()+Names.LPar+argReps()+Names.RPar);
 	}
 	
 	public List<Pair<String, String>> longReps(){
 		List<Pair<String, String>> list = new LinkedList<Pair<String, String>>();
 		list.add(longRep());
-		representations(list);
+		longReps(list);
 		return list;
 	}
 
-	protected abstract void representations(List<Pair<String, String>> list);	
+	protected abstract void longReps(List<Pair<String, String>> list);	
 	
-	protected abstract String representation();
+	protected abstract String argReps();
 
 	public static String shortReps(Expr... args){
 		String s = "";
@@ -53,21 +54,21 @@ public abstract class Expr {
 		return s;
 	}
 
-	public static statistics.posttrees.Expr parse(String string) {
-		SingleResult result = parseShort(string);
+	public static statistics.posttrees.Expr parse(String string, StabileTypeFactory tf) {
+		SingleResult result = parseShort(string, tf);
 		statistics.posttrees.Expr expr = result.getExpr();
-		expr.addArgs(parseArgs(result.getRest()).getExprs());
+		expr.addArgs(parseArgs(result.getRest(), tf).getExprs());
 		return expr;
-	}	
+	}
 	
-	public static CompositeResult parseArgs(String string){
+	public static CompositeResult parseArgs(String string, StabileTypeFactory tf){
 		CompositeResult comp = new CompositeResult();
 		if (!Parser.startsWithRPar(string)){
-			SingleResult result = Parser.parseShort(string);
+			SingleResult result = Parser.parseShort(string, tf);
 			String rest = result.getRest();
 			comp.add(result.getExpr());
 			while (!Parser.startsWithRPar(rest)) {
-				result = Parser.parseShort(Parser.removeComma(rest));
+				result = Parser.parseShort(Parser.removeComma(rest), tf);
 				comp.add(result.getExpr());
 				rest = result.getRest();
 			}

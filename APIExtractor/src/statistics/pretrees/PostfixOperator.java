@@ -1,12 +1,15 @@
 package statistics.pretrees;
 
+import static statistics.parsers.Parser.*;
+
 import java.util.List;
-
 import org.eclipse.jdt.core.dom.PostfixExpression.Operator;
-
 import statistics.Names;
-import statistics.parsers.Result;
+import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
+import statistics.parsers.StringResult;
+import types.StabileTypeFactory;
+import types.Type;
 import util.Pair;
 
 public class PostfixOperator extends Expr {
@@ -31,17 +34,24 @@ public class PostfixOperator extends Expr {
 	}
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		return expr.shortRep();
 	}
 	
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 		list.addAll(expr.longReps());
 	}
 
-	public static SingleResult parseShort(String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
+		String rest = removeLPar(removePostfixOperator(string));
+		StringResult result = parseStringTillRPar(rest);
+		String op = result.getString();
+		rest = removeLPar(removeRPar(result.getRest()));
+		result = parseStringTillRPar(rest);
+		String typePrefix = result.getString();
+		Type type = tf.createTypeByTypePrefix(typePrefix);
+		rest = removeRPar(result.getRest());
+		return new SingleResult(Parser.createPostfixOperator(op, type), rest);
 	}	
 }

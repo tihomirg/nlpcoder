@@ -1,5 +1,6 @@
 package statistics.parsers;
 
+import definitions.Declaration;
 import statistics.Names;
 import statistics.posttrees.Expr;
 import statistics.posttrees.StringExpr;
@@ -19,41 +20,46 @@ import statistics.pretrees.NumberLiteral;
 import statistics.pretrees.PostfixOperator;
 import statistics.pretrees.PrefixOperator;
 import statistics.pretrees.StringLiteral;
+import types.StabileTypeFactory;
+import types.Type;
 
 public class Parser {
-	public static Expr parse(String string){
+	private static final Expr HOLE = new statistics.posttrees.Hole();
+	private static final Expr NULL = new statistics.posttrees.NullLiteral();
+
+	public static Expr parse(String string, StabileTypeFactory tf){
 		if (startsWithAssignment(string)){
-			return Assignment.parse(string);
+			return Assignment.parse(string, tf);
 		} else if (startsWithBooleanLiteral(string)) {
-			return BooleanLiteral.parse(string);
+			return BooleanLiteral.parse(string, tf);
 		} else if (startsWithCastExpr(string)) {
-			return CastExpr.parse(string);
+			return CastExpr.parse(string, tf);
 		} else if (startsWithCharacterLiteral(string)) {
-			return CharacterLiteral.parse(string);
+			return CharacterLiteral.parse(string, tf);
 		} else if (startsWithCondExpr(string)) {
-			return CondExpr.parse(string);
+			return CondExpr.parse(string, tf);
 		} else if (startsWithConstructorInvocation(string)) {
-			return ConstructorInvocation.parse(string);
+			return ConstructorInvocation.parse(string, tf);
 		} else if (startsWithHole(string)) {
-			return Hole.parse(string);
+			return Hole.parse(string, tf);
 		} else if (startsWithInfixOperator(string)) {
-			return InfixOperator.parse(string);
+			return InfixOperator.parse(string, tf);
 		} else if (startsWithInstanceFieldAccess(string)) {
-			return InstanceFieldAccess.parse(string);
+			return InstanceFieldAccess.parse(string, tf);
 		} else if (startsWithInstanceMethodInvocation(string)) {
-			return InstanceMethodInvocation.parse(string);
+			return InstanceMethodInvocation.parse(string, tf);
 		} else if (startsWithInstOfExpr(string)) {
-			return InstOfExpr.parse(string);
+			return InstOfExpr.parse(string, tf);
 		} else if (startsWithNullLiteral(string)) {
-			return NullLiteral.parse(string);
+			return NullLiteral.parse(string, tf);
 		} else if (startsWithNumberLiteral(string)) {
-			return NumberLiteral.parse(string);
+			return NumberLiteral.parse(string, tf);
 		} else if (startsWithPostfixOperator(string)) {
-			return PostfixOperator.parse(string);
+			return PostfixOperator.parse(string, tf);
 		} else if (startsWithPrefixOperator(string)) {
-			return PrefixOperator.parse(string);
+			return PrefixOperator.parse(string, tf);
 		} else {//it is startsWithStringLiteral(string)
-			return StringLiteral.parse(string);
+			return StringLiteral.parse(string, tf);
 		}
 	}
 
@@ -202,39 +208,39 @@ public class Parser {
 		return new StringResult(op, string.substring(op.length()));
 	}
 
-	public static SingleResult parseShort(String string) {
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		if (startsWithAssignment(string)){
-			return Assignment.parseShort(string);
+			return Assignment.parseShort(string, tf);
 		} else if (startsWithBooleanLiteral(string)) {
-			return BooleanLiteral.parseShort(string);
+			return BooleanLiteral.parseShort(string, tf);
 		} else if (startsWithCastExpr(string)) {
-			return CastExpr.parseShort(string);
+			return CastExpr.parseShort(string, tf);
 		} else if (startsWithCharacterLiteral(string)) {
-			return CharacterLiteral.parseShort(string);
+			return CharacterLiteral.parseShort(string, tf);
 		} else if (startsWithCondExpr(string)) {
-			return CondExpr.parseShort(string);
+			return CondExpr.parseShort(string, tf);
 		} else if (startsWithConstructorInvocation(string)) {
-			return ConstructorInvocation.parseShort(string);
+			return ConstructorInvocation.parseShort(string, tf);
 		} else if (startsWithHole(string)) {
-			return Hole.parseShort(string);
+			return Hole.parseShort(string, tf);
 		} else if (startsWithInfixOperator(string)) {
-			return InfixOperator.parseShort(string);
+			return InfixOperator.parseShort(string, tf);
 		} else if (startsWithInstanceFieldAccess(string)) {
-			return InstanceFieldAccess.parseShort(string);
+			return InstanceFieldAccess.parseShort(string, tf);
 		} else if (startsWithInstanceMethodInvocation(string)) {
-			return InstanceMethodInvocation.parseShort(string);
+			return InstanceMethodInvocation.parseShort(string, tf);
 		} else if (startsWithInstOfExpr(string)) {
-			return InstOfExpr.parseShort(string);
+			return InstOfExpr.parseShort(string, tf);
 		} else if (startsWithNullLiteral(string)) {
-			return NullLiteral.parseShort(string);
+			return NullLiteral.parseShort(string, tf);
 		} else if (startsWithNumberLiteral(string)) {
-			return NumberLiteral.parseShort(string);
+			return NumberLiteral.parseShort(string, tf);
 		} else if (startsWithPostfixOperator(string)) {
-			return PostfixOperator.parseShort(string);
+			return PostfixOperator.parseShort(string, tf);
 		} else if (startsWithPrefixOperator(string)) {
-			return PrefixOperator.parseShort(string);
+			return PrefixOperator.parseShort(string, tf);
 		} else if (startsWithStringLiteral(string)){
-			return StringLiteral.parseShort(string);
+			return StringLiteral.parseShort(string, tf);
 		} else { //then it is a regular string
 			StringResult result = parseStringTillRPar(string);
 			return new SingleResult(new StringExpr(result.getString()), result.getRest());
@@ -243,5 +249,78 @@ public class Parser {
 
 	public static boolean startsWithRPar(String string) {
 		return string.startsWith(Names.RPar);
+	}
+	
+	
+	
+
+	public static statistics.posttrees.Expr createAssignment(String op) {
+		return new statistics.posttrees.Assignment(op);
+	}
+
+	public static statistics.posttrees.Expr createBooleanLiteral() {
+		return new statistics.posttrees.BooleanLiteral();
+	}
+
+	public static statistics.posttrees.Expr createCastExpr(Type type) {
+		return new statistics.posttrees.CastExpr(type);
+	}
+
+	public static statistics.posttrees.Expr createCharacterLiteral() {
+		return new statistics.posttrees.CharacterLiteral();
+	}	
+	
+	public static statistics.posttrees.Expr createCondExpr() {
+		return new statistics.posttrees.CondExpr();
+	}
+
+	public static statistics.posttrees.Expr createConstructorInvocation(String name) {
+		//TODO: map this string to the declarations.
+		Declaration decl = null;
+		return new statistics.posttrees.ConstructorInvocation(decl);
+	}
+
+	public static statistics.posttrees.Expr createHole() {
+		return HOLE;
+	}
+
+	public static statistics.posttrees.Expr createInfixOperator(String op, Type type) {
+		return new statistics.posttrees.InfixOperator(op, type);
+	}
+
+	public static statistics.posttrees.Expr createInstanceFieldAccess(String fieldName) {
+		//TODO: map this string to the declarations.
+		Declaration decl = null;
+		return new statistics.posttrees.InstanceFieldAccess(decl);
+	}
+
+	public static statistics.posttrees.Expr createInstanceMethodInvocation(String methodName) {
+		//TODO: map this string to the declarations.
+		Declaration decl = null;
+		return new statistics.posttrees.InstanceMethodInvocation(decl);
+	}
+
+	public static statistics.posttrees.Expr createInstOfExpr(Type type) {
+		return new statistics.posttrees.InstOfExpr(type);
+	}
+
+	public static statistics.posttrees.Expr createNullLiteral() {
+		return NULL;
+	}
+
+	public static statistics.posttrees.Expr createNumberLiteral() {
+		return new statistics.posttrees.NumberLiteral();
+	}
+
+	public static statistics.posttrees.Expr createPostfixOperator(String op, Type type) {
+		return new statistics.posttrees.PostfixOperator(op, type);
+	}
+
+	public static statistics.posttrees.Expr createPrefixOperator(String op, Type type) {
+		return new statistics.posttrees.PrefixOperator(op, type);
+	}
+
+	public static statistics.posttrees.Expr createStringLiteral() {
+		return new statistics.posttrees.StringLiteral();
 	}
 }

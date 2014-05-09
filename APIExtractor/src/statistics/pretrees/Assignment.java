@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.Assignment.Operator;
 import statistics.Names;
+import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
 import statistics.parsers.StringResult;
+import types.StabileTypeFactory;
 import util.Pair;
 
 public class Assignment extends Expr {
@@ -36,21 +38,21 @@ public class Assignment extends Expr {
 	}
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		return shortReps(lexp, rexp);
 	}
 
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 		list.addAll(lexp.longReps());
 		list.addAll(rexp.longReps());
 	}
 
-	public static SingleResult parseShort(String string) {
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		String rest = removeLPar(removeAssignment(string));
 		StringResult result = parseStringTillRPar(rest);
 		String op = result.getString();
 		rest = removeRPar(result.getRest());
-		return new SingleResult(new statistics.posttrees.Assignment(op), rest);
+		return new SingleResult(createAssignment(op), rest);
 	}
 }

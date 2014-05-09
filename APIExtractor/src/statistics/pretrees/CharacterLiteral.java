@@ -1,11 +1,12 @@
 package statistics.pretrees;
 
+import static statistics.parsers.Parser.*;
 import java.util.List;
-
 import statistics.Names;
-import statistics.parsers.Result;
+import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
 import types.PrimitiveType;
+import types.StabileTypeFactory;
 import util.Pair;
 
 public class CharacterLiteral extends Expr {
@@ -28,16 +29,15 @@ public class CharacterLiteral extends Expr {
 	}
 
 	@Override
-	protected String representation() {
+	protected String argReps() {
 		return Character.toString(value);
 	}
 	
 	@Override
-	protected void representations(List<Pair<String, String>> list) {
+	protected void longReps(List<Pair<String, String>> list) {
 	}
 
-	public static SingleResult parseShort(String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
+		return new SingleResult(createCharacterLiteral(), removeCharacterLiteral(string));
 	}	
 }
