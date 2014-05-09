@@ -1,6 +1,6 @@
-package instructions;
+package statistics;
 
-public class ExprConsts {
+public class Names {
 
 	public static final String Assignment = "Asgn";
 	public static final String BooleanLiteral = "Bool";
@@ -17,8 +17,9 @@ public class ExprConsts {
 	public static final String NumberLiteral = "Number";
 	public static final String PostfixOperator = "PostfixOp";
 	public static final String PrefixOperator = "PrefixOp";
-	public static final String StaticFieldAccess = "SField";
-	public static final String StaticMethodInvocation = "SMethod";
 	public static final String StringLiteral = "String";
-
+	
+	public static final String LPar = "(";
+	public static final String RPar = ")";
+	public static final String Comma = ",";
 }

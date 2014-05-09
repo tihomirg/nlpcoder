@@ -1,8 +1,14 @@
-package instructions;
+package statistics.pretrees;
+
+import static statistics.parsers.Parser.*;
 
 import java.util.List;
 
 import definitions.Declaration;
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
+import statistics.parsers.StringResult;
 import types.Type;
 import util.Pair;
 
@@ -23,7 +29,7 @@ public class InstanceFieldAccess extends Expr{
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.InstanceFieldAccess+"("+field.getLongName()+")";
+		return Names.InstanceFieldAccess+Names.LPar+field.getLongName()+Names.RPar;
 	}
 
 	@Override
@@ -34,5 +40,13 @@ public class InstanceFieldAccess extends Expr{
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
 		list.addAll(exp.longReps());
+	}
+
+	public static SingleResult parseShort(String string) {
+		String rest = removeLPar(removeInstanceFieldAccess(string));
+		StringResult result = parseStringTillRPar(rest);
+		String fieldName = result.getString();
+		rest = removeRPar(result.getRest());
+		return new SingleResult(new statistics.posttrees.InstanceFieldAccess(fieldName), rest);		
 	}
 }

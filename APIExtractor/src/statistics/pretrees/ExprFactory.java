@@ -1,4 +1,4 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.HashSet;
 import java.util.Set;

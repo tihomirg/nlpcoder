@@ -1,7 +1,10 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.List;
 
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
 import types.Type;
 import util.Pair;
 
@@ -31,7 +34,7 @@ public class InstOfExpr extends Expr {
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.InstOfExpr+"("+checkType.getPrefix()+")";
+		return Names.InstOfExpr+Names.RPar+checkType.getPrefix()+Names.LPar;
 	}
 
 	@Override
@@ -42,5 +45,10 @@ public class InstOfExpr extends Expr {
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
 		list.addAll(exp.longReps());
+	}
+
+	public static SingleResult parseShort(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

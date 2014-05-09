@@ -1,10 +1,13 @@
-package instructions;
+package statistics.pretrees;
 
-import java.util.LinkedList;
+import static statistics.parsers.Parser.*;
+
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.Assignment.Operator;
-
+import statistics.Names;
+import statistics.parsers.SingleResult;
+import statistics.parsers.StringResult;
 import util.Pair;
 
 public class Assignment extends Expr {
@@ -29,7 +32,7 @@ public class Assignment extends Expr {
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.Assignment+"("+op+")";
+		return Names.Assignment+Names.LPar+op+Names.RPar;
 	}
 
 	@Override
@@ -42,5 +45,12 @@ public class Assignment extends Expr {
 		list.addAll(lexp.longReps());
 		list.addAll(rexp.longReps());
 	}
-	
+
+	public static SingleResult parseShort(String string) {
+		String rest = removeLPar(removeAssignment(string));
+		StringResult result = parseStringTillRPar(rest);
+		String op = result.getString();
+		rest = removeRPar(result.getRest());
+		return new SingleResult(new statistics.posttrees.Assignment(op), rest);
+	}
 }

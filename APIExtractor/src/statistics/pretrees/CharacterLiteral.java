@@ -1,7 +1,10 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.List;
 
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
 import types.PrimitiveType;
 import util.Pair;
 
@@ -21,7 +24,7 @@ public class CharacterLiteral extends Expr {
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.CharacterLiteral;
+		return Names.CharacterLiteral;
 	}
 
 	@Override
@@ -31,5 +34,10 @@ public class CharacterLiteral extends Expr {
 	
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
+	}
+
+	public static SingleResult parseShort(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

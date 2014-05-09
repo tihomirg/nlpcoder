@@ -1,10 +1,19 @@
-package instructions;
+package statistics.pretrees;
+
+import static statistics.parsers.Parser.parseStringTillRPar;
+import static statistics.parsers.Parser.removeInstanceFieldAccess;
+import static statistics.parsers.Parser.removeLPar;
+import static statistics.parsers.Parser.removeRPar;
 
 import java.util.Arrays;
 import java.util.List;
 
 import definitions.Declaration;
 
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
+import statistics.parsers.StringResult;
 import types.Type;
 import util.Pair;
 
@@ -28,7 +37,7 @@ public class InstanceMethodInvocation extends Expr{
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.InstanceMethodInvocation+"("+method.getLongName()+")";
+		return Names.InstanceMethodInvocation+Names.LPar+method.getLongName()+Names.RPar;
 	}
 
 	@Override
@@ -46,5 +55,13 @@ public class InstanceMethodInvocation extends Expr{
 		for (Expr arg : args) {
 			list.addAll(arg.longReps());
 		}
-	}	
+	}
+
+	public static SingleResult parseShort(String string) {
+		String rest = removeLPar(removeInstanceFieldAccess(string));
+		StringResult result = parseStringTillRPar(rest);
+		String fieldName = result.getString();
+		rest = removeRPar(result.getRest());
+		return new SingleResult(new statistics.posttrees.InstanceFieldAccess(fieldName), rest);		
+	}
 }

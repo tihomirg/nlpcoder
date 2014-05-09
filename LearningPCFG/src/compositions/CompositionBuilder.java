@@ -1,7 +1,5 @@
 package compositions;
 
-import instructions.Expr;
-import instructions.Variable;
 
 import java.io.PrintStream;
 import java.util.LinkedList;
@@ -72,6 +70,8 @@ import scopes.ScopeKeyValue;
 import scopes.ScopesKeyValue;
 import scopes.SimpleEvalScopes;
 import statistics.CompositionStatistics;
+import statistics.pretrees.Expr;
+import statistics.pretrees.Variable;
 import symbol.Symbol;
 import types.ReferenceType;
 import types.StabileTypeFactory;

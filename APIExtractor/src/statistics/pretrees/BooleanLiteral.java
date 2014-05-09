@@ -1,7 +1,10 @@
-package instructions;
+package statistics.pretrees;
 
+import static statistics.parsers.Parser.*;
 import java.util.List;
-
+import statistics.Names;
+import statistics.parsers.SingleResult;
+import statistics.parsers.StringResult;
 import types.Type;
 import util.Pair;
 
@@ -21,7 +24,7 @@ public class BooleanLiteral extends Expr {
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.BooleanLiteral;
+		return Names.BooleanLiteral;
 	}
 
 	@Override
@@ -31,6 +34,10 @@ public class BooleanLiteral extends Expr {
 
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
+	}
+
+	public static SingleResult parseShort(String string) {
+		return new SingleResult(new statistics.posttrees.BooleanLiteral(), removeBooleanLiteral(string));
 	}
 	
 }

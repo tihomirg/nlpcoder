@@ -1,9 +1,12 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.InfixExpression.Operator;
 
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
 import types.Type;
 import util.Pair;
 
@@ -26,7 +29,7 @@ public class InfixOperator extends Expr{
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.InfixOperator+"("+op+")("+type+")";
+		return Names.InfixOperator+Names.LPar+op+Names.RPar+Names.LPar+type+Names.RPar;
 	}
 
 	@Override
@@ -38,5 +41,10 @@ public class InfixOperator extends Expr{
 	protected void representations(List<Pair<String, String>> list) {
 		list.addAll(lexp.longReps());
 		list.addAll(rexp.longReps());
+	}
+	
+	public static SingleResult parseShort(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

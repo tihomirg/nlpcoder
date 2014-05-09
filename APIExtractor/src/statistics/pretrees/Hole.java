@@ -1,7 +1,10 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.List;
 
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
 import types.Type;
 import util.Pair;
 
@@ -22,7 +25,7 @@ public class Hole extends Expr{
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.Hole;
+		return Names.Hole;
 	}
 
 	@Override
@@ -32,5 +35,10 @@ public class Hole extends Expr{
 
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
+	}
+	
+	public static SingleResult parseShort(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

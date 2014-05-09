@@ -1,8 +1,5 @@
 package compositions;
 
-import instructions.Expr;
-import instructions.ExprFactory;
-import instructions.Variable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +38,9 @@ import api.Imported;
 import builders.SingleNodeVisitor;
 import scopes.NameScopes;
 import scopes.ScopesKeyValue;
+import statistics.pretrees.Expr;
+import statistics.pretrees.ExprFactory;
+import statistics.pretrees.Variable;
 import types.PrimitiveType;
 import types.ReferenceType;
 import types.StabileTypeFactory;

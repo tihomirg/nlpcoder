@@ -1,4 +1,4 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,10 +1,13 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
 
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
 import types.Type;
 import util.Pair;
 
@@ -26,7 +29,7 @@ public class PrefixOperator extends Expr {
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.PrefixOperator+"("+op+")("+type+")";
+		return Names.PrefixOperator+Names.LPar+op+Names.RPar+Names.LPar+type+Names.RPar;
 	}
 
 	@Override
@@ -37,5 +40,10 @@ public class PrefixOperator extends Expr {
 	@Override
 	protected void representations(List<Pair<String, String>> list) {
 		list.addAll(exp.longReps());
+	}
+
+	public static SingleResult parseShort(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

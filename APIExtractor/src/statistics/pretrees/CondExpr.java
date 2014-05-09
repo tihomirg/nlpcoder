@@ -1,7 +1,10 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.List;
 
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
 import util.Pair;
 
 public class CondExpr extends Expr {
@@ -49,7 +52,7 @@ public class CondExpr extends Expr {
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.CondExpr;
+		return Names.CondExpr;
 	}
 
 	@Override
@@ -62,5 +65,10 @@ public class CondExpr extends Expr {
 		list.addAll(exp.longReps());
 		list.addAll(thenExp.longReps());
 		list.addAll(elseExp.longReps());
+	}
+
+	public static SingleResult parseShort(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

@@ -1,10 +1,13 @@
-package instructions;
+package statistics.pretrees;
 
 import java.util.Arrays;
 import java.util.List;
 
 import definitions.Declaration;
 
+import statistics.Names;
+import statistics.parsers.Result;
+import statistics.parsers.SingleResult;
 import types.Type;
 import util.Pair;
 
@@ -25,7 +28,7 @@ public class ConstructorInvocation extends Expr{
 
 	@Override
 	public String shortRep() {
-		return ExprConsts.ConstructorInvocation+"("+cons.getLongName()+")";
+		return Names.ConstructorInvocation+Names.LPar+cons.getLongName()+Names.RPar;
 	}
 	
 	@Override
@@ -38,5 +41,10 @@ public class ConstructorInvocation extends Expr{
 		for (Expr arg : args) {
 			list.addAll(arg.longReps());	
 		}
+	}
+
+	public static SingleResult parseShort(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }
