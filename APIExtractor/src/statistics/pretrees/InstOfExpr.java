@@ -41,7 +41,7 @@ public class InstOfExpr extends Expr {
 
 	@Override
 	protected String argReps() {
-		return exp.shortRep();
+		return shortReps(exp);
 	}
 	
 	@Override

@@ -30,12 +30,12 @@ public class PostfixOperator extends Expr {
 
 	@Override
 	public String shortRep() {
-		return Names.PostfixOperator+Names.LPar+op+Names.RPar+Names.LPar+type+Names.RPar;		
+		return Names.PostfixOperator+Names.LPar+op+Names.RPar+Names.LPar+type.getPrefix()+Names.RPar;		
 	}
 
 	@Override
 	protected String argReps() {
-		return expr.shortRep();
+		return shortReps(expr);
 	}
 	
 	@Override

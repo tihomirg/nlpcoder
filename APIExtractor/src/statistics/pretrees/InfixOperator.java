@@ -30,7 +30,7 @@ public class InfixOperator extends Expr{
 
 	@Override
 	public String shortRep() {
-		return Names.InfixOperator+Names.LPar+op+Names.RPar+Names.LPar+type+Names.RPar;
+		return Names.InfixOperator+Names.LPar+op+Names.RPar+Names.LPar+type.getPrefix()+Names.RPar;
 	}
 
 	@Override

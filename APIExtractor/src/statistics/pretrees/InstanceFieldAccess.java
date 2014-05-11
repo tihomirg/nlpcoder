@@ -36,7 +36,7 @@ public class InstanceFieldAccess extends Expr{
 
 	@Override
 	protected String argReps() {
-		return exp.shortRep();
+		return shortReps(exp);
 	}
 
 	@Override
