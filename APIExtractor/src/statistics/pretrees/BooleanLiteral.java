@@ -42,4 +42,9 @@ public class BooleanLiteral extends Expr {
 		return new SingleResult(Parser.createBooleanLiteral(), removeBooleanLiteral(string));
 	}
 	
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
+	
 }

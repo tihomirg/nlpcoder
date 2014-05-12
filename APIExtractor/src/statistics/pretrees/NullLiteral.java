@@ -39,5 +39,11 @@ public class NullLiteral extends Expr {
 
 	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		return new SingleResult(Parser.createNullLiteral(), removeNullLiteral(string));
-	}	
+	}
+	
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
+		
 }

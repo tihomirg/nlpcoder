@@ -79,4 +79,8 @@ public abstract class Expr {
 	public boolean isVariable() {
 		return false;
 	}
+
+	public boolean isLiteral() {
+		return false;
+	}
 }

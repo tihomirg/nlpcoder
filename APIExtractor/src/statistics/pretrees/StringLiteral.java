@@ -40,4 +40,10 @@ public class StringLiteral extends Expr {
 	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		return new SingleResult(Parser.createStringLiteral(), removeStringLiteral(string));
 	}	
+
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
+	
 }
