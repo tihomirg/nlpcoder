@@ -36,7 +36,7 @@ public class InstOfExpr extends Expr {
 
 	@Override
 	public String shortRep() {
-		return Names.InstOfExpr+Names.RPar+checkType.getPrefix()+Names.LPar;
+		return Names.InstOfExpr+Names.LPar+checkType.getPrefix()+Names.RPar;
 	}
 
 	@Override

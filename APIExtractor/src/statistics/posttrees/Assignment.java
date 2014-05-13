@@ -2,6 +2,9 @@ package statistics.posttrees;
 
 import java.util.List;
 
+import statistics.Names;
+import util.Pair;
+
 public class Assignment extends Expr {
 
 	public String op;
@@ -25,5 +28,15 @@ public class Assignment extends Expr {
 		this.lexp = args.get(0);
 		this.rexp = args.get(1);
 	}
+
+	@Override
+	protected String shortRep() {
+		return Names.Assignment+"("+op+")";
+	}
+	
+	@Override
+	protected String argsRep() {
+		return shortReps(lexp, rexp);
+	}	
 	
 }

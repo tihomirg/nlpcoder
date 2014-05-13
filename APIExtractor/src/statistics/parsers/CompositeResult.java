@@ -21,7 +21,7 @@ public class CompositeResult extends Result {
 	}
 	
 	public Expr get(int index) {
-		return this.exprs.get(0);
+		return this.exprs.get(index);
 	}	
 	
 	public List<Expr> getExprs() {

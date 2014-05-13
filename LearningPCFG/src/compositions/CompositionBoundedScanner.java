@@ -25,6 +25,7 @@ public class CompositionBoundedScanner extends BoundedScanner {
 		File input = new File(Config.getCompositionCorpusLocation());
 		File output = new File(Config.getCompositionStatisticLocation());
 		
-		scan(builder, input, output, 100000, 10, true);		
+		scan(builder, input, output, 100, 10, true);
+		
 	}
 }

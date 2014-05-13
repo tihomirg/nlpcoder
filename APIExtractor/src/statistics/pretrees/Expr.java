@@ -57,7 +57,9 @@ public abstract class Expr {
 	public static statistics.posttrees.Expr parse(String string, StabileTypeFactory tf) {
 		SingleResult result = parseShort(string, tf);
 		statistics.posttrees.Expr expr = result.getExpr();
-		expr.addArgs(parseArgs(result.getRest(), tf).getExprs());
+		String rest = removeLPar(result.getRest());
+		expr.addArgs(parseArgs(rest, tf).getExprs());
+		//removeRPar(result.getRest());
 		return expr;
 	}
 	

@@ -2,6 +2,7 @@ package statistics.posttrees;
 
 import java.util.List;
 
+import statistics.Names;
 import types.Type;
 
 public class InfixOperator extends Expr {
@@ -20,6 +21,16 @@ public class InfixOperator extends Expr {
 	public void addArgs(List<Expr> args) {
 		this.lexp = args.get(0);
 		this.rexp = args.get(1);
+	}
+
+	@Override
+	protected String shortRep() {
+		return Names.InfixOperator+"("+op+")"+"("+type+")";
+	}
+
+	@Override
+	protected String argsRep() {
+		return shortReps(lexp, rexp);
 	}
 
 }

@@ -12,7 +12,7 @@ public class Names {
 	public static final String InfixOperator = "InfixOp";
 	public static final String InstanceFieldAccess = "Field";
 	public static final String InstanceMethodInvocation = "Method";
-	public static final String InstOfExpr = "As";
+	public static final String InstOfExpr = "InstOf";
 	public static final String NullLiteral = "null";
 	public static final String NumberLiteral = "Number";
 	public static final String PostfixOperator = "PostfixOp";
@@ -20,8 +20,8 @@ public class Names {
 	public static final String StringLiteral = "String";
 	public static final String Variable = "Var";
 	
-	public static final String LPar = "(";
-	public static final String RPar = ")";
-	public static final String Comma = ",";
-	public static final String Colon = ":";
+	public static final String LPar = "%$(";
+	public static final String RPar = ")$%";
+	public static final String Comma = "%$,$%";
+	public static final String Colon = " : ";
 }

@@ -60,5 +60,7 @@ public class CompositionStatistics {
 		Expr expr = Parser.parse(result.getRest(), tf);
 		
 		expr.setFrequency(value);
+		
+		System.out.println(expr);
 	}
 }

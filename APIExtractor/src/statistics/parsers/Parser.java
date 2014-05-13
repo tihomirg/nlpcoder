@@ -323,14 +323,10 @@ public class Parser {
 	public static statistics.posttrees.Expr createStringLiteral() {
 		return new statistics.posttrees.StringLiteral();
 	}
-
-	public static String[] splitColon(String line) {
-		return line.split(Names.Colon);
-	}
-
+	
 	public static IntResult getStatistics(String line) {
-		String[] splits = line.split(Names.Colon);
-		return new IntResult(Integer.parseInt(splits[0]), splits[1]);
+		String number = line.substring(0, line.indexOf(Names.Colon));
+		return new IntResult(Integer.parseInt(number), line.substring(line.indexOf(Names.Colon)+Names.Colon.length()));
 	}
 
 	public static void setDecls(Map<Integer, Declaration> decls) {

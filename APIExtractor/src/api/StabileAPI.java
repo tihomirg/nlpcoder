@@ -20,6 +20,8 @@ public class StabileAPI {
 	private Map<String, ClassInfo> classes;
 	private StabileTypeFactory stf;
 	
+	public StabileAPI(){}
+	
 	public StabileAPI(InitialAPI icif, NameGenerator nameGen) {
 		this.classes = icif.getClassesMap();
 		setStf(icif.getFactory(), nameGen);

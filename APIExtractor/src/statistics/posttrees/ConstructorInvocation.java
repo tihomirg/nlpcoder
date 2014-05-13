@@ -2,6 +2,8 @@ package statistics.posttrees;
 
 import java.util.List;
 
+import statistics.Names;
+
 import definitions.Declaration;
 
 public class ConstructorInvocation extends Expr {
@@ -16,6 +18,16 @@ public class ConstructorInvocation extends Expr {
 	@Override
 	public void addArgs(List<Expr> args) {
 		this.args = args;
+	}
+
+	@Override
+	protected String shortRep() {
+		return Names.ConstructorInvocation+"("+decl.getLongName()+")";
+	}
+
+	@Override
+	protected String argsRep() {
+		return shortReps(args.toArray(new Expr[args.size()]));
 	}
 
 }

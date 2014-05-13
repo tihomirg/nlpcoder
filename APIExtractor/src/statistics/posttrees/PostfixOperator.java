@@ -2,6 +2,7 @@ package statistics.posttrees;
 
 import java.util.List;
 
+import statistics.Names;
 import types.Type;
 
 public class PostfixOperator extends Expr {
@@ -18,6 +19,16 @@ public class PostfixOperator extends Expr {
 	@Override
 	public void addArgs(List<Expr> args) {
 		this.exp = args.get(0);
+	}
+
+	@Override
+	protected String shortRep() {
+		return Names.PostfixOperator+"("+op+")"+"("+type+")";
+	}
+
+	@Override
+	protected String argsRep() {
+		return shortReps(exp);
 	}
 
 }
