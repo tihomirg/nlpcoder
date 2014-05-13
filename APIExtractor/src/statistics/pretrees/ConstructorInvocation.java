@@ -8,6 +8,7 @@ import java.util.List;
 import definitions.Declaration;
 
 import statistics.Names;
+import statistics.parsers.IntResult;
 import statistics.parsers.Parser;
 import statistics.parsers.Result;
 import statistics.parsers.SingleResult;
@@ -33,7 +34,7 @@ public class ConstructorInvocation extends Expr{
 
 	@Override
 	public String shortRep() {
-		return Names.ConstructorInvocation+Names.LPar+cons.getLongName()+Names.RPar;
+		return Names.ConstructorInvocation+Names.LPar+cons.getId()+Names.RPar;
 	}
 	
 	@Override
@@ -50,9 +51,9 @@ public class ConstructorInvocation extends Expr{
 
 	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		String rest = removeLPar(removeConstructorInvocation(string));
-		StringResult result = parseStringTillRPar(rest);
-		String name = result.getString();
+		IntResult result = parseIntTillRPar(rest);
+		int id = result.getInteger();
 		rest = removeRPar(result.getRest());
-		return new SingleResult(Parser.createConstructorInvocation(name), rest);
+		return new SingleResult(Parser.createConstructorInvocation(id), rest);
 	}	
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import definitions.Declaration;
 import statistics.Names;
+import statistics.parsers.IntResult;
 import statistics.parsers.Parser;
 import statistics.parsers.Result;
 import statistics.parsers.SingleResult;
@@ -31,7 +32,7 @@ public class InstanceFieldAccess extends Expr{
 
 	@Override
 	public String shortRep() {
-		return Names.InstanceFieldAccess+Names.LPar+field.getLongName()+Names.RPar;
+		return Names.InstanceFieldAccess+Names.LPar+field.getId()+Names.RPar;
 	}
 
 	@Override
@@ -46,9 +47,9 @@ public class InstanceFieldAccess extends Expr{
 
 	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		String rest = removeLPar(removeInstanceFieldAccess(string));
-		StringResult result = parseStringTillRPar(rest);
-		String fieldName = result.getString();
+		IntResult result = parseIntTillRPar(rest);
+		int id = result.getInteger();
 		rest = removeRPar(result.getRest());
-		return new SingleResult(Parser.createInstanceFieldAccess(fieldName), rest);		
+		return new SingleResult(Parser.createInstanceFieldAccess(id), rest);		
 	}
 }

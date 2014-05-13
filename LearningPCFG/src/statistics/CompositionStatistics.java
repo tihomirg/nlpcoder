@@ -43,9 +43,9 @@ public class CompositionStatistics {
 	public void print(PrintStream out){
 		for (Entry<String, Map<String, Integer>> entry : ruleToStatistics.entrySet()) {
 			String key = entry.getKey();
-			out.println("-----------------------------------------------------------------------------------------------");
-			out.println("Head: "+key);
-			out.println();
+//			out.println("-----------------------------------------------------------------------------------------------");
+//			out.println("Head: "+key);
+//			out.println();
 			Map<String, Integer> value = entry.getValue();
 
 			PriorityQueue<Entry<String, Integer>> pq = new PriorityQueue<Map.Entry<String, Integer>>(100, EntryComparator1.DESC);
@@ -57,10 +57,10 @@ public class CompositionStatistics {
 				Entry<String, Integer> curr = pq.remove();
 				String name = curr.getKey();
 				Integer stat = curr.getValue();
-				out.println(stat +" : "+ name);
+				out.println(stat +Names.Colon+ name);
 			}
-			out.println();
-			out.println();					
+//			out.println();
+//			out.println();					
 		}
 	}
 

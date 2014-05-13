@@ -128,5 +128,18 @@ public class StabileAPI {
 		this.stf.setNoType(itf.getNoType());
 		this.stf.setNullType(itf.getNullType());
 		this.stf.setPrimitive(itf.getPrimitive());
+		this.stf.setRefToClasses(itf.getRefToClasses());
+	}
+
+	public Map<Integer, Declaration> getDeclsMap() {
+		Map<Integer, Declaration> decls = new HashMap<Integer, Declaration>();
+		
+		for (ClassInfo clazz : this.classes.values()) {
+			for(Declaration decl : clazz.getDeclarations()){
+				decls.put(decl.getId(), decl);
+			}
+		}
+		
+		return decls;
 	}
 }

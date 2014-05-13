@@ -27,7 +27,7 @@ public abstract class TypeFactory {
 	private NullType nullType = new NullType();
 	private VoidType voidType = new VoidType();
 
-	protected Map<String, ClassInfo> polyPrefixToClasses = new HashMap<String, ClassInfo>();
+	protected Map<String, ClassInfo> refToClasses = new HashMap<String, ClassInfo>();
 	
 	private ConstType noVarConst = new ConstType(NO_VAR_CONST);
 
@@ -132,22 +132,18 @@ public abstract class TypeFactory {
 			return nullType;
 		else if(isNoVarConst(typePrefix))
 			return noVarConst;
-		else if(isBoxedType(typePrefix))
-			return createBoxedType(typePrefix);
-		else if(isConstType(typePrefix))
-			return createConstType(typePrefix);
-		else if(isPolyTypeByPrefix(typePrefix)){
-			return createPolyTypeByTypePrefix(typePrefix);
+		else if(isReferenceTypeByPrefix(typePrefix)){
+			return referenceTypeByPrefix(typePrefix);
 		} else 
 			return createVariable(typePrefix);
 	}
 	
-	private Type createPolyTypeByTypePrefix(String typePrefix) {
-		return polyPrefixToClasses.get(typePrefix).getType();
+	private Type referenceTypeByPrefix(String typePrefix) {
+		return refToClasses.get(typePrefix).getType();
 	}
 
-	private boolean isPolyTypeByPrefix(String typePrefix) {
-		return polyPrefixToClasses.containsKey(typePrefix);
+	private boolean isReferenceTypeByPrefix(String typePrefix) {
+		return refToClasses.containsKey(typePrefix);
 	}
 
 	private boolean isConstType(String typePrefix) {
@@ -311,5 +307,12 @@ public abstract class TypeFactory {
 	public ConstType createNoVariableType() {
 		return this.noVarConst;
 	}
-		
+
+	public Map<String, ClassInfo> getRefToClasses() {
+		return refToClasses;
+	}
+
+	public void setRefToClasses(Map<String, ClassInfo> refToClasses) {
+		this.refToClasses = refToClasses;
+	}	
 }

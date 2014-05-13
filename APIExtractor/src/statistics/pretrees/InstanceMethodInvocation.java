@@ -8,6 +8,7 @@ import java.util.List;
 import definitions.Declaration;
 
 import statistics.Names;
+import statistics.parsers.IntResult;
 import statistics.parsers.Parser;
 import statistics.parsers.Result;
 import statistics.parsers.SingleResult;
@@ -36,7 +37,7 @@ public class InstanceMethodInvocation extends Expr{
 
 	@Override
 	public String shortRep() {
-		return Names.InstanceMethodInvocation+Names.LPar+method.getLongName()+Names.RPar;
+		return Names.InstanceMethodInvocation+Names.LPar+method.getId()+Names.RPar;
 	}
 
 	@Override
@@ -58,9 +59,9 @@ public class InstanceMethodInvocation extends Expr{
 
 	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		String rest = removeLPar(removeInstanceMethodInvocation(string));
-		StringResult result = parseStringTillRPar(rest);
-		String methodName = result.getString();
+		IntResult result = parseIntTillRPar(rest);
+		int id = result.getInteger();
 		rest = removeRPar(result.getRest());
-		return new SingleResult(Parser.createInstanceMethodInvocation(methodName), rest);		
+		return new SingleResult(Parser.createInstanceMethodInvocation(id), rest);		
 	}
 }

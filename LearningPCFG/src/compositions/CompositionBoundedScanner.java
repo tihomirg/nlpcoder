@@ -22,8 +22,8 @@ public class CompositionBoundedScanner extends BoundedScanner {
 		
 		//File input = new File("C:\\Users\\gvero\\git\\nlpcoder\\Benchmarks");
 		
-		File input = new File("C:\\Users\\gvero\\java_projects\\java_projects");
-		File output = new File("stat.txt");
+		File input = new File(Config.getCompositionCorpusLocation());
+		File output = new File(Config.getCompositionStatisticLocation());
 		
 		scan(builder, input, output, 100000, 10, true);		
 	}

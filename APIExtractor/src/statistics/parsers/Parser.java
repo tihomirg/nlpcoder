@@ -1,5 +1,7 @@
 package statistics.parsers;
 
+import java.util.Map;
+
 import definitions.Declaration;
 import statistics.Names;
 import statistics.posttrees.Expr;
@@ -26,6 +28,7 @@ import types.Type;
 public class Parser {
 	private static final Expr HOLE = new statistics.posttrees.Hole();
 	private static final Expr NULL = new statistics.posttrees.NullLiteral();
+	private static Map<Integer, Declaration> decls;
 
 	public static Expr parse(String string, StabileTypeFactory tf){
 		if (startsWithAssignment(string)){
@@ -207,6 +210,12 @@ public class Parser {
 		String op = string.substring(0, string.indexOf(Names.RPar));
 		return new StringResult(op, string.substring(op.length()));
 	}
+	
+	public static IntResult parseIntTillRPar(String string){
+		String op = string.substring(0, string.indexOf(Names.RPar));
+		int val = Integer.parseInt(op);
+		return new IntResult(val, string.substring(op.length()));
+	}	
 
 	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		if (startsWithAssignment(string)){
@@ -251,9 +260,6 @@ public class Parser {
 		return string.startsWith(Names.RPar);
 	}
 	
-	
-	
-
 	public static statistics.posttrees.Expr createAssignment(String op) {
 		return new statistics.posttrees.Assignment(op);
 	}
@@ -274,10 +280,8 @@ public class Parser {
 		return new statistics.posttrees.CondExpr();
 	}
 
-	public static statistics.posttrees.Expr createConstructorInvocation(String name) {
-		//TODO: map this string to the declarations.
-		Declaration decl = null;
-		return new statistics.posttrees.ConstructorInvocation(decl);
+	public static statistics.posttrees.Expr createConstructorInvocation(int id) {
+		return new statistics.posttrees.ConstructorInvocation(decls.get(id));
 	}
 
 	public static statistics.posttrees.Expr createHole() {
@@ -288,16 +292,12 @@ public class Parser {
 		return new statistics.posttrees.InfixOperator(op, type);
 	}
 
-	public static statistics.posttrees.Expr createInstanceFieldAccess(String fieldName) {
-		//TODO: map this string to the declarations.
-		Declaration decl = null;
-		return new statistics.posttrees.InstanceFieldAccess(decl);
+	public static statistics.posttrees.Expr createInstanceFieldAccess(int id) {
+		return new statistics.posttrees.InstanceFieldAccess(decls.get(id));
 	}
 
-	public static statistics.posttrees.Expr createInstanceMethodInvocation(String methodName) {
-		//TODO: map this string to the declarations.
-		Declaration decl = null;
-		return new statistics.posttrees.InstanceMethodInvocation(decl);
+	public static statistics.posttrees.Expr createInstanceMethodInvocation(int id) {
+		return new statistics.posttrees.InstanceMethodInvocation(decls.get(id));
 	}
 
 	public static statistics.posttrees.Expr createInstOfExpr(Type type) {
@@ -322,5 +322,18 @@ public class Parser {
 
 	public static statistics.posttrees.Expr createStringLiteral() {
 		return new statistics.posttrees.StringLiteral();
+	}
+
+	public static String[] splitColon(String line) {
+		return line.split(Names.Colon);
+	}
+
+	public static IntResult getStatistics(String line) {
+		String[] splits = line.split(Names.Colon);
+		return new IntResult(Integer.parseInt(splits[0]), splits[1]);
+	}
+
+	public static void setDecls(Map<Integer, Declaration> decls) {
+		Parser.decls = decls;
 	}
 }

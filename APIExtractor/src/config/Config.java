@@ -27,7 +27,10 @@ public class Config {
 	private static final String serializationVarPrefix = "SV";
 	private static final String deserializationVarPrefix = "DV";
 	private static final double smoothFactor = 0.2;
-	private static final String frequencyLocation = "frequences.txt";	
+	private static final String frequencyLocation = "frequences.txt";
+	private static final String synthesisStorageLocation = "declarations.kryo";
+	private static final String compositionStatisticStorageLocation = "stat.txt";
+	private static final String compositionCorpusLocation = "C:\\Users\\gvero\\java_projects\\java_projects";	
 	
 	public static String getTaggerLocation(){
 		return tagger;
@@ -98,6 +101,18 @@ public class Config {
 
 	public static double[] getScores() {
 		return scores;
+	}
+
+	public static String getSynthesisStorageLocation() {
+		return synthesisStorageLocation ;
+	}
+
+	public static String getCompositionStatisticLocation() {
+		return compositionStatisticStorageLocation;
+	}
+
+	public static String getCompositionCorpusLocation() {
+		return compositionCorpusLocation;
 	}
 	
 }

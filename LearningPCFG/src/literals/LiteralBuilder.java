@@ -30,9 +30,7 @@ import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
-
 import compositions.TypeBuilder;
-
 import definitions.ArrayClassInfo;
 import definitions.ClassInfo;
 import definitions.Declaration;
@@ -40,7 +38,6 @@ import api.Imported;
 import builders.SingleNodeVisitor;
 import scopes.NameScopes;
 import scopes.ScopesKeyValue;
-import statistics.CompositionStatistics;
 import statistics.pretrees.Expr;
 import statistics.pretrees.ExprFactory;
 import statistics.pretrees.Variable;
@@ -49,7 +46,6 @@ import types.ReferenceType;
 import types.StabileTypeFactory;
 import types.Type;
 import util.Pair;
-
 
 public class LiteralBuilder extends SingleNodeVisitor {
 
@@ -125,7 +121,6 @@ public class LiteralBuilder extends SingleNodeVisitor {
 				collect(cons, args);
 			}
 		}
-		
 		setExprToHole();
 
 		return false;
@@ -170,7 +165,6 @@ public class LiteralBuilder extends SingleNodeVisitor {
 
 			}
 		} 
-		
 		setExprToHole();
 		return false;
 	}

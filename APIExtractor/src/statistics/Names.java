@@ -23,4 +23,5 @@ public class Names {
 	public static final String LPar = "(";
 	public static final String RPar = ")";
 	public static final String Comma = ",";
+	public static final String Colon = ":";
 }
