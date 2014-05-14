@@ -17,7 +17,7 @@ public class InstanceFieldAccess extends Expr {
 
 	@Override
 	public void addArgs(List<Expr> args) {
-		this.exp = args.remove(0);
+		this.exp = decl.isStatic() ? null : args.remove(0);
 	}
 
 	@Override
@@ -27,7 +27,15 @@ public class InstanceFieldAccess extends Expr {
 
 	@Override
 	protected String argsRep() {
-		return shortReps(exp);
+		return decl.isStatic() ? "" : shortReps(exp);
 	}
 
+	@Override
+	public String getPrefix() {
+		return Names.InstanceFieldAccess;
+	}
+	
+	public Declaration getDecl() {
+		return decl;
+	}
 }

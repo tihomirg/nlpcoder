@@ -22,5 +22,13 @@ public class NumberLiteral extends Expr {
 	protected String argsRep() {
 		return value;
 	}
-
+	@Override
+	public String getPrefix() {
+		return Names.NumberLiteral;
+	}
+	
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
 }

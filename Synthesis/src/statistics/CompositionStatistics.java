@@ -19,10 +19,13 @@ public class CompositionStatistics {
 	private String fileName;
 	private Map<Integer, Declaration> decls;
 	
-	public CompositionStatistics(StabileTypeFactory tf, Map<Integer, Declaration> decls, String fileName) {
+	private HandlerTable table;
+	
+	public CompositionStatistics(StabileTypeFactory tf, Map<Integer, Declaration> decls, String fileName, HandlerTable table) {
 		this.tf = tf;
 		this.decls = decls;
 		this.fileName = fileName;
+		this.table = table;
 	}
 
 	public void read(){
@@ -62,5 +65,7 @@ public class CompositionStatistics {
 		expr.setFrequency(value);
 		
 		System.out.println(expr);
+		
+		table.add(expr);
 	}
 }

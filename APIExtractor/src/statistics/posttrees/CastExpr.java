@@ -29,4 +29,17 @@ public class CastExpr extends Expr {
 		return shortReps(expr);
 	}
 
+	@Override
+	public String getPrefix() {
+		return Names.CastExpr;
+	}
+	
+	@Override
+	public boolean hasType() {
+		return true;
+	}
+	
+	public Type getType() {
+		return type;
+	}
 }

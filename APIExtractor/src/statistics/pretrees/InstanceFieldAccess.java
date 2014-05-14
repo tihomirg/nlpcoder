@@ -37,7 +37,7 @@ public class InstanceFieldAccess extends Expr{
 
 	@Override
 	protected String argReps() {
-		return shortReps(exp);
+		return field.isStatic() ? "" : shortReps(exp);
 	}
 
 	@Override

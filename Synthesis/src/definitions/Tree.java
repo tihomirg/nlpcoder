@@ -14,9 +14,15 @@ public class Tree implements Cloneable {
 	}
 	
 	@Override
-	protected Tree clone() throws CloneNotSupportedException {
-		Tree tree = (Tree) super.clone();
-		tree.rep = (HashMap<Integer, Expr>) this.rep.clone();
+	protected Tree clone() {
+		Tree tree = null;
+		try {
+			tree = (Tree) super.clone();
+			tree.rep = (HashMap<Integer, Expr>) this.rep.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return tree;
 	}
 	

@@ -19,9 +19,12 @@ public class Names {
 	public static final String PrefixOperator = "PrefixOp";
 	public static final String StringLiteral = "String";
 	public static final String Variable = "Var";
+
+	public static final String TYPE = "Type";	
 	
 	public static final String LPar = "%$(";
 	public static final String RPar = ")$%";
 	public static final String Comma = "%$,$%";
 	public static final String Colon = " : ";
+
 }

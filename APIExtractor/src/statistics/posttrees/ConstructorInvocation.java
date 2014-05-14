@@ -30,4 +30,13 @@ public class ConstructorInvocation extends Expr {
 		return shortReps(args.toArray(new Expr[args.size()]));
 	}
 
+	@Override
+	public String getPrefix() {
+		return Names.ConstructorInvocation;
+	}
+	
+	public Declaration getDecl() {
+		return decl;
+	}
+
 }

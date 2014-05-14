@@ -29,5 +29,24 @@ public class PrefixOperator extends Expr {
 	@Override
 	protected String argsRep() {
 		return shortReps(exp);
-	}	
+	}
+	
+	@Override
+	public String getPrefix() {
+		return Names.PrefixOperator;
+	}
+	
+	@Override
+	public boolean hasType() {
+		return true;
+	}
+	
+	public Type getType() {
+		return type;
+	}
+
+	@Override
+	public String getOperator() {
+		return op;
+	}
 }

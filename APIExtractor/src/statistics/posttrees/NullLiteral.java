@@ -21,5 +21,14 @@ public class NullLiteral extends Expr {
 	protected String argsRep() {
 		return "";
 	}
-
+	
+	@Override
+	public String getPrefix() {
+		return Names.NullLiteral;
+	}
+	
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
 }

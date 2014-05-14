@@ -23,4 +23,14 @@ public class StringLiteral extends Expr {
 		return value;
 	}
 
+	@Override
+	public String getPrefix() {
+		return Names.StringLiteral;
+	}
+	
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
+	
 }

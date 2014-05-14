@@ -24,4 +24,13 @@ public class BooleanLiteral extends Expr {
 		return Boolean.toString(value);
 	}
 
+	@Override
+	public String getPrefix() {
+		return Names.BooleanLiteral;
+	}
+	
+	@Override
+	public boolean isLiteral() {
+		return true;
+	}
 }

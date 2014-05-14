@@ -42,9 +42,15 @@ public class InstanceMethodInvocation extends Expr{
 
 	@Override
 	protected String argReps() {
-		Expr[] exprs = new Expr[args.length+1];
-		exprs[0] = exp;
-		System.arraycopy(args, 0, exprs, 1, args.length);
+		Expr[] exprs = null;
+		if (method.isStatic()){
+			exprs = args;
+		} else {
+			exprs = new Expr[args.length+1];
+			exprs[0] = exp;
+			System.arraycopy(args, 0, exprs, 1, args.length);			
+		}
+		
 		return shortReps(exprs);
 	}
 	

@@ -9,13 +9,19 @@ public class PartialExpression implements Cloneable {
 	private LinkedList<Substitution> subs;
 	private Tree tree;
 
-	private int score;
+	private double score;
+	
 	
 	@Override
-	public PartialExpression clone() throws CloneNotSupportedException {
-		PartialExpression exp = (PartialExpression) super.clone();
-		exp.tree = this.tree.clone();
-		exp.subs = (LinkedList<Substitution>) this.subs.clone();
+	public PartialExpression clone() {
+		PartialExpression exp = null;
+		try {
+			exp = (PartialExpression) super.clone();
+			exp.tree = this.tree.clone();
+			exp.subs = (LinkedList<Substitution>) this.subs.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
 		return exp;
 	}
 

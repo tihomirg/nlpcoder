@@ -27,4 +27,9 @@ public class CondExpr extends Expr {
 		return shortReps(expr, thenExpr, elseExpr);
 	}
 
+	@Override
+	public String getPrefix() {
+		return Names.CondExpr;
+	}
+
 }

@@ -29,4 +29,17 @@ public class InstOfExpr extends Expr {
 		return shortReps(exp);
 	}
 
+	@Override
+	public String getPrefix() {
+		return Names.InstOfExpr;
+	}
+
+	@Override
+	public boolean hasType() {
+		return true;
+	}
+	
+	public Type getType() {
+		return type;
+	}
 }

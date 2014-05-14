@@ -32,5 +32,23 @@ public class InfixOperator extends Expr {
 	protected String argsRep() {
 		return shortReps(lexp, rexp);
 	}
+	
+	@Override
+	public String getPrefix() {
+		return Names.InfixOperator;
+	}
+	
+	@Override
+	public boolean hasType() {
+		return true;
+	}
 
+	public Type getType() {
+		return type;
+	}
+	
+	@Override
+	public String getOperator() {
+		return op;
+	}
 }

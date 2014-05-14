@@ -3,7 +3,6 @@ package statistics.posttrees;
 import java.util.List;
 
 import statistics.Names;
-import util.Pair;
 
 public class Assignment extends Expr {
 
@@ -12,14 +11,6 @@ public class Assignment extends Expr {
 	private Expr rexp;
 	
 	public Assignment(String op) {
-		this.op = op;
-	}
-
-	public String getOp() {
-		return op;
-	}
-
-	public void setOp(String op) {
 		this.op = op;
 	}
 
@@ -37,6 +28,15 @@ public class Assignment extends Expr {
 	@Override
 	protected String argsRep() {
 		return shortReps(lexp, rexp);
+	}
+
+	@Override
+	public String getPrefix() {
+		return Names.Assignment;
 	}	
-	
+
+	@Override
+	public String getOperator() {
+		return op;
+	}
 }
