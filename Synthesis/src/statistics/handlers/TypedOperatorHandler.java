@@ -9,7 +9,7 @@ public class TypedOperatorHandler extends Handler {
 	@Override
 	public PriorityQueue<Expr> handle(Expr expr) {
 		// TODO Auto-generated method stub
-		return null;
+		return EMPTY_PQ;
 	}
 
 	@Override
