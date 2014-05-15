@@ -1,6 +1,8 @@
 package types;
 
 
+import java.util.List;
+
 import definitions.ClassInfo;
 
 public class ConstType extends ReferenceType {
@@ -9,7 +11,6 @@ public class ConstType extends ReferenceType {
 	 * 
 	 */
 	private static final long serialVersionUID = -1898401502500691232L;
-
 	public ConstType(){}
 	
 	public ConstType(String name) {
@@ -36,6 +37,11 @@ public class ConstType extends ReferenceType {
 	public boolean contains(Type type) {
 		return this.equals(type);
 	}
+	
+	@Override
+	public List<Variable> getVariables() {
+		return EMPTY_VAR_LIST;
+	}
 
 	@Override
 	public boolean isPolymorphicType() {
@@ -56,4 +62,6 @@ public class ConstType extends ReferenceType {
 	public boolean isVariable() {
 		return false;
 	}
+	
+	
 }

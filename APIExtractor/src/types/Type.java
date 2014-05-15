@@ -11,8 +11,11 @@ public abstract class Type implements Serializable {
 	private static final long serialVersionUID = -900979897015622962L;
 
 	protected static final List<String> EMPTY_STRING_LIST = new LinkedList<String>();
-	protected static final Set<Type> EMPTY_TYPE_SET = new HashSet<Type>();	
+	protected static final Set<Type> EMPTY_TYPE_SET = new HashSet<Type>();
+	public static final List<Type> EMPTY_TYPE_LIST = new LinkedList<Type>();	
 	//protected static final List<ReferenceType> EMPTY_REFERENCE_TYPE_LIST = new LinkedList<ReferenceType>();		
+
+	protected static final List<Variable> EMPTY_VAR_LIST = new LinkedList<Variable>();
 	
 	protected String name;
 	
@@ -47,6 +50,8 @@ public abstract class Type implements Serializable {
 	public abstract Type apply(Substitution sub, TypeFactory factory);
 	public abstract Unifier unify(Type type, TypeFactory factory);
 	public abstract boolean contains(Type type);	
+	
+	public abstract List<Variable> getVariables();	
 	
 	public Type apply(List<Substitution> subs, TypeFactory factory){
 		Type curr = this;

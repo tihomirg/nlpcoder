@@ -40,6 +40,11 @@ public class PrimitiveType extends Type {
 	public boolean contains(Type type) {
 		return this.equals(type);
 	}
+	
+	@Override
+	public List<Variable> getVariables() {
+		return EMPTY_VAR_LIST;
+	}
 
 	@Override
 	public Set<Type> getCompatibleTypes(StabileTypeFactory factory) {

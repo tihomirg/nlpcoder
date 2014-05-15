@@ -3,6 +3,7 @@ package statistics.posttrees;
 import java.util.List;
 
 import statistics.Names;
+import types.Type;
 
 public class StringExpr extends Expr {
 
@@ -37,6 +38,16 @@ public class StringExpr extends Expr {
 	
 	@Override
 	public String getPrefix() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<Type> getArgTypes() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Type getReturnType() {
 		throw new UnsupportedOperationException();
 	}
 }

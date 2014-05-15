@@ -1,6 +1,7 @@
 package statistics.pretrees;
 
 import static statistics.parsers.Parser.*;
+
 import java.util.List;
 import statistics.Names;
 import statistics.parsers.Parser;
@@ -13,10 +14,12 @@ import util.Pair;
 public class CastExpr extends Expr {
 
 	private Expr exp;
+	private Type argType;
 
 	public CastExpr(Type type, Expr exp) {
 		super(type);
 		this.exp = exp;
+		this.argType = this.exp.getType();
 	}
 
 	@Override
@@ -26,7 +29,7 @@ public class CastExpr extends Expr {
 
 	@Override
 	public String shortRep() {
-		return Names.CastExpr+Names.LPar+type.getPrefix()+Names.RPar;
+		return Names.CastExpr+Names.LPar+type.getPrefix()+Names.RPar+Names.LPar+argType.getPrefix()+Names.RPar;
 	}
 
 	@Override
@@ -44,8 +47,14 @@ public class CastExpr extends Expr {
 		StringResult result = parseStringTillRPar(rest);
 		String typePrefix = result.getString();
 		Type type = tf.createTypeByTypePrefix(typePrefix);
-		rest = removeRPar(result.getRest());
-		return new SingleResult(Parser.createCastExpr(type), rest);
+		
+		rest = removeLPar(removeRPar(result.getRest()));
+		result = parseStringTillRPar(rest);
+		String argTypePrefix = result.getString();
+		Type argType = tf.createTypeByTypePrefix(argTypePrefix);
+		rest = removeRPar(result.getRest());		
+		
+		return new SingleResult(Parser.createCastExpr(type, argType), rest);
 	}
 	
 }

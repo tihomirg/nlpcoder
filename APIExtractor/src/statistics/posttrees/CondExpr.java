@@ -1,15 +1,24 @@
 package statistics.posttrees;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
+import types.Type;
 
 public class CondExpr extends Expr {
 
 	private Expr expr;
 	private Expr thenExpr;
 	private Expr elseExpr;
+	private Type condType;
+	private Type retType;
 
+	public CondExpr(Type condType, Type retType) {
+		this.condType = condType;
+		this.retType = retType;
+	}
+	
 	@Override
 	public void addArgs(List<Expr> args) {
 		this.expr = args.get(0);
@@ -19,7 +28,7 @@ public class CondExpr extends Expr {
 
 	@Override
 	protected String shortRep() {
-		return Names.CondExpr;
+		return Names.CondExpr+"("+retType+")";
 	}
 
 	@Override
@@ -32,4 +41,13 @@ public class CondExpr extends Expr {
 		return Names.CondExpr;
 	}
 
+	@Override
+	public List<Type> getArgTypes() {
+		return new LinkedList<Type>(){{add(condType); add(retType); add(retType);}};
+	}
+
+	@Override
+	public Type getReturnType() {
+		return this.retType;
+	}	
 }

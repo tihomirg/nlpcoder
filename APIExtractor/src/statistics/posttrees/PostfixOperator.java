@@ -1,5 +1,6 @@
 package statistics.posttrees;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
@@ -37,16 +38,17 @@ public class PostfixOperator extends Expr {
 	}
 	
 	@Override
-	public boolean hasType() {
-		return true;
-	}
-	
-	public Type getType() {
-		return type;
+	public String getOperator() {
+		return op;
 	}
 	
 	@Override
-	public String getOperator() {
-		return op;
+	public List<Type> getArgTypes() {
+		return new LinkedList<Type>(){{add(type);}};
+	}
+
+	@Override
+	public Type getReturnType() {
+		return type;
 	}	
 }

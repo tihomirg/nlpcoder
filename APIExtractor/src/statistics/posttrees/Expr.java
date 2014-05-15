@@ -1,5 +1,6 @@
 package statistics.posttrees;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import definitions.Declaration;
@@ -12,6 +13,16 @@ public abstract class Expr {
 
 	public abstract void addArgs(List<Expr> args);
 
+	public abstract List<Type> getArgTypes();
+	public abstract Type getReturnType();
+	
+	public List<Type> getAllType(){
+		LinkedList<Type> list = new LinkedList<Type>();
+		list.addAll(getArgTypes());
+		list.add(getReturnType());
+		return list;
+	}
+	
 	public String getString() {
 		throw new UnsupportedOperationException();
 	}
@@ -51,14 +62,6 @@ public abstract class Expr {
 
 	public boolean isLiteral(){
 		return false;
-	}
-
-	public boolean hasType(){
-		return false;
-	}
-
-	public Type getType(){
-		throw new UnsupportedOperationException();
 	}
 
 	public Declaration getDecl(){

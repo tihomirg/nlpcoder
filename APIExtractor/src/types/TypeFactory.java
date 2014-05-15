@@ -29,7 +29,7 @@ public abstract class TypeFactory {
 
 	protected Map<String, ClassInfo> refToClasses = new HashMap<String, ClassInfo>();
 	
-	private ConstType noVarConst = new ConstType(NO_VAR_CONST);
+	private ReferenceType noVarConst = new ConstType(NO_VAR_CONST);
 
 	private static final Set<String> primitiveNames = new HashSet<String>(Arrays.asList(new String[]{"byte", "short", "int", "long", "float", "double", "boolean","char"}));
 
@@ -304,7 +304,7 @@ public abstract class TypeFactory {
 		this.voidType = voidType;
 	}
 
-	public ConstType createNoVariableType() {
+	public ReferenceType createNoVariableType() {
 		return this.noVarConst;
 	}
 

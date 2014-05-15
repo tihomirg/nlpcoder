@@ -3,11 +3,17 @@ package statistics.posttrees;
 import java.util.List;
 
 import statistics.Names;
+import types.Type;
 
 public class CharacterLiteral extends Expr {
 
 	private String value;
+	private Type type;
 
+	public CharacterLiteral(Type type) {
+		this.type = type;
+	}
+	
 	@Override
 	public void addArgs(List<Expr> args) {
 		this.value = args.get(0).getString();
@@ -33,4 +39,13 @@ public class CharacterLiteral extends Expr {
 		return true;
 	}
 
+	@Override
+	public List<Type> getArgTypes() {
+		return Type.EMPTY_TYPE_LIST;
+	}
+
+	@Override
+	public Type getReturnType() {
+		return type;
+	}	
 }

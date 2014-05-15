@@ -85,6 +85,11 @@ public class NoType extends Type {
 	public boolean contains(Type type) {
 		return false;
 	}
+	
+	@Override
+	public List<Variable> getVariables() {
+		return EMPTY_VAR_LIST;
+	}
 
 	@Override
 	public boolean isVoidType() {

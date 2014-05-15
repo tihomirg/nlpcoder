@@ -1,5 +1,6 @@
 package statistics.posttrees;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
@@ -9,9 +10,11 @@ public class CastExpr extends Expr {
 
 	private Type type;
 	private Expr expr;
+	private Type argType;
 
-	public CastExpr(Type type) {
+	public CastExpr(Type type, Type argType) {
 		this.type = type;
+		this.argType = argType;
 	}
 
 	@Override
@@ -21,7 +24,7 @@ public class CastExpr extends Expr {
 
 	@Override
 	protected String shortRep() {
-		return Names.CastExpr+"("+type+")";
+		return Names.CastExpr+"("+type+")("+argType+")";
 	}
 
 	@Override
@@ -33,13 +36,14 @@ public class CastExpr extends Expr {
 	public String getPrefix() {
 		return Names.CastExpr;
 	}
-	
+
 	@Override
-	public boolean hasType() {
-		return true;
+	public List<Type> getArgTypes() {
+		return new LinkedList<Type>(){{add(argType);}};
 	}
-	
-	public Type getType() {
+
+	@Override
+	public Type getReturnType() {
 		return type;
 	}
 }

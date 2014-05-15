@@ -10,6 +10,7 @@ import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
 import statistics.parsers.StringResult;
 import types.StabileTypeFactory;
+import types.Type;
 import util.Pair;
 
 public class Assignment extends Expr {
@@ -34,7 +35,7 @@ public class Assignment extends Expr {
 
 	@Override
 	public String shortRep() {
-		return Names.Assignment+Names.LPar+op+Names.RPar;
+		return Names.Assignment+Names.LPar+op+Names.RPar+Names.LPar+type.getPrefix()+Names.RPar;
 	}
 
 	@Override
@@ -52,7 +53,11 @@ public class Assignment extends Expr {
 		String rest = removeLPar(removeAssignment(string));
 		StringResult result = parseStringTillRPar(rest);
 		String op = result.getString();
+		rest = removeLPar(removeRPar(result.getRest()));
+		result = parseStringTillRPar(rest);
+		String typePrefix = result.getString();
+		Type type = tf.createTypeByTypePrefix(typePrefix);
 		rest = removeRPar(result.getRest());
-		return new SingleResult(createAssignment(op), rest);
+		return new SingleResult(createAssignment(op, type), rest);
 	}
 }

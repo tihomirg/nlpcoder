@@ -1,5 +1,6 @@
 package statistics.posttrees;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
@@ -35,18 +36,19 @@ public class PrefixOperator extends Expr {
 	public String getPrefix() {
 		return Names.PrefixOperator;
 	}
-	
-	@Override
-	public boolean hasType() {
-		return true;
-	}
-	
-	public Type getType() {
-		return type;
-	}
 
 	@Override
 	public String getOperator() {
 		return op;
 	}
+	
+	@Override
+	public List<Type> getArgTypes() {
+		return new LinkedList<Type>(){{add(type);}};
+	}
+
+	@Override
+	public Type getReturnType() {
+		return type;
+	}	
 }

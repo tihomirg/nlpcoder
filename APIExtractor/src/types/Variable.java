@@ -35,6 +35,11 @@ public class Variable extends ReferenceType {
 	public boolean contains(Type type) {
 		return this.equals(type);
 	}
+
+	@Override
+	public List<Variable> getVariables() {
+		return new LinkedList<Variable>(){{add(Variable.this);}};
+	}
 	
 	@Override
 	public List<String> getWords() {

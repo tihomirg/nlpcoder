@@ -26,6 +26,10 @@ public class CompositionStatistics {
 		this.decls = decls;
 		this.fileName = fileName;
 		this.table = table;
+		
+		Parser.setDecls(decls);
+		Parser.setTf(tf);
+		Parser.init();
 	}
 
 	public void read(){
@@ -58,9 +62,7 @@ public class CompositionStatistics {
 		IntResult result = Parser.getStatistics(line);
 		int value = result.getInteger();
 		
-		Parser.setDecls(decls);
-		
-		Expr expr = Parser.parse(result.getRest(), tf);
+		Expr expr = Parser.parse(result.getRest());
 		
 		expr.setFrequency(value);
 		

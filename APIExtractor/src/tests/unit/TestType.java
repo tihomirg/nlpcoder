@@ -13,7 +13,6 @@ import definitions.ClassInfo;
 import deserializers.Deserializer;
 
 import types.BoxedType;
-import types.ConstType;
 import types.NameGenerator;
 import types.PolymorphicType;
 import types.PrimitiveType;
@@ -78,7 +77,7 @@ public class TestType {
 		ClassInfo classInfo = scif.getClassesMap().get(java.util.LinkedList.class.getName());
 		PolymorphicType type = factory.createPolymorphicType(java.util.LinkedList.class, classInfo, params);
 		
-		ConstType type2 = factory.createConstType(java.lang.Object.class);	
+		Type type2 = factory.createConstType(java.lang.Object.class);	
 		Assert.isTrue(type2.isCompatible(type, factory));
 	}
 	

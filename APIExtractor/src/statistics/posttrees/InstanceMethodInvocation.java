@@ -1,8 +1,12 @@
 package statistics.posttrees;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
+import types.Type;
 import definitions.Declaration;
 
 public class InstanceMethodInvocation extends Expr {
@@ -48,4 +52,15 @@ public class InstanceMethodInvocation extends Expr {
 		return decl;
 	}
 
+	@Override
+	public List<Type> getArgTypes() {
+		List<Type> list = Arrays.asList(decl.getArgTypes());
+		if (!decl.isStatic()) list.add(decl.getReceiverType());
+		return list;
+	}
+
+	@Override
+	public Type getReturnType() {
+		return decl.getRetType();
+	}	
 }

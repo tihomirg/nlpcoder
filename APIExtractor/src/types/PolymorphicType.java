@@ -94,6 +94,15 @@ public class PolymorphicType extends ReferenceType {
 		}
 		return false;
 	}
+	
+	@Override
+	public List<Variable> getVariables() {
+		List<Variable> list = new LinkedList<Variable>();
+		for (Type param : params) {
+			list.addAll(param.getVariables());
+		}
+		return list;
+	}
 
 	@Override
 	public List<String> getWords() {

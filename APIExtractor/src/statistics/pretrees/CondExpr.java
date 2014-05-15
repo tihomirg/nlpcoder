@@ -8,6 +8,7 @@ import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
 import statistics.parsers.StringResult;
 import types.StabileTypeFactory;
+import types.Type;
 import util.Pair;
 
 public class CondExpr extends Expr {
@@ -55,7 +56,7 @@ public class CondExpr extends Expr {
 
 	@Override
 	public String shortRep() {
-		return Names.CondExpr;
+		return Names.CondExpr+Names.LPar+type.getPrefix()+Names.RPar;
 	}
 
 	@Override
@@ -71,6 +72,11 @@ public class CondExpr extends Expr {
 	}
 
 	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
-		return new SingleResult(createCondExpr(), removeCondExpr(string));
+		String rest = removeLPar(removeCondExpr(string));
+		StringResult result = parseStringTillRPar(rest);
+		String typePrefix = result.getString();
+		Type type = tf.createTypeByTypePrefix(typePrefix);
+		rest = removeRPar(result.getRest());
+		return new SingleResult(createCondExpr(type), rest);
 	}	
 }

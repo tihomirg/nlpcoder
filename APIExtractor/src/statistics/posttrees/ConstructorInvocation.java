@@ -1,8 +1,11 @@
 package statistics.posttrees;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
+import types.Type;
 
 import definitions.Declaration;
 
@@ -37,6 +40,16 @@ public class ConstructorInvocation extends Expr {
 	
 	public Declaration getDecl() {
 		return decl;
+	}
+
+	@Override
+	public List<Type> getArgTypes() {
+		return Arrays.asList(decl.getArgTypes());
+	}
+
+	@Override
+	public Type getReturnType() {
+		return decl.getRetType();
 	}
 
 }

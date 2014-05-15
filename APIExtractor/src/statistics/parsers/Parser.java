@@ -26,11 +26,21 @@ import types.StabileTypeFactory;
 import types.Type;
 
 public class Parser {
-	private static final Expr HOLE = new statistics.posttrees.Hole();
-	private static final Expr NULL = new statistics.posttrees.NullLiteral();
-	private static Map<Integer, Declaration> decls;
 
-	public static Expr parse(String string, StabileTypeFactory tf){
+	private static final String BOOLEAN = "boolean";
+	private static final String CHAR = "char";
+	private static Map<Integer, Declaration> decls;
+	private static StabileTypeFactory tf;
+	
+	private static Expr HOLE;
+	private static Expr NULL;
+
+	public static void init(){
+		HOLE = new statistics.posttrees.Hole(tf.createNoType());
+		NULL = new statistics.posttrees.NullLiteral(tf.createNullType());		
+	}
+
+	public static Expr parse(String string){
 		if (startsWithAssignment(string)){
 			return Assignment.parse(string, tf);
 		} else if (startsWithBooleanLiteral(string)) {
@@ -260,24 +270,24 @@ public class Parser {
 		return string.startsWith(Names.RPar);
 	}
 	
-	public static statistics.posttrees.Expr createAssignment(String op) {
-		return new statistics.posttrees.Assignment(op);
+	public static statistics.posttrees.Expr createAssignment(String op, Type type) {
+		return new statistics.posttrees.Assignment(op, type);
 	}
 
 	public static statistics.posttrees.Expr createBooleanLiteral() {
-		return new statistics.posttrees.BooleanLiteral();
+		return new statistics.posttrees.BooleanLiteral(tf.createPrimitiveType(BOOLEAN));
 	}
 
-	public static statistics.posttrees.Expr createCastExpr(Type type) {
-		return new statistics.posttrees.CastExpr(type);
+	public static statistics.posttrees.Expr createCastExpr(Type type, Type argType) {
+		return new statistics.posttrees.CastExpr(type, argType);
 	}
 
 	public static statistics.posttrees.Expr createCharacterLiteral() {
-		return new statistics.posttrees.CharacterLiteral();
+		return new statistics.posttrees.CharacterLiteral(tf.createPrimitiveType(CHAR));
 	}	
 	
-	public static statistics.posttrees.Expr createCondExpr() {
-		return new statistics.posttrees.CondExpr();
+	public static statistics.posttrees.Expr createCondExpr(Type retType) {
+		return new statistics.posttrees.CondExpr(tf.createPrimitiveType(BOOLEAN), retType);
 	}
 
 	public static statistics.posttrees.Expr createConstructorInvocation(int id) {
@@ -301,7 +311,7 @@ public class Parser {
 	}
 
 	public static statistics.posttrees.Expr createInstOfExpr(Type type) {
-		return new statistics.posttrees.InstOfExpr(type);
+		return new statistics.posttrees.InstOfExpr(type, tf.createNewVariable());
 	}
 
 	public static statistics.posttrees.Expr createNullLiteral() {
@@ -309,7 +319,7 @@ public class Parser {
 	}
 
 	public static statistics.posttrees.Expr createNumberLiteral() {
-		return new statistics.posttrees.NumberLiteral();
+		return new statistics.posttrees.NumberLiteral(tf.createPrimitiveType("int"));
 	}
 
 	public static statistics.posttrees.Expr createPostfixOperator(String op, Type type) {
@@ -321,7 +331,7 @@ public class Parser {
 	}
 
 	public static statistics.posttrees.Expr createStringLiteral() {
-		return new statistics.posttrees.StringLiteral();
+		return new statistics.posttrees.StringLiteral(tf.createConstType(java.lang.String.class));
 	}
 	
 	public static IntResult getStatistics(String line) {
@@ -331,5 +341,9 @@ public class Parser {
 
 	public static void setDecls(Map<Integer, Declaration> decls) {
 		Parser.decls = decls;
+	}
+	
+	public static void setTf(StabileTypeFactory tf) {
+		Parser.tf = tf;
 	}
 }
