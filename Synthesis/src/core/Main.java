@@ -1,10 +1,21 @@
 package core;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import statistics.CompositionStatistics;
 import statistics.HandlerTable;
+import statistics.posttrees.Expr;
+import statistics.posttrees.InstanceMethodInvocation;
 import types.NameGenerator;
+import api.Imported;
 import api.StabileAPI;
 import config.Config;
+import definitions.Declaration;
+import definitions.Param;
+import definitions.PartialExpression;
 import deserializers.Deserializer;
 
 public class Main {
@@ -19,7 +30,22 @@ public class Main {
 		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 		
-		Synthesis synthesis = new Synthesis(handlerTable);
+		Synthesis synthesis = new Synthesis(makePexprs(api), handlerTable, 10, 10);
 		
+	}
+
+	private static List<PartialExpression> makePexprs(StabileAPI api) {
+		List<PartialExpression> pexps = new LinkedList<PartialExpression>();
+		
+		Imported imported = api.createImported();
+		api.load(imported, "java.io", true);
+		Set<Declaration> methods = imported.getMethods("addAll", 1);
+		Declaration[] decls = methods.toArray(new Declaration[methods.size()]);
+				
+		Expr exp = new InstanceMethodInvocation(decls[0]);
+		Param param = new Param(exp);
+		pexps.add(new PartialExpression(param, 1.0));
+		
+		return pexps;
 	}
 }

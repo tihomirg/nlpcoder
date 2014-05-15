@@ -11,8 +11,10 @@ public class PartialExpression implements Cloneable {
 
 	private double score = 1.0;
 	
-	public PartialExpression(LinkedList<Param> params, double score) {
-		this.params = params;
+	public PartialExpression(Param param, double score) {
+		this.params = new LinkedList<Param>();
+		this.params.add(param);
+		
 		this.score = score;
 		this.subs = new LinkedList<Substitution>();
 		this.tree = new Tree();

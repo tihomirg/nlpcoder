@@ -10,13 +10,16 @@ public class Param {
 	private Expr exp;
 	private List<Substitution> subs;
 	
-	
 	public Param(int id, Expr exp) {
 		this.id = id;
 		this.exp = exp;
 		this.subs = createSubs(this.exp);
 	}
 
+	public Param(Expr exp){
+		this(0, exp);
+	}
+	
 	private List<Substitution> createSubs(Expr expr) {
 		//expr.getArg
 		

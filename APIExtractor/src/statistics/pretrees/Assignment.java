@@ -3,10 +3,8 @@ package statistics.pretrees;
 import static statistics.parsers.Parser.*;
 
 import java.util.List;
-
 import org.eclipse.jdt.core.dom.Assignment.Operator;
 import statistics.Names;
-import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
 import statistics.parsers.StringResult;
 import types.StabileTypeFactory;
