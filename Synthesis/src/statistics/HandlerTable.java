@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import definitions.SearchKey;
+
 import statistics.handlers.Handler;
 import statistics.handlers.DeclarationHandler;
 import statistics.handlers.LiteralHandler;
@@ -52,8 +54,8 @@ public class HandlerTable {
 		
 	}
 	
-	public PriorityQueue<Expr> get(Expr expr){
-		return handlers.get(expr.getPrefix()).handle(expr);
+	public PriorityQueue<Expr> get(SearchKey key){
+		return handlers.get(key.getHandlerName()).handle(key);
 	}
 	
 	public void add(Expr expr) {

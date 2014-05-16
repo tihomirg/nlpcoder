@@ -45,5 +45,15 @@ public class InstOfExpr extends Expr {
 	@Override
 	public Type getReturnType() {
 		return type;
+	}
+
+	@Override
+	public List<Expr> getArgs() {
+		return  new LinkedList<Expr>(){{add(exp);}};
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.InstOfExpr(type, argType, ids.get(0));
 	}	
 }

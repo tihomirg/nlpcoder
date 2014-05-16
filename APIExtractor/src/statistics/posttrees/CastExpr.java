@@ -46,4 +46,14 @@ public class CastExpr extends Expr {
 	public Type getReturnType() {
 		return type;
 	}
+
+	@Override
+	public List<Expr> getArgs() {
+		return new LinkedList<Expr>(){{add(expr);}};
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.CastExpr(argType, type, ids.get(0));
+	}
 }

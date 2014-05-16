@@ -1,9 +1,7 @@
 package statistics.posttrees;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-
 import statistics.Names;
 import types.Type;
 
@@ -50,6 +48,16 @@ public class ConstructorInvocation extends Expr {
 	@Override
 	public Type getReturnType() {
 		return decl.getRetType();
+	}
+
+	@Override
+	public List<Expr> getArgs() {
+		return args;
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.ConstructorInvocation(decl, ids);
 	}
 
 }

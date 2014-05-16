@@ -1,40 +1,34 @@
 package definitions;
 
-import java.util.List;
-
 import statistics.posttrees.Expr;
-import types.Substitution;
 
 public class Param {
-	private int id;
-	private Expr exp;
-	private List<Substitution> subs;
+	private SearchKey searchKey;
+	private RepKey repKey;
 	
-	public Param(int id, Expr exp) {
-		this.id = id;
-		this.exp = exp;
-		this.subs = createSubs(this.exp);
+	public Param(SearchKey searchKey, RepKey repKey) {
+		this.searchKey = searchKey;
+		this.repKey = repKey;
+	}	
+	
+	public Param(Expr expr, int id) {
+		this.searchKey = new SearchKey(expr);
+		this.repKey = new RepKey(id);
 	}
 
-	public Param(Expr exp){
-		this(0, exp);
+	public SearchKey getSearchKey() {
+		return searchKey;
 	}
 	
-	private List<Substitution> createSubs(Expr expr) {
-		//expr.getArg
-		
-		return null;
-	}
-
-	public int getId() {
-		return id;
+	public void setSearchKey(SearchKey searchKey) {
+		this.searchKey = searchKey;
 	}
 	
-	public Expr getExp() {
-		return exp;
+	public RepKey getRepKey() {
+		return repKey;
 	}
-
-	public List<Substitution> getSubs() {
-		return subs;
+	
+	public void setRepKey(RepKey repKey) {
+		this.repKey = repKey;
 	}
 }

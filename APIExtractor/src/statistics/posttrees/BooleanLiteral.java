@@ -49,4 +49,14 @@ public class BooleanLiteral extends Expr {
 	public Type getReturnType() {
 		return type;
 	}
+
+	@Override
+	public List<Expr> getArgs() {
+		return Expr.EMPTY_EXPR_LIST;
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.BooleanLitera(type);
+	}
 }

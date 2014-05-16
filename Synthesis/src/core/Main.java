@@ -16,9 +16,13 @@ import config.Config;
 import definitions.Declaration;
 import definitions.Param;
 import definitions.PartialExpression;
+import definitions.RepKey;
+import definitions.SearchKey;
 import deserializers.Deserializer;
 
 public class Main {
+
+
 	public static void main(String[] args) {
 		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
 		Deserializer deserializer = new Deserializer();
@@ -42,10 +46,18 @@ public class Main {
 		Set<Declaration> methods = imported.getMethods("addAll", 1);
 		Declaration[] decls = methods.toArray(new Declaration[methods.size()]);
 				
-		Expr exp = new InstanceMethodInvocation(decls[0]);
-		Param param = new Param(exp);
+		Expr expr = new InstanceMethodInvocation(decls[0]);
+		
+		SearchKey searchKey = new SearchKey(expr);
+		RepKey repKey = initialRepKey();
+		Param param = new Param(searchKey, repKey);
+		
 		pexps.add(new PartialExpression(param, 1.0));
 		
 		return pexps;
+	}
+
+	private static RepKey initialRepKey() {
+		return new RepKey();
 	}
 }

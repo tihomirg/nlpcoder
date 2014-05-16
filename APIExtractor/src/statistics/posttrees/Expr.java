@@ -2,13 +2,12 @@ package statistics.posttrees;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import definitions.Declaration;
-
 import types.Type;
 
 public abstract class Expr {
 
+	public static final List<Expr> EMPTY_EXPR_LIST = new LinkedList<Expr>();
 	private int frequency;
 
 	public abstract void addArgs(List<Expr> args);
@@ -16,7 +15,7 @@ public abstract class Expr {
 	public abstract List<Type> getArgTypes();
 	public abstract Type getReturnType();
 	
-	public List<Type> getAllType(){
+	public List<Type> getAllTypes(){
 		LinkedList<Type> list = new LinkedList<Type>();
 		list.addAll(getArgTypes());
 		list.add(getReturnType());
@@ -67,4 +66,8 @@ public abstract class Expr {
 	public Declaration getDecl(){
 		throw new UnsupportedOperationException();
 	}
+
+	public abstract List<Expr> getArgs();
+
+	public abstract synthesis.trees.Expr createRep(List<Integer> ids);
 }

@@ -50,4 +50,14 @@ public class InstanceFieldAccess extends Expr {
 	public Type getReturnType() {
 		return decl.getRetType();
 	}
+
+	@Override
+	public List<Expr> getArgs() {
+		return decl.isStatic() ? Expr.EMPTY_EXPR_LIST : new LinkedList<Expr>(){{add(exp);}};
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.InstanceFieldAccess(decl, decl.isStatic() ? 0 : ids.get(0));
+	}
 }

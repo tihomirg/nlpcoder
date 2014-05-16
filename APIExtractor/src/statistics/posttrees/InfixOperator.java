@@ -52,5 +52,15 @@ public class InfixOperator extends Expr {
 	@Override
 	public Type getReturnType() {
 		return type;
+	}
+
+	@Override
+	public List<Expr> getArgs() {
+		return new LinkedList<Expr>(){{add(lexp); add(rexp);}};
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.InfixOperator(op, type, ids.get(0), ids.get(1));
 	}	
 }

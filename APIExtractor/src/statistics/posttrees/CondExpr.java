@@ -49,5 +49,15 @@ public class CondExpr extends Expr {
 	@Override
 	public Type getReturnType() {
 		return this.retType;
+	}
+
+	@Override
+	public List<Expr> getArgs() {
+		return new LinkedList<Expr>(){{add(expr); add(thenExpr); add(elseExpr);}};
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.CondExpr(condType, retType, ids.get(0), ids.get(1), ids.get(2));
 	}	
 }

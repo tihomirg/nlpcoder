@@ -50,4 +50,14 @@ public class StringExpr extends Expr {
 	public Type getReturnType() {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public List<Expr> getArgs() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		throw new UnsupportedOperationException();
+	}
 }

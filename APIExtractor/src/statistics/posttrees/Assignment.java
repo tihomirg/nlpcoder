@@ -54,5 +54,18 @@ public class Assignment extends Expr {
 	public Type getReturnType() {
 		return type;
 	}
+
+	@Override
+	public List<Expr> getArgs() {
+		List<Expr> args = new LinkedList<Expr>();
+		args.add(lexp);
+		args.add(rexp);
+		return args;
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.Assignment(op, type, ids.get(0), ids.get(1));
+	}
 	
 }

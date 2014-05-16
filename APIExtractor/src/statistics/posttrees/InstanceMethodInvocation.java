@@ -54,13 +54,27 @@ public class InstanceMethodInvocation extends Expr {
 
 	@Override
 	public List<Type> getArgTypes() {
-		List<Type> list = Arrays.asList(decl.getArgTypes());
+		List<Type> list = new LinkedList<Type>();
 		if (!decl.isStatic()) list.add(decl.getReceiverType());
+		list.addAll(Arrays.asList(decl.getArgTypes()));
 		return list;
 	}
 
 	@Override
 	public Type getReturnType() {
 		return decl.getRetType();
+	}
+
+	@Override
+	public List<Expr> getArgs() {
+		List<Expr> list = new LinkedList<Expr>();
+		if (!decl.isStatic()) list.add(exp);
+		list.addAll(args);
+		return list;
+	}
+
+	@Override
+	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		return new synthesis.trees.InstanceMethodInvocation(decl, ids);
 	}	
 }

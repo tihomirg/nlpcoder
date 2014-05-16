@@ -1,6 +1,9 @@
 package definitions;
 
 import java.util.LinkedList;
+import java.util.List;
+
+import statistics.posttrees.Expr;
 import types.Substitution;
 
 public class PartialExpression implements Cloneable {
@@ -8,7 +11,6 @@ public class PartialExpression implements Cloneable {
 	private LinkedList<Param> params;
 	private LinkedList<Substitution> subs;
 	private Tree tree;
-
 	private double score = 1.0;
 	
 	public PartialExpression(Param param, double score) {
@@ -54,4 +56,25 @@ public class PartialExpression implements Cloneable {
 		return tree.toString();
 	}
 
+	public PartialExpression createPartialExpr(Param param, Expr expr) {
+		PartialExpression newPexpr = this.clone();
+		List<Param> params = newPexpr.getTree().substitute(param, expr);
+		
+		newPexpr.removeParam(param);
+		newPexpr.addAllParams(params);
+		
+		return newPexpr;
+	}
+
+	private void addAllParams(List<Param> params) {
+		this.params.addAll(params);
+	}
+
+	private Tree getTree() {
+		return this.tree;
+	}
+
+	private void removeParam(Param param) {
+		params.remove(param);
+	}
 }
