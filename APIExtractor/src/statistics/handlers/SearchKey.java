@@ -1,4 +1,4 @@
-package definitions;
+package statistics.handlers;
 
 import statistics.posttrees.Expr;
 
@@ -16,5 +16,9 @@ public class SearchKey {
 
 	public Expr getExpr() {
 		return this.expr;
+	}
+
+	public Handler getHandler(HandlerFactory hf) {
+		return expr.getHandler(hf);
 	}
 }

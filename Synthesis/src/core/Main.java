@@ -7,6 +7,7 @@ import java.util.Set;
 
 import statistics.CompositionStatistics;
 import statistics.HandlerTable;
+import statistics.handlers.SearchKey;
 import statistics.posttrees.Expr;
 import statistics.posttrees.InstanceMethodInvocation;
 import types.NameGenerator;
@@ -17,7 +18,6 @@ import definitions.Declaration;
 import definitions.Param;
 import definitions.PartialExpression;
 import definitions.RepKey;
-import definitions.SearchKey;
 import deserializers.Deserializer;
 
 public class Main {

@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
+import statistics.handlers.Handler;
+import statistics.handlers.HandlerFactory;
 import types.Type;
 
 public class PostfixOperator extends Expr {
@@ -60,5 +62,10 @@ public class PostfixOperator extends Expr {
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
 		return new synthesis.trees.PostfixOperator(op, type, ids.get(0));
+	}
+
+	@Override
+	public Handler getHandler(HandlerFactory hf) {
+		return hf.getPostfixOperatorHandler();
 	}	
 }

@@ -2,9 +2,6 @@ package statistics.handlers;
 
 import java.util.PriorityQueue;
 
-import definitions.SearchKey;
-
-import statistics.ExprComparator;
 import statistics.posttrees.Expr;
 
 public abstract class Handler {

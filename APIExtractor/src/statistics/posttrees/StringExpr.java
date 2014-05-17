@@ -3,6 +3,8 @@ package statistics.posttrees;
 import java.util.List;
 
 import statistics.Names;
+import statistics.handlers.Handler;
+import statistics.handlers.HandlerFactory;
 import types.Type;
 
 public class StringExpr extends Expr {
@@ -58,6 +60,11 @@ public class StringExpr extends Expr {
 
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Handler getHandler(HandlerFactory hf) {
 		throw new UnsupportedOperationException();
 	}
 }

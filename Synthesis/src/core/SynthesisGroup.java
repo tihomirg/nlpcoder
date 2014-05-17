@@ -1,11 +1,12 @@
 package core;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import statistics.HandlerTable;
+import statistics.handlers.Handler;
+import statistics.handlers.SearchKey;
 import statistics.posttrees.Expr;
 import definitions.Param;
 import definitions.PartialExpression;
@@ -34,7 +35,10 @@ public class SynthesisGroup {
 	private List<PartialExpression> resolve(PartialExpression pexp) {
 		Param param = pexp.getParam();
 		
-		PriorityQueue<Expr> queue = handlerTable.get(param.getSearchKey());
+		SearchKey searchKey = param.getSearchKey();
+		Handler handler = searchKey.getHandler(handlerTable);
+		
+		PriorityQueue<Expr> queue = handler.handle(searchKey);
 		
 		return createNewPartialExprs(pexp, param, queue);		
 	}

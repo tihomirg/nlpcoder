@@ -3,6 +3,8 @@ package statistics.posttrees;
 import java.util.List;
 
 import statistics.Names;
+import statistics.handlers.Handler;
+import statistics.handlers.HandlerFactory;
 import types.Type;
 
 public class NumberLiteral extends Expr {
@@ -56,5 +58,10 @@ public class NumberLiteral extends Expr {
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
 		return new synthesis.trees.NumberLiteral(type);
+	}
+
+	@Override
+	public Handler getHandler(HandlerFactory hf) {
+		return hf.getNumberLiteralHandler();
 	}
 }

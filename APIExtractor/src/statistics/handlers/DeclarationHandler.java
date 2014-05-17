@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import definitions.SearchKey;
 import statistics.posttrees.Expr;
 
 public class DeclarationHandler extends Handler {

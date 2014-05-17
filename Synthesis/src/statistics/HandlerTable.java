@@ -4,61 +4,78 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import definitions.SearchKey;
 
 import statistics.handlers.Handler;
 import statistics.handlers.DeclarationHandler;
+import statistics.handlers.HandlerFactory;
 import statistics.handlers.LiteralHandler;
 import statistics.handlers.LocalsHandler;
 import statistics.handlers.OperatorHandler;
+import statistics.handlers.SearchKey;
 import statistics.handlers.SingleHandler;
 import statistics.handlers.SingleTypedHandler;
 import statistics.handlers.TypeHandler;
 import statistics.handlers.TypedOperatorHandler;
 import statistics.posttrees.Expr;
 
-public class HandlerTable {
+public class HandlerTable extends HandlerFactory {
 	
-	private Map<String, Handler> handlers;
+	private Handler methodInvocationHandler = new DeclarationHandler();
+	private Handler fieldAccessHandler = new DeclarationHandler();
+	private Handler constructorInvocationHandler = new DeclarationHandler();
 	
-	public HandlerTable() {
-		this.handlers = new HashMap<String, Handler>();
-		
-		//Declaration handlers
-		this.handlers.put(Names.InstanceMethodInvocation, new DeclarationHandler());
-		this.handlers.put(Names.InstanceFieldAccess, new DeclarationHandler());
-		this.handlers.put(Names.ConstructorInvocation, new DeclarationHandler());
-		
-		//Literal handlers
-		this.handlers.put(Names.BooleanLiteral, new LiteralHandler());
-		this.handlers.put(Names.CharacterLiteral, new LiteralHandler());
-		this.handlers.put(Names.NullLiteral, new LiteralHandler());
-		this.handlers.put(Names.NumberLiteral, new LiteralHandler());
-		this.handlers.put(Names.StringLiteral, new LiteralHandler());
-		
-		this.handlers.put(Names.Assignment, new OperatorHandler());
-		this.handlers.put(Names.CondExpr, new SingleHandler());
-		
-		//Type based 
-		this.handlers.put(Names.CastExpr, new SingleTypedHandler());
-		this.handlers.put(Names.InstOfExpr, new SingleTypedHandler());
-		
-		//Type based
-		this.handlers.put(Names.InfixOperator, new TypedOperatorHandler());
-		this.handlers.put(Names.PrefixOperator, new TypedOperatorHandler());
-		this.handlers.put(Names.PostfixOperator, new TypedOperatorHandler());
-		
-		this.handlers.put(Names.Hole, new LocalsHandler());
+	private Handler booleanLiteralHandler = new LiteralHandler();
+	private Handler characterLiteralHandler = new LiteralHandler();
+	private Handler nullLiteralHandler = new LiteralHandler();
+	private Handler numberLiteralHandler = new LiteralHandler();
+	private Handler stringLiteralHandler = new LiteralHandler();
+	
+	private Handler assignmentHandler = new OperatorHandler();	
+	
+	private Handler castExprHandler = new SingleTypedHandler();
+	private Handler instOfExprHandler = new SingleTypedHandler();	
+	
+	private Handler condExprHandler = new SingleHandler();
+	
+	private Handler infixOperatorHandler = new TypedOperatorHandler();
+	private Handler prefixOperatorHandler = new TypedOperatorHandler();
+	private Handler postfixOperatorHandler = new TypedOperatorHandler();	
+	private Handler holeHandler = new LocalsHandler();
+	private Handler typeHandler = new TypeHandler();		
+	
+	//Declaration handlers
+	public Handler getMethodInvocationHandler() {return methodInvocationHandler;}
+	public Handler getFieldAccessHandler(){return fieldAccessHandler;}
+	public Handler getConstructorInvocationHandler(){return constructorInvocationHandler;}
+	
+	//Literal handlers	
+	public Handler getBooleanLiteralHandler(){return booleanLiteralHandler;}
+	public Handler getCharacterLiteralHandler() {return characterLiteralHandler;}
+	public Handler getNullLiteralHandler(){return nullLiteralHandler;}
+	public Handler getNumberLiteralHandler(){return numberLiteralHandler;}
+	public Handler getStringLiteralHandler(){return stringLiteralHandler;}
+	
+	public Handler getAssignmentHandler(){return assignmentHandler;}	
+	public Handler getCondExprHandler(){return condExprHandler;}
+	
+	//Type based 
+	public Handler getCastExprHandler(){return castExprHandler;}
+	public Handler getInstOfExprHandler(){return instOfExprHandler;}
+	
+	//Type based
+	public Handler getInfixOperatorHandler(){return infixOperatorHandler;}
+	public Handler getPrefixOperatorHandler(){return prefixOperatorHandler;}
+	public Handler getPostfixOperatorHandler(){return postfixOperatorHandler;}
+	
+	public Handler getHoleHandler(){return holeHandler;}
 
-		this.handlers.put(Names.TYPE, new TypeHandler());
-		
-	}
+	public Handler getTypeHandler(){return typeHandler;}	
 	
-	public PriorityQueue<Expr> get(SearchKey key){
-		return handlers.get(key.getHandlerName()).handle(key);
-	}
-	
-	public void add(Expr expr) {
-		handlers.get(expr.getPrefix()).add(expr);
-	}
+//	public PriorityQueue<Expr> get(SearchKey key){
+//		return handlers.get(key.getHandlerName()).handle(key);
+//	}
+//	
+//	public void add(Expr expr) {
+//		handlers.get(expr.getPrefix()).add(expr);
+//	}
 }

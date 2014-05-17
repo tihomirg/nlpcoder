@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
+import statistics.handlers.Handler;
+import statistics.handlers.HandlerFactory;
 import types.Type;
 
 public class CondExpr extends Expr {
@@ -59,5 +61,10 @@ public class CondExpr extends Expr {
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
 		return new synthesis.trees.CondExpr(condType, retType, ids.get(0), ids.get(1), ids.get(2));
+	}
+
+	@Override
+	public Handler getHandler(HandlerFactory hf) {
+		return hf.getCondExprHandler();
 	}	
 }

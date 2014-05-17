@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
+import statistics.handlers.Handler;
+import statistics.handlers.HandlerFactory;
 import types.Type;
 
 public class PrefixOperator extends Expr {
@@ -60,5 +62,10 @@ public class PrefixOperator extends Expr {
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
 		return new synthesis.trees.PrefixOperator(op, type, ids.get(0));
+	}
+
+	@Override
+	public Handler getHandler(HandlerFactory hf) {
+		return hf.getPrefixOperatorHandler();
 	}	
 }

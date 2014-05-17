@@ -1,4 +1,4 @@
-package statistics;
+package statistics.handlers;
 
 import java.util.Comparator;
 

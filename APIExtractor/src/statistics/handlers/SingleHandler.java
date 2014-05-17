@@ -2,11 +2,9 @@ package statistics.handlers;
 
 import java.util.PriorityQueue;
 
-import definitions.SearchKey;
-
 import statistics.posttrees.Expr;
 
-public class LocalsHandler extends Handler {
+public class SingleHandler extends Handler {
 
 	@Override
 	public PriorityQueue<Expr> handle(SearchKey key) {
@@ -17,7 +15,6 @@ public class LocalsHandler extends Handler {
 	@Override
 	public void add(Expr expr) {
 		// TODO Auto-generated method stub
-
 	}
 
 }

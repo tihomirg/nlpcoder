@@ -3,6 +3,8 @@ package statistics.posttrees;
 import java.util.LinkedList;
 import java.util.List;
 import definitions.Declaration;
+import statistics.handlers.Handler;
+import statistics.handlers.HandlerFactory;
 import types.Type;
 
 public abstract class Expr {
@@ -70,4 +72,6 @@ public abstract class Expr {
 	public abstract List<Expr> getArgs();
 
 	public abstract synthesis.trees.Expr createRep(List<Integer> ids);
+
+	public abstract Handler getHandler(HandlerFactory hf);
 }

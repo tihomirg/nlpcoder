@@ -8,6 +8,7 @@ import java.util.Map;
 
 import definitions.Declaration;
 
+import statistics.handlers.Handler;
 import statistics.parsers.IntResult;
 import statistics.parsers.Parser;
 import statistics.posttrees.Expr;
@@ -68,6 +69,8 @@ public class CompositionStatistics {
 		
 		System.out.println(expr);
 		
-		table.add(expr);
+		Handler handler = expr.getHandler(table);		
+		handler.add(expr);
+		
 	}
 }

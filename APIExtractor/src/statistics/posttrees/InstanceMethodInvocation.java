@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
+import statistics.handlers.Handler;
+import statistics.handlers.HandlerFactory;
 import types.Type;
 import definitions.Declaration;
 
@@ -76,5 +78,10 @@ public class InstanceMethodInvocation extends Expr {
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
 		return new synthesis.trees.InstanceMethodInvocation(decl, ids);
+	}
+
+	@Override
+	public Handler getHandler(HandlerFactory hf) {
+		return hf.getMethodInvocationHandler();
 	}	
 }

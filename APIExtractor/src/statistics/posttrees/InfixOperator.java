@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
+import statistics.handlers.Handler;
+import statistics.handlers.HandlerFactory;
 import types.Type;
 
 public class InfixOperator extends Expr {
@@ -62,5 +64,10 @@ public class InfixOperator extends Expr {
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
 		return new synthesis.trees.InfixOperator(op, type, ids.get(0), ids.get(1));
+	}
+
+	@Override
+	public Handler getHandler(HandlerFactory hf) {
+		return hf.getInfixOperatorHandler();
 	}	
 }
