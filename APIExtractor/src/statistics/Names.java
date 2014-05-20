@@ -2,6 +2,8 @@ package statistics;
 
 public class Names {
 
+	public static final boolean HumanReadable = true;
+	
 	public static final String Assignment = "Asgn";
 	public static final String BooleanLiteral = "Bool";
 	public static final String CastExpr = "Cast";
@@ -22,9 +24,10 @@ public class Names {
 
 	public static final String TYPE = "Type";	
 	
-	public static final String LPar = "%$(";
-	public static final String RPar = ")$%";
-	public static final String Comma = "%$,$%";
+	public static final String LPar = HumanReadable ? "(": "%$(";
+	public static final String RPar = HumanReadable ? ")" : ")$%";
+	public static final String Comma = HumanReadable ? "," : "%$,$%";
+	
 	public static final String Colon = " : ";
 
 }

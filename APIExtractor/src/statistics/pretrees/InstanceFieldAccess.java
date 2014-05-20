@@ -32,7 +32,15 @@ public class InstanceFieldAccess extends Expr{
 
 	@Override
 	public String shortRep() {
-		return Names.InstanceFieldAccess+Names.LPar+field.getId()+Names.RPar;
+		return Names.InstanceFieldAccess+Names.LPar+name()+Names.RPar;
+	}
+
+	private String name() {
+		if (Names.HumanReadable){
+			return field.getLongName();
+		} else {
+			return Integer.toString(field.getId());
+		}
 	}
 
 	@Override

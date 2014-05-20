@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.ParenthesizedExpression;
@@ -245,30 +246,9 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 
 	public boolean visit(FieldAccess node) {
 		String name = node.getName().getIdentifier();
-		Expr exp = getExpr(node.getExpression());
-		Type type = exp.getType();
-
-		if (type instanceof ReferenceType){
-			ReferenceType refType = (ReferenceType) type;
-			ClassInfo classInfo = refType.getClassInfo();
-			if(classInfo != null){
-				Declaration[] fields = classInfo.getAllFields();
-
-				Declaration field = getFirstCompatible(fields, name);
-
-				//TODO: Fix this such that field "null"
-				//This might be because many methods have same name diff args and they are filtered/masked
-				if (field != null){
-					setExpr(expFactory.createFieldAccess(field, exp));
-				} else {
-					setExprToHole();
-				}
-
-			} else setExprToHole();
-
-		} else setExprToHole();
-
-		return false;
+		ASTNode expr = node.getExpression();
+		
+		return filedAndQualifiedName(name, expr);
 	}
 
 	public boolean visit(InfixExpression node){
@@ -365,7 +345,35 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 
 	//Static methods, fields.
 	public boolean visit(QualifiedName node) {
-		setExprToHole();
+		String name = node.getName().getIdentifier();
+		ASTNode expr = node.getQualifier();
+		return filedAndQualifiedName(name, expr);				
+	}
+
+	private boolean filedAndQualifiedName(String name, ASTNode expr) {
+		Expr exp = getExpr(expr);
+		Type type = exp.getType();
+
+		if (type instanceof ReferenceType){
+			ReferenceType refType = (ReferenceType) type;
+			ClassInfo classInfo = refType.getClassInfo();
+			if(classInfo != null){
+				Declaration[] fields = classInfo.getAllFields();
+
+				Declaration field = getFirstCompatible(fields, name);
+
+				//TODO: Fix this such that field "null"
+				//This might be because many methods have same name diff args and they are filtered/masked
+				if (field != null){
+					setExpr(expFactory.createFieldAccess(field, exp));
+				} else {
+					setExprToHole();
+				}
+
+			} else setExprToHole();
+
+		} else setExprToHole();
+
 		return false;
 	}
 

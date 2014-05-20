@@ -37,8 +37,16 @@ public class InstanceMethodInvocation extends Expr{
 
 	@Override
 	public String shortRep() {
-		return Names.InstanceMethodInvocation+Names.LPar+method.getId()+Names.RPar;
+		return Names.InstanceMethodInvocation+Names.LPar+name()+Names.RPar;
 	}
+	
+	private String name() {
+		if (Names.HumanReadable){
+			return method.getLongName();
+		} else {
+			return Integer.toString(method.getId());
+		}
+	}	
 
 	@Override
 	protected String argReps() {

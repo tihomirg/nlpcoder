@@ -34,8 +34,16 @@ public class ConstructorInvocation extends Expr{
 
 	@Override
 	public String shortRep() {
-		return Names.ConstructorInvocation+Names.LPar+cons.getId()+Names.RPar;
+		return Names.ConstructorInvocation+Names.LPar+name()+Names.RPar;
 	}
+	
+	private String name() {
+		if (Names.HumanReadable){
+			return cons.getLongName();
+		} else {
+			return Integer.toString(cons.getId());
+		}
+	}	
 	
 	@Override
 	protected String argReps() {
