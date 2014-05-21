@@ -32,7 +32,8 @@ public class Main {
 		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 		
-		Synthesis synthesis = new Synthesis(makePexprs(api), handlerTable, 1, 10);
+		GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, 10, 20);
+		Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(makePexprs(api), builder);
 		
 		synthesis.run();
 		

@@ -1,10 +1,10 @@
-package definitions;
+package comparators;
 
 import java.util.Comparator;
 
 import synthesis.PartialExpression;
 
-public class PartialExpressionComparator implements Comparator<PartialExpression>{
+public class PartialExpressionComparatorDesc implements Comparator<PartialExpression>{
 
 	@Override
 	public int compare(PartialExpression o1, PartialExpression o2) {
