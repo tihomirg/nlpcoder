@@ -1,10 +1,10 @@
-package statistics.handlers;
+package synthesis.handlers;
 
 import java.util.PriorityQueue;
 
 import statistics.posttrees.Expr;
 
-public class SingleTypedHandler extends Handler {
+public class TypedOperatorHandler extends Handler {
 
 	@Override
 	public PriorityQueue<Expr> handle(SearchKey key) {

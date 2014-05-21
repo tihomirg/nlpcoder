@@ -6,12 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
+import core.HandlerTable;
+
 import definitions.Declaration;
 
-import statistics.handlers.Handler;
 import statistics.parsers.IntResult;
 import statistics.parsers.Parser;
 import statistics.posttrees.Expr;
+import synthesis.handlers.Handler;
 import types.StabileTypeFactory;
 
 public class CompositionStatistics {

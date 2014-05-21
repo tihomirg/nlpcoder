@@ -1,4 +1,4 @@
-package statistics.handlers;
+package synthesis.handlers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +21,7 @@ public class DeclarationHandler extends Handler {
 		Declaration decl = key.getExpr().getDecl();
 		
 		PriorityQueue<Expr> priorityQueue = pqs.get(decl.getId());
-		
-		//System.out.println(decl.getLongName() +" "+priorityQueue);
-		
+				
 		return priorityQueue;
 	}
 	

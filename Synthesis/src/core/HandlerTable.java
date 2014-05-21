@@ -1,22 +1,15 @@
-package statistics;
+package core;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-
-
-import statistics.handlers.Handler;
-import statistics.handlers.DeclarationHandler;
-import statistics.handlers.HandlerFactory;
-import statistics.handlers.LiteralHandler;
-import statistics.handlers.LocalsHandler;
-import statistics.handlers.OperatorHandler;
-import statistics.handlers.SearchKey;
-import statistics.handlers.SingleHandler;
-import statistics.handlers.SingleTypedHandler;
-import statistics.handlers.TypeHandler;
-import statistics.handlers.TypedOperatorHandler;
-import statistics.posttrees.Expr;
+import synthesis.handlers.DeclarationHandler;
+import synthesis.handlers.Handler;
+import synthesis.handlers.HandlerFactory;
+import synthesis.handlers.LiteralHandler;
+import synthesis.handlers.LocalsHandler;
+import synthesis.handlers.OperatorHandler;
+import synthesis.handlers.SingleHandler;
+import synthesis.handlers.SingleTypedHandler;
+import synthesis.handlers.TypeHandler;
+import synthesis.handlers.TypedOperatorHandler;
 
 public class HandlerTable extends HandlerFactory {
 	
@@ -69,13 +62,5 @@ public class HandlerTable extends HandlerFactory {
 	
 	public Handler getHoleHandler(){return holeHandler;}
 
-	public Handler getTypeHandler(){return typeHandler;}	
-	
-//	public PriorityQueue<Expr> get(SearchKey key){
-//		return handlers.get(key.getHandlerName()).handle(key);
-//	}
-//	
-//	public void add(Expr expr) {
-//		handlers.get(expr.getPrefix()).add(expr);
-//	}
+	public Handler getTypeHandler(){return typeHandler;}
 }

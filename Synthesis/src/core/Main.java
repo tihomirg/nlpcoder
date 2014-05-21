@@ -6,14 +6,13 @@ import java.util.Map;
 import java.util.Set;
 
 import statistics.CompositionStatistics;
-import statistics.HandlerTable;
-import statistics.handlers.SearchKey;
 import statistics.posttrees.ConstructorInvocation;
 import statistics.posttrees.Expr;
 import statistics.posttrees.InstanceMethodInvocation;
 import synthesis.Param;
 import synthesis.PartialExpression;
 import synthesis.RepKey;
+import synthesis.handlers.SearchKey;
 import types.NameGenerator;
 import api.Imported;
 import api.StabileAPI;
@@ -33,7 +32,7 @@ public class Main {
 		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 		
-		Synthesis synthesis = new Synthesis(makePexprs(api), handlerTable, 10, 10);
+		Synthesis synthesis = new Synthesis(makePexprs(api), handlerTable, 1, 10);
 		
 		synthesis.run();
 		

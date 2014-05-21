@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import statistics.Names;
-import statistics.handlers.Handler;
-import statistics.handlers.HandlerFactory;
+import synthesis.handlers.Handler;
+import synthesis.handlers.HandlerFactory;
 import types.Type;
 import definitions.Declaration;
 
@@ -80,10 +80,10 @@ public class InstanceMethodInvocation extends Expr {
 		if (decl.isStatic()){
 			return new synthesis.trees.InstanceMethodInvocation(decl, 0 , ids);
 		} else {
-			return new synthesis.trees.InstanceMethodInvocation(decl, ids.remove(0), ids);
+			LinkedList<Integer> indexes = new LinkedList<Integer>();
+			indexes.addAll(ids);
+			return new synthesis.trees.InstanceMethodInvocation(decl, indexes.remove(0), indexes);
 		}
-		
-		
 	}
 
 	@Override

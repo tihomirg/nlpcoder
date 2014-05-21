@@ -1,15 +1,16 @@
 package core;
 
+import java.util.AbstractQueue;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import statistics.HandlerTable;
-import statistics.handlers.Handler;
-import statistics.handlers.SearchKey;
 import statistics.posttrees.Expr;
 import synthesis.Param;
 import synthesis.PartialExpression;
+import synthesis.handlers.Handler;
+import synthesis.handlers.SearchKey;
+import util.Pair;
 import definitions.PartialExpressionComparator;
 
 public class SynthesisGroup {
@@ -17,6 +18,7 @@ public class SynthesisGroup {
 	private HandlerTable handlerTable;
 	private static final PartialExpressionComparator COMPARATOR = new PartialExpressionComparator();
 	private PriorityQueue<PartialExpression> pexprs = new PriorityQueue<PartialExpression>(DEFAULT_CAPACITY, COMPARATOR);
+	private PriorityQueue<PartialExpression> cpexprs = new PriorityQueue<PartialExpression>(DEFAULT_CAPACITY, COMPARATOR);
 	private int steps;
 	
 	public SynthesisGroup(PartialExpression expr, HandlerTable handlerTable, int steps) {
@@ -28,11 +30,32 @@ public class SynthesisGroup {
 
 	public void run(){
 		for (int i = 0; i < steps && !pexprs.isEmpty(); i++) {
-			pexprs.addAll(resolve(pexprs.remove()));
+			Pair<List<PartialExpression>, List<PartialExpression>> newPexps = resolve(pexprs.remove());
+			
+			cpexprs.addAll(newPexps.getFirst());
+			pexprs.addAll(newPexps.getSecond());
 		}
+			
+		print();
+		
+		System.out.println("Number of partial expressions: "+pexprs.size());
 	}
 
-	private List<PartialExpression> resolve(PartialExpression pexp) {
+	private void print() {
+		System.out.println("Partial: ");
+		for (PartialExpression pexpr : pexprs) {
+			System.out.println(pexpr);
+		}
+		
+		System.out.println("Completed: ");
+		for (PartialExpression pexpr : cpexprs) {
+			System.out.println(pexpr);
+		}		
+	}
+
+	private Pair<List<PartialExpression>, List<PartialExpression>> resolve(PartialExpression pexp) {
+		System.out.println(pexp);
+		
 		Param param = pexp.getParam();
 		
 		SearchKey searchKey = param.getSearchKey();
@@ -43,12 +66,19 @@ public class SynthesisGroup {
 		return createNewPartialExprs(pexp, param, queue);		
 	}
 
-	private List<PartialExpression> createNewPartialExprs(PartialExpression pexp, Param param, PriorityQueue<Expr> queue) {
-		List<PartialExpression> list = new LinkedList<PartialExpression>();
+	private Pair<List<PartialExpression>,List<PartialExpression>> createNewPartialExprs(PartialExpression pexp, Param param, PriorityQueue<Expr> queue) {
+		List<PartialExpression> noncompleted = new LinkedList<PartialExpression>();
+		List<PartialExpression> completed = new LinkedList<PartialExpression>();
 		for (Expr expr : queue) {
-			list.add(pexp.createPartialExpr(param, expr));
+			PartialExpression newPexp = pexp.instantiate(param, expr);
+			if(newPexp.isCompleted()) {
+				completed.add(newPexp);
+			} else {
+				noncompleted.add(newPexp);				
+			}
 		}
-		return list;
+		
+		return new Pair<List<PartialExpression>,List<PartialExpression>>(completed, noncompleted);
 	}
 
 	public boolean hasEnded(){

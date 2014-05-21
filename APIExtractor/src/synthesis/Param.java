@@ -1,7 +1,7 @@
 package synthesis;
 
-import statistics.handlers.SearchKey;
 import statistics.posttrees.Expr;
+import synthesis.handlers.SearchKey;
 
 public class Param {
 	private SearchKey searchKey;

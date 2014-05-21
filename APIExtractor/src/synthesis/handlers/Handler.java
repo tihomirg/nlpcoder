@@ -1,4 +1,4 @@
-package statistics.handlers;
+package synthesis.handlers;
 
 import java.util.PriorityQueue;
 

@@ -3,8 +3,8 @@ package statistics.posttrees;
 import java.util.Arrays;
 import java.util.List;
 import statistics.Names;
-import statistics.handlers.Handler;
-import statistics.handlers.HandlerFactory;
+import synthesis.handlers.Handler;
+import synthesis.handlers.HandlerFactory;
 import types.Type;
 
 import definitions.Declaration;
@@ -19,7 +19,7 @@ public class ConstructorInvocation extends Expr {
 	}
 
 	@Override
-	public void addArgs(List<Expr> args) {
+	public void addArgs(List<Expr> args) {		
 		this.args = args;
 	}
 

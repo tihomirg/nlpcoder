@@ -18,7 +18,7 @@ public class ConstructorInvocation extends Expr {
 
 	@Override
 	public String toString(Representation rep) {
-		return rep.toString(ids);
+		return decl.getName()+"("+rep.toString(ids)+")";
 	}
 
 }

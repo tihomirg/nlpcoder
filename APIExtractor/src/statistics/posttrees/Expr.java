@@ -3,8 +3,8 @@ package statistics.posttrees;
 import java.util.LinkedList;
 import java.util.List;
 import definitions.Declaration;
-import statistics.handlers.Handler;
-import statistics.handlers.HandlerFactory;
+import synthesis.handlers.Handler;
+import synthesis.handlers.HandlerFactory;
 import types.Type;
 
 public abstract class Expr {
@@ -37,7 +37,7 @@ public abstract class Expr {
 	}
 
 	public String toString(){
-		return frequency+" : "+shortRep()+"("+argsRep()+")";
+		return frequency+" : "+shortRep();
 	}
 
 	public static String shortReps(Expr... args){

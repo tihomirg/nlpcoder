@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import statistics.HandlerTable;
 import synthesis.PartialExpression;
 
 import definitions.PartialExpressionComparator;

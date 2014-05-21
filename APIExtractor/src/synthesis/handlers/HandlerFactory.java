@@ -1,4 +1,4 @@
-package statistics.handlers;
+package synthesis.handlers;
 
 public abstract class HandlerFactory {
 	//Declaration handlers

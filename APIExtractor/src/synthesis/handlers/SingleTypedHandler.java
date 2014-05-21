@@ -1,13 +1,14 @@
-package statistics.handlers;
+package synthesis.handlers;
 
 import java.util.PriorityQueue;
+
 import statistics.posttrees.Expr;
 
-public class LocalsHandler extends Handler {
+public class SingleTypedHandler extends Handler {
 
 	@Override
 	public PriorityQueue<Expr> handle(SearchKey key) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 		return EMPTY_PQ;
 	}
 
