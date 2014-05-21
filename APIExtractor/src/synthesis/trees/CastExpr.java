@@ -1,5 +1,6 @@
 package synthesis.trees;
 
+import synthesis.Representation;
 import types.Type;
 
 public class CastExpr extends Expr {
@@ -14,4 +15,8 @@ public class CastExpr extends Expr {
 		this.argId = argId;
 	}
 
+	@Override
+	public String toString(Representation rep) {
+		return "("+type+")"+rep.toString(argId);
+	}
 }

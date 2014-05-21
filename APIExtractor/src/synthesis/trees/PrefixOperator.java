@@ -1,5 +1,6 @@
 package synthesis.trees;
 
+import synthesis.Representation;
 import types.Type;
 
 public class PrefixOperator extends Expr {
@@ -12,6 +13,11 @@ public class PrefixOperator extends Expr {
 		this.op = op;
 		this.type = type;
 		this.argId = argId;
+	}
+
+	@Override
+	public String toString(Representation rep) {
+		return op+rep.toString(argId);
 	}
 
 }

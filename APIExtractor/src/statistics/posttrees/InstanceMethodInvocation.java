@@ -77,7 +77,13 @@ public class InstanceMethodInvocation extends Expr {
 
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
-		return new synthesis.trees.InstanceMethodInvocation(decl, ids);
+		if (decl.isStatic()){
+			return new synthesis.trees.InstanceMethodInvocation(decl, 0 , ids);
+		} else {
+			return new synthesis.trees.InstanceMethodInvocation(decl, ids.remove(0), ids);
+		}
+		
+		
 	}
 
 	@Override

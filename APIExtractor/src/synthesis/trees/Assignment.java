@@ -1,5 +1,6 @@
 package synthesis.trees;
 
+import synthesis.Representation;
 import types.Type;
 
 public class Assignment extends Expr {
@@ -14,6 +15,11 @@ public class Assignment extends Expr {
 		this.type = type;
 		this.lexpId = lexpId;
 		this.rexpId = rexpId;
+	}
+
+	@Override
+	public String toString(Representation rep) {
+		return rep.toString(lexpId) +" "+op+" "+rep.toString(rexpId);
 	}
 
 }

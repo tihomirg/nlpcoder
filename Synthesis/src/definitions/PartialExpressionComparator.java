@@ -2,6 +2,8 @@ package definitions;
 
 import java.util.Comparator;
 
+import synthesis.PartialExpression;
+
 public class PartialExpressionComparator implements Comparator<PartialExpression>{
 
 	@Override

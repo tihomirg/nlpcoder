@@ -8,16 +8,17 @@ import java.util.Set;
 import statistics.CompositionStatistics;
 import statistics.HandlerTable;
 import statistics.handlers.SearchKey;
+import statistics.posttrees.ConstructorInvocation;
 import statistics.posttrees.Expr;
 import statistics.posttrees.InstanceMethodInvocation;
+import synthesis.Param;
+import synthesis.PartialExpression;
+import synthesis.RepKey;
 import types.NameGenerator;
 import api.Imported;
 import api.StabileAPI;
 import config.Config;
 import definitions.Declaration;
-import definitions.Param;
-import definitions.PartialExpression;
-import definitions.RepKey;
 import deserializers.Deserializer;
 
 public class Main {
@@ -27,14 +28,14 @@ public class Main {
 		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
 		Deserializer deserializer = new Deserializer();
 		StabileAPI api = new StabileAPI(deserializer.deserialize(Config.getStorageLocation()), nameGen);
-		
-		//StabileAPI api = deserializer.deserialize(Config.getStabileAPIStorageLocation());
-				
-		HandlerTable handlerTable = new HandlerTable();
+						
+		HandlerTable handlerTable = new HandlerTable();		
 		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 		
 		Synthesis synthesis = new Synthesis(makePexprs(api), handlerTable, 10, 10);
+		
+		synthesis.run();
 		
 	}
 
@@ -43,10 +44,13 @@ public class Main {
 		
 		Imported imported = api.createImported();
 		api.load(imported, "java.io", true);
-		Set<Declaration> methods = imported.getMethods("addAll", 1);
+		
+		Set<Declaration> methods = imported.getConstructors("new File", 1);
 		Declaration[] decls = methods.toArray(new Declaration[methods.size()]);
 				
-		Expr expr = new InstanceMethodInvocation(decls[0]);
+		Expr expr = new ConstructorInvocation(decls[0]);
+
+		System.out.println(expr.getDecl());
 		
 		SearchKey searchKey = new SearchKey(expr);
 		RepKey repKey = initialRepKey();

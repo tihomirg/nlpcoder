@@ -1,5 +1,6 @@
 package synthesis.trees;
 
+import synthesis.Representation;
 import types.Type;
 
 public class CondExpr extends Expr {
@@ -16,6 +17,11 @@ public class CondExpr extends Expr {
 		this.condId = condId;
 		this.thenId = thenId;
 		this.elseId = elseId;
+	}
+
+	@Override
+	public String toString(Representation rep) {
+		return rep.toString(condId)+" ? "+rep.toString(thenId)+" : "+rep.toString(elseId);
 	}
 
 }

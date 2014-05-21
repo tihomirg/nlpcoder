@@ -8,8 +8,8 @@ import statistics.HandlerTable;
 import statistics.handlers.Handler;
 import statistics.handlers.SearchKey;
 import statistics.posttrees.Expr;
-import definitions.Param;
-import definitions.PartialExpression;
+import synthesis.Param;
+import synthesis.PartialExpression;
 import definitions.PartialExpressionComparator;
 
 public class SynthesisGroup {

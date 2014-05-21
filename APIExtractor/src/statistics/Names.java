@@ -2,7 +2,7 @@ package statistics;
 
 public class Names {
 
-	public static final boolean HumanReadable = true;
+	public static final boolean HumanReadable = false;
 	
 	public static final String Assignment = "Asgn";
 	public static final String BooleanLiteral = "Bool";

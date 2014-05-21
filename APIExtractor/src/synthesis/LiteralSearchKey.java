@@ -1,4 +1,4 @@
-package definitions;
+package synthesis;
 
 import statistics.handlers.SearchKey;
 import statistics.posttrees.Expr;

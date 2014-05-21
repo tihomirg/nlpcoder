@@ -1,4 +1,4 @@
-package definitions;
+package synthesis;
 
 public class RepKey {
 	private int id;

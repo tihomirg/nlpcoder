@@ -1,4 +1,4 @@
-package definitions;
+package synthesis;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -6,13 +6,15 @@ import java.util.List;
 
 import synthesis.trees.Expr;
 
-public class Tree implements Cloneable {
+
+
+public class Representation implements Cloneable {
 	private static final int INITIAL_CAP = 20;
 	private RepKey root;
 	private Expr[] rep;
 	private int allocateIndex;
 	
-	public Tree(){
+	public Representation(){
 		this.rep = new Expr[INITIAL_CAP];
 		this.root = new RepKey();
 		int id = this.root.getId();
@@ -21,10 +23,10 @@ public class Tree implements Cloneable {
 	}
 	
 	@Override
-	protected Tree clone() {
-		Tree tree = null;
+	protected Representation clone() {
+		Representation tree = null;
 		try {
-			tree = (Tree) super.clone();
+			tree = (Representation) super.clone();
 			tree.rep = this.rep.clone();
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
@@ -34,7 +36,11 @@ public class Tree implements Cloneable {
 	}
 	
 	public String toString(){
-		return rep[root.getId()].toString();
+		return toString(root.getId());
+	}
+	
+	public String toString(int id){
+		return rep[id].toString(this);
 	}
 
 	public List<Param> substitute(Param param, statistics.posttrees.Expr expr) {
@@ -73,5 +79,17 @@ public class Tree implements Cloneable {
 			System.arraycopy(rep, 0, newArray, 0, allocateIndex);
 			this.rep = newArray;
 		}
+	}
+
+	public String toString(List<Integer> ids) {
+		StringBuilder sb = new StringBuilder();
+		if(ids.size() > 1){
+			sb.append(toString(ids.get(0)));
+			for(int i=1; i < ids.size(); i++){
+				sb.append(", "+toString(ids.get(i)));
+			}
+		}
+		
+		return sb.toString();
 	}
 }

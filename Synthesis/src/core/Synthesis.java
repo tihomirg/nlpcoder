@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import statistics.HandlerTable;
+import synthesis.PartialExpression;
 
-import definitions.PartialExpression;
 import definitions.PartialExpressionComparator;
 
 public class Synthesis {
@@ -21,6 +21,7 @@ public class Synthesis {
 	public Synthesis(List<PartialExpression> pexprs, HandlerTable handlerTable, int maxRounds, int steps) {
 		this.maxRounds = maxRounds;
 		this.activeGroups = createGroups(pexprs, handlerTable, steps);
+		this.resolvedGroups = new LinkedList<SynthesisGroup>();
 	}
 	
 	private List<SynthesisGroup> createGroups(List<PartialExpression> pexprs, HandlerTable handlerTable, int steps) {

@@ -1,5 +1,6 @@
 package synthesis.trees;
 
+import synthesis.Representation;
 import types.Type;
 
 public class InstOfExpr extends Expr {
@@ -12,6 +13,11 @@ public class InstOfExpr extends Expr {
 		this.type = type;
 		this.argType = argType;
 		this.argId = argId;
+	}
+
+	@Override
+	public String toString(Representation rep) {
+		return rep.toString(argId) +" instanceof "+type;
 	}
 
 }

@@ -1,5 +1,6 @@
 package synthesis.trees;
 
+import synthesis.Representation;
 import types.Type;
 
 public class BooleanLitera extends Expr {
@@ -10,4 +11,8 @@ public class BooleanLitera extends Expr {
 		this.type = type;
 	}
 
+	@Override
+	public String toString(Representation rep) {
+		return "false";
+	}
 }

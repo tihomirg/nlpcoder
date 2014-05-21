@@ -7,7 +7,7 @@ public class LocalsHandler extends Handler {
 
 	@Override
 	public PriorityQueue<Expr> handle(SearchKey key) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
 		return EMPTY_PQ;
 	}
 

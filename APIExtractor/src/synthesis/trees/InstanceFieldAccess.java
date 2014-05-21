@@ -1,5 +1,6 @@
 package synthesis.trees;
 
+import synthesis.Representation;
 import definitions.Declaration;
 
 public class InstanceFieldAccess extends Expr {
@@ -10,6 +11,11 @@ public class InstanceFieldAccess extends Expr {
 	public InstanceFieldAccess(Declaration decl, int recId) {
 		this.decl = decl;
 		this.recId = recId;
+	}
+
+	@Override
+	public String toString(Representation rep) {
+		return (decl.isStatic() ? decl.getClazz(): rep.toString(recId))+"."+decl.getName();
 	}
 
 }

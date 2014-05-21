@@ -147,6 +147,8 @@ public class ExpressionBuilder extends SingleNodeVisitor {
 
 		if (leftType.isCompatible(rightType, typeFactory)){
 			Operator operator = node.getOperator();
+			
+			
 			setExpr(this.expFactory.createAssignment(operator, leftExp, rightExp));
 			if (operator.equals(Operator.ASSIGN)){
 				if (leftExp instanceof Variable){

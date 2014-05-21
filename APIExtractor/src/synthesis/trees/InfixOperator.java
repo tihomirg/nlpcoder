@@ -1,5 +1,6 @@
 package synthesis.trees;
 
+import synthesis.Representation;
 import types.Type;
 
 public class InfixOperator extends Expr {
@@ -16,4 +17,8 @@ public class InfixOperator extends Expr {
 		this.rexpId = rexpId;
 	}
 
+	@Override
+	public String toString(Representation rep) {
+		return rep.toString(lexpId) +" "+op+" "+rep.toString(rexpId);
+	}
 }

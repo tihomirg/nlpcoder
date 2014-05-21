@@ -1,4 +1,4 @@
-package definitions;
+package synthesis;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +10,7 @@ public class PartialExpression implements Cloneable {
 
 	private LinkedList<Param> params;
 	private LinkedList<Substitution> subs;
-	private Tree tree;
+	private Representation rep;
 	private double score = 1.0;
 	
 	public PartialExpression(Param param, double score) {
@@ -19,7 +19,7 @@ public class PartialExpression implements Cloneable {
 		
 		this.score = score;
 		this.subs = new LinkedList<Substitution>();
-		this.tree = new Tree();
+		this.rep = new Representation();
 	}
 
 //	public PartialExpression(double score) {
@@ -39,7 +39,7 @@ public class PartialExpression implements Cloneable {
 		PartialExpression exp = null;
 		try {
 			exp = (PartialExpression) super.clone();
-			exp.tree = this.tree.clone();
+			exp.rep = this.rep.clone();
 			exp.subs = (LinkedList<Substitution>) this.subs.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
@@ -53,12 +53,12 @@ public class PartialExpression implements Cloneable {
 	
 	@Override
 	public String toString() {
-		return tree.toString();
+		return rep.toString();
 	}
 
 	public PartialExpression createPartialExpr(Param param, Expr expr) {
 		PartialExpression newPexpr = this.clone();
-		List<Param> params = newPexpr.getTree().substitute(param, expr);
+		List<Param> params = newPexpr.getRep().substitute(param, expr);
 		
 		newPexpr.removeParam(param);
 		newPexpr.addAllParams(params);
@@ -70,8 +70,8 @@ public class PartialExpression implements Cloneable {
 		this.params.addAll(params);
 	}
 
-	private Tree getTree() {
-		return this.tree;
+	private Representation getRep() {
+		return this.rep;
 	}
 
 	private void removeParam(Param param) {
