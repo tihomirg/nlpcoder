@@ -72,7 +72,7 @@ public class CompositionStatistics {
 
 			Expr expr = Parser.parse(result.getRest());
 
-			expr.setFrequency(value);
+			expr.setLogProbability(Math.log(value));
 			Handler handler = expr.getHandler(table);
 			
 			handler.add(expr);

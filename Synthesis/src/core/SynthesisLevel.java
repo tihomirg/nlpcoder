@@ -11,6 +11,7 @@ import comparators.PartialExpressionComparatorDesc;
 import statistics.posttrees.Expr;
 import synthesis.Param;
 import synthesis.PartialExpression;
+import synthesis.PartialExpressionScorer;
 import synthesis.handlers.Handler;
 import synthesis.handlers.SearchKey;
 import util.Pair;
@@ -28,8 +29,9 @@ public class SynthesisLevel {
 	private PriorityQueue<PartialExpression> activeWorst;
 	
 	private int levelId;
+	private PartialExpressionScorer scorer;
 	
-	public SynthesisLevel(int levelId, HandlerTable handlerTable, int maxNumOfPexpr) {
+	public SynthesisLevel(int levelId, HandlerTable handlerTable, int maxNumOfPexpr, PartialExpressionScorer scorer) {
 		this.levelId = levelId;
 		this.handlerTable = handlerTable;
 
@@ -40,6 +42,7 @@ public class SynthesisLevel {
 		this.activeWorst = new PriorityQueue<PartialExpression>(this.maxNumOfPexpr+1, COMPARATOR_ASCE);		
 		
 		this.freeSpaces = this.maxNumOfPexpr;
+		this.scorer = scorer;
 	}
 	
 	public Pair<List<PartialExpression>, List<PartialExpression>> resolveAll() {
@@ -115,7 +118,7 @@ public class SynthesisLevel {
 		List<PartialExpression> partial = new LinkedList<PartialExpression>();
 		List<PartialExpression> completed = new LinkedList<PartialExpression>();
 		for (Expr expr : queue) {
-			PartialExpression newPexp = pexp.instantiate(param, expr);
+			PartialExpression newPexp = pexp.instantiate(param, expr, scorer);
 			if(newPexp.isCompleted()) {
 				completed.add(newPexp);
 			} else {

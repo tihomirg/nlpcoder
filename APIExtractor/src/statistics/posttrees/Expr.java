@@ -10,7 +10,7 @@ import types.Type;
 public abstract class Expr {
 
 	public static final List<Expr> EMPTY_EXPR_LIST = new LinkedList<Expr>();
-	private double frequency;
+	private double logProbability;
 
 	public abstract void addArgs(List<Expr> args);
 
@@ -28,16 +28,16 @@ public abstract class Expr {
 		throw new UnsupportedOperationException();
 	}
 
-	public void setFrequency(double value) {
-		this.frequency = value;
+	public void setLogProbability(double logProbability) {
+		this.logProbability = logProbability;
 	}
 
-	public double getFrequency() {
-		return frequency;
+	public double getLogProbability() {
+		return logProbability;
 	}
 
 	public String toString(){
-		return frequency+" : "+shortRep();
+		return logProbability+" : "+shortRep();
 	}
 
 	public static String shortReps(Expr... args){

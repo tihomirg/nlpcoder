@@ -12,15 +12,15 @@ public class Synthesis<T extends SynthesisGroup> {
 
 	private long time;
 	
-	public Synthesis(List<PartialExpression> pexprs, GroupBuilder<T> builder) {
-		this.groups = createGroups(pexprs, builder);
+	public Synthesis(List<List<PartialExpression>> pexprss, GroupBuilder<T> builder) {
+		this.groups = createGroups(pexprss, builder);
 		this.completed = new LinkedList<PartialExpression>();
 	}
 	
-	private List<T> createGroups(List<PartialExpression> pexprs, GroupBuilder<T> builder) {
+	private List<T> createGroups(List<List<PartialExpression>> pexprss, GroupBuilder<T> builder) {
 		List<T> groups = new LinkedList<T>(); 
-		for (PartialExpression pexpr : pexprs) {
-			groups.add(builder.build(pexpr));
+		for (List<PartialExpression> pexprs : pexprss) {			
+			groups.add(builder.build(pexprs));
 		}
 		return groups;
 	}

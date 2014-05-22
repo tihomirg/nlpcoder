@@ -11,13 +11,11 @@ public class PartialExpression implements Cloneable {
 	private LinkedList<Param> params;
 	private LinkedList<Substitution> subs;
 	private Representation rep;
-	private double score = 1.0;
+	private double score;
 	
-	public PartialExpression(Param param, double score) {
+	public PartialExpression(Param param) {
 		this.params = new LinkedList<Param>();
-		this.params.add(param);
-		
-		this.score = score;
+		this.params.add(param);		
 		this.subs = new LinkedList<Substitution>();
 		this.rep = new Representation();
 	}
@@ -28,6 +26,10 @@ public class PartialExpression implements Cloneable {
 	
 	public double getScore() {
 		return score;
+	}
+	
+	public void setScore(double score) {
+		this.score = score;
 	}
 	
 	public Param getParam() {
@@ -57,21 +59,16 @@ public class PartialExpression implements Cloneable {
 		return this.score+" "+rep.toString();
 	}
 
-	public PartialExpression instantiate(Param param, Expr expr) {
+	public PartialExpression instantiate(Param param, Expr expr, PartialExpressionScorer scorer) {
 		PartialExpression newPexpr = this.clone();
 		List<Param> params = newPexpr.getRep().instantiate(param, expr);
 		
 		newPexpr.removeParam(param);
 		newPexpr.addAllParams(params);
 		
-		//TODO: improve this weight association mechanism.
-		setNewScore(expr, newPexpr);
+		scorer.calculetScore(newPexpr, expr, param, params);
 		
 		return newPexpr;
-	}
-
-	private void setNewScore(Expr expr, PartialExpression newPexpr) {
-		newPexpr.score = 10 * newPexpr.score * expr.getFrequency();
 	}
 
 	private void addAllParams(List<Param> params) {

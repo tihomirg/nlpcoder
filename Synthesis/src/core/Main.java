@@ -11,6 +11,7 @@ import statistics.posttrees.Expr;
 import statistics.posttrees.InstanceMethodInvocation;
 import synthesis.Param;
 import synthesis.PartialExpression;
+import synthesis.PartialExpressionScorer;
 import synthesis.RepKey;
 import synthesis.handlers.SearchKey;
 import types.NameGenerator;
@@ -32,7 +33,8 @@ public class Main {
 		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 		
-		GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, 10, 20);
+		PartialExpressionScorer scorer = new PartialExpressionScorer();
+		GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, scorer, 10, 20);
 		Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(makePexprs(api), builder);
 		
 		synthesis.run();
@@ -41,8 +43,8 @@ public class Main {
 		
 	}
 
-	private static List<PartialExpression> makePexprs(StabileAPI api) {
-		List<PartialExpression> pexps = new LinkedList<PartialExpression>();
+	private static List<List<PartialExpression>> makePexprs(StabileAPI api) {
+		List<PartialExpression> pexprs = new LinkedList<PartialExpression>();
 		
 		Imported imported = api.createImported();
 		api.load(imported, "java.io", true);
@@ -58,9 +60,10 @@ public class Main {
 		RepKey repKey = initialRepKey();
 		Param param = new Param(searchKey, repKey);
 		
-		pexps.add(new PartialExpression(param, 1.0));
-		
-		return pexps;
+		pexprs.add(new PartialExpression(param));
+		List<List<PartialExpression>> pexprss = new LinkedList<List<PartialExpression>>();
+		pexprss.add(pexprs);
+		return pexprss;
 	}
 
 	private static RepKey initialRepKey() {
