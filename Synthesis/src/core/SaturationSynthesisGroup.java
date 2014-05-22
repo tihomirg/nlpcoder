@@ -13,13 +13,13 @@ public class SaturationSynthesisGroup extends SynthesisGroup {
 	private static final int DEFAULT_CAPACITY = 100;
 	private static final PartialExpressionComparatorDesc COMPARATOR = new PartialExpressionComparatorDesc();
 
-	private int numOfLevels;
 	private int maxNumOfPexprPerLevel;
+	private SynthesisLevel[] levels;
 
 	public SaturationSynthesisGroup(PartialExpression pexpr, HandlerTable handlerTable, int numOfLevels, int maxNumOfPexprPerLevel) {
 		super(pexpr, handlerTable);
-		this.numOfLevels = numOfLevels;
 		this.maxNumOfPexprPerLevel = maxNumOfPexprPerLevel;
+		this.levels = new SynthesisLevel[numOfLevels+1];
 	}
 
 	public PriorityQueue<PartialExpression> run(){
@@ -28,17 +28,27 @@ public class SaturationSynthesisGroup extends SynthesisGroup {
 		if (pexpr.isCompleted()){
 			completed.add(pexpr);
 		} else {
-			SynthesisLevel level = new SynthesisLevel(handlerTable, maxNumOfPexprPerLevel);
-			level.add(pexpr);
+			
+			levels[0] = new SynthesisLevel(0, handlerTable, maxNumOfPexprPerLevel);
+			levels[0].add(pexpr);
 
-			for(int i = 0; i< this.numOfLevels; i++){
-				Pair<List<PartialExpression>, List<PartialExpression>> newPexprs = level.resolveAll();
+			for(int i = 1; i < this.levels.length; i++){
+				Pair<List<PartialExpression>, List<PartialExpression>> newPexprs = levels[i-1].resolveAll();
 				completed.addAll(newPexprs.getFirst());
-				level = new SynthesisLevel(handlerTable, maxNumOfPexprPerLevel);
-				level.addAll(newPexprs.getSecond());
+				levels[i] = new SynthesisLevel(i, handlerTable, maxNumOfPexprPerLevel);
+				levels[i].addAll(newPexprs.getSecond());
 			}
 		}
 
 		return completed;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (SynthesisLevel level: levels) {
+			sb.append(level+"\n\n");
+		}
+		return sb.toString();
 	}
 }

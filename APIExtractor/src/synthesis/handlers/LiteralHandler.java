@@ -12,8 +12,6 @@ public class LiteralHandler extends Handler {
 		PriorityQueue<Expr> priorityQueue = new PriorityQueue<Expr>();
 		
 		priorityQueue.add(key.getExpr());
-
-		System.out.println(key.getExpr());
 		
 		return priorityQueue;
 	}

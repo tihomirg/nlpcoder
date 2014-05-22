@@ -21,20 +21,23 @@ public class SynthesisLevel {
 	private static final PartialExpressionComparatorAsce COMPARATOR_ASCE = new PartialExpressionComparatorAsce();
 	
 	private HandlerTable handlerTable;
-	private PriorityQueue<PartialExpression> activeDesc;
+	private PriorityQueue<PartialExpression> activeBest;
 	private List<PartialExpression> processed;
 	private int maxNumOfPexpr;
 	private int freeSpaces;
-	private PriorityQueue<PartialExpression> activeAsce;
+	private PriorityQueue<PartialExpression> activeWorst;
 	
-	public SynthesisLevel(HandlerTable handlerTable, int maxNumOfPexpr) {
+	private int levelId;
+	
+	public SynthesisLevel(int levelId, HandlerTable handlerTable, int maxNumOfPexpr) {
+		this.levelId = levelId;
 		this.handlerTable = handlerTable;
 
 		this.processed = new LinkedList<PartialExpression>();
 		this.maxNumOfPexpr = maxNumOfPexpr;
 
-		this.activeDesc = new PriorityQueue<PartialExpression>(this.maxNumOfPexpr+1, COMPARATOR_DESC);
-		this.activeAsce = new PriorityQueue<PartialExpression>(this.maxNumOfPexpr+1, COMPARATOR_ASCE);		
+		this.activeBest = new PriorityQueue<PartialExpression>(this.maxNumOfPexpr+1, COMPARATOR_DESC);
+		this.activeWorst = new PriorityQueue<PartialExpression>(this.maxNumOfPexpr+1, COMPARATOR_ASCE);		
 		
 		this.freeSpaces = this.maxNumOfPexpr;
 	}
@@ -54,10 +57,10 @@ public class SynthesisLevel {
 	}
 
 	private int activeSize() {
-		return this.activeAsce.size();
+		return this.activeWorst.size();
 	}
 	
-	public Pair<List<PartialExpression>, List<PartialExpression>> resolveOne(){
+	public Pair<List<PartialExpression>, List<PartialExpression>> resolveOne() {
 		PartialExpression pexp = removeBestFromActive();
 		this.processed.add(pexp);
 		return resolve(pexp);
@@ -79,19 +82,19 @@ public class SynthesisLevel {
 	}
 	
 	private void addToActive(PartialExpression pexp){
-		this.activeDesc.add(pexp);
-		this.activeAsce.add(pexp);
+		this.activeBest.add(pexp);
+		this.activeWorst.add(pexp);
 	}
 	
 	private PartialExpression removeBestFromActive(){
-		PartialExpression best = this.activeDesc.remove();
-		this.activeAsce.remove(best);
+		PartialExpression best = this.activeBest.remove();
+		this.activeWorst.remove(best);
 		return best;
 	}
 	
 	private PartialExpression removeWorstFromActive(){
-		PartialExpression worst = this.activeDesc.remove();
-		this.activeAsce.remove(worst);
+		PartialExpression worst = this.activeWorst.remove();
+		this.activeBest.remove(worst);
 		return worst;
 	}
 	
@@ -119,5 +122,14 @@ public class SynthesisLevel {
 		}
 		
 		return new Pair<List<PartialExpression>,List<PartialExpression>>(completed, partial);
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Level: "+levelId+"\n");
+		sb.append("Processed: "+processed+"\n");
+		sb.append("Active: "+activeBest+"\n");
+		return sb.toString();
+	}
 }

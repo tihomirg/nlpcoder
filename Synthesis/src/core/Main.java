@@ -37,6 +37,8 @@ public class Main {
 		
 		synthesis.run();
 		
+		System.out.println(synthesis);
+		
 	}
 
 	private static List<PartialExpression> makePexprs(StabileAPI api) {
