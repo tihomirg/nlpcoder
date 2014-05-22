@@ -10,7 +10,7 @@ import types.Type;
 public abstract class Expr {
 
 	public static final List<Expr> EMPTY_EXPR_LIST = new LinkedList<Expr>();
-	private int frequency;
+	private double frequency;
 
 	public abstract void addArgs(List<Expr> args);
 
@@ -28,11 +28,11 @@ public abstract class Expr {
 		throw new UnsupportedOperationException();
 	}
 
-	public void setFrequency(int value) {
+	public void setFrequency(double value) {
 		this.frequency = value;
 	}
 
-	public int getFrequency() {
+	public double getFrequency() {
 		return frequency;
 	}
 

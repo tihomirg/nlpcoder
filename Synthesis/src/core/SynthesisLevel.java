@@ -106,6 +106,8 @@ public class SynthesisLevel {
 		
 		PriorityQueue<Expr> queue = handler.handle(searchKey);
 		
+		//System.out.println(queue);
+		
 		return createNewPartialExprs(pexp, param, queue);		
 	}
 

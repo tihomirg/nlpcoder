@@ -334,9 +334,9 @@ public class Parser {
 		return new statistics.posttrees.StringLiteral(tf.createConstType(java.lang.String.class));
 	}
 	
-	public static IntResult getStatistics(String line) {
+	public static DoubleResult getStatistics(String line) {
 		String number = line.substring(0, line.indexOf(Names.Colon));
-		return new IntResult(Integer.parseInt(number), line.substring(line.indexOf(Names.Colon)+Names.Colon.length()));
+		return new DoubleResult(Double.parseDouble(number), line.substring(line.indexOf(Names.Colon)+Names.Colon.length()));
 	}
 
 	public static void setDecls(Map<Integer, Declaration> decls) {

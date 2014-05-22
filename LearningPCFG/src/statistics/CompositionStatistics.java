@@ -13,6 +13,8 @@ public class CompositionStatistics {
 	
 	private Map<String, Map<String, Integer>> ruleToStatistics = new HashMap<String, Map<String,Integer>>();
 
+	private Map<String, Integer> ruleToCount = new HashMap<String, Integer>();
+	
 	private Map<String, Integer> getRuleStatistics(Pair<String, String> pair){
 		String leftSide = pair.getFirst();
 		if(!ruleToStatistics.containsKey(leftSide)){
@@ -38,11 +40,23 @@ public class CompositionStatistics {
 		
 		int val = statistics.get(second);
 		statistics.put(second, val + 1);
+		
+		incrementCount(pair.getFirst());
+	}
+
+	private void incrementCount(String leftSide) {
+		if(!ruleToCount.containsKey(leftSide)){
+			ruleToCount.put(leftSide, 1);
+		} else {
+			ruleToCount.put(leftSide, ruleToCount.get(leftSide) + 1);
+		}
 	}
 
 	public void print(PrintStream out){
 		for (Entry<String, Map<String, Integer>> entry : ruleToStatistics.entrySet()) {
 			String key = entry.getKey();
+			
+			int count = ruleToCount.get(key);
 			
 			if (Names.HumanReadable){
 				out.println("-----------------------------------------------------------------------------------------------");
@@ -60,7 +74,7 @@ public class CompositionStatistics {
 			for(int i=0; i< length; i++){
 				Entry<String, Integer> curr = pq.remove();
 				String name = curr.getKey();
-				Integer stat = curr.getValue();
+				double stat = ((double) curr.getValue())/count;
 				out.println(stat +Names.Colon+ name);
 			}
 			

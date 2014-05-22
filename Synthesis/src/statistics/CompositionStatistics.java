@@ -10,6 +10,7 @@ import core.HandlerTable;
 
 import definitions.Declaration;
 
+import statistics.parsers.DoubleResult;
 import statistics.parsers.IntResult;
 import statistics.parsers.Parser;
 import statistics.posttrees.Expr;
@@ -65,9 +66,9 @@ public class CompositionStatistics {
 
 	private void parse(String line) {
 		try {
-			IntResult result = Parser.getStatistics(line);
+			DoubleResult result = Parser.getStatistics(line);
 
-			int value = result.getInteger();
+			double value = result.getDouble();
 
 			Expr expr = Parser.parse(result.getRest());
 

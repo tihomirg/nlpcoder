@@ -8,9 +8,12 @@ public class ExprComparator implements Comparator<Expr> {
 
 	@Override
 	public int compare(Expr o1, Expr o2) {
-		int f1 = o1.getFrequency();
-		int f2 = o2.getFrequency();
-		return f1 - f2;
+		double f1 = o1.getFrequency();
+		double f2 = o2.getFrequency();
+		
+		if (f1 > f2) return -1;
+		else if (f2 > f1) return 1;
+		else return 0;		
 	}
 
 }

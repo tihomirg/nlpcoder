@@ -33,7 +33,6 @@ public class PartialExpression implements Cloneable {
 	public Param getParam() {
 		return params.get(0);
 	}
-	
 
 	@Override
 	public PartialExpression clone() {
@@ -55,7 +54,7 @@ public class PartialExpression implements Cloneable {
 	
 	@Override
 	public String toString() {
-		return rep.toString();
+		return this.score+" "+rep.toString();
 	}
 
 	public PartialExpression instantiate(Param param, Expr expr) {
@@ -65,7 +64,14 @@ public class PartialExpression implements Cloneable {
 		newPexpr.removeParam(param);
 		newPexpr.addAllParams(params);
 		
+		//TODO: improve this weight association mechanism.
+		setNewScore(expr, newPexpr);
+		
 		return newPexpr;
+	}
+
+	private void setNewScore(Expr expr, PartialExpression newPexpr) {
+		newPexpr.score = 10 * newPexpr.score * expr.getFrequency();
 	}
 
 	private void addAllParams(List<Param> params) {
