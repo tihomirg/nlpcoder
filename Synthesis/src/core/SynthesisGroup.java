@@ -3,9 +3,9 @@ package core;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import comparators.PartialExpressionComparatorDesc;
 
 import synthesis.PartialExpression;
+import synthesis.comparators.PartialExpressionComparatorDesc;
 
 public abstract class SynthesisGroup {
 	protected static final int DEFAULT_CAPACITY = 100;

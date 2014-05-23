@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import comparators.PartialExpressionComparatorAsce;
-import comparators.PartialExpressionComparatorDesc;
 
 import statistics.posttrees.Expr;
 import synthesis.Param;
 import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
+import synthesis.comparators.PartialExpressionComparatorAsce;
+import synthesis.comparators.PartialExpressionComparatorDesc;
 import synthesis.handlers.Handler;
 import synthesis.handlers.SearchKey;
 import util.Pair;

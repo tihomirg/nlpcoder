@@ -6,9 +6,9 @@ import java.util.PriorityQueue;
 
 import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
+import synthesis.comparators.PartialExpressionComparatorDesc;
 import util.Pair;
 
-import comparators.PartialExpressionComparatorDesc;
 
 public class SaturationSynthesisGroup extends SynthesisGroup {
 

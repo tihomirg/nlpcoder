@@ -66,6 +66,8 @@ public class PartialExpression implements Cloneable {
 		newPexpr.removeParam(param);
 		newPexpr.addAllParams(params);
 		
+		//We need to check if one of the params is is 'connection' param than 
+		
 		scorer.calculetScore(newPexpr, expr, param, params);
 		
 		return newPexpr;
