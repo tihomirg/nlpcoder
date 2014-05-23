@@ -22,14 +22,14 @@ public class Hole extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.Hole;
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return "";
-	}
+	protected String shortRep() {
+		return Names.Hole;
+	}	
 	
 	@Override
 	public String getPrefix() {

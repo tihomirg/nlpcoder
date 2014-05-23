@@ -22,14 +22,14 @@ public class CharacterLiteral extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.CharacterLiteral;
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return value;
-	}
+	protected String shortRep() {
+		return Names.CharacterLiteral;
+	}	
 
 	@Override
 	public String getPrefix() {

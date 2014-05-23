@@ -23,14 +23,14 @@ public class BooleanLiteral extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.BooleanLiteral;
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return Boolean.toString(value);
-	}
+	protected String shortRep() {
+		return Names.BooleanLiteral;
+	}	
 
 	@Override
 	public String getPrefix() {

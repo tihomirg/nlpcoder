@@ -1,9 +1,8 @@
 package core;
 
-import java.util.List;
 import java.util.PriorityQueue;
 
-
+import synthesis.ExprGroup;
 import synthesis.PartialExpression;
 import synthesis.comparators.PartialExpressionComparatorDesc;
 
@@ -12,10 +11,10 @@ public abstract class SynthesisGroup {
 	protected static final PartialExpressionComparatorDesc COMPARATOR = new PartialExpressionComparatorDesc();
 	
 	protected HandlerTable handlerTable;
-	protected List<PartialExpression> pexprs;
+	protected ExprGroup egroup;
 	
-	public SynthesisGroup(List<PartialExpression> pexprs, HandlerTable handlerTable) {
-		this.pexprs = pexprs;
+	public SynthesisGroup(ExprGroup egroup, HandlerTable handlerTable) {
+		this.egroup = egroup;
 		this.handlerTable = handlerTable;
 	}
 

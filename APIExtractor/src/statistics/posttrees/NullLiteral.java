@@ -22,14 +22,14 @@ public class NullLiteral extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.NullLiteral;
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return "";
-	}
+	protected String shortRep() {
+		return Names.NullLiteral;
+	}	
 	
 	@Override
 	public String getPrefix() {

@@ -2,6 +2,8 @@ package core;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import synthesis.ExprGroup;
 import synthesis.PartialExpression;
 
 public class Synthesis<T extends SynthesisGroup> {
@@ -12,14 +14,14 @@ public class Synthesis<T extends SynthesisGroup> {
 
 	private long time;
 	
-	public Synthesis(List<List<PartialExpression>> pexprss, GroupBuilder<T> builder) {
-		this.groups = createGroups(pexprss, builder);
+	public Synthesis(List<ExprGroup> exprGroups, GroupBuilder<T> builder) {
+		this.groups = createGroups(exprGroups, builder);
 		this.completed = new LinkedList<PartialExpression>();
 	}
 	
-	private List<T> createGroups(List<List<PartialExpression>> pexprss, GroupBuilder<T> builder) {
+	private List<T> createGroups(List<ExprGroup> exprGroups, GroupBuilder<T> builder) {
 		List<T> groups = new LinkedList<T>(); 
-		for (List<PartialExpression> pexprs : pexprss) {			
+		for (ExprGroup pexprs : exprGroups) {			
 			groups.add(builder.build(pexprs));
 		}
 		return groups;

@@ -25,14 +25,14 @@ public class PostfixOperator extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.PostfixOperator+"("+op+")"+"("+type+")";
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return shortReps(exp);
-	}
+	protected String shortRep() {
+		return Names.PostfixOperator+"("+op+")"+"("+type+")";
+	}	
 
 	@Override
 	public String getPrefix() {

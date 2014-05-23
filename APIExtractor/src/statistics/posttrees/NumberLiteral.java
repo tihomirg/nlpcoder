@@ -22,14 +22,15 @@ public class NumberLiteral extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.NumberLiteral;
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return value;
-	}
+	protected String shortRep() {
+		return Names.NumberLiteral;
+	}	
+	
 	@Override
 	public String getPrefix() {
 		return Names.NumberLiteral;

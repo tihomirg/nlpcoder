@@ -24,14 +24,14 @@ public class ConstructorInvocation extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.ConstructorInvocation+"("+decl.getLongName()+")";
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return shortReps(args.toArray(new Expr[args.size()]));
-	}
+	protected String shortRep() {
+		return Names.ConstructorInvocation+"("+decl.getId()+")";
+	}	
 
 	@Override
 	public String getPrefix() {

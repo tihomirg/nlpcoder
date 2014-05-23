@@ -25,14 +25,14 @@ public class CastExpr extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.CastExpr+"("+type+")("+argType+")";
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return shortReps(expr);
-	}
+	protected String shortRep() {
+		return Names.CastExpr+"("+type+")("+argType+")";
+	}	
 
 	@Override
 	public String getPrefix() {

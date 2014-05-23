@@ -29,14 +29,14 @@ public class CondExpr extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.CondExpr+"("+retType+")";
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return shortReps(expr, thenExpr, elseExpr);
-	}
+	protected String shortRep() {
+		return Names.CondExpr+"("+retType+")";
+	}	
 
 	@Override
 	public String getPrefix() {

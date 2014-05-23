@@ -28,22 +28,14 @@ public class InstanceMethodInvocation extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.InstanceMethodInvocation+"("+decl.getLongName()+")";
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		Expr[] exprs = null;
-		if (decl.isStatic()){
-			exprs = args.toArray(new Expr[args.size()]);
-		} else {
-			exprs = new Expr[args.size()+1];
-			exprs[0] = exp;
-			System.arraycopy(args.toArray(new Expr[args.size()]), 0, exprs, 1, args.size());			
-		}
-		return shortReps(exprs);
-	}
+	protected String shortRep() {
+		return Names.InstanceMethodInvocation+"("+decl.getId()+")";
+	}	
 	
 	@Override
 	public String getPrefix() {

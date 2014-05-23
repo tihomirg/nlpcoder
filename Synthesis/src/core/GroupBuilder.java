@@ -1,11 +1,9 @@
 package core;
 
-import java.util.List;
-
-import synthesis.PartialExpression;
+import synthesis.ExprGroup;
 
 public abstract class GroupBuilder<T> {
 
-	public abstract T build(List<PartialExpression> pexprs);
+	public abstract T build(ExprGroup pexprs);
 	
 }

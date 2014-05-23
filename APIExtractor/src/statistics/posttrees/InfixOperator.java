@@ -27,14 +27,14 @@ public class InfixOperator extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.InfixOperator+"("+op+")"+"("+type+")";
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return shortReps(lexp, rexp);
-	}
+	protected String shortRep() {
+		return Names.InfixOperator+"("+op+")"+"("+type+")";
+	}	
 	
 	@Override
 	public String getPrefix() {

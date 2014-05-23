@@ -25,14 +25,14 @@ public class InstanceFieldAccess extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.InstanceFieldAccess+"("+decl.getLongName()+")";
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return decl.isStatic() ? "" : shortReps(exp);
-	}
+	protected String shortRep() {
+		return Names.InstanceFieldAccess+"("+decl.getId()+")";
+	}	
 
 	@Override
 	public String getPrefix() {

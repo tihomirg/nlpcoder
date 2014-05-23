@@ -29,14 +29,14 @@ public class StringExpr extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return string;
 	}
-
+	
 	@Override
-	protected String argsRep() {
-		return "";
-	}
+	protected String shortRep() {
+		throw new UnsupportedOperationException();
+	}	
 	
 	@Override
 	public String getPrefix() {

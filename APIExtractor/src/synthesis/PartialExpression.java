@@ -2,9 +2,9 @@ package synthesis;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import statistics.posttrees.Expr;
 import types.Substitution;
+import util.Pair;
 
 public class PartialExpression implements Cloneable {
 
@@ -12,17 +12,15 @@ public class PartialExpression implements Cloneable {
 	private LinkedList<Substitution> subs;
 	private Representation rep;
 	private double score;
+	private LinkedList<Connection> connections;
 	
 	public PartialExpression(Param param) {
 		this.params = new LinkedList<Param>();
 		this.params.add(param);		
 		this.subs = new LinkedList<Substitution>();
 		this.rep = new Representation();
+		this.connections = new LinkedList<Connection>();
 	}
-
-//	public PartialExpression(double score) {
-//		this()
-//	}
 	
 	public double getScore() {
 		return score;
@@ -43,6 +41,7 @@ public class PartialExpression implements Cloneable {
 			exp = (PartialExpression) super.clone();
 			exp.rep = this.rep.clone();
 			exp.params = (LinkedList<Param>) this.params.clone();
+			exp.connections = (LinkedList<Connection>) this.connections.clone();
 			exp.subs = (LinkedList<Substitution>) this.subs.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
@@ -59,18 +58,30 @@ public class PartialExpression implements Cloneable {
 		return this.score+" "+rep.toString();
 	}
 
-	public PartialExpression instantiate(Param param, Expr expr, PartialExpressionScorer scorer) {
+	public PartialExpression instantiate(Param param, Expr expr, ExprGroup egroup, PartialExpressionScorer scorer) {
 		PartialExpression newPexpr = this.clone();
-		List<Param> params = newPexpr.getRep().instantiate(param, expr);
+		List<Param> newParams = newPexpr.getRep().instantiate(param, expr);
 		
+		//remove old param
 		newPexpr.removeParam(param);
+
+		Pair<List<Connection>, List<Param>> connectionsAndParams = findConnections(newParams, egroup);
+		
+		//Add connections
+		List<Connection> connections = connectionsAndParams.getFirst();
+		newPexpr.addAllConnections(connections);
+		
+		//Add params
+		List<Param> params = connectionsAndParams.getSecond();
 		newPexpr.addAllParams(params);
 		
-		//We need to check if one of the params is is 'connection' param than 
-		
-		scorer.calculetScore(newPexpr, expr, param, params);
+		scorer.calculetScore(newPexpr, expr, param, connections, params);
 		
 		return newPexpr;
+	}
+
+	private void addAllConnections(List<Connection> connections) {
+		this.connections.addAll(connections);
 	}
 
 	private void addAllParams(List<Param> params) {
@@ -83,5 +94,23 @@ public class PartialExpression implements Cloneable {
 
 	private void removeParam(Param param) {
 		params.remove(param);
+	}
+	
+	private Pair<List<Connection>, List<Param>> findConnections(List<Param> params, ExprGroup egroup){
+		List<Connection> connections = new LinkedList<Connection>();
+		List<Param> rests = new LinkedList<Param>();
+		for (Param param : params) {
+			Expr expr = param.getSearchKey().getExpr();
+			
+			List<ExprGroup> relatedGroups = egroup.tryFindRelatedGroups(expr);
+			
+			if (!relatedGroups.isEmpty()){
+				connections.add(new Connection(param, relatedGroups));				
+			} else {
+				rests.add(param);
+			}
+		}
+		
+		return new Pair<List<Connection>, List<Param>>(connections, rests);
 	}
 }

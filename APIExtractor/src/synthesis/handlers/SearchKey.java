@@ -10,10 +10,6 @@ public class SearchKey {
 		this.expr = expr;
 	}
 
-	public String getHandlerName() {
-		return this.expr.getPrefix();
-	}
-
 	public Expr getExpr() {
 		return this.expr;
 	}

@@ -28,13 +28,13 @@ public class Assignment extends Expr {
 	}
 
 	@Override
-	protected String shortRep() {
+	protected String shortReadableRep() {
 		return Names.Assignment+"("+op+")("+type+")";
 	}
 	
 	@Override
-	protected String argsRep() {
-		return shortReps(lexp, rexp);
+	protected String shortRep() {
+		return Names.Assignment+"("+op+")("+type+")";
 	}
 
 	@Override

@@ -37,24 +37,28 @@ public abstract class Expr {
 	}
 
 	public String toString(){
-		return logProbability+" : "+shortRep();
+		return logProbability+" : "+shortReadableRep();
 	}
 
 	public static String shortReps(Expr... args){
 		String s = "";
 		if (args.length > 0){
-			s += args[0].shortRep();
+			s += args[0].shortReadableRep();
 			for (int i = 1; i < args.length; i++) {
-				s+=","+args[i].shortRep();
+				s+=","+args[i].shortReadableRep();
 			}
 		}
 		return s;
 	}
 
+	protected abstract String shortReadableRep();
+
 	protected abstract String shortRep();
-
-	protected abstract String argsRep();
-
+	
+	public static boolean equalShort(Expr e1, Expr e2){
+		return e1.shortRep().equals(e2.shortRep());
+	}
+	
 	public abstract String getPrefix();
 
 	public String getOperator() {
@@ -66,7 +70,7 @@ public abstract class Expr {
 	}
 
 	public Declaration getDecl(){
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	public abstract List<Expr> getArgs();

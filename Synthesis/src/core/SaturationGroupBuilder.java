@@ -2,6 +2,7 @@ package core;
 
 import java.util.List;
 
+import synthesis.ExprGroup;
 import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
 
@@ -20,8 +21,8 @@ public class SaturationGroupBuilder extends GroupBuilder<SaturationSynthesisGrou
 	}
 
 	@Override
-	public SaturationSynthesisGroup build(List<PartialExpression> pexprs) {
-		return new SaturationSynthesisGroup(pexprs, handlerTable, numOfLevels, maxNumOfPexprPerLevel, scorer);
+	public SaturationSynthesisGroup build(ExprGroup egroup) {
+		return new SaturationSynthesisGroup(egroup, handlerTable, numOfLevels, maxNumOfPexprPerLevel, scorer);
 	}
 
 }
