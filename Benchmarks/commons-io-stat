@@ -1,0 +1,474 @@
+Head: Method(org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator) 
+"Normalizes a path, removing double and single dot path steps, and removing any final directory separator."
+
+2 : Method(org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator)(FilenameUtils,Hole)
+2 : Method(org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator)(FilenameUtils,Method(java.lang.Array.access))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.copyInputStreamToFile)
+"Copies bytes from an InputStream source to a file destination."
+
+
+2 : Method(org.apache.commons.io.FileUtils.copyInputStreamToFile)(FileUtils,Hole,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.copyInputStreamToFile)(FileUtils,ConsInv(java.io.ByteArrayInputStream.new ByteArrayInputStream),ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.copyInputStreamToFile)(FileUtils,null,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.copyInputStreamToFile)(FileUtils,Hole,Asgn(=))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.write)
+""
+
+
+2 : Method(org.apache.commons.io.IOUtils.write)(IOUtils,Hole,ConsInv(java.io.FileWriter.new FileWriter))
+2 : Method(org.apache.commons.io.IOUtils.write)(IOUtils,Method(java.lang.String.format),Hole,Hole)
+2 : Method(org.apache.commons.io.IOUtils.write)(IOUtils,Hole,ConsInv(java.io.FileOutputStream.new FileOutputStream))
+1 : Method(org.apache.commons.io.IOUtils.write)(IOUtils,Method(java.lang.Integer.toString),ConsInv(java.io.FileOutputStream.new FileOutputStream))
+1 : Method(org.apache.commons.io.IOUtils.write)(IOUtils,Hole,null)
+1 : Method(org.apache.commons.io.IOUtils.write)(IOUtils,Method(org.apache.commons.io.IOUtils.toString),ConsInv(java.io.FileOutputStream.new FileOutputStream))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.isFileOlder)
+"Tests if the specified File is older than the reference File."
+
+1 : Method(org.apache.commons.io.FileUtils.isFileOlder)(FileUtils,Hole,Hole)
+1 : Method(org.apache.commons.io.FileUtils.isFileOlder)(FileUtils,Hole,ConsInv(java.util.Date.new Date))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.copyURLToFile)
+"Copies bytes from the URL source to a file destination."
+
+2 : Method(org.apache.commons.io.FileUtils.copyURLToFile)(FileUtils,Hole,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.copyURLToFile)(FileUtils,Hole,null)
+1 : Method(org.apache.commons.io.FileUtils.copyURLToFile)(FileUtils,Hole,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.writeLines)
+"Writes the toString() value of each item in a collection to the specified File line by line."
+
+2 : Method(org.apache.commons.io.FileUtils.writeLines)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.util.ArrayList.new ArrayList),String)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.LineIterator.close)
+
+
+2 : Method(org.apache.commons.io.LineIterator.close)(Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.toString)
+
+16 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,Hole)
+5 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,Hole,String)
+3 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,ConsInv(java.io.FileInputStream.new FileInputStream))
+2 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,null)
+2 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,ConsInv(java.io.FileReader.new FileReader))
+2 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,null,String)
+1 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,Hole,Hole)
+1 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,Method(java.lang.ClassLoader.getResourceAsStream),String)
+1 : Method(org.apache.commons.io.IOUtils.toString)(IOUtils,Method(java.lang.ClassLoader.getResourceAsStream))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.readLines)
+
+2 : Method(org.apache.commons.io.IOUtils.readLines)(IOUtils,Hole)
+1 : Method(org.apache.commons.io.IOUtils.readLines)(IOUtils,ConsInv(java.io.FileInputStream.new FileInputStream))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.touch)
+"Implements the same behaviour as the "touch" utility on Unix."
+
+1 : Method(org.apache.commons.io.FileUtils.touch)(FileUtils,ConsInv(java.io.File.new File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.readLines)
+"Reads the contents of a file line by line to a List of Strings."
+
+2 : Method(org.apache.commons.io.FileUtils.readLines)(FileUtils,ConsInv(java.io.File.new File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.getTempDirectoryPath)
+"Returns the path to the system temporary directory."
+
+3 : Method(org.apache.commons.io.FileUtils.getTempDirectoryPath)(FileUtils)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.closeQuietly)
+""
+
+58 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,null)
+16 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,Hole)
+1 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,Method(org.apache.commons.io.IOUtils.toInputStream))
+1 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,Cast(java.io.OutputStream))
+1 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,Method(java.lang.Process.getErrorStream))
+1 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,Method(java.lang.Process.getInputStream))
+1 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,ConsInv(java.io.FileInputStream.new FileInputStream))
+1 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,Cast(java.io.InputStream))
+1 : Method(org.apache.commons.io.IOUtils.closeQuietly)(IOUtils,Method(java.lang.Process.getOutputStream))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.LineIterator.hasNext)
+""
+
+7 : Method(org.apache.commons.io.LineIterator.hasNext)(Method(org.apache.commons.io.IOUtils.lineIterator))
+2 : Method(org.apache.commons.io.LineIterator.hasNext)(Method(org.apache.commons.io.FileUtils.lineIterator))
+2 : Method(org.apache.commons.io.LineIterator.hasNext)(null)
+2 : Method(org.apache.commons.io.LineIterator.hasNext)(Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.output.ByteArrayOutputStream.toByteArray)
+
+1 : Method(org.apache.commons.io.output.ByteArrayOutputStream.toByteArray)(ConsInv(org.apache.commons.io.output.ByteArrayOutputStream.new ByteArrayOutputStream))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FilenameUtils.separatorsToSystem)
+
+1 : Method(org.apache.commons.io.FilenameUtils.separatorsToSystem)(FilenameUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.copyFileToDirectory)
+"Copies a file to a directory preserving the file date."
+
+
+Ex1: Copy "java.txt" file to "dir/" directory.
+Ex2: copy("java.txt" file, "dir/" directory)
+
+myFile = new File("java.txt")
+dir = new File("dir")
+Ex3: Copy myFile to dir.
+
+4 : Method(org.apache.commons.io.FileUtils.copyFileToDirectory)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.copyFileToDirectory)(FileUtils,Hole,Hole)
+1 : Method(org.apache.commons.io.FileUtils.copyFileToDirectory)(FileUtils,ConsInv(java.io.File.new File),Hole)
+1 : Method(org.apache.commons.io.FileUtils.copyFileToDirectory)(FileUtils,Hole,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.copyFileToDirectory)(FileUtils,Cast(java.io.File),ConsInv(java.io.File.new File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.copyDirectory)
+"Copies a whole directory to a new location preserving the file dates."
+
+Ex: Similar to the previous.
+
+3 : Method(org.apache.commons.io.FileUtils.copyDirectory)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.copyDirectory)(FileUtils,Hole,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.copyDirectory)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.io.File.new File),Method(org.apache.commons.io.filefilter.FileFilterUtils.suffixFileFilter))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.forceDeleteOnExit)
+"Schedules a file to be deleted when JVM exits."
+
+Ex: delete(file "java.txt")
+
+1 : Method(org.apache.commons.io.FileUtils.forceDeleteOnExit)(FileUtils,ConsInv(java.io.File.new File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.readFileToString)
+"Reads the contents of a file into a String"
+
+Ex: read(file "java.txt")
+
+8 : Method(org.apache.commons.io.FileUtils.readFileToString)(FileUtils,ConsInv(java.io.File.new File))
+3 : Method(org.apache.commons.io.FileUtils.readFileToString)(FileUtils,Hole)
+2 : Method(org.apache.commons.io.FileUtils.readFileToString)(FileUtils,Hole,String)
+1 : Method(org.apache.commons.io.FileUtils.readFileToString)(FileUtils,Cast(java.io.File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.write)
+
+
+//we could have some simple regex 
+write(file "java.txt", "some-content")
+
+1 : Method(org.apache.commons.io.FileUtils.write)(FileUtils,ConsInv(java.io.File.new File),String,String)
+1 : Method(org.apache.commons.io.FileUtils.write)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.lang.StringBuilder.new StringBuilder))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FilenameUtils.getName)
+
+11 : Method(org.apache.commons.io.FilenameUtils.getName)(FilenameUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.filefilter.FileFilterUtils.andFileFilter)
+
+2 : Method(org.apache.commons.io.filefilter.FileFilterUtils.andFileFilter)(FileFilterUtils,Method(org.apache.commons.io.filefilter.FileFilterUtils.andFileFilter),Hole)
+2 : Method(org.apache.commons.io.filefilter.FileFilterUtils.andFileFilter)(FileFilterUtils,Method(org.apache.commons.io.filefilter.FileFilterUtils.notFileFilter),Method(org.apache.commons.io.filefilter.FileFilterUtils.suffixFileFilter))
+1 : Method(org.apache.commons.io.filefilter.FileFilterUtils.andFileFilter)(FileFilterUtils,Hole,Method(org.apache.commons.io.filefilter.FileFilterUtils.orFileFilter))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.copyLarge)
+
+2 : Method(org.apache.commons.io.IOUtils.copyLarge)(IOUtils,Hole,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.LineIterator.closeQuietly)
+
+2 : Method(org.apache.commons.io.LineIterator.closeQuietly)(LineIterator,null)
+2 : Method(org.apache.commons.io.LineIterator.closeQuietly)(LineIterator,Method(org.apache.commons.io.FileUtils.lineIterator))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.filefilter.FileFilterUtils.notFileFilter)
+
+2 : Method(org.apache.commons.io.filefilter.FileFilterUtils.notFileFilter)(FileFilterUtils,Method(org.apache.commons.io.filefilter.FileFilterUtils.nameFileFilter))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FilenameUtils.concat)
+
+6 : Method(org.apache.commons.io.FilenameUtils.concat)(FilenameUtils,Hole,Hole)
+1 : Method(org.apache.commons.io.FilenameUtils.concat)(FilenameUtils,Hole,String)
+1 : Method(org.apache.commons.io.FilenameUtils.concat)(FilenameUtils,Method(org.apache.commons.io.FilenameUtils.concat),InfixOp(+)(NoType))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.copy)
+
+8 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Hole,ConsInv(java.io.ByteArrayOutputStream.new ByteArrayOutputStream))
+4 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,null,ConsInv(java.io.StringWriter.new StringWriter),String)
+4 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Hole,ConsInv(java.io.FileOutputStream.new FileOutputStream))
+2 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,null,Hole)
+2 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Hole,ConsInv(java.io.StringWriter.new StringWriter))
+2 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Hole,Hole)
+2 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Hole,ConsInv(java.io.StringWriter.new StringWriter),String)
+2 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Hole,ConsInv(java.io.BufferedOutputStream.new BufferedOutputStream))
+2 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Hole,null)
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Method(java.lang.ClassLoader.getResourceAsStream),Hole)
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Hole,ConsInv(java.io.StringWriter.new StringWriter),CondExp)
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,ConsInv(java.io.BufferedInputStream.new BufferedInputStream),Hole)
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Asgn(=),ConsInv(java.io.StringWriter.new StringWriter))
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Method(java.lang.Process.getInputStream),ConsInv(java.io.StringWriter.new StringWriter))
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,ConsInv(java.io.BufferedInputStream.new BufferedInputStream),ConsInv(java.io.BufferedOutputStream.new BufferedOutputStream))
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,null,null)
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,Method(java.lang.Process.getInputStream),ConsInv(java.io.ByteArrayOutputStream.new ByteArrayOutputStream))
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,ConsInv(java.io.InputStreamReader.new InputStreamReader),ConsInv(java.io.PrintWriter.new PrintWriter))
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,ConsInv(java.io.FileInputStream.new FileInputStream),Hole)
+1 : Method(org.apache.commons.io.IOUtils.copy)(IOUtils,ConsInv(java.io.StringReader.new StringReader),ConsInv(java.io.BufferedWriter.new BufferedWriter))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.iterateFiles)
+
+1 : Method(org.apache.commons.io.FileUtils.iterateFiles)(FileUtils,ConsInv(java.io.File.new File),Hole,Bool)
+1 : Method(org.apache.commons.io.FileUtils.iterateFiles)(FileUtils,Hole,ConsInv(java.lang.Array.new Array),Bool)
+1 : Method(org.apache.commons.io.FileUtils.iterateFiles)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.lang.Array.new Array),Bool)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.filefilter.FileFilterUtils.suffixFileFilter)
+
+4 : Method(org.apache.commons.io.filefilter.FileFilterUtils.suffixFileFilter)(FileFilterUtils,String)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.filefilter.FileFilterUtils.nameFileFilter)
+
+2 : Method(org.apache.commons.io.filefilter.FileFilterUtils.nameFileFilter)(FileFilterUtils,String)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.filefilter.FileFilterUtils.orFileFilter)
+
+1 : Method(org.apache.commons.io.filefilter.FileFilterUtils.orFileFilter)(FileFilterUtils,Method(org.apache.commons.io.filefilter.FileFilterUtils.suffixFileFilter),Method(org.apache.commons.io.filefilter.FileFilterUtils.directoryFileFilter))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.checksumCRC32)
+"Computes the checksum of a file using the CRC32 checksum routine."
+
+Ex1: checksum("java.txt")
+Ex2: Find checksum crc 32 of "java.txt" file.
+
+2 : Method(org.apache.commons.io.FileUtils.checksumCRC32)(FileUtils,ConsInv(java.io.File.new File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.writeStringToFile)
+
+3 : Method(org.apache.commons.io.FileUtils.writeStringToFile)(FileUtils,ConsInv(java.io.File.new File),Hole)
+2 : Method(org.apache.commons.io.FileUtils.writeStringToFile)(FileUtils,ConsInv(java.io.File.new File),Method(java.lang.StringBuffer.toString))
+2 : Method(org.apache.commons.io.FileUtils.writeStringToFile)(FileUtils,ConsInv(java.io.File.new File),Hole,String)
+2 : Method(org.apache.commons.io.FileUtils.writeStringToFile)(FileUtils,ConsInv(java.io.File.new File),null)
+1 : Method(org.apache.commons.io.FileUtils.writeStringToFile)(FileUtils,Method(java.io.File.createTempFile),Method(java.lang.StringBuilder.toString))
+1 : Method(org.apache.commons.io.FileUtils.writeStringToFile)(FileUtils,ConsInv(java.io.File.new File),Method(java.lang.StringBuilder.toString))
+1 : Method(org.apache.commons.io.FileUtils.writeStringToFile)(FileUtils,Hole,Hole,String)
+1 : Method(org.apache.commons.io.FileUtils.writeStringToFile)(FileUtils,ConsInv(java.io.File.new File),Hole,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.copyFile)
+
+6 : Method(org.apache.commons.io.FileUtils.copyFile)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.io.File.new File))
+5 : Method(org.apache.commons.io.FileUtils.copyFile)(FileUtils,Hole,ConsInv(java.io.File.new File))
+2 : Method(org.apache.commons.io.FileUtils.copyFile)(FileUtils,Hole,null)
+1 : Method(org.apache.commons.io.FileUtils.copyFile)(FileUtils,null,ConsInv(java.io.File.new File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.deleteDirectory)
+
+16 : Method(org.apache.commons.io.FileUtils.deleteDirectory)(FileUtils,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.deleteDirectory)(FileUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.moveFileToDirectory)
+
+1 : Method(org.apache.commons.io.FileUtils.moveFileToDirectory)(FileUtils,Method(java.io.File.createTempFile),ConsInv(java.io.File.new File),Bool)
+1 : Method(org.apache.commons.io.FileUtils.moveFileToDirectory)(FileUtils,Hole,ConsInv(java.io.File.new File),Bool)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.forceDelete)
+
+1 : Method(org.apache.commons.io.FileUtils.forceDelete)(FileUtils,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.forceDelete)(FileUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.lineIterator)
+
+3 : Method(org.apache.commons.io.IOUtils.lineIterator)(IOUtils,Hole,String)
+3 : Method(org.apache.commons.io.IOUtils.lineIterator)(IOUtils,ConsInv(java.io.StringReader.new StringReader))
+2 : Method(org.apache.commons.io.IOUtils.lineIterator)(IOUtils,Hole,null)
+1 : Method(org.apache.commons.io.IOUtils.lineIterator)(IOUtils,ConsInv(java.io.FileReader.new FileReader))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.lineIterator)
+
+3 : Method(org.apache.commons.io.FileUtils.lineIterator)(FileUtils,Hole)
+1 : Method(org.apache.commons.io.FileUtils.lineIterator)(FileUtils,ConsInv(java.io.File.new File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.deleteQuietly)
+
+6 : Method(org.apache.commons.io.FileUtils.deleteQuietly)(FileUtils,Hole)
+4 : Method(org.apache.commons.io.FileUtils.deleteQuietly)(FileUtils,ConsInv(java.io.File.new File))
+2 : Method(org.apache.commons.io.FileUtils.deleteQuietly)(FileUtils,null)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.filefilter.FileFilterUtils.directoryFileFilter)
+
+1 : Method(org.apache.commons.io.filefilter.FileFilterUtils.directoryFileFilter)(FileFilterUtils)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.moveFile)
+
+1 : Method(org.apache.commons.io.FileUtils.moveFile)(FileUtils,Hole,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.moveFile)(FileUtils,null,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.moveFile)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.io.File.new File))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.output.CountingOutputStream.getByteCount)
+
+1 : Method(org.apache.commons.io.output.CountingOutputStream.getByteCount)(ConsInv(org.apache.commons.io.output.CountingOutputStream.new CountingOutputStream))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.toInputStream)
+
+4 : Method(org.apache.commons.io.IOUtils.toInputStream)(IOUtils,Hole,String)
+2 : Method(org.apache.commons.io.IOUtils.toInputStream)(IOUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FilenameUtils.getBaseName)
+
+2 : Method(org.apache.commons.io.FilenameUtils.getBaseName)(FilenameUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.listFiles)
+
+5 : Method(org.apache.commons.io.FileUtils.listFiles)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.lang.Array.new Array),Bool)
+3 : Method(org.apache.commons.io.FileUtils.listFiles)(FileUtils,Hole,ConsInv(java.lang.Array.new Array),Bool)
+2 : Method(org.apache.commons.io.FileUtils.listFiles)(FileUtils,Hole,Method(org.apache.commons.io.filefilter.FileFilterUtils.andFileFilter),Hole)
+2 : Method(org.apache.commons.io.FileUtils.listFiles)(FileUtils,Hole,Hole,Bool)
+2 : Method(org.apache.commons.io.FileUtils.listFiles)(FileUtils,Hole,ConsInv(java.lang.Array.new Array),Hole)
+2 : Method(org.apache.commons.io.FileUtils.listFiles)(FileUtils,Hole,ConsInv(org.apache.commons.io.filefilter.RegexFileFilter.new RegexFileFilter),ConsInv(org.apache.commons.io.filefilter.RegexFileFilter.new RegexFileFilter))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.forceMkdir)
+
+2 : Method(org.apache.commons.io.FileUtils.forceMkdir)(FileUtils,ConsInv(java.io.File.new File))
+1 : Method(org.apache.commons.io.FileUtils.forceMkdir)(FileUtils,Method(java.io.File.getParentFile))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FilenameUtils.getExtension)
+
+3 : Method(org.apache.commons.io.FilenameUtils.getExtension)(FilenameUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FilenameUtils.getFullPath)
+
+1 : Method(org.apache.commons.io.FilenameUtils.getFullPath)(FilenameUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.writeByteArrayToFile)
+
+1 : Method(org.apache.commons.io.FileUtils.writeByteArrayToFile)(FileUtils,Hole,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.IOUtils.toByteArray)
+
+4 : Method(org.apache.commons.io.IOUtils.toByteArray)(IOUtils,null)
+2 : Method(org.apache.commons.io.IOUtils.toByteArray)(IOUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.readFileToByteArray)
+
+2 : Method(org.apache.commons.io.FileUtils.readFileToByteArray)(FileUtils,Hole)
+1 : Method(org.apache.commons.io.FileUtils.readFileToByteArray)(FileUtils,null)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.LineIterator.nextLine)
+
+4 : Method(org.apache.commons.io.LineIterator.nextLine)(Method(org.apache.commons.io.IOUtils.lineIterator))
+2 : Method(org.apache.commons.io.LineIterator.nextLine)(Hole)
+2 : Method(org.apache.commons.io.LineIterator.nextLine)(null)
+2 : Method(org.apache.commons.io.LineIterator.nextLine)(Method(org.apache.commons.io.FileUtils.lineIterator))
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.openInputStream)
+
+1 : Method(org.apache.commons.io.FileUtils.openInputStream)(FileUtils,Hole)
+
+
+-----------------------------------------------------------------------------------------------
+Head: Method(org.apache.commons.io.FileUtils.copyDirectoryToDirectory)
+
+4 : Method(org.apache.commons.io.FileUtils.copyDirectoryToDirectory)(FileUtils,ConsInv(java.io.File.new File),ConsInv(java.io.File.new File))

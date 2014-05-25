@@ -7,6 +7,8 @@ import synthesis.handlers.Handler;
 import synthesis.handlers.HandlerFactory;
 import types.Type;
 
+//Fix bugs with StringExpr!
+
 public class StringExpr extends Expr {
 
 	private String string;
@@ -56,16 +58,16 @@ public class StringExpr extends Expr {
 
 	@Override
 	public List<Expr> getArgs() {
-		throw new UnsupportedOperationException();
+		return Expr.EMPTY_EXPR_LIST;
 	}
 
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
-		throw new UnsupportedOperationException();
+		return new synthesis.trees.Hole(null);
 	}
 
 	@Override
 	public Handler getHandler(HandlerFactory hf) {
-		throw new UnsupportedOperationException();
+		return hf.getHoleHandler();
 	}
 }

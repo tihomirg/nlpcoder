@@ -22,6 +22,7 @@ import types.NameGenerator;
 import api.Imported;
 import api.StabileAPI;
 import config.Config;
+import definitions.ClassInfo;
 import definitions.Declaration;
 import deserializers.Deserializer;
 
@@ -45,7 +46,7 @@ public class Main {
 		
 		
 		PartialExpressionScorer scorer = new PartialExpressionScorer();
-		GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, scorer, 10, 20);
+		GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, scorer, 5, 20);
 		Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder);
 		
 		synthesis.run();
@@ -59,16 +60,34 @@ public class Main {
 		
 		Imported imported = api.createImported();
 		api.load(imported, "java.io", true);
-
-		declss.add(initNewFileConst(imported));
-		declss.add(initNewFileInputStream(imported));
-		declss.add(initNewDataInputStream(imported));		
+//
+//		declss.add(initNewFileConst(imported));
+//		declss.add(initNewFileInputStream(imported));
+//		declss.add(initNewDataInputStream(imported));		
+//		declss.add(initNewPrintReader(imported));			
+		
+		declss.add(initSystemClass(imported));	
+		declss.add(initPrintln(imported));	
 		
 		return declss;
 	}
 
+	private static List<Declaration> initSystemClass(Imported imported) {
+		ClassInfo type = imported.getFirstType("System");
+		Declaration[] declArray = type.getFields();
+		return Arrays.asList(declArray);
+	}
+	
+	private static List<Declaration> initPrintln(Imported imported) {
+		ClassInfo type = imported.getFirstType("PrintStream");
+		Declaration[] declArray = type.getAllMethods();
+		
+		System.out.println(Arrays.toString(declArray));
+		
+		return Arrays.asList(declArray);
+	}
+
 	private static List<Declaration> initNewFileConst(Imported imported) {
-		List<Declaration> decls = new LinkedList<Declaration>();	
 		Set<Declaration> methods = imported.getConstructors("new File", 1);
 		Declaration[] declArray = methods.toArray(new Declaration[methods.size()]);
 		
@@ -76,15 +95,27 @@ public class Main {
 	}
 	
 	private static List<Declaration> initNewFileInputStream(Imported imported) {
-		List<Declaration> decls = new LinkedList<Declaration>();	
 		Set<Declaration> methods = imported.getConstructors("new FileInputStream", 1);
 		Declaration[] declArray = methods.toArray(new Declaration[methods.size()]);
 		
 		return Arrays.asList(declArray);		
 	}	
 	
+	private static List<Declaration> initNewPrintWriter(Imported imported) {
+		Set<Declaration> methods = imported.getConstructors("new PrintWriter", 1);
+		Declaration[] declArray = methods.toArray(new Declaration[methods.size()]);
+		
+		return Arrays.asList(declArray);		
+	}		
+	
+	private static List<Declaration> initNewPrintReader(Imported imported) {
+		Set<Declaration> methods = imported.getConstructors("new StringReader", 1);
+		Declaration[] declArray = methods.toArray(new Declaration[methods.size()]);
+		
+		return Arrays.asList(declArray);		
+	}		
+	
 	private static List<Declaration> initNewDataInputStream(Imported imported) {
-		List<Declaration> decls = new LinkedList<Declaration>();	
 		Set<Declaration> methods = imported.getConstructors("new DataInputStream", 1);
 		Declaration[] declArray = methods.toArray(new Declaration[methods.size()]);
 		

@@ -1,0 +1,26 @@
+TODO:
+
+(1) Analyze those packages:
+
+- java.net
+- org.apache.commons.lang
+- org.apache.commons.cli
+- org.apache.commons.collections
+
+
+- java.net.uri/java.net.url
+- org.apache.commons.lang.StringUtils
+- org.apache.commons.cli.CommandLine
+- org.apache.commons.collections.CollectionUtils
+
+
+
+Things that may make our examples and tool cute:
+(2) Include anaphora resolution
+
+(3) recognizing filenames and urls, use regex and a table for the top filenames.
+
+(4) annotate each constructor with worods "new", "create",...
+(5) each collection with a word "collection"
+
+(6) Given a set of literals 1, 2, 3 create new Array[]{1,2,3} and proceed further. In general, 
