@@ -1,0 +1,2 @@
+1) Check what is wrong with "StringExpr" and statistics. See if all important statistic details are loaded.
+2) In statistics we use all methods/fields, so we should use the same in NLP part, i.e., we should use unique methods for each type. 
