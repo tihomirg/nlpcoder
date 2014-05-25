@@ -31,12 +31,10 @@ public class SynthesisLevel {
 	
 	private int levelId;
 	private PartialExpressionScorer scorer;
-	private ExprGroup egroup;
 	
-	public SynthesisLevel(int levelId, HandlerTable handlerTable, ExprGroup egroup, int maxNumOfPexpr, PartialExpressionScorer scorer) {
+	public SynthesisLevel(int levelId, HandlerTable handlerTable, int maxNumOfPexpr, PartialExpressionScorer scorer) {
 		this.levelId = levelId;
 		this.handlerTable = handlerTable;
-		this.egroup = egroup;
 		
 		this.processed = new LinkedList<PartialExpression>();
 		this.maxNumOfPexpr = maxNumOfPexpr;
@@ -121,7 +119,7 @@ public class SynthesisLevel {
 		List<PartialExpression> partial = new LinkedList<PartialExpression>();
 		List<PartialExpression> completed = new LinkedList<PartialExpression>();
 		for (Expr expr : queue) {
-			PartialExpression newPexp = pexp.instantiate(param, expr, egroup, scorer);
+			PartialExpression newPexp = pexp.instantiate(param, expr, scorer);
 			if(newPexp.isCompleted()) {
 				completed.add(newPexp);
 			} else {

@@ -25,7 +25,7 @@ public class InstanceFieldAccess extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return Names.InstanceFieldAccess+"("+decl.getLongName()+")";
 	}
 	

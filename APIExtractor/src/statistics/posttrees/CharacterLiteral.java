@@ -22,7 +22,7 @@ public class CharacterLiteral extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return Names.CharacterLiteral;
 	}
 	

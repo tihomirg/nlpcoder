@@ -29,13 +29,14 @@ public class StringExpr extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return string;
 	}
 	
 	@Override
 	protected String shortRep() {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		return string;
 	}	
 	
 	@Override

@@ -29,7 +29,7 @@ public class CondExpr extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return Names.CondExpr+"("+retType+")";
 	}
 	

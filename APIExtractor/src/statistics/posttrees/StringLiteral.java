@@ -23,7 +23,7 @@ public class StringLiteral extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return Names.StringLiteral;
 	}
 	

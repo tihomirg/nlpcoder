@@ -28,7 +28,7 @@ public class Assignment extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return Names.Assignment+"("+op+")("+type+")";
 	}
 	

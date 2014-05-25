@@ -32,4 +32,9 @@ public class Param {
 	public void setRepKey(RepKey repKey) {
 		this.repKey = repKey;
 	}
+	
+	@Override
+	public String toString() {
+		return searchKey.toString();
+	}
 }

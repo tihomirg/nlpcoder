@@ -51,7 +51,7 @@ public abstract class Expr {
 		return s;
 	}
 
-	protected abstract String shortReadableRep();
+	public abstract String shortReadableRep();
 
 	protected abstract String shortRep();
 	

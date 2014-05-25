@@ -25,7 +25,7 @@ public class CastExpr extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return Names.CastExpr+"("+type+")("+argType+")";
 	}
 	

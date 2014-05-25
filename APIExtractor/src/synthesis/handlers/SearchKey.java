@@ -17,4 +17,9 @@ public class SearchKey {
 	public Handler getHandler(HandlerFactory hf) {
 		return expr.getHandler(hf);
 	}
+	
+	@Override
+	public String toString() {
+		return expr.shortReadableRep();
+	}
 }

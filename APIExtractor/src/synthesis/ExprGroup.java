@@ -9,44 +9,29 @@ import synthesis.handlers.SearchKey;
 
 public class ExprGroup {
 
-	private List<Expr> exprs;
-	public Set<ExprGroup> relatedGroups;
+	//TODO: Maybe it is better to have ExprGroup per one expr!
+	//Than we have way slower first stage of the algorithm.
+	private Expr expr;
+	public List<ExprGroup> relatedGroups;	
 	
-	public ExprGroup(final Expr expr) {
-		this(new LinkedList<Expr>(){{add(expr);}});
-	}
-	
-	public ExprGroup(List<Expr> exprs) {
-		this.exprs = exprs;
-	}	
-	
-	public List<PartialExpression> createPartialExprs(){
-		List<PartialExpression> pexprs = new LinkedList<PartialExpression>();
-		
-		for (Expr expr : exprs) {
-			pexprs.add(createPartialExpr(expr));
-		}
-		
-		return pexprs;
+	public ExprGroup(Expr expr) {
+		this.expr = expr;
 	}
 
-	private PartialExpression createPartialExpr(Expr expr) {
-		return new PartialExpression(new Param(new SearchKey(expr), new RepKey()));
+	public PartialExpression createPartialExpr() {
+		return new PartialExpression(new Param(new SearchKey(expr), new RepKey()), this);
 	}
 	
-	public Set<ExprGroup> relatedGroups(){
+	public List<ExprGroup> relatedGroups(){
 		return relatedGroups;
 	}
 	
-	public void setRelatedGroups(Set<ExprGroup> relatedGroups) {
+	public void setRelatedGroups(List<ExprGroup> relatedGroups) {
 		this.relatedGroups = relatedGroups;
 	}
 	
 	public boolean contains(Expr thatExpr){
-		for(Expr expr:exprs){
-			if (Expr.equalShort(expr, thatExpr)) return true;
-		}
-		return false;
+	    return Expr.equalShort(expr, thatExpr);
 	}
 
 	public List<ExprGroup> tryFindRelatedGroups(Expr expr) {

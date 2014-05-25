@@ -27,7 +27,7 @@ public class InfixOperator extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return Names.InfixOperator+"("+op+")"+"("+type+")";
 	}
 	

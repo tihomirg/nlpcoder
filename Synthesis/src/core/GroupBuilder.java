@@ -1,9 +1,11 @@
 package core;
 
+import java.util.List;
+
 import synthesis.ExprGroup;
 
 public abstract class GroupBuilder<T> {
 
-	public abstract T build(ExprGroup pexprs);
+	public abstract T build(List<ExprGroup> pexprs);
 	
 }

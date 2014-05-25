@@ -3,8 +3,10 @@ package core;
 import java.util.LinkedList;
 import java.util.List;
 
+import synthesis.Connection;
 import synthesis.ExprGroup;
 import synthesis.PartialExpression;
+import util.Pair;
 
 public class Synthesis<T extends SynthesisGroup> {
 	
@@ -14,15 +16,15 @@ public class Synthesis<T extends SynthesisGroup> {
 
 	private long time;
 	
-	public Synthesis(List<ExprGroup> exprGroups, GroupBuilder<T> builder) {
-		this.groups = createGroups(exprGroups, builder);
+	public Synthesis(List<List<ExprGroup>> exprGroupss, GroupBuilder<T> builder) {
+		this.groups = createGroups(exprGroupss, builder);
 		this.completed = new LinkedList<PartialExpression>();
 	}
 	
-	private List<T> createGroups(List<ExprGroup> exprGroups, GroupBuilder<T> builder) {
+	private List<T> createGroups(List<List<ExprGroup>> exprGroupss, GroupBuilder<T> builder) {
 		List<T> groups = new LinkedList<T>(); 
-		for (ExprGroup pexprs : exprGroups) {			
-			groups.add(builder.build(pexprs));
+		for (List<ExprGroup> exprGroups : exprGroupss) {			
+			groups.add(builder.build(exprGroups));
 		}
 		return groups;
 	}
@@ -43,8 +45,14 @@ public class Synthesis<T extends SynthesisGroup> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Time: "+ time+"ms\n");
-		sb.append("Completed:");
-		sb.append(this.completed+"\n\n");
+		sb.append("Completed:\n");
+		Pair<List<PartialExpression>, List<PartialExpression>> pair = filterConnected(this.completed);
+
+		sb.append("With connections:\n");
+		sb.append(pair.getFirst()+"\n\n");
+		
+		sb.append("Without connections:\n");		
+		sb.append(pair.getSecond()+"\n\n");
 		
 		for(int i=0; i < groups.size(); i++){
 			T group = groups.get(i);
@@ -52,5 +60,20 @@ public class Synthesis<T extends SynthesisGroup> {
 			sb.append(group+"\n\n");
 		}
 		return sb.toString();
+	}
+
+	private Pair<List<PartialExpression>, List<PartialExpression>> filterConnected(List<PartialExpression> pexprs) {
+		List<PartialExpression> with = new LinkedList<PartialExpression>();
+		List<PartialExpression> without = new LinkedList<PartialExpression>();
+		for (PartialExpression pexpr : pexprs) {
+			LinkedList<Connection> connections = pexpr.getConnections();
+			if (!connections.isEmpty()){
+				with.add(pexpr);
+			} else {
+				without.add(pexpr);
+			}
+		}
+		
+		return new Pair<List<PartialExpression>,List<PartialExpression>>(with, without);
 	}
 }

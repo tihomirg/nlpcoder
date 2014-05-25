@@ -21,8 +21,8 @@ public class SaturationGroupBuilder extends GroupBuilder<SaturationSynthesisGrou
 	}
 
 	@Override
-	public SaturationSynthesisGroup build(ExprGroup egroup) {
-		return new SaturationSynthesisGroup(egroup, handlerTable, numOfLevels, maxNumOfPexprPerLevel, scorer);
+	public SaturationSynthesisGroup build(List<ExprGroup> egroups) {
+		return new SaturationSynthesisGroup(egroups, handlerTable, numOfLevels, maxNumOfPexprPerLevel, scorer);
 	}
 
 }

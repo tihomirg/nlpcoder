@@ -25,7 +25,7 @@ public class PrefixOperator extends Expr {
 	}
 
 	@Override
-	protected String shortReadableRep() {
+	public String shortReadableRep() {
 		return Names.PrefixOperator+"("+op+")"+"("+type+")";
 	}
 	
