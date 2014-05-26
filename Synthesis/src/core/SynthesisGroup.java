@@ -2,12 +2,13 @@ package core;
 
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.concurrent.Callable;
 
 import synthesis.ExprGroup;
 import synthesis.PartialExpression;
 import synthesis.comparators.PartialExpressionComparatorDesc;
 
-public abstract class SynthesisGroup {
+public abstract class SynthesisGroup implements Callable<PriorityQueue<PartialExpression>>{
 	protected static final int DEFAULT_CAPACITY = 100;
 	protected static final PartialExpressionComparatorDesc COMPARATOR = new PartialExpressionComparatorDesc();
 	
@@ -19,5 +20,4 @@ public abstract class SynthesisGroup {
 		this.handlerTable = handlerTable;
 	}
 
-	public abstract PriorityQueue<PartialExpression> run();
 }

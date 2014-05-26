@@ -26,8 +26,28 @@ public class SaturationSynthesisGroup extends SynthesisGroup {
 		this.levels = new SynthesisLevel[numOfLevels+1];
 		this.scorer = scorer;
 	}
+	
+	private List<PartialExpression> createPartialExprs() {
+		List<PartialExpression> list = new LinkedList<PartialExpression>();
+		
+		for (ExprGroup egroup: this.egroups) {
+			list.add(egroup.createPartialExpr());
+		}
+		
+		return list;
+	}
 
-	public PriorityQueue<PartialExpression> run(){
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (SynthesisLevel level: levels) {
+			sb.append(level+"\n\n");
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public PriorityQueue<PartialExpression> call() throws Exception {
 		PriorityQueue<PartialExpression> completed = new PriorityQueue<PartialExpression>(DEFAULT_CAPACITY, COMPARATOR);
 		List<PartialExpression> starters = new LinkedList<PartialExpression>();
 
@@ -54,24 +74,5 @@ public class SaturationSynthesisGroup extends SynthesisGroup {
 		}
 
 		return completed;
-	}
-	
-	private List<PartialExpression> createPartialExprs() {
-		List<PartialExpression> list = new LinkedList<PartialExpression>();
-		
-		for (ExprGroup egroup: this.egroups) {
-			list.add(egroup.createPartialExpr());
-		}
-		
-		return list;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		for (SynthesisLevel level: levels) {
-			sb.append(level+"\n\n");
-		}
-		return sb.toString();
 	}
 }

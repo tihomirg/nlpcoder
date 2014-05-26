@@ -2,6 +2,13 @@ package core;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import synthesis.Connection;
 import synthesis.ExprGroup;
@@ -9,18 +16,24 @@ import synthesis.PartialExpression;
 import util.Pair;
 
 public class Synthesis<T extends SynthesisGroup> {
-	
+
 	private List<T> groups;
-	
+
 	private List<PartialExpression> completed;
 
 	private long time;
-	
-	public Synthesis(List<List<ExprGroup>> exprGroupss, GroupBuilder<T> builder) {
+
+	ExecutorService service;
+
+	private boolean parallel;
+
+	public Synthesis(List<List<ExprGroup>> exprGroupss, GroupBuilder<T> builder, boolean parallel) {
 		this.groups = createGroups(exprGroupss, builder);
+		this.parallel = parallel;
 		this.completed = new LinkedList<PartialExpression>();
+		this.service = Executors.newFixedThreadPool(this.groups.size());
 	}
-	
+
 	private List<T> createGroups(List<List<ExprGroup>> exprGroupss, GroupBuilder<T> builder) {
 		List<T> groups = new LinkedList<T>(); 
 		for (List<ExprGroup> exprGroups : exprGroupss) {			
@@ -28,19 +41,55 @@ public class Synthesis<T extends SynthesisGroup> {
 		}
 		return groups;
 	}
-	
+
 	public void run(){
 		long currentTime = System.currentTimeMillis();
-		this.start();
+		if (this.parallel) this.startParallel();
+		else this.startSequential();
 		this.time = System.currentTimeMillis() - currentTime;
 	}
-	
-	public void start(){
-		for (T group : groups) {
-			this.completed.addAll(group.run());
+
+	private void startSequential() {
+		try {
+			for (T group : groups) {
+				this.completed.addAll(group.call());
+				// TODO Auto-generated catch block
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void startParallel(){
+		try {
+			List<Future<PriorityQueue<PartialExpression>>> result = service.invokeAll(this.groups);
+			
+			service.shutdown();
+			service.awaitTermination(10, TimeUnit.SECONDS);
+			
+			processResult(result);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
+	
+
+	private void processResult(List<Future<PriorityQueue<PartialExpression>>> result) {
+		for (Future<PriorityQueue<PartialExpression>> future : result) {
+			try {
+				this.completed.addAll(future.get());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -50,10 +99,10 @@ public class Synthesis<T extends SynthesisGroup> {
 
 		sb.append("With connections:\n");
 		sb.append(pair.getFirst()+"\n\n");
-		
+
 		sb.append("Without connections:\n");		
 		sb.append(pair.getSecond()+"\n\n");
-		
+
 		for(int i=0; i < groups.size(); i++){
 			T group = groups.get(i);
 			sb.append("Group "+i+":");
@@ -73,7 +122,7 @@ public class Synthesis<T extends SynthesisGroup> {
 				without.add(pexpr);
 			}
 		}
-		
+
 		return new Pair<List<PartialExpression>,List<PartialExpression>>(with, without);
 	}
 }

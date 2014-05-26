@@ -1,2 +1,14 @@
 1) Check what is wrong with "StringExpr" and statistics. See if all important statistic details are loaded.
 2) In statistics we use all methods/fields, so we should use the same in NLP part, i.e., we should use unique methods for each type. 
+
+3) Merge algorithm
+4) Local analysis
+5) Literals
+6) Type handler
+
+7) Find char representation
+
+8) NLP input and selection algorithm
+
+9) To speed up parallel execution, duplicate some parts of the memory, or build a map that you can easily recreate afterwards.
+ 
