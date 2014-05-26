@@ -16,5 +16,9 @@ public class Connection {
 	public String toString() {
 		return param.toString();
 	}
+	
+	public List<ExprGroup> getRelatedGroups() {
+		return relatedGroups;
+	}
 
 }

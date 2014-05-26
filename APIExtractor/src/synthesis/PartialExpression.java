@@ -33,7 +33,7 @@ public class PartialExpression implements Cloneable {
 	}
 
 	public Param getParam() {
-		return params.get(0);
+		return params.element();
 	}
 
 	@Override
@@ -102,6 +102,15 @@ public class PartialExpression implements Cloneable {
 	public LinkedList<Connection> getConnections() {
 		return connections;
 	}
+	
+	public Connection getConnection() {
+		return connections.element();
+	}
+	
+	private void removeConnection(Connection con) {
+		connections.remove(con);
+	}	
+	
 
 	private void addAllParams(List<Param> params) {
 		this.params.addAll(params);

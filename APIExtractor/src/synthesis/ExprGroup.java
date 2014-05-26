@@ -12,10 +12,21 @@ public class ExprGroup {
 	//TODO: Maybe it is better to have ExprGroup per one expr!
 	//Than we have way slower first stage of the algorithm.
 	private Expr expr;
-	public List<ExprGroup> relatedGroups;	
+	private List<ExprGroup> relatedGroups;	
+	
+	private List<PartialExpression> completedExprs;
 	
 	public ExprGroup(Expr expr) {
 		this.expr = expr;
+		this.completedExprs = new LinkedList<PartialExpression>();
+	}
+	
+	public void addCompletedExpr(PartialExpression pexpr){
+		completedExprs.add(pexpr);
+	}
+	
+	public List<PartialExpression> getCompletedExprs() {
+		return completedExprs;
 	}
 
 	public PartialExpression createPartialExpr() {

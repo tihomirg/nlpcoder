@@ -11,4 +11,5 @@
 8) NLP input and selection algorithm
 
 9) To speed up parallel execution, duplicate some parts of the memory, or build a map that you can easily recreate afterwards.
+ Also we would need to duplicate handlers. Have a pool of (5-6) handlers. And Scorer should be duplicated.
  

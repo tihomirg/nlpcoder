@@ -47,7 +47,7 @@ public class Main {
 		
 		PartialExpressionScorer scorer = new PartialExpressionScorer();
 		GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, scorer, 5, 20);
-		Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, true);
+		Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);
 		
 		synthesis.run();
 		
@@ -61,10 +61,10 @@ public class Main {
 		Imported imported = api.createImported();
 		api.load(imported, "java.io", true);
 
-		declss.add(initNewFileConst(imported));
-		declss.add(initNewFileInputStream(imported));
-		declss.add(initNewDataInputStream(imported));		
-		declss.add(initNewPrintReader(imported));			
+//		declss.add(initNewFileConst(imported));
+//		declss.add(initNewFileInputStream(imported));
+//		declss.add(initNewDataInputStream(imported));		
+//		declss.add(initNewPrintReader(imported));			
 		
 		declss.add(initSystemClass(imported));	
 		declss.add(initPrintln(imported));	
