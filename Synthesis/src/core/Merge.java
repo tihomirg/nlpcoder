@@ -101,7 +101,12 @@ public class Merge {
 		sb.append("With connections:\n");
 		sb.append(pair.getFirst()+"\n\n");
 
-		sb.append("Without connections:\n");		
+		sb.append("Without connections:\n");
+		
+//		for(PartialExpression pe : pair.getSecond()){
+//			System.out.println(pe.toString());
+//		}
+//		
 		sb.append(pair.getSecond()+"\n\n");
 
 //		for(int i=0; i < groups.size(); i++){

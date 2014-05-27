@@ -55,11 +55,13 @@ public class Main {
 		
 		Pair<List<PartialExpression>, List<PartialExpression>> pexprs = synthesis.getPexprs();
 		
-		List<PartialExpression> completed = pexprs.getFirst();
-		List<PartialExpression> withConnections = pexprs.getSecond();
+		final List<PartialExpression> withConnections = pexprs.getFirst();
+		List<PartialExpression> completed = pexprs.getSecond();
 		
 		prepareForMearging(completed);
 		prepareForMearging(withConnections);
+		
+		//List<PartialExpression> list = new LinkedList<PartialExpression>(){{add(withConnections.get(0));}};
 		
 		Merge merge = new Merge(withConnections, 4, 5, 20, scorer, false);
 		
@@ -81,13 +83,13 @@ public class Main {
 		Imported imported = api.createImported();
 		api.load(imported, "java.io", true);
 
-//		declss.add(initNewFileConst(imported));
-//		declss.add(initNewFileInputStream(imported));
-//		declss.add(initNewDataInputStream(imported));		
+		declss.add(initNewFileConst(imported));
+		declss.add(initNewFileInputStream(imported));
+		declss.add(initNewDataInputStream(imported));		
 //		declss.add(initNewPrintReader(imported));			
 		
-		declss.add(initSystemClass(imported));	
-		declss.add(initPrintln(imported));	
+//		declss.add(initSystemClass(imported));	
+//		declss.add(initPrintln(imported));	
 		
 		return declss;
 	}

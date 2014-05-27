@@ -163,8 +163,10 @@ public class PartialExpression implements Cloneable {
 		Connection[] cons = new Connection[connections.size()];
 		
 		for(int i=0; i < cons.length; i++){
-			cons[i] = connections.get(i);
-			cons[i].setIndex(index);
+			Connection newConnection = connections.get(i).clone();
+			newConnection.setIndex(index);
+			
+			cons[i] = newConnection;
 		}
 		
 		return Arrays.asList(cons);

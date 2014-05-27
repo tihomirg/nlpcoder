@@ -12,7 +12,7 @@ public class RepPointer extends Expr {
 
 	@Override
 	public String toString(Representation rep) {
-		return rep.toString(index);
+		return rep.getParent().toString(index);
 	}
 
 }

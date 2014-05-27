@@ -9,12 +9,12 @@ public class SimpleRepresentation extends Representation {
 
 	private Representation parent;
 
-	private Expr[] rep;
+	private Expr[] nodes;
 
 	public SimpleRepresentation(){
 		super();
-		this.rep = new Expr[INITIAL_CAP];
-		this.rep[this.root.getId()] = Expr.REP_HOLE;
+		this.nodes = new Expr[INITIAL_CAP];
+		this.nodes[this.root.getId()] = Expr.REP_HOLE;
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class SimpleRepresentation extends Representation {
 		SimpleRepresentation representation = null;
 		try {
 			representation = (SimpleRepresentation) super.clone();
-			representation.rep = this.rep.clone();
+			representation.nodes = this.nodes.clone();
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,7 +31,7 @@ public class SimpleRepresentation extends Representation {
 	}
 
 	public String toString(int id){
-		return rep[id].toString(this);
+		return nodes[id].toString(this);
 	}
 
 	public List<Param> instantiate(Param param, statistics.posttrees.Expr expr) {
@@ -39,7 +39,7 @@ public class SimpleRepresentation extends Representation {
 		List<statistics.posttrees.Expr> args = expr.getArgs();
 		List<Integer> ids = allocate(args.size());
 
-		rep[repKey.getId()] = expr.createRep(ids);
+		nodes[repKey.getId()] = expr.createRep(ids);
 
 		setRepHoles(ids);
 
@@ -48,16 +48,16 @@ public class SimpleRepresentation extends Representation {
 
 	protected void setRepHoles(List<Integer> ids) {
 		for (int id : ids) {
-			rep[id] = Expr.REP_HOLE;
+			nodes[id] = Expr.REP_HOLE;
 		}
 	}
 
 	protected void ensureSize(int newLength) {
-		if (rep.length < newLength){
+		if (nodes.length < newLength){
 			int length = newLength + INITIAL_CAP;
 			Expr[] newArray = new Expr[length];
-			System.arraycopy(rep, 0, newArray, 0, this.length);
-			this.rep = newArray;
+			System.arraycopy(nodes, 0, newArray, 0, this.length);
+			this.nodes = newArray;
 		}
 	}
 
@@ -82,7 +82,7 @@ public class SimpleRepresentation extends Representation {
 	}
 
 	public void setExpr(int id, RepPointer repPointer) {
-		rep[id] = repPointer;
+		nodes[id] = repPointer;
 	}
 
 	@Override

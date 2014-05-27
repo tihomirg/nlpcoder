@@ -5,12 +5,12 @@ import java.util.List;
 import synthesis.trees.RepPointer;
 
 public class ComplexRepresentation extends Representation {
-	private SimpleRepresentation[] rep;
+	private SimpleRepresentation[] nodes;
 	
 	public ComplexRepresentation(SimpleRepresentation simpleRep){
 		super();
-		this.rep = new SimpleRepresentation[INITIAL_CAP];
-		this.rep[this.root.getId()] = simpleRep;
+		this.nodes = new SimpleRepresentation[INITIAL_CAP];
+		this.nodes[this.root.getId()] = simpleRep;
 		simpleRep.setParent(this);
 	}
 	
@@ -19,10 +19,10 @@ public class ComplexRepresentation extends Representation {
 		ComplexRepresentation representation = null;
 		try {
 			representation = (ComplexRepresentation) super.clone();
-			representation.rep = this.rep.clone();
-			for (int i=0; i < this.rep.length; i++) {
-				representation.rep[i] = this.rep[i].clone();
-				representation.rep[i].setParent(this);
+			representation.nodes = this.nodes.clone();
+			for (int i=0; i < this.length; i++) {
+				representation.nodes[i] = this.nodes[i].clone();
+				representation.nodes[i].setParent(representation);
 			}
 			
 		} catch (CloneNotSupportedException e) {
@@ -33,7 +33,7 @@ public class ComplexRepresentation extends Representation {
 	}
 	
 	public String toString(int id){
-		return rep[id].toString();
+		return nodes[id].toString();
 	}
 
 	public List<Param> instantiate(Param param, statistics.posttrees.Expr expr) {
@@ -41,11 +41,11 @@ public class ComplexRepresentation extends Representation {
 	}
 
 	protected void ensureSize(int newLength) {
-		if (rep.length < newLength){
+		if (nodes.length < newLength){
 			int length = newLength + INITIAL_CAP;
 			SimpleRepresentation[] newArray = new SimpleRepresentation[length];
-			System.arraycopy(rep, 0, newArray, 0, this.length);
-			this.rep = newArray;
+			System.arraycopy(nodes, 0, newArray, 0, this.length);
+			this.nodes = newArray;
 		}
 	}
 
@@ -67,17 +67,19 @@ public class ComplexRepresentation extends Representation {
 	@Override
 	public int connect(Connection connection, Representation rep) {		
 		int index = allocate(1).get(0);
-		this.rep[index] = rep.asSimpleRepresentation();
+		SimpleRepresentation simpleRepresentation = rep.asSimpleRepresentation();
+		this.nodes[index] = simpleRepresentation.clone();
+		simpleRepresentation.setParent(this);
 		
 		//Set pointer
-		this.rep[connection.getIndex()].setExpr(connection.getParam().getRepKey().getId(), new RepPointer(index));
+		this.nodes[connection.getIndex()].setExpr(connection.getParam().getRepKey().getId(), new RepPointer(index));
 		
 		return index;
 	}
 	
 	@Override
 	public SimpleRepresentation asSimpleRepresentation() {
-		return rep[root.getId()];
+		return nodes[root.getId()];
 	}
 	
 	@Override
