@@ -8,36 +8,40 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-
 import synthesis.Connection;
-import synthesis.ExprGroup;
 import synthesis.PartialExpression;
+import synthesis.PartialExpressionScorer;
 import util.Pair;
 
-public class Synthesis<T extends SynthesisGroup> {
-
-	private List<T> groups;
-
+public class Merge {
+	
+	private List<MergeGroup> groups;
 	private List<PartialExpression> completed;
-
 	private long time;
-
 	ExecutorService service;
-
 	private boolean parallel;
-
-	public Synthesis(List<List<ExprGroup>> exprGroupss, GroupBuilder<T> builder, boolean parallel) {
-		this.groups = createGroups(exprGroupss, builder);
+	
+	public Merge(List<PartialExpression> withConnections, int numOfGroups, int numOfLevels, int maxNumOfPexprPerLevel, PartialExpressionScorer scorer, boolean parallel) {
+		this.groups = createGroups(withConnections, numOfGroups, numOfLevels, maxNumOfPexprPerLevel, scorer);
 		this.parallel = parallel;
 		this.completed = new LinkedList<PartialExpression>();
 		this.service = Executors.newFixedThreadPool(this.groups.size());
 	}
 
-	private List<T> createGroups(List<List<ExprGroup>> exprGroupss, GroupBuilder<T> builder) {
-		List<T> groups = new LinkedList<T>(); 
-		for (List<ExprGroup> exprGroups : exprGroupss) {			
-			groups.add(builder.build(exprGroups));
+	private List<MergeGroup> createGroups(List<PartialExpression> withConnections, int numOfGroups, int numOfLevles, int maxNumOfPexprPerLevel, PartialExpressionScorer scorer) {
+		List<MergeGroup> groups = new LinkedList<MergeGroup>();
+		
+		int size = withConnections.size();
+		int realGroupNum = Math.min(size, numOfGroups);
+		
+		for(int i=0; i < realGroupNum; i++){
+			groups.add(new MergeGroup(numOfLevles, maxNumOfPexprPerLevel, scorer));
 		}
+		
+		for(int i=0; i <size; i++){
+			groups.get(i % realGroupNum).addPexpr(withConnections.get(i));
+		}
+		
 		return groups;
 	}
 
@@ -50,7 +54,7 @@ public class Synthesis<T extends SynthesisGroup> {
 
 	private void startSequential() {
 		try {
-			for (T group : groups) {
+			for (MergeGroup group : groups) {
 				this.completed.addAll(group.call());
 				// TODO Auto-generated catch block
 			}
@@ -100,16 +104,12 @@ public class Synthesis<T extends SynthesisGroup> {
 		sb.append("Without connections:\n");		
 		sb.append(pair.getSecond()+"\n\n");
 
-		for(int i=0; i < groups.size(); i++){
-			T group = groups.get(i);
-			sb.append("Group "+i+":");
-			sb.append(group+"\n\n");
-		}
+//		for(int i=0; i < groups.size(); i++){
+//			MergeGroup group = groups.get(i);
+//			sb.append("Group "+i+":");
+//			sb.append(group+"\n\n");
+//		}
 		return sb.toString();
-	}
-	
-	public Pair<List<PartialExpression>, List<PartialExpression>> getPexprs() {
-		return filterConnected(completed);
 	}
 
 	private Pair<List<PartialExpression>, List<PartialExpression>> filterConnected(List<PartialExpression> pexprs) {
@@ -125,5 +125,5 @@ public class Synthesis<T extends SynthesisGroup> {
 		}
 
 		return new Pair<List<PartialExpression>,List<PartialExpression>>(with, without);
-	}
+	}	
 }

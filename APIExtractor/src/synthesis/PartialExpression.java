@@ -146,15 +146,17 @@ public class PartialExpression implements Cloneable {
 		return new Pair<List<Connection>, List<Param>>(connections, rests);
 	}
 
-	public PartialExpression connect(Connection connection, PartialExpression pexpr) {
-		PartialExpression newExpr = this.clone();
+	public PartialExpression connect(Connection connection, PartialExpression pexpr, PartialExpressionScorer scorer) {
+		PartialExpression newPexpr = this.clone();
 		
-		int index = newExpr.getRep().connect(connection, pexpr.getRep());
+		int index = newPexpr.getRep().connect(connection, pexpr.getRep());
 
-		newExpr.removeConnection(connection);
-		newExpr.addAllConnections(getConnections(pexpr.getConnections(), index));
+		newPexpr.removeConnection(connection);
+		newPexpr.addAllConnections(getConnections(pexpr.getConnections(), index));
 		
-		return newExpr;
+		scorer.calculetScore(newPexpr, pexpr);
+		
+		return newPexpr;
 	}
 
 	private List<Connection> getConnections(List<Connection> connections, int index) {
@@ -168,7 +170,8 @@ public class PartialExpression implements Cloneable {
 		return Arrays.asList(cons);
 	}
 	
-	public void switchToComplexRep(){
+	public void prepareForMearging(){
 		this.rep = this.rep.asComplexRepresentation();
+		this.egroup.addCompletedExpr(this);
 	}
 }

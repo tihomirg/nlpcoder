@@ -1,13 +1,9 @@
 package core;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-
-
 import statistics.posttrees.Expr;
-import synthesis.ExprGroup;
 import synthesis.Param;
 import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
@@ -125,7 +121,7 @@ public class SynthesisLevel {
 				if(newPexp.isCompleted()) {
 					completed.add(newPexp);
 				} else {
-					partial.add(newPexp);				
+					partial.add(newPexp);
 				}
 			}
 		}

@@ -19,6 +19,7 @@ import synthesis.PartialExpressionScorer;
 import synthesis.RepKey;
 import synthesis.handlers.SearchKey;
 import types.NameGenerator;
+import util.Pair;
 import api.Imported;
 import api.StabileAPI;
 import config.Config;
@@ -48,13 +49,32 @@ public class Main {
 		PartialExpressionScorer scorer = new PartialExpressionScorer();
 		GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, scorer, 5, 20);
 		Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);
-		
 		synthesis.run();
 		
 		System.out.println(synthesis);
 		
+		Pair<List<PartialExpression>, List<PartialExpression>> pexprs = synthesis.getPexprs();
+		
+		List<PartialExpression> completed = pexprs.getFirst();
+		List<PartialExpression> withConnections = pexprs.getSecond();
+		
+		prepareForMearging(completed);
+		prepareForMearging(withConnections);
+		
+		Merge merge = new Merge(withConnections, 4, 5, 20, scorer, false);
+		
+		merge.run();
+		
+		System.out.println(merge);
+		
 	}
 	
+	private static void prepareForMearging(List<PartialExpression> pexprs) {
+		for (PartialExpression pexpr : pexprs) {
+			pexpr.prepareForMearging();
+		}
+	}
+
 	private static List<List<Declaration>> initDecls(StabileAPI api){
 		List<List<Declaration>> declss = new LinkedList<List<Declaration>>();
 		

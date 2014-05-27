@@ -10,4 +10,8 @@ public class PartialExpressionScorer {
 		newPexpr.setScore(newPexpr.getScore() + expr.getLogProbability());		
 	}
 
+	public void calculetScore(PartialExpression newPexpr, PartialExpression pexpr) {
+		newPexpr.setScore(newPexpr.getScore() + pexpr.getScore());
+	}
+
 }

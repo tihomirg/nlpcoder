@@ -10,7 +10,7 @@ import synthesis.PartialExpressionScorer;
 import synthesis.comparators.PartialExpressionComparatorDesc;
 import util.Pair;
 
-public class Merger implements Callable<PriorityQueue<PartialExpression>>{
+public class MergeGroup implements Callable<PriorityQueue<PartialExpression>>{
 
 	private static final int DEFAULT_CAPACITY = 100;
 	private static final PartialExpressionComparatorDesc COMPARATOR = new PartialExpressionComparatorDesc();	
@@ -22,6 +22,17 @@ public class Merger implements Callable<PriorityQueue<PartialExpression>>{
 	private int maxNumOfPexprPerLevel;
 	private PartialExpressionScorer scorer;
 	
+	public MergeGroup(int numOfLevels, int maxNumOfPexprPerLevel, PartialExpressionScorer scorer) {
+		this.pexprs = new LinkedList<PartialExpression>();
+		this.levels = new MergeLevel[numOfLevels+1];
+		this.maxNumOfPexprPerLevel = maxNumOfPexprPerLevel;
+		this.scorer = scorer;
+	}
+	
+	public void addPexpr(PartialExpression pexpr) {
+		this.pexprs.add(pexpr);
+	}
+
 	public PriorityQueue<PartialExpression> call(){
 		PriorityQueue<PartialExpression> completed = new PriorityQueue<PartialExpression>(DEFAULT_CAPACITY, COMPARATOR);
 				

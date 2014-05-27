@@ -18,7 +18,6 @@ import util.Pair;
 
 public class MergeLevel {
 
-
 	private static final PartialExpressionComparatorDesc COMPARATOR_DESC = new PartialExpressionComparatorDesc();
 	private static final PartialExpressionComparatorAsce COMPARATOR_ASCE = new PartialExpressionComparatorAsce();
 
@@ -97,7 +96,7 @@ public class MergeLevel {
 
 
 		for (PartialExpression pexpr2: pexprs) {
-			PartialExpression newPexpr = pexpr1.connect(connection, pexpr2);
+			PartialExpression newPexpr = pexpr1.connect(connection, pexpr2, scorer);
 			if (newPexpr.isCompletelyConnected()){
 				completed.add(newPexpr);
 			} else {
