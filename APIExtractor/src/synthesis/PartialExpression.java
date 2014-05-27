@@ -1,5 +1,6 @@
 package synthesis;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import statistics.posttrees.Expr;
@@ -19,7 +20,7 @@ public class PartialExpression implements Cloneable {
 		this.params = new LinkedList<Param>();
 		this.params.add(param);		
 		this.subs = new LinkedList<Substitution>();
-		this.rep = new Representation();
+		this.rep = new SimpleRepresentation();
 		this.connections = new LinkedList<Connection>();
 		this.egroup = egroup;
 	}
@@ -41,7 +42,7 @@ public class PartialExpression implements Cloneable {
 		PartialExpression exp = null;
 		try {
 			exp = (PartialExpression) super.clone();
-			exp.rep = this.rep.clone();
+			exp.rep = (Representation) this.rep.clone();
 			exp.params = (LinkedList<Param>) this.params.clone();
 			exp.connections = (LinkedList<Connection>) this.connections.clone();
 			exp.subs = (LinkedList<Substitution>) this.subs.clone();
@@ -54,6 +55,10 @@ public class PartialExpression implements Cloneable {
 	public boolean isCompleted() {
 		return params.isEmpty();
 	}
+	
+	public boolean isCompletelyConnected() {
+		return connections.isEmpty();
+	}	
 
 	@Override
 	public String toString() {
@@ -99,7 +104,7 @@ public class PartialExpression implements Cloneable {
 		this.connections.addAll(connections);
 	}
 
-	public LinkedList<Connection> getConnections() {
+	public List<Connection> getConnections() {
 		return connections;
 	}
 	
@@ -111,7 +116,6 @@ public class PartialExpression implements Cloneable {
 		connections.remove(con);
 	}	
 	
-
 	private void addAllParams(List<Param> params) {
 		this.params.addAll(params);
 	}
@@ -140,5 +144,31 @@ public class PartialExpression implements Cloneable {
 		}
 
 		return new Pair<List<Connection>, List<Param>>(connections, rests);
+	}
+
+	public PartialExpression connect(Connection connection, PartialExpression pexpr) {
+		PartialExpression newExpr = this.clone();
+		
+		int index = newExpr.getRep().connect(connection, pexpr.getRep());
+
+		newExpr.removeConnection(connection);
+		newExpr.addAllConnections(getConnections(pexpr.getConnections(), index));
+		
+		return newExpr;
+	}
+
+	private List<Connection> getConnections(List<Connection> connections, int index) {
+		Connection[] cons = new Connection[connections.size()];
+		
+		for(int i=0; i < cons.length; i++){
+			cons[i] = connections.get(i);
+			cons[i].setIndex(index);
+		}
+		
+		return Arrays.asList(cons);
+	}
+	
+	public void switchToComplexRep(){
+		this.rep = this.rep.asComplexRepresentation();
 	}
 }

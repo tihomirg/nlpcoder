@@ -18,7 +18,7 @@ import util.Pair;
 
 public class MergeLevel {
 
-	
+
 	private static final PartialExpressionComparatorDesc COMPARATOR_DESC = new PartialExpressionComparatorDesc();
 	private static final PartialExpressionComparatorAsce COMPARATOR_ASCE = new PartialExpressionComparatorAsce();
 
@@ -61,13 +61,13 @@ public class MergeLevel {
 	private int activeSize() {
 		return this.activeWorst.size();
 	}
-	
+
 	public Pair<List<PartialExpression>, List<PartialExpression>> resolveOne() {
 		PartialExpression pexp = removeBestFromActive();
 		this.processed.add(pexp);
 		return resolve(pexp);
 	}
-	
+
 	private Pair<List<PartialExpression>, List<PartialExpression>> resolve(PartialExpression pexp) {		
 		Connection connection = pexp.getConnection();
 
@@ -79,39 +79,33 @@ public class MergeLevel {
 	private Pair<List<PartialExpression>, List<PartialExpression>> createNewPartialExprss(PartialExpression pexp, Connection connection, List<ExprGroup> relatedGroups) {
 		List<PartialExpression> completed = new LinkedList<PartialExpression>();
 		List<PartialExpression> partial = new LinkedList<PartialExpression>();
-		
-		
+
 		for (ExprGroup eGroup : relatedGroups) {
-			
+
 			Pair<List<PartialExpression>, List<PartialExpression>> pair = createNewPartialExprs(pexp, connection, eGroup.getCompletedExprs());
 			completed.addAll(pair.getFirst());
 			partial.addAll(pair.getSecond());
-			
+
 		}
-		
+
 		return new Pair<List<PartialExpression>, List<PartialExpression>>(completed, partial);
 	}
 
-	private Pair<List<PartialExpression>, List<PartialExpression>> createNewPartialExprs(PartialExpression pexp, Connection connection, List<PartialExpression> completedExprs) {
+	private Pair<List<PartialExpression>, List<PartialExpression>> createNewPartialExprs(PartialExpression pexpr1, Connection connection, List<PartialExpression> pexprs) {
 		List<PartialExpression> completed = new LinkedList<PartialExpression>();
 		List<PartialExpression> partial = new LinkedList<PartialExpression>();
-		
-		
-		for (PartialExpression complededPexpr: completedExprs) {
-			
-			Pair<List<PartialExpression>, List<PartialExpression>> pair = createNewPartialExprs(pexp, connection, complededPexpr);
-			completed.addAll(pair.getFirst());
-			partial.addAll(pair.getSecond());
-			
+
+
+		for (PartialExpression pexpr2: pexprs) {
+			PartialExpression newPexpr = pexpr1.connect(connection, pexpr2);
+			if (newPexpr.isCompletelyConnected()){
+				completed.add(newPexpr);
+			} else {
+				partial.add(newPexpr);
+			}
 		}
-		
+
 		return new Pair<List<PartialExpression>, List<PartialExpression>>(completed, partial);
-	}
-
-	private Pair<List<PartialExpression>, List<PartialExpression>> createNewPartialExprs(PartialExpression pexp, Connection connection, PartialExpression complededPexpr) {
-
-		
-		return null;
 	}
 
 	public void addAll(List<PartialExpression> pexprs){

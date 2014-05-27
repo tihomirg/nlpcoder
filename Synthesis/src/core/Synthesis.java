@@ -115,7 +115,7 @@ public class Synthesis<T extends SynthesisGroup> {
 		List<PartialExpression> with = new LinkedList<PartialExpression>();
 		List<PartialExpression> without = new LinkedList<PartialExpression>();
 		for (PartialExpression pexpr : pexprs) {
-			LinkedList<Connection> connections = pexpr.getConnections();
+			List<Connection> connections = pexpr.getConnections();
 			if (!connections.isEmpty()){
 				with.add(pexpr);
 			} else {
