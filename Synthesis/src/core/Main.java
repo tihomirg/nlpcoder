@@ -86,8 +86,7 @@ public class Main {
 		declss.add(initNewFileConst(imported));
 		declss.add(initNewFileInputStream(imported));
 		declss.add(initNewDataInputStream(imported));		
-//		declss.add(initNewPrintReader(imported));			
-		
+//		declss.add(initNewPrintReader(imported));					
 //		declss.add(initSystemClass(imported));	
 //		declss.add(initPrintln(imported));	
 		
@@ -103,8 +102,6 @@ public class Main {
 	private static List<Declaration> initPrintln(Imported imported) {
 		ClassInfo type = imported.getFirstType("PrintStream");
 		Declaration[] declArray = type.getAllMethods();
-		
-		System.out.println(Arrays.toString(declArray));
 		
 		return Arrays.asList(declArray);
 	}

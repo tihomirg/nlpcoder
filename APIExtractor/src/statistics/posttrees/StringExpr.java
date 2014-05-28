@@ -14,6 +14,7 @@ public class StringExpr extends Expr {
 	private String string;
 	
 	public StringExpr(String string) {
+//		System.out.println("******************************************************************* StringExpr: "+string);	
 		this.string = string;
 	}
 	
@@ -38,6 +39,8 @@ public class StringExpr extends Expr {
 	@Override
 	protected String shortRep() {
 		//throw new UnsupportedOperationException();
+		
+		//System.out.println("******************************************************************* StringExpr: "+string);		
 		return string;
 	}	
 	
@@ -58,16 +61,20 @@ public class StringExpr extends Expr {
 
 	@Override
 	public List<Expr> getArgs() {
+		//System.out.println("******************************************************************* StringExpr: "+string);		
 		return Expr.EMPTY_EXPR_LIST;
 	}
 
 	@Override
 	public synthesis.trees.Expr createRep(List<Integer> ids) {
+		//System.out.println("******************************************************************* StringExpr: "+string);
+		
 		return new synthesis.trees.Hole(null);
 	}
 
 	@Override
 	public Handler getHandler(HandlerFactory hf) {
+		//System.out.println("******************************************************************* StringExpr: "+string);		
 		return hf.getHoleHandler();
 	}
 }

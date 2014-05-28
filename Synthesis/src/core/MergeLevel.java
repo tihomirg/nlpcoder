@@ -94,7 +94,6 @@ public class MergeLevel {
 		List<PartialExpression> completed = new LinkedList<PartialExpression>();
 		List<PartialExpression> partial = new LinkedList<PartialExpression>();
 
-
 		for (PartialExpression pexpr2: pexprs) {
 			PartialExpression newPexpr = pexpr1.connect(connection, pexpr2, scorer);
 			if (newPexpr.isCompletelyConnected()){

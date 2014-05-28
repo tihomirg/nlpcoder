@@ -8,7 +8,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import synthesis.Connection;
 import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
 import util.Pair;
@@ -121,11 +120,10 @@ public class Merge {
 		List<PartialExpression> with = new LinkedList<PartialExpression>();
 		List<PartialExpression> without = new LinkedList<PartialExpression>();
 		for (PartialExpression pexpr : pexprs) {
-			List<Connection> connections = pexpr.getConnections();
-			if (!connections.isEmpty()){
-				with.add(pexpr);
-			} else {
+			if (pexpr.isCompletelyConnected()){
 				without.add(pexpr);
+			} else {
+				with.add(pexpr);
 			}
 		}
 
