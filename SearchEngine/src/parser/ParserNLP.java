@@ -14,11 +14,11 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 
-public class ParserTextToSentence implements IParser {
+public class ParserNLP implements IParser {
 
 	private StanfordCoreNLP pipeline;
 	
-	public ParserTextToSentence(StanfordCoreNLP pipeline) {
+	public ParserNLP(StanfordCoreNLP pipeline) {
 		this.pipeline = pipeline;
 	}
 
