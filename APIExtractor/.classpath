@@ -5,7 +5,6 @@
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/accumulo-core-1.5.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/hadoop-core-0.19.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/libthrift-0.5.0.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/gvero/apache/commons-io-2.4/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/bcel-5.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/kryo-2.23.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/lib/asm-4.0.jar"/>
@@ -24,6 +23,7 @@
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/eclipse/org.eclipse.equinox.preferences_3.4.2.v20120111-2020.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/eclipse/org.eclipse.jdt.core_3.7.3.v20120119-1537.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/eclipse/org.eclipse.osgi_3.7.2.v20120110-1415.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/commons-io-2.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
