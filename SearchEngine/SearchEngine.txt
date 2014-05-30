@@ -1,0 +1,5 @@
+Observations:
+1) since the input might be and in general is broken, we want to focus to words.
+2) declarations in general contains at least one noun, preposition, adjective. Not necessarily a verb.
+3) we will collect groups that contain: a main word, and words that can be reach throw it using diff. NLP graphs and "right side" heuristics.
+4) Argument constraints are inferred based on the explicit user input and/or the group's reachable words.

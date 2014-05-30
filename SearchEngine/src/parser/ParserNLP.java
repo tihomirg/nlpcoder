@@ -12,6 +12,7 @@ import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation;
+import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 
 public class ParserNLP implements IParser {
@@ -39,13 +40,15 @@ public class ParserNLP implements IParser {
 			List<Token> tokens = new LinkedList<Token>();
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
 				Token tokenRep = new Token(token);
-				tokenRep.setWord(token.get(TextAnnotation.class));
+				tokenRep.setLemma(token.get(TextAnnotation.class));
 				tokenRep.setPos(token.get(PartOfSpeechAnnotation.class));
 				tokens.add(tokenRep);
 			}
 			
 			sentenceRep.setTokens(tokens);
 			sentenceRep.setDependancyGraph(sentence.get(CollapsedCCProcessedDependenciesAnnotation.class));
+			sentenceRep.setTree(sentence.get(TreeAnnotation.class));
+			 
 			sentenceReps.add(sentenceRep);
 		}
 		

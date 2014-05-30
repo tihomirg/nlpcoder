@@ -26,4 +26,21 @@ public class Input {
 	public void setCorefGraph(Map<Integer, CorefChain> corefGraph) {
 		this.corefGraph = corefGraph;
 	}
+	
+	public List<Sentence> getSentences() {
+		return sentences;
+	}
+	
+	public Map<Integer, CorefChain> getCorefGraph() {
+		return corefGraph;
+	}
+
+	@Override
+	public String toString() {
+		return "text = " + text + "\n"+
+	           "sentences = " + sentences+"\n"+
+			   "corefGraph = " + corefGraph + "\n";
+	}
+	
+	
 }
