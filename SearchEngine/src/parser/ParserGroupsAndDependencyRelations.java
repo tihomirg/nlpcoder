@@ -9,7 +9,7 @@ import java.util.Map;
 import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 
-public class ParserDependencyRelations implements IParser {
+public class ParserGroupsAndDependencyRelations implements IParser {
 
 	@Override
 	public Input parse(Input input) {
@@ -18,9 +18,7 @@ public class ParserDependencyRelations implements IParser {
 		for (Sentence sentence : sentences) {
 			Map<Integer, Group> groups = new HashMap<Integer, Group>();
 			SemanticGraph graph = sentence.getDependancyGraph();
-			Collection<IndexedWord> roots = graph.getRoots();
-			
-			getChildrenGroups(roots, sentence, graph, groups);
+			getChildrenGroups(graph.getRoots(), sentence, graph, groups);
 			
 			sentence.addGroupMap(groups);
 			

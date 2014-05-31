@@ -46,7 +46,7 @@ public class ParserRightHandSideNeighbours implements IParser{
 				Group group = groupMap.get(index);
 				Token token = group.getToken();
 				
-				if (!token.isVerb()){
+				if (!token.shouldSkipAsNeighbour()){
 					list.add(groupMap.get(index));
 					num--;
 				}

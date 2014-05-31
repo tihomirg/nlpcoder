@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/stanford-corenlp-full-2014-01-04/stanford-corenlp-3.3.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/stanford-corenlp-full-2014-01-04/stanford-corenlp-3.3.1-models.jar"/>
 	<classpathentry kind="lib" path="C:/Users/gvero/git/lib/stanford-corenlp-full-2014-01-04/xom.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Library"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

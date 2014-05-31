@@ -14,6 +14,7 @@ public class Sentence {
 	private SemanticGraph dependancyGraph;
 	private Map<Integer, Group> groups;
 	private Tree tree;
+	private List<Group> stringLiterals;
 	
 	public Sentence(CoreMap map) {
 		this.map = map;
@@ -43,6 +44,7 @@ public class Sentence {
 	public String toString() {
 		return "Sentence[\n"+
 			   "tokens = " + tokens + "\n"+
+			   "string-L = "+stringLiterals+"\n"+
 	           "groups = " + groups + "\n"+
 			   "map = "+ map + "\n"+
 	           "dependancyGraph = " + dependancyGraph + "\n"+
@@ -64,6 +66,10 @@ public class Sentence {
 
 	public int size() {
 		return this.tokens.size();
+	}
+
+	public void setStringLiterals(List<Group> strings) {
+		this.stringLiterals = strings;
 	}
 
 }

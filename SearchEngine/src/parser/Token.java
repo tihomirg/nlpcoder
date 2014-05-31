@@ -1,5 +1,6 @@
 package parser;
 
+import core.Local;
 import edu.stanford.nlp.ling.CoreLabel;
 
 public class Token {
@@ -39,5 +40,21 @@ public class Token {
 
 	public boolean isVerb() {
 		return this.pos.startsWith("V");
+	}
+	
+	public boolean isArticle() {
+		return this.pos.equals("DT") && (this.lemma.equals("a") || this.lemma.equals("A") || this.lemma.equals("the") || this.lemma.equals("The"));
+	}
+	
+	public boolean shouldSkipAsNeighbour(){
+		return isVerb() || isArticle();
+	}
+
+	public boolean isBeginingOfString() {
+		return this.pos.equals("``");
+	}
+
+	public boolean isEndOfString() {
+		return this.pos.equals("''");
 	}
 }
