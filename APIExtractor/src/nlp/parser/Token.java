@@ -1,16 +1,15 @@
-package parser;
-
-import core.Local;
-import edu.stanford.nlp.ling.CoreLabel;
+package nlp.parser;
 
 public class Token {
 
-	private CoreLabel token;
 	private String lemma;
 	private String pos;
-
-	public Token(CoreLabel token) {
-		this.token = token;
+	private int index;
+	
+	public Token(String lemma, String pos, int index) {
+		this.lemma = lemma;
+		this.pos = pos;
+		this.index = index;
 	}
 
 	public void setLemma(String word) {
@@ -31,7 +30,7 @@ public class Token {
 	}
 	
 	public int getIndex() {
-		return getIndex(this.token.index());
+		return getIndex(index);
 	}
 
 	private int getIndex(int index) {

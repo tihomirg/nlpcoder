@@ -1,4 +1,4 @@
-package parser;
+package nlp.parser;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -39,10 +39,7 @@ public class ParserNLP implements IParser {
 			
 			List<Token> tokens = new LinkedList<Token>();
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				Token tokenRep = new Token(token);
-				tokenRep.setLemma(token.get(TextAnnotation.class));
-				tokenRep.setPos(token.get(PartOfSpeechAnnotation.class));
-				tokens.add(tokenRep);
+				tokens.add(new Token(token.get(TextAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
 			}
 			
 			sentenceRep.setTokens(tokens);

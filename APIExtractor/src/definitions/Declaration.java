@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import nlp.parser.Token;
 import nlp.parser.one.Word;
 import types.StabileTypeFactory;
 import types.Type;
@@ -36,6 +37,8 @@ public class Declaration implements Serializable, Cloneable {
 	private String clazz;
 
 	private Word[] words;
+	
+	private Token[] tokens;
 
 	private String simpleName;
 	private String packageName;
@@ -351,6 +354,14 @@ public class Declaration implements Serializable, Cloneable {
 		}
 
 		return true;
+	}
+
+	public Token[] getTokens() {
+		return tokens;
+	}
+
+	public void setTokens(Token[] tokens) {
+		this.tokens = tokens;
 	}
 
 	//	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {

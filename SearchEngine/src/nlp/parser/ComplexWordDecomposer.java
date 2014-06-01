@@ -1,4 +1,4 @@
-package parser;
+package nlp.parser;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,10 +41,7 @@ public class ComplexWordDecomposer {
 			
 			for(CoreMap sentence: sentences) {
 				for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-					Token newToken = new Token(token);
-					newToken.setLemma(token.get(TextAnnotation.class));
-					newToken.setPos(token.get(PartOfSpeechAnnotation.class));
-					newTokens.add(newToken);
+					newTokens.add(new Token(token.get(TextAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
 				}
 			}
 		}

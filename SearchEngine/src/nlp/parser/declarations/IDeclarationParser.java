@@ -1,4 +1,4 @@
-package parser.declarations;
+package nlp.parser.declarations;
 
 import definitions.Declaration;
 

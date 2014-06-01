@@ -1,10 +1,10 @@
-package parser.declarations;
+package nlp.parser.declarations;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import parser.ComplexWordDecomposer;
-import parser.Token;
+import nlp.parser.ComplexWordDecomposer;
+import nlp.parser.Token;
 import definitions.Declaration;
 
 public class DeclarationParser implements IDeclarationParser {
@@ -25,9 +25,7 @@ public class DeclarationParser implements IDeclarationParser {
 			tokens.addAll(decomposer.decomposeString(name));
 		}
 		
-		//TODO: decl.setTokens();
-		//TODO: first we need to push Token class into library.
-		
+		decl.setTokens(tokens.toArray(new Token[tokens.size()]));
 		return decl;
 	}
 

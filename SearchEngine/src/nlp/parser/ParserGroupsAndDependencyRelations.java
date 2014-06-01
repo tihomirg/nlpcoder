@@ -1,4 +1,4 @@
-package parser;
+package nlp.parser;
 
 import java.util.Collection;
 import java.util.HashMap;

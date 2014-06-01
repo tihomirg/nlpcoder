@@ -1,4 +1,4 @@
-package parser;
+package nlp.parser;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

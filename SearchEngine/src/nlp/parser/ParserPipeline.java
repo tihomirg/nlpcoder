@@ -1,4 +1,4 @@
-package parser;
+package nlp.parser;
 
 public class ParserPipeline {
 

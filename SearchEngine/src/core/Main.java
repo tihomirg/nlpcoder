@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import parser.ComplexWordDecomposer;
-import parser.IParser;
-import parser.Input;
-import parser.ParserExtractLiterals;
-import parser.ParserIdentifyLocals;
-import parser.ParserNLP;
-import parser.ParserPipeline;
-import parser.ParserGroupsAndDependencyRelations;
-import parser.ParserRelatedWords;
-import parser.ParserRightHandSideNeighbours;
-import parser.ParserSliceComplexTokens;
+import nlp.parser.ComplexWordDecomposer;
+import nlp.parser.IParser;
+import nlp.parser.Input;
+import nlp.parser.ParserExtractLiterals;
+import nlp.parser.ParserGroupsAndDependencyRelations;
+import nlp.parser.ParserIdentifyLocals;
+import nlp.parser.ParserNLP;
+import nlp.parser.ParserPipeline;
+import nlp.parser.ParserRelatedWords;
+import nlp.parser.ParserRightHandSideNeighbours;
+import nlp.parser.ParserSliceComplexTokens;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class Main {
