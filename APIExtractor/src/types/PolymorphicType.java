@@ -107,7 +107,7 @@ public class PolymorphicType extends ReferenceType {
 	@Override
 	public List<String> getWords() {
 		List<String> list = new LinkedList<String>();
-		list.add(this.name);
+		list.add(shortName(name));
 		
 		for (Type type : params) {
 			list.addAll(type.getWords());

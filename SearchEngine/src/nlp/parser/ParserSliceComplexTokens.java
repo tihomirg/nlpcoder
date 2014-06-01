@@ -29,7 +29,7 @@ public class ParserSliceComplexTokens implements IParser{
 
 			for (Group group : groupMap.values()) {
 				Token token = group.getToken();
-				group.setTokenDecompositions(decomposer.decomposeToken(token));
+				group.setTokenDecompositions(decomposer.decomposeTokenIfNeeded(token));
 			}
 		}
 

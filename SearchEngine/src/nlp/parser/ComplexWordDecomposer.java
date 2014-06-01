@@ -14,18 +14,18 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 
 public class ComplexWordDecomposer {
-	
+
 	private StanfordCoreNLP pipeline;
 
 	public ComplexWordDecomposer(StanfordCoreNLP pipeline) {
 		this.pipeline = pipeline;
 	}	
-	
-	public List<Token> decomposeToken(Token oldToken) {
-		return decomposeString(oldToken.getLemma());
+
+	public List<Token> decomposeTokenIfNeeded(Token oldToken) {
+		return decomposeStringIfNeeded(oldToken.getLemma());
 	}
 
-	public List<Token> decomposeString(String lemma) {
+	public List<Token> decomposeStringIfNeeded(String lemma) {
 		List<Token> newTokens = new LinkedList<Token>();
 		List<String> newLemmas = slice(lemma);
 
@@ -38,14 +38,35 @@ public class ComplexWordDecomposer {
 			pipeline.annotate(document);
 
 			List<CoreMap> sentences = document.get(SentencesAnnotation.class);
-			
+
 			for(CoreMap sentence: sentences) {
 				for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
 					newTokens.add(new Token(token.get(TextAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
 				}
 			}
 		}
-		
+
+		return newTokens;
+	}	
+
+	public List<Token> decomposeString(String lemma) {
+		List<Token> newTokens = new LinkedList<Token>();
+		List<String> newLemmas = slice(lemma);
+
+		String text = concatenate(newLemmas, " ");
+
+		Annotation document = new Annotation(text);
+
+		pipeline.annotate(document);
+
+		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+
+		for(CoreMap sentence: sentences) {
+			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
+				newTokens.add(new Token(token.get(TextAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
+			}
+		}
+
 		return newTokens;
 	}
 

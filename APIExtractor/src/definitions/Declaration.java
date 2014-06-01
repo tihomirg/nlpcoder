@@ -214,7 +214,11 @@ public class Declaration implements Serializable, Cloneable {
 			if (!constructor){
 				if (this.clazz != null){
 					words.add(shortType(clazz));
-				}				
+				}
+				
+				if (this.receiverType != null){
+					words.addAll(this.receiverType.getWords());
+				}
 			}
 		}
 
@@ -341,8 +345,8 @@ public class Declaration implements Serializable, Cloneable {
 		return modifiers()+" name=" + simpleName 
 				+ ", receiver=" + receiverType + ", params="
 				+ Arrays.toString(argTypes) + ", ret=" + retType
-				+ ", pkg=" + packageName+"\n";
-		//+ ", words=" + Arrays.toString(words) + "\n";
+				+ ", pkg=" + packageName+"\n"
+		        + ", tokens=" + Arrays.toString(tokens) + "\n";
 	}
 
 	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {

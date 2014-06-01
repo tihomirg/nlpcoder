@@ -6,6 +6,8 @@ public class Token {
 	private String pos;
 	private int index;
 	
+	public Token(){}
+	
 	public Token(String lemma, String pos, int index) {
 		this.lemma = lemma;
 		this.pos = pos;
