@@ -1,13 +1,9 @@
-package core;
+package parser;
 
 import java.util.List;
 import java.util.Map;
 
-import parser.Group;
-import parser.IParser;
-import parser.Input;
-import parser.Sentence;
-import parser.Token;
+import core.Local;
 
 public class ParserIdentifyLocals implements IParser {
 

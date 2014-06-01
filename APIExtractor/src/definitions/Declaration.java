@@ -2,10 +2,10 @@ package definitions;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import nlp.parser.one.Word;
-
 import types.StabileTypeFactory;
 import types.Type;
 
@@ -66,7 +66,7 @@ public class Declaration implements Serializable, Cloneable {
 	private String getShortName(String name) {
 		return name.substring(name.lastIndexOf(".")+1);
 	}
-	
+
 	public String getLongName(){
 		return this.clazz +"."+ this.name;
 	}
@@ -197,6 +197,38 @@ public class Declaration implements Serializable, Cloneable {
 		return new String[]{groupOne(), groupTwo()};
 	}
 
+	public List<String> getTokensAsStrings(){
+		List<String> words = new LinkedList<String>();
+
+		words.add(simpleName);
+		
+		if (this.isStatic){
+			if (this.clazz != null){
+				words.add(shortType(clazz));
+			}
+
+		} else {
+			if (!constructor){
+				if (this.clazz != null){
+					words.add(shortType(clazz));
+				}				
+			}
+		}
+
+		if (this.argTypes != null) {
+			for (Type argType : this.argTypes) {
+				if (argType != null){
+					words.addAll(argType.getWords());
+				}
+			}		
+		}
+
+		if (this.retType != null) words.addAll(this.retType.getWords());
+
+		return words;
+
+	}
+
 	private String typeToSentence(Type type) {
 		return toString(type.getWords());
 	}
@@ -234,14 +266,14 @@ public class Declaration implements Serializable, Cloneable {
 		Type[] thatArgTypes = decl.argTypes;
 		int length = thatArgTypes.length;		
 		if (length != this.argTypes.length) return false;
-		
+
 		for (int i=0; i < length ; i++) {
 			Type thatType = thatArgTypes[i];
 			Type thisType = this.argTypes[i];
-			
+
 			if (thatType.getPrefix() != thisType.getPrefix()) return false;
 		}
-		
+
 		return true;
 	}
 
@@ -320,42 +352,42 @@ public class Declaration implements Serializable, Cloneable {
 
 		return true;
 	}
-	
-//	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {
-//		if (this.method){
-//			//no receiver
-//			if(this.constructor || this.isStatic){
-//				int length = this.argTypes.length;
-//				if (length != argTypes.length) return false;
-//				
-//				for (int i = 0; i < length; i++) {
-//					if(!this.argTypes[i].isCompatible(argTypes[i], factory)) return false;
-//				}
-//				
-//				return true;
-//			} else {
-//				int length = this.argTypes.length;
-//				if (length + 1 != argTypes.length) return false;
-//				
-//				if(!this.receiverType.isCompatible(argTypes[0], factory)) return false;
-//				
-//				for (int i = 1; i < length; i++) {
-//					if(!this.argTypes[i].isCompatible(argTypes[i], factory)) return false;
-//				}
-//				
-//				return true;				
-//			}
-//		} else {
-//			//field
-//			if (this.isStatic){
-//				return argTypes.length == 0;
-//			} else {
-//				if (argTypes.length != 1) return false;
-//				
-//				if(!this.receiverType.isCompatible(argTypes[0], factory)) return false;
-//				
-//				return true;
-//			}
-//		}
-//	}	
+
+	//	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {
+	//		if (this.method){
+	//			//no receiver
+	//			if(this.constructor || this.isStatic){
+	//				int length = this.argTypes.length;
+	//				if (length != argTypes.length) return false;
+	//				
+	//				for (int i = 0; i < length; i++) {
+	//					if(!this.argTypes[i].isCompatible(argTypes[i], factory)) return false;
+	//				}
+	//				
+	//				return true;
+	//			} else {
+	//				int length = this.argTypes.length;
+	//				if (length + 1 != argTypes.length) return false;
+	//				
+	//				if(!this.receiverType.isCompatible(argTypes[0], factory)) return false;
+	//				
+	//				for (int i = 1; i < length; i++) {
+	//					if(!this.argTypes[i].isCompatible(argTypes[i], factory)) return false;
+	//				}
+	//				
+	//				return true;				
+	//			}
+	//		} else {
+	//			//field
+	//			if (this.isStatic){
+	//				return argTypes.length == 0;
+	//			} else {
+	//				if (argTypes.length != 1) return false;
+	//				
+	//				if(!this.receiverType.isCompatible(argTypes[0], factory)) return false;
+	//				
+	//				return true;
+	//			}
+	//		}
+	//	}	
 }

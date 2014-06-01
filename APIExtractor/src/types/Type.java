@@ -77,7 +77,7 @@ public abstract class Type implements Serializable {
 
 	protected static String shortName(String name) {
 		return name.substring(name.lastIndexOf(".")+1);
-	}	
+	}
 	
 	public String getPrefix() {
 		return this.name;

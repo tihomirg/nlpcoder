@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import parser.ComplexWordDecomposer;
 import parser.IParser;
 import parser.Input;
 import parser.ParserExtractLiterals;
+import parser.ParserIdentifyLocals;
 import parser.ParserNLP;
 import parser.ParserPipeline;
 import parser.ParserGroupsAndDependencyRelations;
@@ -25,14 +27,16 @@ public class Main {
 
 		Map<String, Local> locals = new HashMap<String, Local>();
 		
+		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP);
+		
 		ParserPipeline pipeline = new ParserPipeline(
 				new IParser[]{ 
 						new ParserNLP(coreNLP),
 						new ParserGroupsAndDependencyRelations(),
-						new ParserSliceComplexTokens(coreNLP),
 						new ParserExtractLiterals(),
-						new ParserIdentifyLocals(locals),
-						new ParserRightHandSideNeighbours(2),						
+						new ParserIdentifyLocals(locals),					
+						new ParserRightHandSideNeighbours(2),
+						new ParserSliceComplexTokens(decomposer),						
 						new ParserRelatedWords()});
 		
 		
