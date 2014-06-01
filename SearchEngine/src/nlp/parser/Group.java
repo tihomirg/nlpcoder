@@ -12,6 +12,7 @@ public class Group {
 	private List<Group> graphRchildren;
 	private List<Token> tokenDecompositions;
 	private Local local;
+	private boolean literal;
 
 	public Group(Token token) {
 		this.token = token;
@@ -47,6 +48,7 @@ public class Group {
 	public String toString() {
 		return "Group [token= " + token + " decompositions"+ this.tokenDecompositions +
 				"\n, Local = "+ local +
+				"\n, Literal = "+ literal +				
 				"\n, D-Tokens = " + graphDTokens() + 
 				"\n, R-Tokens = " + graphRTokens() + 
 				"]\n\n";
@@ -66,5 +68,13 @@ public class Group {
 	
 	public boolean isLocal() {
 		return this.local != null;
+	}
+	
+	public void setLiteral(boolean literal) {
+		this.literal = literal;
+	}
+	
+	public boolean isLiteral() {
+		return literal;
 	}
 }

@@ -11,11 +11,13 @@ public class ParserExtractLiterals implements IParser {
 		List<Sentence> sentences = input.getSentences();
 
 		for (Sentence sentence : sentences) {
-			List<Token> tokens = sentence.getTokens();			
-
-			transformToGroups(sentence.getGroupMap(), extractStrings(tokens));
+			List<Group> groups = transformToGroups(sentence.getGroupMap(), extractStrings(sentence.getTokens()));
 			
-			sentence.setStringLiterals(transformToGroups(sentence.getGroupMap(), extractStrings(tokens)));
+			for (Group group : groups) {
+				group.setLiteral(true);
+			}
+			
+			sentence.setStringLiterals(groups);
 		}
 
 		return input;

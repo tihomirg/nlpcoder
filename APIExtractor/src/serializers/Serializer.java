@@ -43,7 +43,7 @@ public class Serializer {
 			
 			System.out.println(classes);			
 			
-			extractor.addWords(classes);
+			//extractor.addWords(classes);
 			
 			KryoSerializer serializer = new KryoSerializer();
 			

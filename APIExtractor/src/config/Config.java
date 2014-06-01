@@ -31,7 +31,8 @@ public class Config {
 	private static final String synthesisStorageLocation = "declarations.kryo";
 	private static final String compositionStatisticStorageLocation = "stat.txt";
 	private static final String compositionCorpusLocation = "C:\\Users\\gvero\\java_projects\\java_projects";
-	private static final String stabileAPIStorageLocation = "stabile_api.kryo";	
+	private static final String stabileAPIStorageLocation = "stabile_api.kryo";
+	private static final String secondStorageLocation = "initial_api_with_tokens.kryo";	
 	
 	public static String getTaggerLocation(){
 		return tagger;
@@ -118,6 +119,10 @@ public class Config {
 
 	public static String getStabileAPIStorageLocation() {
 		return stabileAPIStorageLocation;
+	}
+
+	public static String getSecondStorageLocation() {
+		return secondStorageLocation;
 	}
 	
 }
