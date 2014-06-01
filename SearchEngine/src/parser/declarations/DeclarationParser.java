@@ -25,6 +25,9 @@ public class DeclarationParser implements IDeclarationParser {
 			tokens.addAll(decomposer.decomposeString(name));
 		}
 		
+		//TODO: decl.setTokens();
+		//TODO: first we need to push Token class into library.
+		
 		return decl;
 	}
 
