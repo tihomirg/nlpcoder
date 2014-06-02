@@ -58,4 +58,8 @@ public class Token {
 	public boolean isEndOfString() {
 		return this.pos.equals("''");
 	}
+	
+	public String getPos() {
+		return pos;
+	}
 }
