@@ -29,7 +29,7 @@ public class RichDeclaration {
 		addAll(decl.getTokens());
 	}
 
-	private void addAll(Token[] declTokens) {
+	public void addAll(Token[] declTokens) {
 		for (Token token : declTokens) {
 			add(token);
 		}	
@@ -82,5 +82,9 @@ public class RichDeclaration {
 	
 	public boolean isHit() {
 		return hit;
+	}
+	
+	public double getScore() {
+		return score;
 	}
 }

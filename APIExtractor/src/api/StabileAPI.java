@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -140,6 +142,16 @@ public class StabileAPI {
 			for(Declaration decl : clazz.getDeclarations()){
 				decls.put(decl.getId(), decl);
 			}
+		}
+		
+		return decls;
+	}
+	
+	public List<Declaration> getDecls() {
+		List<Declaration> decls = new LinkedList<Declaration>();
+		
+		for (ClassInfo clazz : this.classes.values()) {
+			decls.addAll(Arrays.asList(clazz.getDeclarations()));
 		}
 		
 		return decls;

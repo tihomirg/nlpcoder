@@ -43,6 +43,10 @@ public class Declaration implements Serializable, Cloneable {
 	private String simpleName;
 	private String packageName;
 
+	private Declaration unique;
+
+	private Token[] receiverTokens;
+
 	public Declaration(){}	
 
 	public Declaration(String name, Type retType, boolean isLiteral) {
@@ -366,6 +370,14 @@ public class Declaration implements Serializable, Cloneable {
 
 	public void setTokens(Token[] tokens) {
 		this.tokens = tokens;
+	}
+
+	public Declaration getUniqueDecl() {
+		return this.unique;
+	}
+
+	public Token[] getReceiverTokens() {
+		return this.receiverTokens;
 	}
 
 	//	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {
