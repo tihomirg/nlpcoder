@@ -2,15 +2,15 @@ package selection.scorers;
 
 import selection.RichDeclarationStatistics;
 
-public class HitScorer implements RichDeclarationScorer {
+public class HitCountScorer implements RichDeclarationScorer {
 
 	private double factor;
 
-	public HitScorer() {
+	public HitCountScorer() {
 		this(1.0);
 	}
 	
-	public HitScorer(double factor) {
+	public HitCountScorer(double factor) {
 		this.factor = factor;
 	}
 	

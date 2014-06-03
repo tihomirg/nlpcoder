@@ -7,15 +7,15 @@ import nlp.parser.Token;
 import selection.RichDeclarationStatistics;
 import selection.WToken;
 
-public class WHitScorer implements RichDeclarationScorer {
+public class HitWeightScorer implements RichDeclarationScorer {
 
 	private double factor;
 	
-	public WHitScorer() {
+	public HitWeightScorer() {
 		this(1.0);
 	}
 
-	public WHitScorer(double factor) {
+	public HitWeightScorer(double factor) {
 		this.factor = factor;
 	}
 	

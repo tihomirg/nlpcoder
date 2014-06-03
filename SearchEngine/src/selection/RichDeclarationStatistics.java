@@ -63,4 +63,8 @@ public class RichDeclarationStatistics {
 	public Map<Token, PriorityQueue<WToken>> getHits() {
 		return hits;
 	}
+	
+	public double getDeclProb() {
+		return declProb;
+	}
 }
