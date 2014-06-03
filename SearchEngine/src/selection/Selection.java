@@ -14,15 +14,25 @@ public class Selection {
 	private ScorerPipeline scorer;
 	private ScoreListener listener;
 	
-	public Selection() {
+	public Selection(ScorerPipeline scorer, ScoreListener listener) {
 		this.table = new Table();
 		this.declToRichDecl = new HashMap<Declaration, RichDeclaration>();
+		this.scorer = scorer;
+		this.listener = listener;
 	}
 	
 	public void add(StabileAPI api){
 		addAll(api.getDecls());
+		addToTable();
+		declToRichDecl = null;
 	}
 	
+	private void addToTable() {
+		for (RichDeclaration rd : declToRichDecl.values()) {
+			table.add(rd);
+		}
+	}
+
 	private void addAll(List<Declaration> decls) {
 		for (Declaration decl : decls) {
 			add(decl);

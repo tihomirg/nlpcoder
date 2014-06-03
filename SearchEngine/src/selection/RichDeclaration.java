@@ -65,7 +65,6 @@ public class RichDeclaration {
 		statistics.hit(wtoken, posToLemmaToToken.get(pos).get(word));
 		calculateScore();
 		notifyListener();
-		this.hit = true;
 	}
 
 	private void calculateScore() {
@@ -86,5 +85,13 @@ public class RichDeclaration {
 	
 	public double getScore() {
 		return score;
+	}
+	
+	public List<Token> getTokens() {
+		return tokens;
+	}
+
+	public void setHit(boolean hit) {
+		this.hit = hit;
 	}
 }
