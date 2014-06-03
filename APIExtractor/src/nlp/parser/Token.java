@@ -2,16 +2,18 @@ package nlp.parser;
 
 public class Token {
 
+	private String text;
 	private String lemma;
 	private String pos;
 	private int index;
 	
 	public Token(){}
 	
-	public Token(String lemma, String pos, int index) {
+	public Token(String text, String lemma, String pos, int index) {
+		this.text = text;
 		this.lemma = lemma;
-		this.pos = pos;
-		this.index = index;
+		this.pos = Character.isLetter(pos.charAt(0)) ? Character.toString(pos.charAt(0)) : pos;
+		this.index = getIndex(index);
 	}
 
 	public void setLemma(String word) {
@@ -24,7 +26,7 @@ public class Token {
 
 	@Override
 	public String toString() {
-		return "Token [lemma = " + lemma + ", pos = " + pos+"]";
+		return "Token [text = "+text+" ,lemma = " + lemma + ", pos = " + pos+"]";
 	}
 
 	public String getLemma() {
@@ -32,7 +34,7 @@ public class Token {
 	}
 	
 	public int getIndex() {
-		return getIndex(index);
+		return index;
 	}
 
 	private int getIndex(int index) {
@@ -61,5 +63,9 @@ public class Token {
 	
 	public String getPos() {
 		return pos;
+	}
+	
+	public String getText() {
+		return text;
 	}
 }

@@ -22,10 +22,10 @@ public class ParserIdentifyLocals implements IParser {
 			
 			for (Group group : groupMap.values()) {
 				Token token = group.getToken();
-				String lemma = token.getLemma();
+				String text = token.getText();
 				
-				if (locals.containsKey(lemma)){
-					Local local = locals.get(lemma);
+				if (locals.containsKey(text)){
+					Local local = locals.get(text);
 					group.setLocal(local);
 				}
 			}

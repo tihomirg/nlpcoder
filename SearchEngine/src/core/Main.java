@@ -44,7 +44,7 @@ public class Main {
 		//Input input = pipeline.parse(new Input("open read close a file \"text.txt\""));
 
 		//Input input = pipeline.parse(new Input("Open a buffered file 'text.txt', print it."));
-		Input input = pipeline.parse(new Input("new InputStream(new File(\"text.txt\"))"));
+		Input input = pipeline.parse(new Input("new InputStream(new Files(\"text.txt\"))"));
 		//Input input = pipeline.parse(new Input("Transfer contents of a file \"text1.txt\" to a file \"text2.txt\""));
 		//Input input = pipeline.parse(new Input("Create a window."));
 		//Input input = pipeline.parse(new Input("Read bytes from an input stream."));

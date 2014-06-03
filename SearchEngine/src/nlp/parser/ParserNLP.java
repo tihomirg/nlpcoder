@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations.CorefChainAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
@@ -39,7 +40,7 @@ public class ParserNLP implements IParser {
 			
 			List<Token> tokens = new LinkedList<Token>();
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				tokens.add(new Token(token.get(TextAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
+				tokens.add(new Token(token.get(TextAnnotation.class), token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
 			}
 			
 			sentenceRep.setTokens(tokens);

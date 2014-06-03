@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
@@ -22,7 +23,7 @@ public class ComplexWordDecomposer {
 	}	
 
 	public List<Token> decomposeTokenIfNeeded(Token oldToken) {
-		return decomposeStringIfNeeded(oldToken.getLemma());
+		return decomposeStringIfNeeded(oldToken.getText());
 	}
 
 	public List<Token> decomposeStringIfNeeded(String lemma) {
@@ -41,7 +42,7 @@ public class ComplexWordDecomposer {
 
 			for(CoreMap sentence: sentences) {
 				for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-					newTokens.add(new Token(token.get(TextAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
+					newTokens.add(new Token(token.get(TextAnnotation.class), token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
 				}
 			}
 		}
@@ -63,7 +64,7 @@ public class ComplexWordDecomposer {
 
 		for(CoreMap sentence: sentences) {
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				newTokens.add(new Token(token.get(TextAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
+				newTokens.add(new Token(token.get(TextAnnotation.class),  token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
 			}
 		}
 
