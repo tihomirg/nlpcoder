@@ -64,7 +64,6 @@ public class Declaration implements Serializable, Cloneable {
 			this.literal = isLiteral;
 			this.isPublic = true;
 		}
-
 	}
 
 	public String getName() {
@@ -456,6 +455,16 @@ public class Declaration implements Serializable, Cloneable {
 	
 	public void addAdditionalReceiverTokens(List<Token> tokens){
 		this.additionalReceiverTokens.addAll(tokens);
+	}
+
+	public void setUnique(Declaration unique) {
+		this.unique = unique;
+	}
+
+	public void propagateTokensToUniqueDecl() {
+		if(this.unique != null){
+			this.unique.addAdditionalReceiverTokens(Arrays.asList(this.receiverTokens));
+		}
 	}
 
 	//	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {

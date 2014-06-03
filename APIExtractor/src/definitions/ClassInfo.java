@@ -600,6 +600,30 @@ public class ClassInfo implements Serializable {
 
 		return false;
 	}
+	
+	public Declaration tryFindInheritedMethodEquivalentTo(Declaration method) {
+		ClassInfo[] inheritedClasses = getAllInheritedClasses();	
+		for (ClassInfo clazz : inheritedClasses) {
+			Declaration decl = clazz.tryFindMethodEquivalentTo(method);
+			if (decl != null){
+				return decl;
+			}
+		}
+
+		return null;
+	}
+	
+	public Declaration tryFindInheritedFieldEquivalentTo(Declaration field) {
+		ClassInfo[] inheritedClasses = getAllInheritedClasses();
+		for (ClassInfo clazz : inheritedClasses) {
+			Declaration decl = clazz.tryFindFieldEquivalentTo(field);
+			if(decl != null){
+				return decl;
+			}
+		}
+
+		return null;
+	}	
 
 	private boolean containsInheritedFieldEquivalentTo(Declaration field) {
 		ClassInfo[] inheritedClasses = getAllInheritedClasses();
@@ -620,6 +644,7 @@ public class ClassInfo implements Serializable {
 				ClassInfo clazz = type.getClassInfo();
 
 				if (clazz != null){
+					classes.add(clazz);
 					classes.addAll(Arrays.asList(clazz.getAllInheritedClasses()));
 				}
 			}
@@ -634,11 +659,67 @@ public class ClassInfo implements Serializable {
 		return false;
 	}
 
+	public Declaration tryFindFieldEquivalentTo(Declaration decl) {
+		for (Declaration field: getUniqueFields()) {
+			if (field.equivalentTo(decl)) return field;
+		}
+		return null;
+	}	
+	
 	private boolean containsMethodEquivalentTo(Declaration decl) {
 		for (Declaration method: methods) {
 			if (method.equivalentTo(decl)) return true;
 		}
 		return false;
+	}
+	
+	public Declaration tryFindMethodEquivalentTo(Declaration decl) {
+		for (Declaration method: getUniqueMethods()) {
+			if (method.equivalentTo(decl)) return method;
+		}
+		return null;
+	}
+	
+	public void setUniqueDeclarationsForAllDeclarations(){
+		setUniqueFieldsForAllFields();
+		setUniqueMethodsForAllMethods();
+	}
+
+	private void setUniqueMethodsForAllMethods() {
+		List<Declaration> nonUniqueMethods = Arrays.asList(this.methods);
+		nonUniqueMethods.removeAll(Arrays.asList(getUniqueMethods()));
+		
+		for (Declaration method: nonUniqueMethods) {
+			Declaration unique = tryFindInheritedMethodEquivalentTo(method);
+			method.setUnique(unique);
+		}
+	}
+
+	private void setUniqueFieldsForAllFields() {
+		List<Declaration> nonUniqueFields = Arrays.asList(this.fields);
+		nonUniqueFields.removeAll(Arrays.asList(getUniqueFields()));
+		
+		for (Declaration field: nonUniqueFields) {
+			Declaration unique = tryFindInheritedFieldEquivalentTo(field);
+			field.setUnique(unique);
+		}
+	}
+	
+	public void propagateTokensToUniqueDeclarations(){
+		propagateTokensToUniqueMethods();
+		propagateTokensToUniqueFields();
+	}
+
+	private void propagateTokensToUniqueFields() {
+		for (Declaration field : this.fields) {
+			field.propagateTokensToUniqueDecl();
+		}
+	}
+
+	private void propagateTokensToUniqueMethods() {
+		for (Declaration method : this.methods) {
+			method.propagateTokensToUniqueDecl();
+		}
 	}
 
 	public Declaration[] getMethods() {
@@ -661,7 +742,7 @@ public class ClassInfo implements Serializable {
 		this.name = name;
 	}
 
-	public boolean isClass() {
+ 	public boolean isClass() {
 		return isClass;
 	}
 
