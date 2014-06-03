@@ -51,20 +51,7 @@ public class Declaration implements Serializable, Cloneable {
 
 	private List<Token> additionalReceiverTokens;
 
-	public Declaration(){}	
-
-	public Declaration(String name, Type retType, boolean isLiteral) {
-
-		this.name = name;
-		this.retType = retType;
-
-		this.additionalReceiverTokens = new LinkedList<Token>();
-		
-		if(isLiteral){
-			this.literal = isLiteral;
-			this.isPublic = true;
-		}
-	}
+	public Declaration(){}
 
 	public String getName() {
 		return name;
@@ -395,11 +382,12 @@ public class Declaration implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		return modifiers()+" name=" + simpleName 
+		return modifiers()+" name=" + simpleName
 				+ ", receiver=" + receiverType + ", params="
 				+ Arrays.toString(argTypes) + ", ret=" + retType
-				+ ", pkg=" + packageName+"\n"
-				+ ", tokens=" + Arrays.toString(tokens) + "\n";
+				+ ", pkg=" + packageName
+				+", unique="+ (unique != null ? unique.getLongName() : null)+"\n"
+				+", add tokens=" + this.additionalReceiverTokens + "\n";
 	}
 
 	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {
@@ -454,6 +442,10 @@ public class Declaration implements Serializable, Cloneable {
 	}
 	
 	public void addAdditionalReceiverTokens(List<Token> tokens){
+		if (this.additionalReceiverTokens == null){
+			this.additionalReceiverTokens = new LinkedList<Token>();
+		}
+		
 		this.additionalReceiverTokens.addAll(tokens);
 	}
 

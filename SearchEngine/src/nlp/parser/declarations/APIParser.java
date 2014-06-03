@@ -23,7 +23,8 @@ public class APIParser {
 	public InitialAPI parse(InitialAPI api){
 		for (ClassInfo clazz : api.getClasses()) {
 			for (Declaration decl : clazz.getDeclarations()) {
-				parser.parse(decl);		
+				parser.parse(decl);
+				decl.propagateTokensToUniqueDecl();
 			}
 		}
 		
@@ -40,6 +41,10 @@ public class APIParser {
 		APIParser parser = new APIParser(new DeclarationParser(new ComplexWordDecomposer(coreNLP)));
 		
 		KryoSerializer serializer = new KryoSerializer();
-		serializer.writeObject(Config.getSecondStorageLocation(), parser.parse(api));
+		InitialAPI parse = parser.parse(api);
+		
+		System.out.println(parse.getClasses());
+		
+		serializer.writeObject(Config.getSecondStorageLocation(), parse);
 	}
 }

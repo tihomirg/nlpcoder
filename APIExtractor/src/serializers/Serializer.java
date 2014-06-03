@@ -39,9 +39,11 @@ public class Serializer {
 			cil.loadArrayClassInfo();
 			cil.connectTypesAndClassInfos();
 			
+			cil.setUniqueDeclarationsForAllDeclatarions();
+			
 			Collection<ClassInfo> classes = cil.getClasses();
 			
-			System.out.println(classes);			
+			System.out.println(classes);
 			
 			//extractor.addWords(classes);
 			

@@ -686,7 +686,8 @@ public class ClassInfo implements Serializable {
 	}
 
 	private void setUniqueMethodsForAllMethods() {
-		List<Declaration> nonUniqueMethods = Arrays.asList(this.methods);
+		List<Declaration> nonUniqueMethods = new LinkedList<Declaration>();
+		nonUniqueMethods.addAll(Arrays.asList(this.methods));
 		nonUniqueMethods.removeAll(Arrays.asList(getUniqueMethods()));
 		
 		for (Declaration method: nonUniqueMethods) {
@@ -696,7 +697,8 @@ public class ClassInfo implements Serializable {
 	}
 
 	private void setUniqueFieldsForAllFields() {
-		List<Declaration> nonUniqueFields = Arrays.asList(this.fields);
+		List<Declaration> nonUniqueFields = new LinkedList<Declaration>();
+		nonUniqueFields.addAll(Arrays.asList(this.fields));
 		nonUniqueFields.removeAll(Arrays.asList(getUniqueFields()));
 		
 		for (Declaration field: nonUniqueFields) {

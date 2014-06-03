@@ -38,4 +38,10 @@ public abstract class ClassInfoLoader {
 	public void connectTypesAndClassInfos(){
 		cif.connectTypesAndClassInfos();
 	}
+
+	public void setUniqueDeclarationsForAllDeclatarions() {
+		for (ClassInfo clazz : cif.getClasses()) {
+			clazz.setUniqueDeclarationsForAllDeclarations();
+		}
+	}
 }
