@@ -1,6 +1,9 @@
 1) Unique declarations
 2) Keep receiver tokens separated.
-3) Clean selection table when you already printed/copied top statistics.
-4) Do word lemmatization.
-5) Think about WordNet, and what related words indeed to use. For some tokens, that are literals or locals we do not need related words.
- 
+3) Clean selection table after you print/copy top statistics.
+4) Think about WordNet, and what related words indeed to use. For some tokens, that are literals or locals we do not need related words.
+5) What about lemmatization of "println"
+
+Done:
+
+1) Do word lemmatization. //Still see if we need WordNet lemmatizer/steammer.
