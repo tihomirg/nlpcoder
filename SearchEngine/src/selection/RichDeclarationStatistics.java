@@ -58,5 +58,9 @@ public class RichDeclarationStatistics {
 		hits.clear();
 		missed.clear();
 		missed.addAll(allTokens);
-	}	
+	}
+	
+	public Map<Token, PriorityQueue<WToken>> getHits() {
+		return hits;
+	}
 }

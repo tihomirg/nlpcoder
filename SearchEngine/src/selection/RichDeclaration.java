@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import selection.scorers.Score;
 import nlp.parser.Token;
 import definitions.Declaration;
 
@@ -15,7 +16,7 @@ public class RichDeclaration {
 	private RichDeclarationStatistics statistics;
 	private ScoreListener listener;
 	private ScorerPipeline scorer;
-	private double score;
+	private Score score;
 	
 	private boolean hit;
 	
@@ -83,7 +84,7 @@ public class RichDeclaration {
 		return hit;
 	}
 	
-	public double getScore() {
+	public Score getScore() {
 		return score;
 	}
 	
