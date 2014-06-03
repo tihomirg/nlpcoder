@@ -1,5 +1,6 @@
 package selection;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,9 +28,18 @@ public class RichDeclaration {
 		this.statistics = new RichDeclarationStatistics(declProb);
 		this.posToLemmaToToken = new HashMap<String, Map<String,List<Token>>>();
 		this.tokens = new LinkedList<Token>();
-		addAll(decl.getTokens());
+		addAll(decl.getSimpleNameTokens());
+		addAll(decl.getReceiverTokens());
+		addAll(decl.getRemainderTokens());
+		addAll(decl.getAdditionalReceiverTokens());
 	}
 
+	public void addAll(Collection<Token> declTokens) {
+		for (Token token : declTokens) {
+			add(token);
+		}
+	}
+	
 	public void addAll(Token[] declTokens) {
 		for (Token token : declTokens) {
 			add(token);

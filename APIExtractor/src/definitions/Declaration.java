@@ -37,7 +37,7 @@ public class Declaration implements Serializable, Cloneable {
 	private String clazz;
 
 	private Word[] words;
-	
+
 	private Token[] tokens;
 
 	private String simpleName;
@@ -46,6 +46,10 @@ public class Declaration implements Serializable, Cloneable {
 	private Declaration unique;
 
 	private Token[] receiverTokens;
+	private Token[] simpleNameTokens;
+	private Token[] remainderTokens;
+
+	private List<Token> additionalReceiverTokens;
 
 	public Declaration(){}	
 
@@ -54,6 +58,8 @@ public class Declaration implements Serializable, Cloneable {
 		this.name = name;
 		this.retType = retType;
 
+		this.additionalReceiverTokens = new LinkedList<Token>();
+		
 		if(isLiteral){
 			this.literal = isLiteral;
 			this.isPublic = true;
@@ -208,7 +214,7 @@ public class Declaration implements Serializable, Cloneable {
 		List<String> words = new LinkedList<String>();
 
 		words.add(simpleName);
-		
+
 		if (this.isStatic){
 			if (this.clazz != null){
 				words.add(shortType(clazz));
@@ -219,7 +225,7 @@ public class Declaration implements Serializable, Cloneable {
 				if (this.clazz != null){
 					words.add(shortType(clazz));
 				}
-				
+
 				if (this.receiverType != null){
 					words.addAll(this.receiverType.getWords());
 				}
@@ -239,6 +245,50 @@ public class Declaration implements Serializable, Cloneable {
 		return words;
 
 	}
+	
+	public String getSimpleNameTextualForm(){
+		return getSimpleName();
+	}
+
+	public List<String> getReceiverTypeTextualForm(){
+		List<String> words = new LinkedList<String>();
+
+		if (!this.isStatic && !this.constructor && this.receiverType != null){
+			words.addAll(this.receiverType.getWords());
+		}
+
+		return words;
+	}
+
+	public List<String> getRemainderOfTextualForm(){
+		List<String> words = new LinkedList<String>();
+
+		if (this.isStatic){
+			if (this.clazz != null){
+				words.add(shortType(clazz));
+			}
+
+		} else {
+			if (!constructor){
+				if (this.clazz != null){
+					words.add(shortType(clazz));
+				}
+			}
+		}
+
+		if (this.argTypes != null) {
+			for (Type argType : this.argTypes) {
+				if (argType != null){
+					words.addAll(argType.getWords());
+				}
+			}		
+		}
+
+		if (this.retType != null) words.addAll(this.retType.getWords());
+
+		return words;
+
+	}	
 
 	private String typeToSentence(Type type) {
 		return toString(type.getWords());
@@ -350,7 +400,7 @@ public class Declaration implements Serializable, Cloneable {
 				+ ", receiver=" + receiverType + ", params="
 				+ Arrays.toString(argTypes) + ", ret=" + retType
 				+ ", pkg=" + packageName+"\n"
-		        + ", tokens=" + Arrays.toString(tokens) + "\n";
+				+ ", tokens=" + Arrays.toString(tokens) + "\n";
 	}
 
 	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {
@@ -378,6 +428,34 @@ public class Declaration implements Serializable, Cloneable {
 
 	public Token[] getReceiverTokens() {
 		return this.receiverTokens;
+	}
+
+	public void setSimpleNameTokens(Token[] simpleNameTokens) {
+		this.simpleNameTokens = simpleNameTokens;
+	}
+
+	public void setReceiverTokens(Token[] receiverTokens) {
+		this.receiverTokens = receiverTokens;
+	}
+
+	public void setRemainderTokens(Token[] remainderTokens) {
+		this.remainderTokens = remainderTokens;		
+	}
+	
+	public Token[] getSimpleNameTokens() {
+		return simpleNameTokens;
+	}
+	
+	public Token[] getRemainderTokens() {
+		return remainderTokens;
+	}
+
+	public List<Token> getAdditionalReceiverTokens() {
+		return this.additionalReceiverTokens;
+	}
+	
+	public void addAdditionalReceiverTokens(List<Token> tokens){
+		this.additionalReceiverTokens.addAll(tokens);
 	}
 
 	//	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {
