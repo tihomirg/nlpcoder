@@ -91,4 +91,8 @@ public class Group {
 	public void setWtokens(List<WToken> wtokens) {
 		this.wtokens = wtokens;
 	}
+
+	public boolean shouldSkipAsNeighbour() {
+		return token.shouldSkipAsNeighbour();
+	}
 }

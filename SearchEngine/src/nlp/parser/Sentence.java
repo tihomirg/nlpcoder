@@ -76,17 +76,21 @@ public class Sentence {
 
 	public List<Group> getSearchKeyGroups(){
 		List<Group> list = new LinkedList<Group>();
-		for(Group group : groups.values()){
+		for(Group group : getGroups()){
 			if (group.isSearchKey()){
 				list.add(group);
 			}
 		}
 		return list;
 	}
+
+	public Collection<Group> getGroups() {
+		return groups.values();
+	}
 	
 	public List<Group> getRemainingGroups(){
 		List<Group> list = new LinkedList<Group>();
-		for(Group group : groups.values()){
+		for(Group group : getGroups()){
 			if (!group.isSearchKey()){
 				list.add(group);
 			}

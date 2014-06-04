@@ -18,9 +18,8 @@ public class ParserIdentifyLocals implements IParser {
 		List<Sentence> sentences = input.getSentences();
 		
 		for (Sentence sentence : sentences) {
-			Map<Integer, Group> groupMap = sentence.getGroupMap();
 			
-			for (Group group : groupMap.values()) {
+			for (Group group : sentence.getGroups()) {
 				Token token = group.getToken();
 				String text = token.getText();
 				

@@ -106,4 +106,9 @@ public class RichDeclaration {
 	public void setHit(boolean hit) {
 		this.hit = hit;
 	}
+
+	@Override
+	public String toString() {
+		return "score=" + score + ", decl=" + decl;
+	}
 }

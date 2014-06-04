@@ -26,6 +26,9 @@ public class WToken {
 	public void setScore(double score) {
 		this.score = score;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "WToken [score=" + score + ", token=" + token + "]";
+	}
 }
