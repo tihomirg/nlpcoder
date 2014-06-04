@@ -1,11 +1,11 @@
-package selection.scorers;
+package search.scorers;
 
 import java.util.Map;
 import java.util.PriorityQueue;
 
 import nlp.parser.Token;
-import selection.RichDeclarationStatistics;
-import selection.WToken;
+import search.RichDeclarationStatistics;
+import search.WToken;
 
 public class HitWeightScorer implements RichDeclarationScorer {
 

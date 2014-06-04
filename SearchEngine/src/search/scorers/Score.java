@@ -1,4 +1,4 @@
-package selection.scorers;
+package search.scorers;
 
 import java.util.LinkedList;
 

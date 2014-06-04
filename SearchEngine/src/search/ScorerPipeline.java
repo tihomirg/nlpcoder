@@ -1,10 +1,10 @@
-package selection;
+package search;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import selection.scorers.RichDeclarationScorer;
-import selection.scorers.Score;
+import search.scorers.RichDeclarationScorer;
+import search.scorers.Score;
 import nlp.parser.Token;
 
 public class ScorerPipeline {

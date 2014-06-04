@@ -1,12 +1,11 @@
-package selection;
+package search;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import selection.comparators.RichDeclarationComparatorAsce;
-import selection.comparators.RichDeclarationComparatorDesc;
+import search.comparators.RichDeclarationComparatorAsce;
+import search.comparators.RichDeclarationComparatorDesc;
 
 public class ScoreListener {
 
@@ -55,7 +54,11 @@ public class ScoreListener {
 		}
 	}
 	
-	private void clear(){
+	public PriorityQueue<RichDeclaration> getBestRDs() {
+		return bestRDs;
+	}
+	
+	public void clear(){
 		for (RichDeclaration rd : changed) {
 			rd.clear();
 		}

@@ -1,5 +1,6 @@
 package nlp.parser;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,12 +36,27 @@ public class Input {
 		return corefGraph;
 	}
 
+	public List<Group> getSearchKeyGorups(){
+		List<Group> list = new LinkedList<Group>();
+		for (Sentence sentence : sentences) {
+			list.addAll(sentence.getSearchKeyGroups());
+		}
+		return list;
+	}
+	
+	public List<Group> getRemainingGorups(){
+		List<Group> list = new LinkedList<Group>();
+		for (Sentence sentence : sentences) {
+			list.addAll(sentence.getRemainingGroups());
+		}
+		return list;		
+	}	
+	
 	@Override
 	public String toString() {
 		return "text = " + text + "\n"+
 	           "sentences = " + sentences+"\n"+
 			   "corefGraph = " + corefGraph + "\n";
 	}
-	
 	
 }

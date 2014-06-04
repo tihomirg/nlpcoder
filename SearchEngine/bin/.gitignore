@@ -1,5 +1,3 @@
-/parser
-/core
-/nlp
+/search
 /selection
-/tests
+/nlp

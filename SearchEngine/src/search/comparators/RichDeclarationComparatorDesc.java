@@ -1,8 +1,8 @@
-package selection.comparators;
+package search.comparators;
 
 import java.util.Comparator;
 
-import selection.RichDeclaration;
+import search.RichDeclaration;
 
 public class RichDeclarationComparatorDesc implements Comparator<RichDeclaration>{
 

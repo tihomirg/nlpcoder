@@ -1,6 +1,6 @@
-package selection.scorers;
+package search.scorers;
 
-import selection.RichDeclarationStatistics;
+import search.RichDeclarationStatistics;
 
 public class DeclProbScorer implements RichDeclarationScorer{
 

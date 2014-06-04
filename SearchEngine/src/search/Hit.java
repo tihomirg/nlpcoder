@@ -1,4 +1,4 @@
-package selection;
+package search;
 
 import java.util.List;
 

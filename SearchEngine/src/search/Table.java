@@ -1,4 +1,4 @@
-package selection;
+package search;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,5 +40,20 @@ public class Table {
 		}
 		
 		rds.add(rd);
+	}
+
+	public void search(WToken searchKey) {
+		Token token = searchKey.getToken();
+		Map<String, Set<RichDeclaration>> lemmaToRDs = posToLemmaToRDs.get(token.getPos());
+		
+		if (lemmaToRDs != null){
+			Set<RichDeclaration> rds = lemmaToRDs.get(token.getLemma());
+			
+			if(rds != null){
+				for (RichDeclaration rd : rds) {
+					rd.hit(searchKey);
+				}
+			}
+		}
 	}
 }

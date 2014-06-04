@@ -3,6 +3,7 @@ package nlp.parser;
 import java.util.LinkedList;
 import java.util.List;
 
+import search.WToken;
 import core.Local;
 
 public class Group {
@@ -13,6 +14,7 @@ public class Group {
 	private List<Token> tokenDecompositions;
 	private Local local;
 	private boolean literal;
+	private List<WToken> wtokens;
 
 	public Group(Token token) {
 		this.token = token;
@@ -76,5 +78,17 @@ public class Group {
 	
 	public boolean isLiteral() {
 		return literal;
+	}
+
+	public boolean isSearchKey() {
+		return !isLocal() && !isLiteral();
+	}
+
+	public List<WToken> getSearchKeys() {
+		return this.wtokens;
+	}
+	
+	public void setWtokens(List<WToken> wtokens) {
+		this.wtokens = wtokens;
 	}
 }

@@ -1,4 +1,4 @@
-package selection;
+package search;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import selection.scorers.Score;
+import search.scorers.Score;
 import nlp.parser.Token;
 import definitions.Declaration;
 
@@ -72,8 +72,9 @@ public class RichDeclaration {
 		lemmaToToken.get(lemma).add(token);
 	}
 	
-	public void hit(String pos, String word, WToken wtoken) {
-		statistics.hit(wtoken, posToLemmaToToken.get(pos).get(word));
+	public void hit(WToken wtoken) {
+		Token token = wtoken.getToken();
+		statistics.hit(wtoken, posToLemmaToToken.get(token.getPos()).get(token.getLemma()));
 		calculateScore();
 		notifyListener();
 	}
