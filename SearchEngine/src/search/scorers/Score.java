@@ -22,4 +22,9 @@ public class Score {
 		return total;
 	}
 
+	@Override
+	public String toString() {
+		return "sum = "+getSum()+" "+scores.toString();
+	}
+	
 }
