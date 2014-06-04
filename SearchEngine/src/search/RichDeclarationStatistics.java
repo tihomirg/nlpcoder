@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import search.comparators.WTokenComparatorDesc;
 import nlp.parser.Token;
 
 public class RichDeclarationStatistics {
+	private static final int CAPACITY = 10;
+	private static final WTokenComparatorDesc COMPARATOR = new WTokenComparatorDesc();
 	private double declProb;
 	private Map<Token, PriorityQueue<WToken>> hits;
 	private List<Token> missed;
@@ -46,7 +49,7 @@ public class RichDeclarationStatistics {
 	private void addToHits(Token token, WToken wtoken) {
 		PriorityQueue<WToken> pq = null;
 		if (!hits.containsKey(token)){
-			pq = new PriorityQueue<WToken>();
+			pq = new PriorityQueue<WToken>(CAPACITY, COMPARATOR);
 			hits.put(token, pq);
 		} else {
 			pq = hits.get(token);

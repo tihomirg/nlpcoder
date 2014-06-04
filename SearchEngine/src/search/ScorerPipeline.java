@@ -1,18 +1,14 @@
 package search;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import search.scorers.RichDeclarationScorer;
 import search.scorers.Score;
-import nlp.parser.Token;
 
 public class ScorerPipeline {
 
-	private List<RichDeclarationScorer> scorers;
+	private RichDeclarationScorer[] scorers;
 	
-	public ScorerPipeline() {
-		this.scorers = new LinkedList<RichDeclarationScorer>();
+	public ScorerPipeline(RichDeclarationScorer[] scorers) {
+		this.scorers = scorers;
 	}
 	
 	public Score calculate(RichDeclarationStatistics rds) {

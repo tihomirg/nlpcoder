@@ -31,7 +31,9 @@ public class RichDeclaration {
 		addAll(decl.getSimpleNameTokens());
 		addAll(decl.getReceiverTokens());
 		addAll(decl.getRemainderTokens());
-		addAll(decl.getAdditionalReceiverTokens());
+		
+		List<Token> receiverTokens = decl.getAdditionalReceiverTokens();
+		if (receiverTokens != null) addAll(receiverTokens);
 	}
 
 	public void addAll(Collection<Token> declTokens) {
@@ -65,7 +67,7 @@ public class RichDeclaration {
 		Map<String, List<Token>> lemmaToToken = this.posToLemmaToToken.get(pos);
 		
 		String lemma = token.getLemma();
-		if(lemmaToToken.containsKey(lemma)){
+		if(!lemmaToToken.containsKey(lemma)){
 			lemmaToToken.put(lemma, new LinkedList<Token>());
 		}
 		

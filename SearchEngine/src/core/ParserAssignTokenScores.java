@@ -34,7 +34,5 @@ public class ParserAssignTokenScores implements IParser {
 		for (WToken wToken : list) {
 			wToken.setScore(score);
 		}
-		
 	}
-
 }

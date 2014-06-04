@@ -156,4 +156,14 @@ public class StabileAPI {
 		
 		return decls;
 	}
+	
+	public List<Declaration> getUniqueDecls() {
+		List<Declaration> decls = new LinkedList<Declaration>();
+		
+		for (ClassInfo clazz : this.classes.values()) {
+			decls.addAll(Arrays.asList(clazz.getUniqueDeclarations()));
+		}
+		
+		return decls;
+	}	
 }

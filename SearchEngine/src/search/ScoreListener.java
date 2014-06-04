@@ -65,6 +65,7 @@ public class ScoreListener {
 		changed.clear();
 		worstRDs.clear();
 		bestRDs.clear();
+		this.currentSize = 0;
 	}
 
 }

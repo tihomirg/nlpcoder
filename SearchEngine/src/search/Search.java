@@ -13,10 +13,11 @@ public class Search {
 	private ScorerPipeline scorer;
 	private ScoreListener listener;
 	
-	public Search(ScorerPipeline scorer, ScoreListener listener) {
+	public Search(ScorerPipeline scorer, ScoreListener listener, StabileAPI api) {
 		this.table = new Table();
 		this.scorer = scorer;
 		this.listener = listener;
+		add(api);
 	}
 	
 	public void add(StabileAPI api){
