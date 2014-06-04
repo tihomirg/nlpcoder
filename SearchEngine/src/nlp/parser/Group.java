@@ -142,4 +142,8 @@ public class Group {
 	public void setAllGraphTokenRelatedTokens(List<Token> allGraphTokenRelatedTokens) {
 		this.allGraphTokenRelatedTokens = allGraphTokenRelatedTokens;
 	}
+
+	public List<List<WToken>> getLevels() {
+		return this.levels;
+	}
 }
