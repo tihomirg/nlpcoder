@@ -6,6 +6,10 @@ public class WToken {
 	private Token token;
 	private double score;
 	
+	public WToken(Token token){
+		this(token, 0);
+	}
+	
 	public WToken(Token token, double score) {
 		this.token = token;
 		this.score = score;

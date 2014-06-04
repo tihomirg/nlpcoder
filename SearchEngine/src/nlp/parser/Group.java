@@ -15,6 +15,10 @@ public class Group {
 	private Local local;
 	private boolean literal;
 	private List<WToken> wtokens;
+	
+	private List<List<WToken>> levels;
+	private List<Token> tokenRelatedTokens;
+	private List<Token> allGraphTokenRelatedTokens;
 
 	public Group(Token token) {
 		this.token = token;
@@ -85,14 +89,57 @@ public class Group {
 	}
 
 	public List<WToken> getSearchKeys() {
-		return this.wtokens;
+		return flatten(levels);
 	}
 	
-	public void setWtokens(List<WToken> wtokens) {
-		this.wtokens = wtokens;
+	public void setLevels(List<List<WToken>> levels) {
+		this.levels = levels;
+	}
+
+	private <T> List<T> flatten(List<List<T>> lists) {
+		List<T> rlist = new LinkedList<T>();
+		
+		for (List<T> list : lists) {
+			rlist.addAll(list);
+		}
+		
+		return rlist;
 	}
 
 	public boolean shouldSkipAsNeighbour() {
 		return token.shouldSkipAsNeighbour();
+	}
+
+	public boolean hasTokenDecompositions() {
+		return !this.tokenDecompositions.isEmpty();
+	}
+	
+	public List<Token> getTokenDecompositions() {
+		return tokenDecompositions;
+	}
+
+	public List<Token> getTokenRelatedTokens() {
+		return this.tokenRelatedTokens;
+	}
+	
+	public void setTokenRelatedTokens(List<Token> tokenRelatedTokens) {
+		this.tokenRelatedTokens = tokenRelatedTokens;
+	}
+
+	public List<Token> getAllGraphTokens() {
+		List<Token> tokens = new LinkedList<Token>();
+		
+		tokens.addAll(graphDTokens());
+		tokens.addAll(graphRTokens());
+		
+		return tokens;
+	}
+
+	public List<Token> getAllGraphTokenRelatedTokens() {
+		return this.allGraphTokenRelatedTokens;
+	}
+	
+	public void setAllGraphTokenRelatedTokens(List<Token> allGraphTokenRelatedTokens) {
+		this.allGraphTokenRelatedTokens = allGraphTokenRelatedTokens;
 	}
 }

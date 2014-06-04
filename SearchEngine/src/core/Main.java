@@ -17,6 +17,7 @@ import nlp.parser.ParserPipeline;
 import nlp.parser.ParserRelatedWords;
 import nlp.parser.ParserRightHandSideNeighbours;
 import nlp.parser.ParserSliceComplexTokens;
+import nlp.parser.ParserWTokensAndLevels;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class Main {
@@ -37,7 +38,8 @@ public class Main {
 						new ParserIdentifyLocals(locals),					
 						new ParserRightHandSideNeighbours(2),
 						new ParserSliceComplexTokens(decomposer),						
-						new ParserRelatedWords()});
+						new ParserRelatedWords(),
+						new ParserWTokensAndLevels()});
 		
 		
 		//Input input = pipeline.parse(new Input("open(file(\"text.txt\"), make)"));

@@ -1,6 +1,6 @@
 package nlp.parser;
 
-import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ParserRelatedWords implements IParser{
@@ -10,8 +10,11 @@ public class ParserRelatedWords implements IParser{
 		List<Sentence> sentences = input.getSentences();
 		
 		for (Sentence sentence : sentences) {
-			for (Group gorup: sentence.getGroups()) {
+			for (Group group: sentence.getSearchKeyGroups()) {
 				
+				//TODO: Implement the connection with WordNet
+				group.setTokenRelatedTokens(new LinkedList<Token>());
+				group.setAllGraphTokenRelatedTokens(new LinkedList<Token>());
 			}
 		}
 		
