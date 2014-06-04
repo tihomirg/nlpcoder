@@ -8,7 +8,13 @@
 For instance: if a declaration has [name words]:[remaining words]:[receiver words] => [multiset]:[multiset]:[singleton set]
 
 7) Technique that maximizes the hit. Given words that hit a declaration we try to maximize the hit. i.e. cover as many distinct positions in the declaration.
-The most important is the name. Others must not multiply, especially, remaining receiver words. 
+The most important is the name. Others must not multiply, especially, remaining receiver words.
+
+Again we need groups. Now we can introduce scorers for hits (1,1), (2,2), (1,2), (2,1)....bases should be maximize hit tactics.
+This means if one word has an option to hit many places it takes into account the other hits and together they maximize the hit.
+Also, we need to take into account places, and missed places as well. Two args with the same type shouldn't be hit two times by one word.
+Only the one that brings more "points" will be hit. The other one needs to wait for more words to come. We get points based on the
+declaration structure not based on the word hit. JavaDoc can be used for main group, name hit.
 
 Done:
 
