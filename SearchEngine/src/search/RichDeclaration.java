@@ -37,6 +37,7 @@ public class RichDeclaration {
 		addAll(decl.getArgTokens());
 		addAll(decl.getClazzTokens());
 		addAll(decl.getAdditionalReceiverTokens());
+		addAll(decl.getReturnTypeTokens());
 	}
 
 	private void addAll(List<List<Token>> argTokens) {

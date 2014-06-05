@@ -14,6 +14,7 @@ public class RichDeclarationStatistics {
 
 	public RichDeclarationStatistics(Declaration decl, double declProb, int indexScoress[][]) {
 		this.declProb = declProb;
+		this.slotss = new Slot[2][];
 		initiateGroups(decl, indexScoress);
 	}
 
@@ -22,7 +23,7 @@ public class RichDeclarationStatistics {
 		createFirstGroup(decl.getSimpleNameTokens(), indexScoress[0]);
 		
 		//Second group
-		createSecondGroup(decl.getReceiverTokens(), decl.getArgTokens(), decl.getClazzTokens(), decl.getAdditionalReceiverTokens(), indexScoress[1]);
+		createSecondGroup(decl.getReceiverTokens(), decl.getArgTokens(), decl.getClazzTokens(), decl.getAdditionalReceiverTokens(), decl.getReturnTypeTokens(), indexScoress[1]);
 	}
 
 	private void createFirstGroup(List<Token> simpleNameTokens, int[] indexScores) {
@@ -36,7 +37,7 @@ public class RichDeclarationStatistics {
 		slotss[0] = slots.toArray(new Slot[slots.size()]);
 	}
 	
-	private void createSecondGroup(List<Token> receiverTokens, List<List<Token>> argTokens, List<Token> clazzTokens, List<List<Token>> additionalReceiverTokens, int[] indexScores) {
+	private void createSecondGroup(List<Token> receiverTokens, List<List<Token>> argTokens, List<Token> clazzTokens, List<List<Token>> additionalReceiverTokens, List<Token> returnTypeTokens, int[] indexScores) {
 		List<List<Token>> tokenss = new LinkedList<List<Token>>();
 		
 		List<List<Token>> receiverTokenss = new LinkedList<List<Token>>();
@@ -46,6 +47,7 @@ public class RichDeclarationStatistics {
 		tokenss.addAll(argTokens);
 		tokenss.add(UtilList.flatten(receiverTokenss));
 		tokenss.add(clazzTokens);
+		tokenss.add(returnTypeTokens);
 		
 		List<Slot> slots = new LinkedList<Slot>();
 		for (List<Token> tokens : tokenss) {

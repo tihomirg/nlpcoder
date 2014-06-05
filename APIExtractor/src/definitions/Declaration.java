@@ -45,14 +45,12 @@ public class Declaration implements Serializable, Cloneable {
 
 	private Declaration unique;
 
-	private List<Token> receiverTokens;
 	private List<Token> simpleNameTokens;
+	
+	private List<Token> receiverTokens;
 	private List<List<Token>> argTokens;
-
 	private List<List<Token>> additionalReceiverTokens;
-
 	private List<Token> clazzTokens;
-
 	private List<Token> returnTypeTokens;
 
 	public Declaration(){}
