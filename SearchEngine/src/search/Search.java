@@ -54,8 +54,8 @@ public class Search {
 	private void publish(List<WToken> searchKeys, PriorityQueue<RichDeclaration> bestRDs) {
 		System.out.println("For words: "+ searchKeys);
 		
-		for (RichDeclaration rd : bestRDs) {
-			System.out.println(rd);
+		while(!bestRDs.isEmpty()) {
+			System.out.println(bestRDs.remove());
 		}
 		
 		System.out.println();
