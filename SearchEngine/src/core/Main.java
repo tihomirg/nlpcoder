@@ -86,7 +86,11 @@ public class Main {
 		
 		ScorerPipeline scorer = new ScorerPipeline(new RichDeclarationScorer[]{ new HitWeightScorer()});
 		ScoreListener listener = new ScoreListener(20);
-		Search search = new Search(scorer, listener, api);
+		
+		//Test matrix
+		int[][] indexScoress = {{5, 3},{1, 2}};
+		
+		Search search = new Search(scorer, listener, api, indexScoress);
 		
 		System.out.println("Loading Decls in Search Engine time : "+(System.currentTimeMillis() - time)+" ms");			
 		time = System.currentTimeMillis();		

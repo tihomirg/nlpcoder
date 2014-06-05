@@ -1,73 +1,107 @@
 package search;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
 
-import search.comparators.WTokenComparatorDesc;
+import util.UtilList;
 import nlp.parser.Token;
+import definitions.Declaration;
 
 public class RichDeclarationStatistics {
-	private static final int CAPACITY = 10;
-	private static final WTokenComparatorDesc COMPARATOR = new WTokenComparatorDesc();
 	private double declProb;
-	private Map<Token, PriorityQueue<WToken>> hits;
-	private List<Token> missed;
-	
-	public RichDeclarationStatistics(double declProb) {
+
+	private Slot[][] slotss;
+
+	public RichDeclarationStatistics(Declaration decl, double declProb, int indexScoress[][]) {
 		this.declProb = declProb;
-		this.hits = new HashMap<Token, PriorityQueue<WToken>>();
-		this.missed = new LinkedList<Token>();
+		initiateGroups(decl, indexScoress);
 	}
 
-	public void addToMissed(List<Token> tokens){
-		for (Token token : tokens) {
-			addToMissed(token);
+	private void initiateGroups(Declaration decl, int[][] indexScoress) {
+		//First group
+		createFirstGroup(decl.getSimpleNameTokens(), indexScoress[0]);
+		
+		//Second group
+		createSecondGroup(decl.getReceiverTokens(), decl.getArgTokens(), decl.getClazzTokens(), decl.getAdditionalReceiverTokens(), indexScoress[1]);
+	}
+
+	private void createFirstGroup(List<Token> simpleNameTokens, int[] indexScores) {
+		List<Slot> slots = new LinkedList<Slot>();
+		for (Token token : simpleNameTokens) {
+			Slot slot = new Slot(indexScores);
+			slot.addToken(token);
+			slots.add(slot);
 		}
+		
+		slotss[0] = slots.toArray(new Slot[slots.size()]);
 	}
 	
-	public void addToMissed(Token token){
-		if (!missed.contains(token)){
-			missed.add(token);
+	private void createSecondGroup(List<Token> receiverTokens, List<List<Token>> argTokens, List<Token> clazzTokens, List<List<Token>> additionalReceiverTokens, int[] indexScores) {
+		List<List<Token>> tokenss = new LinkedList<List<Token>>();
+		
+		List<List<Token>> receiverTokenss = new LinkedList<List<Token>>();
+		receiverTokenss.add(receiverTokens);
+		receiverTokenss.addAll(additionalReceiverTokens);
+		
+		tokenss.addAll(argTokens);
+		tokenss.add(UtilList.flatten(receiverTokenss));
+		tokenss.add(clazzTokens);
+		
+		List<Slot> slots = new LinkedList<Slot>();
+		for (List<Token> tokens : tokenss) {
+			Slot slot = new Slot(indexScores);
+			for (Token token : tokens) {
+				slot.addToken(token);
+			}
+			slots.add(slot);			
 		}
-	}
-	
-	public void removeFromMissed(List<Token> hitTokens) {
-		for (Token token : hitTokens) {
-			missed.remove(token);
-		}
+		
+		slotss[1] = slots.toArray(new Slot[slots.size()]);		
 	}	
 
-	public void hit(WToken wtoken, List<Token> hitTokens) {
-		for (Token token : hitTokens) {
-			addToHits(token, wtoken);
+	public void hit(WToken wtoken) {
+		fit(wtoken);
+	}
+
+	private void fit(WToken wtoken) {
+		WToken current = wtoken;
+		int currentIndex = wtoken.getIndex();
+
+		while(true){
+			Slot[] slots = slotss[currentIndex];
+
+			for (int i = 0; i < slots.length; i++) {
+				Slot slot = slots[i];
+				if (slot.fits(current)){
+					if (slot.isOccupied()){
+						current = slot.substitute(current);
+					} else {
+						slot.setWToken(current);
+						return;
+					}
+				}
+			}
+
+			//if these are the same we need to check different group
+			if (currentIndex == current.getIndex()){
+				currentIndex = (currentIndex + 1) % 2;
+			} else return;
 		}
 	}
 
-	private void addToHits(Token token, WToken wtoken) {
-		PriorityQueue<WToken> pq = null;
-		if (!hits.containsKey(token)){
-			pq = new PriorityQueue<WToken>(CAPACITY, COMPARATOR);
-			hits.put(token, pq);
-		} else {
-			pq = hits.get(token);
+	public void clear() {
+		for (Slot[] slots : this.slotss) {
+			for (Slot slot : slots) {
+				slot.clear();
+			}
 		}
-		pq.add(wtoken);
 	}
-	
-	public void clear(List<Token> allTokens) {
-		hits.clear();
-		missed.clear();
-		missed.addAll(allTokens);
-	}
-	
-	public Map<Token, PriorityQueue<WToken>> getHits() {
-		return hits;
-	}
-	
+
 	public double getDeclProb() {
 		return declProb;
+	}
+
+	public Slot[][] getSlots() {
+		return this.slotss;
 	}
 }

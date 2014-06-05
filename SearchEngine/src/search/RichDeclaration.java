@@ -21,19 +21,28 @@ public class RichDeclaration {
 	
 	private boolean hit;
 	
-	public RichDeclaration(Declaration decl, double declProb, ScorerPipeline scorer, ScoreListener listener) {
+	public RichDeclaration(Declaration decl, double declProb, ScorerPipeline scorer, ScoreListener listener, int[][] indexScores) {
 		this.decl = decl;
 		this.scorer = scorer;
 		this.listener = listener;
-		this.statistics = new RichDeclarationStatistics(declProb);
+		this.statistics = new RichDeclarationStatistics(decl, declProb, indexScores);
 		this.posToLemmaToToken = new HashMap<String, Map<String,List<Token>>>();
 		this.tokens = new LinkedList<Token>();
-		addAll(decl.getSimpleNameTokens());
-		addAll(decl.getReceiverTokens());
-		addAll(decl.getRemainderTokens());
 		
-		List<Token> receiverTokens = decl.getAdditionalReceiverTokens();
-		if (receiverTokens != null) addAll(receiverTokens);
+		//First group
+		addAll(decl.getSimpleNameTokens());
+		
+		//Second group
+		addAll(decl.getReceiverTokens());
+		addAll(decl.getArgTokens());
+		addAll(decl.getClazzTokens());
+		addAll(decl.getAdditionalReceiverTokens());
+	}
+
+	private void addAll(List<List<Token>> argTokens) {
+		for (List<Token> list : argTokens) {
+			addAll(list);
+		}
 	}
 
 	public void addAll(Collection<Token> declTokens) {
@@ -49,34 +58,15 @@ public class RichDeclaration {
 	}
 	
 	public void add(Token token){
-		addToMap(token);
 		addToTokens(token);
-		statistics.addToMissed(token);
 	}
 
 	private void addToTokens(Token token) {
 		this.tokens.add(token);
 	}
-
-	private void addToMap(Token token) {
-		String pos = token.getPos();
-		if (!this.posToLemmaToToken.containsKey(pos)){
-			this.posToLemmaToToken.put(pos, new HashMap<String, List<Token>>());
-		}
-		
-		Map<String, List<Token>> lemmaToToken = this.posToLemmaToToken.get(pos);
-		
-		String lemma = token.getLemma();
-		if(!lemmaToToken.containsKey(lemma)){
-			lemmaToToken.put(lemma, new LinkedList<Token>());
-		}
-		
-		lemmaToToken.get(lemma).add(token);
-	}
 	
 	public void hit(WToken wtoken) {
-		Token token = wtoken.getToken();
-		statistics.hit(wtoken, posToLemmaToToken.get(token.getPos()).get(token.getLemma()));
+		statistics.hit(wtoken);
 		calculateScore();
 		notifyListener();
 	}
@@ -90,7 +80,7 @@ public class RichDeclaration {
 	}
 	
 	public void clear(){
-		this.statistics.clear(this.tokens);
+		this.statistics.clear();
 	}
 	
 	public boolean isHit() {

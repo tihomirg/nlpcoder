@@ -45,11 +45,15 @@ public class Declaration implements Serializable, Cloneable {
 
 	private Declaration unique;
 
-	private Token[] receiverTokens;
-	private Token[] simpleNameTokens;
-	private Token[] remainderTokens;
+	private List<Token> receiverTokens;
+	private List<Token> simpleNameTokens;
+	private List<List<Token>> argTokens;
 
-	private List<Token> additionalReceiverTokens;
+	private List<List<Token>> additionalReceiverTokens;
+
+	private List<Token> clazzTokens;
+
+	private List<Token> returnTypeTokens;
 
 	public Declaration(){}
 
@@ -245,8 +249,8 @@ public class Declaration implements Serializable, Cloneable {
 
 		return words;
 	}
-
-	public List<String> getRemainderOfTextualForm(){
+	
+	public List<String> getClassTextualForm(){
 		List<String> words = new LinkedList<String>();
 
 		if (this.isStatic){
@@ -261,20 +265,31 @@ public class Declaration implements Serializable, Cloneable {
 				}
 			}
 		}
+		return words;
+	}
+
+	public List<List<String>> getArgsTextualForm(){
+		List<List<String>> words = new LinkedList<List<String>>();
 
 		if (this.argTypes != null) {
 			for (Type argType : this.argTypes) {
 				if (argType != null){
-					words.addAll(argType.getWords());
+					words.add(argType.getWords());
 				}
 			}		
 		}
+
+		return words;
+	}
+	
+	public List<String> getReturnTypeTextualForm(){
+		List<String> words = new LinkedList<String>();
 
 		if (this.retType != null) words.addAll(this.retType.getWords());
 
 		return words;
 
-	}	
+	}		
 
 	private String typeToSentence(Type type) {
 		return toString(type.getWords());
@@ -413,40 +428,40 @@ public class Declaration implements Serializable, Cloneable {
 		return this.unique;
 	}
 
-	public Token[] getReceiverTokens() {
+	public List<Token> getReceiverTokens() {
 		return this.receiverTokens;
 	}
 
-	public void setSimpleNameTokens(Token[] simpleNameTokens) {
+	public void setSimpleNameTokens(List<Token> simpleNameTokens) {
 		this.simpleNameTokens = simpleNameTokens;
 	}
 
-	public void setReceiverTokens(Token[] receiverTokens) {
+	public void setReceiverTokens(List<Token> receiverTokens) {
 		this.receiverTokens = receiverTokens;
 	}
 
-	public void setRemainderTokens(Token[] remainderTokens) {
-		this.remainderTokens = remainderTokens;		
+	public void setArgTokens(List<List<Token>> argTokens) {
+		this.argTokens = argTokens;		
 	}
 	
-	public Token[] getSimpleNameTokens() {
+	public List<Token> getSimpleNameTokens() {
 		return simpleNameTokens;
 	}
 	
-	public Token[] getRemainderTokens() {
-		return remainderTokens;
+	public List<List<Token>> getArgTokens() {
+		return argTokens;
 	}
 
-	public List<Token> getAdditionalReceiverTokens() {
+	public List<List<Token>> getAdditionalReceiverTokens() {
+		if (this.additionalReceiverTokens == null){
+			this.additionalReceiverTokens = new LinkedList<List<Token>>();
+		}
+		
 		return this.additionalReceiverTokens;
 	}
 	
 	public void addAdditionalReceiverTokens(List<Token> tokens){
-		if (this.additionalReceiverTokens == null){
-			this.additionalReceiverTokens = new LinkedList<Token>();
-		}
-		
-		this.additionalReceiverTokens.addAll(tokens);
+		getAdditionalReceiverTokens().add(tokens);
 	}
 
 	public void setUnique(Declaration unique) {
@@ -455,8 +470,24 @@ public class Declaration implements Serializable, Cloneable {
 
 	public void propagateTokensToUniqueDecl() {
 		if(this.unique != null){
-			this.unique.addAdditionalReceiverTokens(Arrays.asList(this.receiverTokens));
+			this.unique.addAdditionalReceiverTokens(this.receiverTokens);
 		}
+	}
+
+	public void setClassTokens(List<Token> clazzTokens) {
+		this.clazzTokens = clazzTokens;
+	}
+	
+	public List<Token> getClazzTokens() {
+		return clazzTokens;
+	}
+
+	public void setReturnTypeTokens(List<Token> returnTypeTokens) {
+		this.returnTypeTokens = returnTypeTokens;
+	}
+	
+	public List<Token> getReturnTypeTokens() {
+		return returnTypeTokens;
 	}
 
 	//	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {

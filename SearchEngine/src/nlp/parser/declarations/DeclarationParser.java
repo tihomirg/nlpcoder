@@ -20,6 +20,8 @@ public class DeclarationParser implements IDeclarationParser {
 		simpleNameTokenization(decl);
 		receiverTypeTokenization(decl);		
 		remainderTypeTokenization(decl);
+		clazzTokenization(decl);
+		returnTypeTokenization(decl);
 		
 		return decl;
 	}
@@ -34,12 +36,19 @@ public class DeclarationParser implements IDeclarationParser {
 	}
 	
 	private void remainderTypeTokenization(Declaration decl) {
-		List<Token> remainderTokens = new LinkedList<Token>();		
-		List<String> remainder = decl.getRemainderOfTextualForm();
-		for (String name : remainder) {
-			remainderTokens.addAll(decomposer.decomposeString(name));
+		List<List<Token>> argTokens = new LinkedList<List<Token>>();		
+		List<List<String>> args = decl.getArgsTextualForm();
+		
+		for (List<String> arg : args) {
+			List<Token> tokens = new LinkedList<Token>();
+			for (String name : arg) {
+				tokens.addAll(decomposer.decomposeString(name));
+			}			
+			argTokens.add(tokens);
 		}
-		decl.setRemainderTokens(remainderTokens.toArray(new Token[remainderTokens.size()]));
+		
+
+		decl.setArgTokens(argTokens);
 	}	
 	
 	private void receiverTypeTokenization(Declaration decl) {
@@ -48,13 +57,30 @@ public class DeclarationParser implements IDeclarationParser {
 		for (String name : receiver) {
 			receiverTokens.addAll(decomposer.decomposeString(name));
 		}
-		decl.setReceiverTokens(receiverTokens.toArray(new Token[receiverTokens.size()]));
+		decl.setReceiverTokens(receiverTokens);
 	}
 
 	private void simpleNameTokenization(Declaration decl) {
 		String simpleName = decl.getSimpleNameTextualForm();
 		List<Token> simpleNameTokens = decomposer.decomposeString(simpleName);
-		decl.setSimpleNameTokens(simpleNameTokens.toArray(new Token[simpleNameTokens.size()]));
+		decl.setSimpleNameTokens(simpleNameTokens);
 	}
 
+	private void clazzTokenization(Declaration decl) {
+		List<Token> clazzTokens = new LinkedList<Token>();	
+		List<String> clazzName = decl.getClassTextualForm();
+		for (String name : clazzName) {
+			clazzTokens.addAll(decomposer.decomposeString(name));
+		}
+		decl.setClassTokens(clazzTokens);
+	}
+	
+	private void returnTypeTokenization(Declaration decl) {
+		List<Token> returnTypeTokens = new LinkedList<Token>();	
+		List<String> returnTypeName = decl.getReturnTypeTextualForm();
+		for (String name : returnTypeName) {
+			returnTypeTokens.addAll(decomposer.decomposeString(name));
+		}
+		decl.setReturnTypeTokens(returnTypeTokens);
+	}	
 }

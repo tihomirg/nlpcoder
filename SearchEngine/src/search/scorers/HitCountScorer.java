@@ -1,6 +1,7 @@
 package search.scorers;
 
 import search.RichDeclarationStatistics;
+import search.Slot;
 
 public class HitCountScorer implements RichDeclarationScorer {
 
@@ -16,7 +17,17 @@ public class HitCountScorer implements RichDeclarationScorer {
 	
 	@Override
 	public double calculate(RichDeclarationStatistics rds) {
-		return factor * rds.getHits().size();
+		Slot[][] slotss = rds.getSlots();
+		
+		double score = 0;
+		
+		for (Slot[] slots : slotss) {
+			for (Slot slot : slots) {
+				score += slot.isOccupiedToInt();
+			}
+		}
+		
+		return factor * score;
 	}
 
 }

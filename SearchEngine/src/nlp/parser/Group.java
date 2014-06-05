@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import search.WToken;
+import util.UtilList;
 import core.Local;
 
 public class Group {
@@ -89,21 +90,11 @@ public class Group {
 	}
 
 	public List<WToken> getSearchKeys() {
-		return flatten(levels);
+		return UtilList.flatten(levels);
 	}
 	
 	public void setLevels(List<List<WToken>> levels) {
 		this.levels = levels;
-	}
-
-	private <T> List<T> flatten(List<List<T>> lists) {
-		List<T> rlist = new LinkedList<T>();
-		
-		for (List<T> list : lists) {
-			rlist.addAll(list);
-		}
-		
-		return rlist;
 	}
 
 	public boolean shouldSkipAsNeighbour() {

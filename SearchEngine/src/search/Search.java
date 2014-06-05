@@ -12,11 +12,13 @@ public class Search {
 	private Table table;
 	private ScorerPipeline scorer;
 	private ScoreListener listener;
+	private int[][] indexScoress;
 	
-	public Search(ScorerPipeline scorer, ScoreListener listener, StabileAPI api) {
+	public Search(ScorerPipeline scorer, ScoreListener listener, StabileAPI api, int[][] indexScoress) {
 		this.table = new Table();
 		this.scorer = scorer;
 		this.listener = listener;
+		this.indexScoress = indexScoress;
 		add(api);
 	}
 	
@@ -31,7 +33,7 @@ public class Search {
 	}
 
 	public void add(Declaration decl){
-		table.add(new RichDeclaration(decl, 0, scorer, listener));
+		table.add(new RichDeclaration(decl, 0, scorer, listener, indexScoress));
 	}
 	
 	public PriorityQueue<RichDeclaration> search(Group searchKeyGroup){

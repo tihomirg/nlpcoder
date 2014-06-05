@@ -5,6 +5,7 @@ import java.util.PriorityQueue;
 
 import nlp.parser.Token;
 import search.RichDeclarationStatistics;
+import search.Slot;
 import search.WToken;
 
 public class HitWeightScorer implements RichDeclarationScorer {
@@ -21,13 +22,14 @@ public class HitWeightScorer implements RichDeclarationScorer {
 	
 	@Override
 	public double calculate(RichDeclarationStatistics rds) {
-		Map<Token, PriorityQueue<WToken>> hits = rds.getHits();
+		Slot[][] slotss = rds.getSlots();
 		
 		double score = 0;
 		
-		for (PriorityQueue<WToken> pq : hits.values()) {
-			WToken best = pq.element();
-			score += best.getScore();
+		for (Slot[] slots : slotss) {
+			for (Slot slot : slots) {
+				score += slot.getScore();
+			}
 		}
 		
 		return factor * score;

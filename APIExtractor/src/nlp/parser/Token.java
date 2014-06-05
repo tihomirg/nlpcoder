@@ -68,4 +68,8 @@ public class Token {
 	public String getText() {
 		return text;
 	}
+
+	public boolean equalsByPosAndLemma(Token thatToken) {
+		return this.pos.equals(thatToken.pos) && this.lemma.equals(thatToken.lemma);
+	}
 }

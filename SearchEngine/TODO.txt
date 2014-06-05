@@ -16,6 +16,17 @@ Also, we need to take into account places, and missed places as well. Two args w
 Only the one that brings more "points" will be hit. The other one needs to wait for more words to come. We get points based on the
 declaration structure not based on the word hit. JavaDoc can be used for main group, name hit.
 
+8) Word importance measured in calculus. For instance if f("file") > f("input") this means that those that we select with "input" will have more importance than
+those selected with "file"
+
+9) Simple max algorithm:
+    - sort slots by importance
+    - check if the declaration slot is free
+    - if yes, occupy the slot
+    - if not, check if it can bring higher score than the current.
+    - if yes, substitute and continue wit the substitute (in substitutes direction)
+    - if not, continue it the current direction 
+
 Done:
 
 1) Do word lemmatization. //Still see if we need WordNet lemmatizer/steammer.
