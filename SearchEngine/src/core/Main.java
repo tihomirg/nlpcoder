@@ -56,7 +56,7 @@ public class Main {
 						new ParserSliceComplexTokens(decomposer),						
 						new ParserRelatedWords(),
 						new ParserWTokensAndLevels(),
-						new ParserAssignTokenScores(new double[]{5,1,1,1})});
+						new ParserAssignTokenScores(new double[]{1,0.5,1,0.5}, new int[]{0,0,1,1})});
 		
 		
 		//Input input = pipeline.parse(new Input("open(file(\"text.txt\"), make)"));

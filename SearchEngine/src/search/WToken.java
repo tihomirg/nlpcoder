@@ -45,4 +45,8 @@ public class WToken {
 	public int getIndex() {
 		return this.index;
 	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
 }

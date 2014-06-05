@@ -11,9 +11,11 @@ import nlp.parser.Sentence;
 public class ParserAssignTokenScores implements IParser {
 
 	private double[] scores;
+	private int[] indexes;
 
-	public ParserAssignTokenScores(double[] scores) {
+	public ParserAssignTokenScores(double[] scores, int[] indexes) {
 		this.scores = scores;
+		this.indexes = indexes;
 	}
 	
 	@Override
@@ -22,7 +24,7 @@ public class ParserAssignTokenScores implements IParser {
 			for (Group group: sentence.getSearchKeyGroups()) {
 				List<List<WToken>> levels = group.getLevels();
 				for (int i = 0; i < levels.size(); i++) {
-					assign(levels.get(i), scores[i]);
+					assign(levels.get(i), scores[i], indexes[i]);
 				}
 			}
 		}
@@ -30,9 +32,10 @@ public class ParserAssignTokenScores implements IParser {
 		return input;
 	}
 
-	private void assign(List<WToken> list, double score) {
+	private void assign(List<WToken> list, double score, int index) {
 		for (WToken wToken : list) {
 			wToken.setScore(score);
+			wToken.setIndex(index);
 		}
 	}
 }
