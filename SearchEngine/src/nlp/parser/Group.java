@@ -41,12 +41,19 @@ public class Group {
 		List<Token> tokens = new LinkedList<Token>();
 		
 		for (Group child : children) {
-			tokens.add(child.getToken());
+			tokens.addAll(child.getTokenOrDecompositions());
 		}
 		
 		return tokens;
 	}	
 	
+	private List<Token> getTokenOrDecompositions() {
+		if (hasTokenDecompositions()){
+			return this.tokenDecompositions;
+		}
+		return new LinkedList<Token>(){{add(Group.this.token);}};
+	}
+
 	public Token getToken() {
 		return this.token;
 	}
@@ -57,7 +64,8 @@ public class Group {
 				"\n, Local = "+ local +
 				"\n, Literal = "+ literal +				
 				"\n, D-Tokens = " + graphDTokens() + 
-				"\n, R-Tokens = " + graphRTokens() + 
+				"\n, R-Tokens = " + graphRTokens() +
+				"\n, Search Keys = " + getSearchKeys() +
 				"]\n\n";
 	}
 

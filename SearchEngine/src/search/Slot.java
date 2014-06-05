@@ -63,4 +63,9 @@ public class Slot {
 	public void addToken(Token token) {
 		this.tokens.add(token);
 	}
+
+	@Override
+	public String toString() {
+		return "Slot [score = "+getScore()+", wtoken=" + wtoken + "]";
+	}
 }

@@ -52,7 +52,7 @@ public class Main {
 						new ParserGroupsAndDependencyRelations(),
 						new ParserExtractLiterals(),
 						new ParserIdentifyLocals(locals),					
-						new ParserRightHandSideNeighbours(2),
+						new ParserRightHandSideNeighbours(1),
 						new ParserSliceComplexTokens(decomposer),						
 						new ParserRelatedWords(),
 						new ParserWTokensAndLevels(),
@@ -64,7 +64,7 @@ public class Main {
 
 		//Input input = pipeline.parse(new Input("Open a buffered file 'text.txt', print it."));
 		
-		Input input = pipeline.parse(new Input("new InputStream(new Files(\"text.txt\"))"));
+		Input input = pipeline.parse(new Input("new InputStream(new Files(String))"));
 		
 		System.out.println("SearchInputParser time : "+(System.currentTimeMillis() - time)+" ms");		
 		time = System.currentTimeMillis();
@@ -78,14 +78,14 @@ public class Main {
 		//
 		//Input input = pipeline.parse(new Input("Load a file \"text1.txt\" content into a buffer."));
 	
-		//System.out.println(input);
+		System.out.println(input);
 		
 		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
 		Deserializer deserializer = new Deserializer();
 		StabileAPI api = new StabileAPI(deserializer.deserialize(Config.getSecondStorageLocation()), nameGen);	
 		
-		ScorerPipeline scorer = new ScorerPipeline(new RichDeclarationScorer[]{ new HitWeightScorer()});
-		ScoreListener listener = new ScoreListener(20);
+		ScorerPipeline scorer = new ScorerPipeline(new RichDeclarationScorer[]{new HitWeightScorer()});
+		ScoreListener listener = new ScoreListener(10);
 		
 		//Test matrix
 		int[][] indexScoress = {{5, 3},{1, 2}};

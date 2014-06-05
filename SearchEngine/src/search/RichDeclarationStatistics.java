@@ -75,7 +75,7 @@ public class RichDeclarationStatistics {
 			for (int i = 0; i < slots.length; i++) {
 				Slot slot = slots[i];
 				if (slot.fits(current)){
-					if (slot.isOccupied()){
+					if (slot.isOccupied() && slot.getScore(current) > slot.getScore()){
 						current = slot.substitute(current);
 					} else {
 						slot.setWToken(current);
