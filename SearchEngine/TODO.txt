@@ -9,7 +9,9 @@
 7) Include JavaDoc.
 8) Change "locals" with their return type
 9) Extract/Generate argument constraints
-10) Use argument constraints.
+10) Use argument constraints:
+   - add also constraint that between the argument of "the hole" is the list of "non-constraint declarations". This way, all declarations are constraint with
+   at least one constraint. Also, this would mean that we have an idea what declarations should be head declarations of the final expression.
 
 Done:
 
