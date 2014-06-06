@@ -29,6 +29,11 @@ public class Search {
 
 	private void addAll(List<Declaration> decls) {
 		for (Declaration decl : decls) {
+			
+			if (decl.getSimpleName().equals("new BufferedInputStream")){
+				System.out.println("Found: "+ decl);
+			}
+			
 			add(decl);
 		}
 	}

@@ -1,3 +1,8 @@
+1) We would need to do STEAMING with WordNet steamer.
+2) Should try the entire algorithm without POS. 
+We need to thik about possitions. Maybe it is good to get rid of them
+For instance "a buffered file" would not be mapped to new BufferedInputStrema(new File()), cause in the first sentence it is adjective and in the second it's a verb.
+
 3) Declaration frequencies
 4) Same holds for "int" -> "integer", "bool" -> "boolean" and so on. We should make our own list.
   - can be solver by getting a boxed type and its wordset.

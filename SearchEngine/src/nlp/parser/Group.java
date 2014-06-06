@@ -102,12 +102,14 @@ public class Group {
 	}
 
 	public boolean isSearchKey() {
-		return !isLocal() && !isLiteral();
+		return !(isLocal() || isLiteral() || isArticl());
 	}
 
 	public Set<WToken> getSearchKeys() {
-		Set<WToken> set = new HashSet<WToken>();	
-		set.addAll(UtilList.flatten(levels));
+		Set<WToken> set = new HashSet<WToken>();
+		if (levels != null){
+			set.addAll(UtilList.flatten(levels));
+		}
 		return set;
 	}
 
@@ -164,7 +166,11 @@ public class Group {
 		this.literalTypeToken = literalTypeToken;
 	}
 
+	public boolean isArticl(){
+		return this.token.isArticle();
+	}
+
 	public boolean isSearchKeyOrLiteral() {
-		return !this.isLocal();
+		return !(this.isLocal() || this.isArticl());
 	}
 }
