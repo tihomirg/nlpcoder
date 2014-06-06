@@ -23,6 +23,7 @@ public class PartialExpression implements Cloneable {
 		this.rep = new SimpleRepresentation();
 		this.connections = new LinkedList<Connection>();
 		this.egroup = egroup;
+		this.score = egroup.getInitialScore();
 	}
 
 	public double getScore() {

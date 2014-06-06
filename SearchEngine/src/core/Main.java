@@ -100,7 +100,9 @@ public class Main {
 		for (Sentence sentence : sentences) {
 			for (Group group : sentence.getSearchKeyGroups()) {
 				search.search(group);	
-			}			
+			}	
+			
+			//TODO: Here we do synthesis, it is per sentence.
 		}
 		
 		System.out.println("Search time : "+(System.currentTimeMillis() - time)+" ms");	

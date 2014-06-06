@@ -12,7 +12,8 @@ public class ExprGroup {
 	//TODO: Maybe it is better to have ExprGroup per one expr!
 	//Than we have way slower first stage of the algorithm.
 	private Expr expr;
-	private List<ExprGroup> relatedGroups;	
+	private List<ExprGroup> relatedGroups;
+	private double initialScore;
 	
 	private List<PartialExpression> completedExprs;
 	
@@ -55,5 +56,13 @@ public class ExprGroup {
 		}
 		
 		return rgroups;
+	}
+
+	public double getInitialScore() {
+		return initialScore;
+	}
+
+	public void setInitialScore(double initialScore) {
+		this.initialScore = initialScore;
 	}
 }
