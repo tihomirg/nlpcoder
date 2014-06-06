@@ -108,6 +108,11 @@ public class PrimitiveType extends Type {
 	public boolean isBoxedType() {
 		return false;
 	}
+	
+	@Override
+	public List<String> getWords(InitialTypeFactory tf) {
+		return boxedType(tf).getWords(tf);
+	}
 
 	@Override
 	protected Set<Type> getInheritedTypes(StabileTypeFactory factory) {

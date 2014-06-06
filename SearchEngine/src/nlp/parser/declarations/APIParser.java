@@ -38,7 +38,8 @@ public class APIParser {
 		Properties props = new Properties();
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
-		APIParser parser = new APIParser(new DeclarationParser(new ComplexWordDecomposer(coreNLP)));
+		
+		APIParser parser = new APIParser(new DeclarationParser(new ComplexWordDecomposer(coreNLP), api.getFactory()));
 		
 		KryoSerializer serializer = new KryoSerializer();
 		InitialAPI parse = parser.parse(api);

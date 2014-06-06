@@ -71,7 +71,7 @@ public abstract class Type implements Serializable {
 		return this.hashCode() == obj.hashCode();
 	}
 
-	public List<String> getWords() {
+	public List<String> getWords(InitialTypeFactory tf) {
 		return new LinkedList<String>(){{add(shortName(name));}};
 	}
 

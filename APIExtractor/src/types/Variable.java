@@ -42,7 +42,7 @@ public class Variable extends ReferenceType {
 	}
 	
 	@Override
-	public List<String> getWords() {
+	public List<String> getWords(InitialTypeFactory tf) {
 		return EMPTY_STRING_LIST;
 	}
 

@@ -7,6 +7,7 @@ import java.util.List;
 
 import nlp.parser.Token;
 import nlp.parser.one.Word;
+import types.InitialTypeFactory;
 import types.StabileTypeFactory;
 import types.Type;
 
@@ -144,44 +145,6 @@ public class Declaration implements Serializable, Cloneable {
 		this.words = words;
 	}
 
-	public String getSignature() {
-		String signature = this.name+(this.retType != null? " "+typeToSentence(this.retType):"");
-
-		if(clazz != null && (!constructor || isStatic)) {
-			signature += " "+shortType(clazz);
-		}		
-
-		if (this.argTypes != null)
-			for (Type argType : this.argTypes) {
-				signature += (argType != null? " "+typeToSentence(argType):"");
-			}
-
-		return signature;
-	}
-
-	private String groupOne(){
-		String one = this.simpleName;
-
-		one += (this.retType != null? " "+typeToSentence(this.retType):"");
-
-		if(clazz != null && (!constructor || isStatic)) {
-			one += " "+shortType(clazz);
-		}
-
-		return one;
-	}
-
-	private String groupTwo(){
-		String two = "";
-
-		if (this.argTypes != null)
-			for (Type argType : this.argTypes) {
-				two += (argType != null? " "+typeToSentence(argType):"");
-			}
-
-		return two;
-	}
-
 	private String shortType(String clazz) {
 		return clazz.substring(clazz.lastIndexOf("."));
 	}
@@ -195,10 +158,10 @@ public class Declaration implements Serializable, Cloneable {
 	}
 
 	public String[] getCaracteristicWordGroups(){
-		return new String[]{groupOne(), groupTwo()};
+		return new String[]{};
 	}
 
-	public List<String> getTokensAsStrings(){
+	public List<String> getTokensAsStrings(InitialTypeFactory tf){
 		List<String> words = new LinkedList<String>();
 
 		words.add(simpleName);
@@ -215,7 +178,7 @@ public class Declaration implements Serializable, Cloneable {
 				}
 
 				if (this.receiverType != null){
-					words.addAll(this.receiverType.getWords());
+					words.addAll(this.receiverType.getWords(tf));
 				}
 			}
 		}
@@ -223,12 +186,12 @@ public class Declaration implements Serializable, Cloneable {
 		if (this.argTypes != null) {
 			for (Type argType : this.argTypes) {
 				if (argType != null){
-					words.addAll(argType.getWords());
+					words.addAll(argType.getWords(tf));
 				}
 			}		
 		}
 
-		if (this.retType != null) words.addAll(this.retType.getWords());
+		if (this.retType != null) words.addAll(this.retType.getWords(tf));
 
 		return words;
 
@@ -238,11 +201,11 @@ public class Declaration implements Serializable, Cloneable {
 		return getSimpleName();
 	}
 
-	public List<String> getReceiverTypeTextualForm(){
+	public List<String> getReceiverTypeTextualForm(InitialTypeFactory tf){
 		List<String> words = new LinkedList<String>();
 
 		if (!this.isStatic && !this.constructor && this.receiverType != null){
-			words.addAll(this.receiverType.getWords());
+			words.addAll(this.receiverType.getWords(tf));
 		}
 
 		return words;
@@ -266,13 +229,13 @@ public class Declaration implements Serializable, Cloneable {
 		return words;
 	}
 
-	public List<List<String>> getArgsTextualForm(){
+	public List<List<String>> getArgsTextualForm(InitialTypeFactory tf){
 		List<List<String>> words = new LinkedList<List<String>>();
 
 		if (this.argTypes != null) {
 			for (Type argType : this.argTypes) {
 				if (argType != null){
-					words.add(argType.getWords());
+					words.add(argType.getWords(tf));
 				}
 			}		
 		}
@@ -280,17 +243,17 @@ public class Declaration implements Serializable, Cloneable {
 		return words;
 	}
 	
-	public List<String> getReturnTypeTextualForm(){
+	public List<String> getReturnTypeTextualForm(InitialTypeFactory tf){
 		List<String> words = new LinkedList<String>();
 
-		if (this.retType != null) words.addAll(this.retType.getWords());
+		if (this.retType != null) words.addAll(this.retType.getWords(tf));
 
 		return words;
 
 	}		
 
-	private String typeToSentence(Type type) {
-		return toString(type.getWords());
+	private String typeToSentence(Type type, InitialTypeFactory tf) {
+		return toString(type.getWords(tf));
 	}
 
 	private String toString(List<String> words) {

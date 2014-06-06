@@ -3,6 +3,7 @@ package nlp.parser.declarations;
 import java.util.LinkedList;
 import java.util.List;
 
+import types.InitialTypeFactory;
 import nlp.parser.ComplexWordDecomposer;
 import nlp.parser.Token;
 import definitions.Declaration;
@@ -10,9 +11,11 @@ import definitions.Declaration;
 public class DeclarationParser implements IDeclarationParser {
 
 	private ComplexWordDecomposer decomposer;
+	private InitialTypeFactory tf;
 	
-	public DeclarationParser(ComplexWordDecomposer decomposer) {
+	public DeclarationParser(ComplexWordDecomposer decomposer, InitialTypeFactory tf) {
 		this.decomposer = decomposer;
+		this.tf = tf;
 	}
 	
 	@Override
@@ -28,7 +31,7 @@ public class DeclarationParser implements IDeclarationParser {
 
 	private void entireTokenization(Declaration decl) {
 		List<Token> tokens = new LinkedList<Token>();		
-		List<String> tokensAsStrings = decl.getTokensAsStrings();
+		List<String> tokensAsStrings = decl.getTokensAsStrings(tf);
 		for (String name : tokensAsStrings) {
 			tokens.addAll(decomposer.decomposeString(name));
 		}
@@ -37,7 +40,7 @@ public class DeclarationParser implements IDeclarationParser {
 	
 	private void remainderTypeTokenization(Declaration decl) {
 		List<List<Token>> argTokens = new LinkedList<List<Token>>();		
-		List<List<String>> args = decl.getArgsTextualForm();
+		List<List<String>> args = decl.getArgsTextualForm(tf);
 		
 		for (List<String> arg : args) {
 			List<Token> tokens = new LinkedList<Token>();
@@ -53,7 +56,7 @@ public class DeclarationParser implements IDeclarationParser {
 	
 	private void receiverTypeTokenization(Declaration decl) {
 		List<Token> receiverTokens = new LinkedList<Token>();		
-		List<String> receiver = decl.getReceiverTypeTextualForm();
+		List<String> receiver = decl.getReceiverTypeTextualForm(tf);
 		for (String name : receiver) {
 			receiverTokens.addAll(decomposer.decomposeString(name));
 		}
@@ -77,7 +80,7 @@ public class DeclarationParser implements IDeclarationParser {
 	
 	private void returnTypeTokenization(Declaration decl) {
 		List<Token> returnTypeTokens = new LinkedList<Token>();	
-		List<String> returnTypeName = decl.getReturnTypeTextualForm();
+		List<String> returnTypeName = decl.getReturnTypeTextualForm(tf);
 		for (String name : returnTypeName) {
 			returnTypeTokens.addAll(decomposer.decomposeString(name));
 		}
