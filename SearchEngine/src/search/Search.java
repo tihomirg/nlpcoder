@@ -1,5 +1,6 @@
 package search;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -42,19 +43,25 @@ public class Search {
 		table.add(new RichDeclaration(decl, 0, scorer, listener, indexScoress));
 	}
 	
-	public PriorityQueue<RichDeclaration> search(Group searchKeyGroup){
+	public List<RichDeclaration> search(Group searchKeyGroup){
 		Set<WToken> searchKeys = searchKeyGroup.getSearchKeys();
 		
 		for (WToken searchKey : searchKeys) {
 			table.search(searchKey);
 		}
 		
+		
 		PriorityQueue<RichDeclaration> bestRDs = listener.getBestRDs();
+		
+		List<RichDeclaration>  rds = new LinkedList<RichDeclaration>();
+		rds.addAll(bestRDs);
+		
+		
 		publish(searchKeys, bestRDs);
 		listener.clear();
 
 		//TODO: Note that now "bestRDs" is empty;
-		return bestRDs;
+		return rds;
 	}
 	
 	//For testing purpose

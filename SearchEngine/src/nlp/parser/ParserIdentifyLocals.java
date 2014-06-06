@@ -3,7 +3,7 @@ package nlp.parser;
 import java.util.List;
 import java.util.Map;
 
-import core.Local;
+import search.Local;
 
 public class ParserIdentifyLocals implements IParser {
 

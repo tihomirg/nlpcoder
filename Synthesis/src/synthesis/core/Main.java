@@ -1,4 +1,4 @@
-package core;
+package synthesis.core;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -20,6 +20,7 @@ import synthesis.RepKey;
 import synthesis.handlers.SearchKey;
 import types.NameGenerator;
 import util.Pair;
+import util.UtilList;
 import api.Imported;
 import api.StabileAPI;
 import config.Config;
@@ -170,19 +171,9 @@ public class Main {
 			relatedGroupss.remove(eGroups);
 			
 			for (ExprGroup eGroup : eGroups) {
-				eGroup.setRelatedGroups(flatten(relatedGroupss));
+				eGroup.setRelatedGroups(UtilList.flatten(relatedGroupss));
 			}
 		}
-	}
-
-	private static <T> List<T> flatten(List<List<T>> lists) {
-		List<T> flist = new LinkedList<T>();
-		
-		for (List<T> list : lists) {
-			flist.addAll(list);
-		}
-		
-		return flist;
 	}
 
 	private static Expr createExpr(Declaration decl) {

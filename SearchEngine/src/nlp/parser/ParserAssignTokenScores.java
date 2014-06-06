@@ -1,12 +1,8 @@
-package core;
+package nlp.parser;
 
 import java.util.List;
 
 import search.WToken;
-import nlp.parser.Group;
-import nlp.parser.IParser;
-import nlp.parser.Input;
-import nlp.parser.Sentence;
 
 public class ParserAssignTokenScores implements IParser {
 

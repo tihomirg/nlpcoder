@@ -6,14 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
-import core.HandlerTable;
-
 import definitions.Declaration;
-
 import statistics.parsers.DoubleResult;
 import statistics.parsers.IntResult;
 import statistics.parsers.Parser;
 import statistics.posttrees.Expr;
+import synthesis.core.HandlerTable;
 import synthesis.handlers.Handler;
 import types.StabileTypeFactory;
 

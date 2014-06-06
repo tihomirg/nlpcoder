@@ -16,10 +16,15 @@ public class ExprGroup {
 	private double initialScore;
 	
 	private List<PartialExpression> completedExprs;
-	
+
 	public ExprGroup(Expr expr) {
+		this(expr, 0.0);
+	}
+
+	public ExprGroup(Expr expr, double initialScore) {
 		this.expr = expr;
 		this.completedExprs = new LinkedList<PartialExpression>();
+		this.initialScore = initialScore;
 	}
 	
 	public void addCompletedExpr(PartialExpression pexpr){

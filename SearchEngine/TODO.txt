@@ -1,11 +1,16 @@
+1) Merge:
+   - collect "compositional statistics"
+   - include missing Groups (literals, and other excluded)
+   - reorder times
+   - make "initialScore" in ExprGroup works.
+
 1) We would need to do STEAMING with WordNet steamer.
 2) Should try the entire algorithm without POS. 
 We need to thik about possitions. Maybe it is good to get rid of them
 For instance "a buffered file" would not be mapped to new BufferedInputStrema(new File()), cause in the first sentence it is adjective and in the second it's a verb.
 
 3) Declaration frequencies
-4) Same holds for "int" -> "integer", "bool" -> "boolean" and so on. We should make our own list.
-  - can be solver by getting a boxed type and its wordset.
+
 
 5) Think about WordNet, and what related words indeed to use. For some tokens, that are literals or locals we do not need related words.
 6) Manually: What about lemmatization of "println" --> "print new line" //we should get this from the JavaDoc
@@ -50,4 +55,7 @@ those selected with "file"
     - if not, continue it the current direction 
     
 12) Remove "abstract" constructors!
-13) Change "literals" with their return types    
+13) Change "literals" with their return types  
+
+14) Same holds for "int" -> "integer", "bool" -> "boolean" and so on. We should make our own list.
+  - can be solver by getting a boxed type and its wordset.  

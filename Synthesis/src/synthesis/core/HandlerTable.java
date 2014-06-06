@@ -1,4 +1,4 @@
-package core;
+package synthesis.core;
 
 import synthesis.handlers.DeclarationHandler;
 import synthesis.handlers.Handler;

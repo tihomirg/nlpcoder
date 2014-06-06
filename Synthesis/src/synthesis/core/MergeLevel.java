@@ -1,9 +1,12 @@
-package core;
+package synthesis.core;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+
 import statistics.posttrees.Expr;
+import synthesis.Connection;
+import synthesis.ExprGroup;
 import synthesis.Param;
 import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
@@ -13,12 +16,11 @@ import synthesis.handlers.Handler;
 import synthesis.handlers.SearchKey;
 import util.Pair;
 
-public class SynthesisLevel {
-	private static final int DEFAULT_CAPACITY = 100;
+public class MergeLevel {
+
 	private static final PartialExpressionComparatorDesc COMPARATOR_DESC = new PartialExpressionComparatorDesc();
 	private static final PartialExpressionComparatorAsce COMPARATOR_ASCE = new PartialExpressionComparatorAsce();
 
-	private HandlerTable handlerTable;
 	private PriorityQueue<PartialExpression> activeBest;
 	private List<PartialExpression> processed;
 	private int maxNumOfPexpr;
@@ -28,9 +30,8 @@ public class SynthesisLevel {
 	private int levelId;
 	private PartialExpressionScorer scorer;
 
-	public SynthesisLevel(int levelId, HandlerTable handlerTable, int maxNumOfPexpr, PartialExpressionScorer scorer) {
+	public MergeLevel(int levelId, int maxNumOfPexpr, PartialExpressionScorer scorer) {
 		this.levelId = levelId;
-		this.handlerTable = handlerTable;
 
 		this.processed = new LinkedList<PartialExpression>();
 		this.maxNumOfPexpr = maxNumOfPexpr;
@@ -66,6 +67,45 @@ public class SynthesisLevel {
 		return resolve(pexp);
 	}
 
+	private Pair<List<PartialExpression>, List<PartialExpression>> resolve(PartialExpression pexp) {		
+		Connection connection = pexp.getConnection();
+
+		List<ExprGroup> relatedGroups = connection.getRelatedGroups();
+
+		return createNewPartialExprss(pexp, connection, relatedGroups);		
+	}	
+
+	private Pair<List<PartialExpression>, List<PartialExpression>> createNewPartialExprss(PartialExpression pexp, Connection connection, List<ExprGroup> relatedGroups) {
+		List<PartialExpression> completed = new LinkedList<PartialExpression>();
+		List<PartialExpression> partial = new LinkedList<PartialExpression>();
+
+		for (ExprGroup eGroup : relatedGroups) {
+
+			Pair<List<PartialExpression>, List<PartialExpression>> pair = createNewPartialExprs(pexp, connection, eGroup.getCompletedExprs());
+			completed.addAll(pair.getFirst());
+			partial.addAll(pair.getSecond());
+
+		}
+
+		return new Pair<List<PartialExpression>, List<PartialExpression>>(completed, partial);
+	}
+
+	private Pair<List<PartialExpression>, List<PartialExpression>> createNewPartialExprs(PartialExpression pexpr1, Connection connection, List<PartialExpression> pexprs) {
+		List<PartialExpression> completed = new LinkedList<PartialExpression>();
+		List<PartialExpression> partial = new LinkedList<PartialExpression>();
+
+		for (PartialExpression pexpr2: pexprs) {
+			PartialExpression newPexpr = pexpr1.connect(connection, pexpr2, scorer);
+			if (newPexpr.isCompletelyConnected()){
+				completed.add(newPexpr);
+			} else {
+				partial.add(newPexpr);
+			}
+		}
+
+		return new Pair<List<PartialExpression>, List<PartialExpression>>(completed, partial);
+	}
+
 	public void addAll(List<PartialExpression> pexprs){
 		for (PartialExpression pexpr : pexprs) {
 			add(pexpr);
@@ -98,43 +138,4 @@ public class SynthesisLevel {
 		return worst;
 	}
 
-	private Pair<List<PartialExpression>, List<PartialExpression>> resolve(PartialExpression pexp) {		
-		Param param = pexp.getParam();
-
-		SearchKey searchKey = param.getSearchKey();
-		Handler handler = searchKey.getHandler(handlerTable);
-
-		PriorityQueue<Expr> queue = handler.handle(searchKey);
-
-		//System.out.println(queue);
-
-		return createNewPartialExprs(pexp, param, queue);		
-	}
-
-	private Pair<List<PartialExpression>,List<PartialExpression>> createNewPartialExprs(PartialExpression pexp, Param param, PriorityQueue<Expr> queue) {
-		List<PartialExpression> partial = new LinkedList<PartialExpression>();
-		List<PartialExpression> completed = new LinkedList<PartialExpression>();
-
-		if (queue != null){
-			for (Expr expr : queue) {
-				PartialExpression newPexp = pexp.instantiate(param, expr, scorer);
-				if(newPexp.isCompleted()) {
-					completed.add(newPexp);
-				} else {
-					partial.add(newPexp);
-				}
-			}
-		}
-
-		return new Pair<List<PartialExpression>,List<PartialExpression>>(completed, partial);
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Level: "+levelId+"\n");
-		sb.append("Processed: "+processed+"\n");
-		sb.append("Active: "+activeBest+"\n");
-		return sb.toString();
-	}
 }

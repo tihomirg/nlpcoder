@@ -1,4 +1,4 @@
-package core;
+package synthesis.core;
 
 import java.util.List;
 

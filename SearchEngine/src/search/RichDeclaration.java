@@ -119,4 +119,8 @@ public class RichDeclaration {
 		
 		return sb.toString();
 	}
+
+	public Declaration getDecl() {
+		return this.decl;
+	}
 }

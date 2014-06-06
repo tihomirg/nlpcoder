@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import search.Local;
 import search.WToken;
 import util.UtilList;
-import core.Local;
 
 public class Group {
 
