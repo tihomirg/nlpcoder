@@ -17,7 +17,8 @@ public class Group {
 	private List<Token> tokenDecompositions;
 	private Local local;
 	private boolean literal;
-	
+	private Token literalTypeToken;
+
 	private List<List<WToken>> levels;
 	private List<Token> tokenRelatedTokens;
 	private List<Token> allGraphTokenRelatedTokens;
@@ -33,26 +34,32 @@ public class Group {
 	public List<Token> graphDTokens(){
 		return graphTokens(this.graphDchildren);
 	}
-	
+
 	public List<Token> graphRTokens(){
 		return graphTokens(this.graphRchildren);
 	}
 
 	private List<Token> graphTokens(List<Group> children) {
 		List<Token> tokens = new LinkedList<Token>();
-		
+
 		for (Group child : children) {
-			tokens.addAll(child.getTokenOrDecompositions());
+			tokens.addAll(child.getTokenOrDecompositionsOrLiteralType());
 		}
-		
+
 		return tokens;
 	}	
-	
-	private List<Token> getTokenOrDecompositions() {
-		if (hasTokenDecompositions()){
+
+	private List<Token> getTokenOrDecompositionsOrLiteralType() {
+		if (hasTokenDecompositions() && !isLiteral()){
 			return this.tokenDecompositions;
 		}
-		return new LinkedList<Token>(){{add(Group.this.token);}};
+		return new LinkedList<Token>(){{
+			if (Group.this.isLiteral()){
+				add(Group.this.literalTypeToken);	
+			} else {
+				add(Group.this.token);
+			}
+		}};
 	}
 
 	public Token getToken() {
@@ -81,15 +88,15 @@ public class Group {
 	public void setLocal(Local local) {
 		this.local = local;
 	}
-	
+
 	public boolean isLocal() {
 		return this.local != null;
 	}
-	
+
 	public void setLiteral(boolean literal) {
 		this.literal = literal;
 	}
-	
+
 	public boolean isLiteral() {
 		return literal;
 	}
@@ -103,7 +110,7 @@ public class Group {
 		set.addAll(UtilList.flatten(levels));
 		return set;
 	}
-	
+
 	public void setLevels(List<List<WToken>> levels) {
 		this.levels = levels;
 	}
@@ -115,7 +122,7 @@ public class Group {
 	public boolean hasTokenDecompositions() {
 		return !this.tokenDecompositions.isEmpty();
 	}
-	
+
 	public List<Token> getTokenDecompositions() {
 		return tokenDecompositions;
 	}
@@ -123,29 +130,41 @@ public class Group {
 	public List<Token> getTokenRelatedTokens() {
 		return this.tokenRelatedTokens;
 	}
-	
+
 	public void setTokenRelatedTokens(List<Token> tokenRelatedTokens) {
 		this.tokenRelatedTokens = tokenRelatedTokens;
 	}
 
 	public List<Token> getAllGraphTokens() {
 		List<Token> tokens = new LinkedList<Token>();
-		
+
 		tokens.addAll(graphDTokens());
 		tokens.addAll(graphRTokens());
-		
+
 		return tokens;
 	}
 
 	public List<Token> getAllGraphTokenRelatedTokens() {
 		return this.allGraphTokenRelatedTokens;
 	}
-	
+
 	public void setAllGraphTokenRelatedTokens(List<Token> allGraphTokenRelatedTokens) {
 		this.allGraphTokenRelatedTokens = allGraphTokenRelatedTokens;
 	}
 
 	public List<List<WToken>> getLevels() {
 		return this.levels;
+	}
+
+	public Token getLiteralTypeToken() {
+		return literalTypeToken;
+	}
+
+	public void setLiteralTypeToken(Token literalTypeToken) {
+		this.literalTypeToken = literalTypeToken;
+	}
+
+	public boolean isSearchKeyOrLiteral() {
+		return !this.isLocal();
 	}
 }

@@ -1,5 +1,3 @@
-1) Remove "abstract" constructors!
-2) Change "literals" with their return types
 3) Declaration frequencies
 4) Same holds for "int" -> "integer", "bool" -> "boolean" and so on. We should make our own list.
   - can be solver by getting a boxed type and its wordset.
@@ -38,10 +36,13 @@ declaration structure not based on the word hit. JavaDoc can be used for main gr
 10) Word importance measured in calculus. For instance if f("file") > f("input") this means that those that we select with "input" will have more importance than
 those selected with "file"
 
-10) Simple max algorithm:
+11) Simple max algorithm:
     - sort slots by importance
     - check if the declaration slot is free
     - if yes, occupy the slot
     - if not, check if it can bring higher score than the current.
     - if yes, substitute and continue wit the substitute (in substitutes direction)
     - if not, continue it the current direction 
+    
+12) Remove "abstract" constructors!
+13) Change "literals" with their return types    

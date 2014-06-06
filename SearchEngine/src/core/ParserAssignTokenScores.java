@@ -21,7 +21,7 @@ public class ParserAssignTokenScores implements IParser {
 	@Override
 	public Input parse(Input input) {
 		for (Sentence sentence : input.getSentences()) {
-			for (Group group: sentence.getSearchKeyGroups()) {
+			for (Group group: sentence.getSearchKeyAndLiteralGroups()) {
 				List<List<WToken>> levels = group.getLevels();
 				for (int i = 0; i < levels.size(); i++) {
 					assign(levels.get(i), scores[i], indexes[i]);

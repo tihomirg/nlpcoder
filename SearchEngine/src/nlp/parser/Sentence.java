@@ -18,6 +18,7 @@ public class Sentence {
 	private Tree tree;
 	private List<Group> stringLiterals;
 	private LinkedList<Group> searchKeyGroups;
+	private LinkedList<Group> searchKeyGroupsAndLiterals;
 
 	public Sentence(CoreMap map) {
 		this.map = map;
@@ -99,6 +100,22 @@ public class Sentence {
 			}
 		}
 		return list;		
+	}
+
+	public List<Group> getStringLiterals() {
+		return this.stringLiterals;
+	}
+
+	public List<Group> getSearchKeyAndLiteralGroups() {
+		if(this.searchKeyGroupsAndLiterals == null){
+			this.searchKeyGroupsAndLiterals = new LinkedList<Group>();
+			for(Group group : getGroups()){
+				if (group.isSearchKeyOrLiteral()){
+					this.searchKeyGroupsAndLiterals.add(group);
+				}
+			}
+		}
+		return this.searchKeyGroupsAndLiterals;
 	}
 
 }

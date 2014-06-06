@@ -203,13 +203,13 @@ public class ClassInfo implements Serializable {
 		List<Declaration> consts = new LinkedList<Declaration>();
 
 		for(Method javaDecl: javaDecls){
-			if(javaDecl.isPublic()){
+			String name = javaDecl.getName();
+			if(javaDecl.isPublic() && !(javaDecl.isAbstract() && isConstructor(name))){
 				Declaration decl = new Declaration();
 				decl.setClazz(className);
 				decl.setPackageName(pkg);
 
-				String name = javaDecl.getName();
-				if (name.equals(CONSTRUCTOR_SHORT_NAME)){
+				if (isConstructor(name)){
 					String clazzName = clazz.getClassName();
 					decl.setName("new "+clazzName.substring(clazzName.lastIndexOf('.')+1, clazzName.length()));
 					decl.setConstructor(true);
@@ -254,6 +254,10 @@ public class ClassInfo implements Serializable {
 		this.constructors = consts.toArray(new Declaration[consts.size()]);
 		this.methods = methods.toArray(new Declaration[methods.size()]);
 
+	}
+
+	private boolean isConstructor(String name) {
+		return name.equals(CONSTRUCTOR_SHORT_NAME);
 	}
 
 	private static Set<String> createVariables(String[] methodTypeParams, String[] clazzTypeParams) {

@@ -64,7 +64,7 @@ public class Main {
 
 		//Input input = pipeline.parse(new Input("Open a buffered file 'text.txt', print it."));
 		
-		Input input = pipeline.parse(new Input("new InputStream(new Files(String))"));
+		Input input = pipeline.parse(new Input("new InputStream(new Files(\"text.txt\"))"));
 		
 		System.out.println("Input parsing time : "+(System.currentTimeMillis() - time)+" ms");		
 		time = System.currentTimeMillis();
