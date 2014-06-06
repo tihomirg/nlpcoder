@@ -46,7 +46,7 @@ public class Token {
 	}
 	
 	public boolean isArticle() {
-		return this.pos.equals("DT") && (this.lemma.equals("a") || this.lemma.equals("A") || this.lemma.equals("an") || this.lemma.equals("An") || this.lemma.equals("the") || this.lemma.equals("The"));
+		return this.pos.equals("D") && (this.lemma.equals("a") || this.lemma.equals("A") || this.lemma.equals("an") || this.lemma.equals("An") || this.lemma.equals("the") || this.lemma.equals("The"));
 	}
 	
 	public boolean shouldSkipAsNeighbour(){

@@ -363,6 +363,7 @@ public class Declaration implements Serializable, Cloneable {
 				+ Arrays.toString(argTypes) + ", ret=" + retType
 				+ ", pkg=" + packageName
 				+", unique="+ (unique != null ? unique.getLongName() : null)+"\n"
+				+", add s.n. tokens=" + this.simpleNameTokens + "\n"
 				+", add tokens=" + this.additionalReceiverTokens + "\n";
 	}
 
