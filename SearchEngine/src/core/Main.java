@@ -40,7 +40,7 @@ public class Main {
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
 
-		System.out.println("StanfordCoreNLP time : "+(System.currentTimeMillis() - time)+" ms");
+		System.out.println("Loading Stanford core time : "+(System.currentTimeMillis() - time)+" ms");
 		time = System.currentTimeMillis();
 		
 		Map<String, Local> locals = new HashMap<String, Local>();
@@ -66,7 +66,7 @@ public class Main {
 		
 		Input input = pipeline.parse(new Input("new InputStream(new Files(String))"));
 		
-		System.out.println("SearchInputParser time : "+(System.currentTimeMillis() - time)+" ms");		
+		System.out.println("Input parsing time : "+(System.currentTimeMillis() - time)+" ms");		
 		time = System.currentTimeMillis();
 		
 		//Input input = pipeline.parse(new Input("Transfer contents of a file \"text1.txt\" to a file \"text2.txt\""));
@@ -92,7 +92,7 @@ public class Main {
 		
 		Search search = new Search(scorer, listener, api, indexScoress);
 		
-		System.out.println("Loading Decls in Search Engine time : "+(System.currentTimeMillis() - time)+" ms");			
+		System.out.println("Loading decls time : "+(System.currentTimeMillis() - time)+" ms");			
 		time = System.currentTimeMillis();		
 		
 		List<Sentence> sentences = input.getSentences();
