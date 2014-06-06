@@ -3,8 +3,11 @@
 3) Same holds for "int" -> "integer", "bool" -> "boolean" and so on. We should make our own list.
 4) Include JavaDoc.
 5) Declaration frequencies
-6) Word importance measured in calculus. For instance if f("file") > f("input") this means that those that we select with "input" will have more importance than
-those selected with "file"
+6) Change "locals" with their return type
+
+0) Remove "abstract" constructors!
+1) Change "literals" with their return types
+
 
 Done:
 
@@ -27,6 +30,9 @@ This means if one word has an option to hit many places it takes into account th
 Also, we need to take into account places, and missed places as well. Two args with the same type shouldn't be hit two times by one word.
 Only the one that brings more "points" will be hit. The other one needs to wait for more words to come. We get points based on the
 declaration structure not based on the word hit. JavaDoc can be used for main group, name hit.
+
+10) Word importance measured in calculus. For instance if f("file") > f("input") this means that those that we select with "input" will have more importance than
+those selected with "file"
 
 10) Simple max algorithm:
     - sort slots by importance

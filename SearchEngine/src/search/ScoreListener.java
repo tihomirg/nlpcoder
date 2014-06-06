@@ -16,21 +16,21 @@ public class ScoreListener {
 
 	private PriorityQueue<RichDeclaration> worstRDs;
 	private PriorityQueue<RichDeclaration> bestRDs;
-	
+
 	private int maxSize;
 	private int currentSize;
-	
+
 	public ScoreListener(int maxSize) {
 		this.changed = new LinkedList<RichDeclaration>();
 		this.maxSize = maxSize;
 		this.worstRDs = new PriorityQueue<RichDeclaration>(maxSize+1, comparatorAsce);
 		this.bestRDs = new PriorityQueue<RichDeclaration>(maxSize+1, comparatorDesc);
 	}
-	
+
 	public void notify(RichDeclaration rd) {
 		add(rd);
 		keepMaxSize();
-		
+
 		changed(rd);
 	}
 
@@ -42,9 +42,25 @@ public class ScoreListener {
 	}
 
 	private void add(RichDeclaration rd) {
+		if (contains(rd)){
+			reAdd(rd);
+		} else {
+			this.bestRDs.add(rd);
+			this.worstRDs.add(rd);
+			this.currentSize++;
+		}
+	}
+
+	private void reAdd(RichDeclaration rd) {
+		this.bestRDs.remove(rd);
+		this.worstRDs.remove(rd);
+
 		this.bestRDs.add(rd);
 		this.worstRDs.add(rd);
-		this.currentSize++;
+	}
+
+	private boolean contains(RichDeclaration rd) {
+		return this.bestRDs.contains(rd);
 	}
 
 	private void changed(RichDeclaration rd) {
@@ -53,11 +69,11 @@ public class ScoreListener {
 			rd.setHit(true);
 		}
 	}
-	
+
 	public PriorityQueue<RichDeclaration> getBestRDs() {
 		return bestRDs;
 	}
-	
+
 	public void clear(){
 		for (RichDeclaration rd : changed) {
 			rd.clear();

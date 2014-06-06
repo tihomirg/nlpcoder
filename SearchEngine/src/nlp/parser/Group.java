@@ -1,7 +1,9 @@
 package nlp.parser;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import search.WToken;
 import util.UtilList;
@@ -15,7 +17,6 @@ public class Group {
 	private List<Token> tokenDecompositions;
 	private Local local;
 	private boolean literal;
-	private List<WToken> wtokens;
 	
 	private List<List<WToken>> levels;
 	private List<Token> tokenRelatedTokens;
@@ -97,8 +98,10 @@ public class Group {
 		return !isLocal() && !isLiteral();
 	}
 
-	public List<WToken> getSearchKeys() {
-		return UtilList.flatten(levels);
+	public Set<WToken> getSearchKeys() {
+		Set<WToken> set = new HashSet<WToken>();	
+		set.addAll(UtilList.flatten(levels));
+		return set;
 	}
 	
 	public void setLevels(List<List<WToken>> levels) {

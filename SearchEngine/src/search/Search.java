@@ -2,6 +2,7 @@ package search;
 
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 import nlp.parser.Group;
 import api.StabileAPI;
@@ -37,7 +38,7 @@ public class Search {
 	}
 	
 	public PriorityQueue<RichDeclaration> search(Group searchKeyGroup){
-		List<WToken> searchKeys = searchKeyGroup.getSearchKeys();
+		Set<WToken> searchKeys = searchKeyGroup.getSearchKeys();
 		
 		for (WToken searchKey : searchKeys) {
 			table.search(searchKey);
@@ -47,11 +48,12 @@ public class Search {
 		publish(searchKeys, bestRDs);
 		listener.clear();
 
+		//TODO: Note that now "bestRDs" is empty;
 		return bestRDs;
 	}
 	
 	//For testing purpose
-	private void publish(List<WToken> searchKeys, PriorityQueue<RichDeclaration> bestRDs) {
+	private void publish(Set<WToken> searchKeys, PriorityQueue<RichDeclaration> bestRDs) {
 		System.out.println("For words: "+ searchKeys);
 		
 		while(!bestRDs.isEmpty()) {

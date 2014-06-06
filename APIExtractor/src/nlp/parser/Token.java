@@ -11,7 +11,7 @@ public class Token {
 	
 	public Token(String text, String lemma, String pos, int index) {
 		this.text = text;
-		this.lemma = lemma;
+		this.lemma = lemma.toLowerCase();
 		this.pos = Character.isLetter(pos.charAt(0)) ? Character.toString(pos.charAt(0)) : pos;
 		this.index = getIndex(index);
 	}
