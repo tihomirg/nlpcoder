@@ -1,9 +1,10 @@
-package compositions;
+package all;
 
 
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayAccess;
 import org.eclipse.jdt.core.dom.ArrayCreation;
@@ -58,6 +59,8 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.Assignment.Operator;
 
+import compositions.ExpressionBuilder;
+import compositions.TypeBuilder;
 import definitions.ArrayClassInfo;
 import definitions.ClassInfo;
 import definitions.Declaration;
@@ -70,6 +73,7 @@ import scopes.ScopeKeyValue;
 import scopes.ScopesKeyValue;
 import scopes.SimpleEvalScopes;
 import statistics.CompositionStatistics;
+import statistics.DeclCountStatistics;
 import statistics.pretrees.Expr;
 import statistics.pretrees.Variable;
 import symbol.Symbol;
@@ -77,9 +81,10 @@ import types.ReferenceType;
 import types.StabileTypeFactory;
 import util.Pair;
 
-public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
+public class CompositionsAndDeclarationsBuilder extends SingleNodeVisitor implements IBuilder {
 
 	private CompositionStatistics statistics;
+	private DeclCountStatistics declStatistics;
 	private NameScopes methods;
 	private NameScopes fields;
 	private Imported imported;
@@ -89,8 +94,9 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 	private ExpressionBuilder expBuilder;
 	private TypeBuilder typeBuilder;
 
-	public CompositionBuilder(StabileAPI api) {
+	public CompositionsAndDeclarationsBuilder(StabileAPI api) {
 		this.statistics  = new CompositionStatistics();
+		this.declStatistics = new DeclCountStatistics();
 		this.methods = new NameScopes();
 		this.fields = new NameScopes();
 		this.locals = new ScopesKeyValue<String, Pair<String, types.Type>>();
@@ -405,6 +411,11 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 		if (!expr.isVariable()){
 			List<Pair<String, String>> compos = expr.longReps();
 			statistics.inc(compos);
+			
+			List<Declaration> decls = expr.extractDecls();
+			
+			declStatistics.inc(decls);
+			
 			return compos.get(0).getFirst();
 		} return expr.shortRep();
 	}
@@ -523,6 +534,6 @@ public class CompositionBuilder extends SingleNodeVisitor implements IBuilder {
 	@Override
 	public void printDeclarations(PrintStream out) {
 		// TODO Auto-generated method stub
-		
+		this.declStatistics.print(out);
 	}	
 }

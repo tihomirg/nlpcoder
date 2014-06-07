@@ -3,6 +3,8 @@ package statistics.pretrees;
 import static statistics.parsers.Parser.*;
 
 import java.util.List;
+
+import definitions.Declaration;
 import statistics.Names;
 import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
@@ -78,5 +80,17 @@ public class CondExpr extends Expr {
 		Type type = tf.createTypeByTypePrefix(typePrefix);
 		rest = removeRPar(result.getRest());
 		return new SingleResult(createCondExpr(type), rest);
+	}
+
+	@Override
+	protected Declaration extractDecl() {
+		return null;
+	}
+
+	@Override
+	protected void extractDecls(List<Declaration> list) {
+		list.addAll(exp.extractDecls());
+		list.addAll(thenExp.extractDecls());
+		list.addAll(elseExp.extractDecls());		
 	}	
 }

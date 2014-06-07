@@ -63,5 +63,17 @@ public class ConstructorInvocation extends Expr{
 		int id = result.getInteger();
 		rest = removeRPar(result.getRest());
 		return new SingleResult(Parser.createConstructorInvocation(id), rest);
+	}
+
+	@Override
+	protected Declaration extractDecl() {
+		return this.cons;
+	}
+
+	@Override
+	protected void extractDecls(List<Declaration> list) {
+		for (Expr arg : args) {
+			list.addAll(arg.extractDecls());	
+		}
 	}	
 }

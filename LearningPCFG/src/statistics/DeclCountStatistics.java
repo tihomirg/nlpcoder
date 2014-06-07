@@ -3,6 +3,7 @@ package statistics;
 import java.io.PrintStream;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
@@ -32,6 +33,17 @@ public class DeclCountStatistics {
 		}
 	}
 	
+	public void inc(List<Declaration> decls){
+		
+		for (Declaration decl : decls) {
+			
+			int id = decl.getId();
+			if (!this.decls.containsKey(id)) {
+				this.decls.put(id, 0);
+			}
+			this.decls.put(id, this.decls.get(id)+1);
+		}
+	}
 	
 	public void print(PrintStream out){
 		PriorityQueue<Entry<Integer, Integer>> pq = new PriorityQueue<Map.Entry<Integer,Integer>>(InitialCap, COMPARATOR);

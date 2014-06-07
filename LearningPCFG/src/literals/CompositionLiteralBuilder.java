@@ -499,5 +499,11 @@ public class CompositionLiteralBuilder extends SingleNodeVisitor implements IBui
 
 	public boolean visit(EmptyStatement node) {
 		return false;
+	}
+
+	@Override
+	public void printDeclarations(PrintStream out) {
+		// TODO Auto-generated method stub
+		
 	}	
 }

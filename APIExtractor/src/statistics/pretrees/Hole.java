@@ -1,7 +1,10 @@
 package statistics.pretrees;
 
 import static statistics.parsers.Parser.*;
+
 import java.util.List;
+
+import definitions.Declaration;
 import statistics.Names;
 import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
@@ -40,5 +43,14 @@ public class Hole extends Expr{
 	
 	public static SingleResult parseShort(String string, StabileTypeFactory tf) {
 		return new SingleResult(Parser.createHole(), removeHole(string));
+	}
+
+	@Override
+	protected Declaration extractDecl() {
+		return null;
+	}
+
+	@Override
+	protected void extractDecls(List<Declaration> list) {
 	}	
 }

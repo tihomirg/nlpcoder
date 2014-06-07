@@ -54,9 +54,39 @@ public class BoundedScanner {
 		  ex.printStackTrace();
 		}
 		
+		print(builder, file);
+		
+		System.out.println("Scanned "+counter+" files in "+(System.currentTimeMillis() - fstartTime)+"ms");
+	}
+
+	protected static void scan(IBuilder builder, File folder, File compositionOuptut, File declOuptut, int fileNum, int intervalNum, boolean testCheck) {
+		
+		BoundedScanner.fileNum = fileNum;
+		BoundedScanner.intervalNum = intervalNum;
+		
+		startTime = System.currentTimeMillis();
+		
+		long fstartTime = startTime;
+		
+		try{
+			scanProjects(folder, builder, testCheck);
+		} catch(ScannerException ex){
+			System.out.println(ex);
+		} catch(Throwable ex){
+		  //System.out.println(ex);
+		  ex.printStackTrace();
+		}
+		
+		print(builder, compositionOuptut);
+		printDecls(builder, declOuptut);
+		
+		System.out.println("Scanned "+counter+" files in "+(System.currentTimeMillis() - fstartTime)+"ms");
+	}
+
+	private static void print(IBuilder builder, File compositionOuptut) {
 		PrintStream output = null;
 		try {
-			output = new PrintStream(file);
+			output = new PrintStream(compositionOuptut);
 			builder.print(output);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -67,10 +97,23 @@ public class BoundedScanner {
 			output.flush();
 			output.close();
 		}
+	}	
+	
+	private static void printDecls(IBuilder builder, File compositionOuptut) {
+		PrintStream output = null;
+		try {
+			output = new PrintStream(compositionOuptut);
+			builder.printDeclarations(output);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		System.out.println("Scanned "+counter+" files in "+(System.currentTimeMillis() - fstartTime)+"ms");
-	}
-
+		if (output != null) {
+			output.flush();
+			output.close();
+		}
+	}		
 	
 	public static void scanProjects(final File folder, IBuilder builder, boolean testCheck)
 			throws Throwable {

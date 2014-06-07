@@ -4,6 +4,7 @@ import static statistics.parsers.Parser.*;
 
 import java.util.List;
 
+import definitions.Declaration;
 import statistics.Names;
 import statistics.parsers.Parser;
 import statistics.parsers.Result;
@@ -44,6 +45,15 @@ public class NullLiteral extends Expr {
 	@Override
 	public boolean isLiteral() {
 		return true;
+	}
+
+	@Override
+	protected Declaration extractDecl() {
+		return null;
+	}
+
+	@Override
+	protected void extractDecls(List<Declaration> list) {
 	}
 		
 }

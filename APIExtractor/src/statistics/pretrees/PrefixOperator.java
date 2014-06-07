@@ -1,9 +1,13 @@
 package statistics.pretrees;
 
 import static statistics.parsers.Parser.*;
+
 import java.util.List;
+
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression.Operator;
+
+import definitions.Declaration;
 import statistics.Names;
 import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
@@ -53,5 +57,15 @@ public class PrefixOperator extends Expr {
 		Type type = tf.createTypeByTypePrefix(typePrefix);
 		rest = removeRPar(result.getRest());
 		return new SingleResult(Parser.createPrefixOperator(op, type), rest);
+	}
+
+	@Override
+	protected Declaration extractDecl() {
+		return null;
+	}
+
+	@Override
+	protected void extractDecls(List<Declaration> list) {
+		list.addAll(exp.extractDecls());		
 	}	
 }

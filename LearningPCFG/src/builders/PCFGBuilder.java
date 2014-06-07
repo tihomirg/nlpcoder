@@ -754,4 +754,10 @@ public class PCFGBuilder extends ASTVisitor implements IBuilder {
 	public void releaseUnder(int percentage) {
 		//statistics.releaseUnder(percentage);
 	}
+
+	@Override
+	public void printDeclarations(PrintStream out) {
+		// TODO Auto-generated method stub
+		
+	}
 }

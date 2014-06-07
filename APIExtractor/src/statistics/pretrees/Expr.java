@@ -2,6 +2,8 @@ package statistics.pretrees;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import definitions.Declaration;
 import static statistics.parsers.Parser.*;
 import statistics.Names;
 import statistics.parsers.CompositeResult;
@@ -13,7 +15,7 @@ import util.Pair;
 
 public abstract class Expr {
 	protected Type type;
-	
+
 	public Expr(Type type) {
 		this.type = type;
 	}
@@ -25,13 +27,13 @@ public abstract class Expr {
 	public void setType(Type type) {
 		this.type = type;
 	}
-	
+
 	public abstract String shortRep();
-	
+
 	public Pair<String, String> longRep(){
 		return new Pair(shortRep(), shortRep()+Names.LPar+argReps()+Names.RPar);
 	}
-	
+
 	public List<Pair<String, String>> longReps(){
 		List<Pair<String, String>> list = new LinkedList<Pair<String, String>>();
 		list.add(longRep());
@@ -40,7 +42,24 @@ public abstract class Expr {
 	}
 
 	protected abstract void longReps(List<Pair<String, String>> list);	
-	
+
+
+	public List<Declaration> extractDecls(){
+		List<Declaration> list = new LinkedList<Declaration>();
+		
+		Declaration decl = extractDecl();
+		if (decl != null){
+			list.add(decl);
+		}
+		
+		extractDecls(list);
+		return list;
+	}
+
+	protected abstract Declaration extractDecl();
+	protected abstract void extractDecls(List<Declaration> list);
+
+
 	protected abstract String argReps();
 
 	public static String shortReps(Expr... args){
@@ -62,7 +81,7 @@ public abstract class Expr {
 		//removeRPar(result.getRest());
 		return expr;
 	}
-	
+
 	public static CompositeResult parseArgs(String string, StabileTypeFactory tf){
 		CompositeResult comp = new CompositeResult();
 		if (!Parser.startsWithRPar(string)){

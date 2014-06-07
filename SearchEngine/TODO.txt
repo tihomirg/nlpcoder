@@ -21,6 +21,10 @@ For instance "a buffered file" would not be mapped to new BufferedInputStrema(ne
    - add also constraint that between the argument of "the hole" is the list of "non-constraint declarations". This way, all declarations are constraint with
    at least one constraint. Also, this would mean that we have an idea what declarations should be head declarations of the final expression.
 
+11) Numeric literals
+12) When and if "map from supertype to list of subtypes" (this is similar to words) we can keep it in the
+    - we should implement Object as separate class. 
+
 Done:
 
 1) Do word lemmatization. //Still see if we need WordNet lemmatizer/steammer.

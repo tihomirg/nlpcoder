@@ -3,6 +3,8 @@ package statistics.pretrees;
 import static statistics.parsers.Parser.*;
 
 import java.util.List;
+
+import definitions.Declaration;
 import statistics.Names;
 import statistics.parsers.Parser;
 import statistics.parsers.SingleResult;
@@ -55,6 +57,16 @@ public class CastExpr extends Expr {
 		rest = removeRPar(result.getRest());		
 		
 		return new SingleResult(Parser.createCastExpr(type, argType), rest);
+	}
+
+	@Override
+	protected Declaration extractDecl() {
+		return null;
+	}
+
+	@Override
+	protected void extractDecls(List<Declaration> list) {
+		list.addAll(exp.extractDecls());		
 	}
 	
 }

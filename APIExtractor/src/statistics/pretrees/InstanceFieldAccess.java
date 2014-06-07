@@ -60,4 +60,14 @@ public class InstanceFieldAccess extends Expr{
 		rest = removeRPar(result.getRest());
 		return new SingleResult(Parser.createInstanceFieldAccess(id), rest);		
 	}
+
+	@Override
+	protected Declaration extractDecl() {
+		return this.field;
+	}
+
+	@Override
+	protected void extractDecls(List<Declaration> list) {
+		list.addAll(exp.extractDecls());		
+	}
 }

@@ -78,4 +78,18 @@ public class InstanceMethodInvocation extends Expr{
 		rest = removeRPar(result.getRest());
 		return new SingleResult(Parser.createInstanceMethodInvocation(id), rest);		
 	}
+
+	@Override
+	protected Declaration extractDecl() {
+		return this.method;
+	}
+
+	@Override
+	protected void extractDecls(List<Declaration> list) {
+		list.addAll(exp.extractDecls());
+		
+		for (Expr arg : args) {
+			list.addAll(arg.extractDecls());
+		}		
+	}
 }

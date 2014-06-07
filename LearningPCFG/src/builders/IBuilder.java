@@ -7,6 +7,8 @@ public interface IBuilder {
 
 	void print(PrintStream out);
 	
+	void printDeclarations(PrintStream out);	
+	
     void releaseUnder(int percent);
 	
     void build(CompilationUnit node);
