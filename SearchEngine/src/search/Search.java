@@ -8,6 +8,7 @@ import java.util.Set;
 import nlp.parser.Group;
 import api.StabileAPI;
 import definitions.Declaration;
+import deserializers.FrequencyDeserializer;
 
 public class Search {
 
@@ -16,11 +17,14 @@ public class Search {
 	private ScoreListener listener;
 	private int[][] indexScoress;
 	
-	public Search(ScorerPipeline scorer, ScoreListener listener, StabileAPI api, int[][] indexScoress) {
+	private FrequencyDeserializer fd;
+	
+	public Search(ScorerPipeline scorer, ScoreListener listener, StabileAPI api, int[][] indexScoress, FrequencyDeserializer fd) {
 		this.table = new Table();
 		this.scorer = scorer;
 		this.listener = listener;
 		this.indexScoress = indexScoress;
+		this.fd = fd;
 		add(api);
 	}
 	
@@ -40,7 +44,7 @@ public class Search {
 	}
 
 	public void add(Declaration decl){
-		table.add(new RichDeclaration(decl, 0, scorer, listener, indexScoress));
+		table.add(new RichDeclaration(decl, fd.getFrequency(decl.getId()), scorer, listener, indexScoress));
 	}
 	
 	public List<RichDeclaration> search(Group searchKeyGroup){

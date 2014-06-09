@@ -10,6 +10,7 @@ import java.util.Scanner;
 import config.Config;
 import definitions.Declaration;
 import deserializers.Deserializer;
+import deserializers.FrequencyDeserializer;
 import api.StabileAPI;
 import search.scorers.HitWeightScorer;
 import search.scorers.RichDeclarationScorer;
@@ -100,6 +101,7 @@ public class Main {
 		//Input input = pipeline.parse(new Input("open(file(\"text.txt\"), make)"));
 		//Input input = pipeline.parse(new Input("open read close a file \"text.txt\""));
 
+		FrequencyDeserializer frequencies = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());
 		Scanner scanner = new Scanner(System.in);
 
 		String line = null;
@@ -128,7 +130,7 @@ public class Main {
 				//Input input = pipeline.parse(new Input("Load a file \"text1.txt\" content into a buffer."));
 
 
-				Search search = new Search(scorer, listener, api, indexScoress);
+				Search search = new Search(scorer, listener, api, indexScoress, frequencies);
 
 				System.out.println("Loading decls time : "+(System.currentTimeMillis() - time)+" ms");			
 				time = System.currentTimeMillis();		

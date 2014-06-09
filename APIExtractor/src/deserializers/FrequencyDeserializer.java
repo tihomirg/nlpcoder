@@ -11,9 +11,14 @@ import java.util.Map;
 public class FrequencyDeserializer {
 
 	private Map<Integer, Integer> freq;
+	
+	private double minimum;
+	private double total;
 
 	public FrequencyDeserializer(String fileName) {
 		this.freq = loadMap(fileName);
+		this.minimum = Integer.MAX_VALUE;
+		this.total = 0;
 	}
 
 	private Map<Integer, Integer> loadMap(String fileName){
@@ -27,7 +32,12 @@ public class FrequencyDeserializer {
 		  String line = null;
 		  while ((line = reader.readLine()) != null) {
 		    String[] splits = line.split(" : ");
-		    map.put(Integer.parseInt(splits[1]), Integer.parseInt(splits[0]));
+		    int declID = Integer.parseInt(splits[1]);
+			int freq = Integer.parseInt(splits[0]);
+			map.put(declID, freq);
+			
+			trySetMinimum(freq);
+			total += freq;
 		  }
 		
 		} catch(IOException e){
@@ -43,8 +53,20 @@ public class FrequencyDeserializer {
 		return map;
 	}
 
+	private void trySetMinimum(int freq) {
+		this.minimum = Math.min(minimum, freq);
+	}
+
 	public Map<Integer, Integer> getFreq() {
 		return freq;
+	}
+
+	public double getFrequency(int id) {
+		Integer integer = freq.get(id);
+		
+		if( integer != null){
+			return Math.log(integer) - Math.log(total);
+		} else return Math.log(minimum) - Math.log(total);
 	}		
 	
 }
