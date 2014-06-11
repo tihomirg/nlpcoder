@@ -1,4 +1,10 @@
 1) Tweaking:
+  Now:
+   Literals:
+    - Seems that word string is specific.
+    - Include literals, merge with 
+    - More sophisticated scoring algorith, that favors correct args.
+    
   Search:
    - Work on the parser processing more. Some words tokens should not appear twice in the groups.
    - Find a good ration between decl frequency and word scoring
