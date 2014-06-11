@@ -16,9 +16,9 @@ public class FrequencyDeserializer {
 	private double total;
 
 	public FrequencyDeserializer(String fileName) {
-		this.freq = loadMap(fileName);
 		this.minimum = Integer.MAX_VALUE;
 		this.total = 0;
+		this.freq = loadMap(fileName);
 	}
 
 	private Map<Integer, Integer> loadMap(String fileName){
@@ -60,13 +60,29 @@ public class FrequencyDeserializer {
 	public Map<Integer, Integer> getFreq() {
 		return freq;
 	}
+	
+	public double getMinimumLog() {
+		return Math.log(minimum);
+	}
 
+	public double getSmoothLog(){
+		return Math.log(minimum) - Math.log(total);
+	}
+	
+	public double getTotalLog(){
+		return Math.log(total);
+	}
+	
 	public double getFrequency(int id) {
 		Integer integer = freq.get(id);
 		
-		if( integer != null){
+		if(integer != null){
 			return Math.log(integer) - Math.log(total);
 		} else return Math.log(minimum) - Math.log(total);
 	}		
 	
+	@Override
+	public String toString() {
+		return "min = "+this.getMinimumLog() +", total = "+this.getTotalLog() +", smooth = "+getSmoothLog();
+	}	
 }

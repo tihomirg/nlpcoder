@@ -3,14 +3,17 @@ package search;
 import java.util.LinkedList;
 import java.util.List;
 
+import search.scorers.Score;
 import util.UtilList;
 import nlp.parser.Token;
 import definitions.Declaration;
 
-public class RichDeclarationStatistics {
+public class RichDeclarationStatistics implements Cloneable {
 	private double declProb;
 
 	private Slot[][] slotss;
+
+	private Score score;
 
 	public RichDeclarationStatistics(Declaration decl, double declProb, int indexScoress[][]) {
 		this.declProb = declProb;
@@ -92,6 +95,7 @@ public class RichDeclarationStatistics {
 	}
 
 	public void clear() {
+		this.score = null;
 		for (Slot[] slots : this.slotss) {
 			for (Slot slot : slots) {
 				slot.clear();
@@ -105,5 +109,31 @@ public class RichDeclarationStatistics {
 
 	public Slot[][] getSlots() {
 		return this.slotss;
+	}
+
+	public void setScore(Score score) {
+		this.score = score;
+	}
+
+	public Score getScore() {
+		return this.score;
+	}
+	
+	@Override
+	protected RichDeclarationStatistics clone() {
+		RichDeclarationStatistics clone = null;
+		try {
+			clone = (RichDeclarationStatistics) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return clone;
+	}
+
+	@Override
+	public String toString() {
+		return this.score.toString();
 	}
 }

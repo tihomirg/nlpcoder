@@ -3,17 +3,17 @@ package search;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
 import search.scorers.Score;
 import nlp.parser.Token;
 import definitions.Declaration;
 
-public class RichDeclaration {
+public class RichDeclaration implements Cloneable {
 	private Declaration decl;
 	private List<Token> tokens;
 	private RichDeclarationStatistics statistics;
 	private ScoreListener listener;
 	private ScorerPipeline scorer;
-	private Score score;
 
 	private boolean hit;
 
@@ -73,7 +73,7 @@ public class RichDeclaration {
 	}
 
 	private void calculateScore() {
-		this.score = scorer.calculate(statistics);
+		this.statistics.setScore(scorer.calculate(statistics));
 	}
 
 	private void notifyListener() {
@@ -81,7 +81,6 @@ public class RichDeclaration {
 	}
 
 	public void clear(){
-		this.score = null;
 		this.hit = false;
 		this.statistics.clear();
 	}
@@ -89,9 +88,9 @@ public class RichDeclaration {
 	public boolean isHit() {
 		return hit;
 	}
-
+	
 	public Score getScore() {
-		return score;
+		return this.statistics.getScore();
 	}
 
 	public List<Token> getTokens() {
@@ -104,8 +103,20 @@ public class RichDeclaration {
 
 	@Override
 	public String toString() {
-		return "score=" + score + ", decl=" + decl+"\n"+
-			   "slots= "+slotsToString();
+		return this.statistics+", decl=" + decl;
+	}
+	
+	@Override
+	protected RichDeclaration clone() {
+		RichDeclaration clone = null;
+		try {
+			clone = (RichDeclaration) super.clone();
+			clone.statistics = this.statistics.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return clone;
 	}
 
 	private String slotsToString() {

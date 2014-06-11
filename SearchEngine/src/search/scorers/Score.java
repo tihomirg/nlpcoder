@@ -24,7 +24,7 @@ public class Score {
 
 	@Override
 	public String toString() {
-		return "sum = "+getSum()+" "+scores.toString();
+		return "Score[ total = "+getSum()+", single = "+scores.toString()+"]";
 	}
 	
 }

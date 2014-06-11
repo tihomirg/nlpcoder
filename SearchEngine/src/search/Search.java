@@ -54,17 +54,20 @@ public class Search {
 			table.search(searchKey);
 		}
 		
-		
 		PriorityQueue<RichDeclaration> bestRDs = listener.getBestRDs();
-		
-		List<RichDeclaration>  rds = new LinkedList<RichDeclaration>();
-		rds.addAll(bestRDs);
-		
+		List<RichDeclaration> rds = cloneBestRDs(bestRDs);
 		
 		publish(searchKeys, bestRDs);
 		listener.clear();
 
-		//TODO: Note that now "bestRDs" is empty;
+		return rds;
+	}
+
+	private List<RichDeclaration> cloneBestRDs(PriorityQueue<RichDeclaration> bestRDs) {
+		List<RichDeclaration>  rds = new LinkedList<RichDeclaration>();
+		for (RichDeclaration rd : bestRDs) {
+			rds.add(rd.clone());
+		}
 		return rds;
 	}
 	
