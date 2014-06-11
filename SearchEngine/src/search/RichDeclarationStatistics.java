@@ -9,14 +9,14 @@ import nlp.parser.Token;
 import definitions.Declaration;
 
 public class RichDeclarationStatistics implements Cloneable {
-	private double declProb;
+	private double logProb;
 
 	private Slot[][] slotss;
 
 	private Score score;
 
-	public RichDeclarationStatistics(Declaration decl, double declProb, int indexScoress[][]) {
-		this.declProb = declProb;
+	public RichDeclarationStatistics(Declaration decl, double logProb, int indexScoress[][]) {
+		this.logProb = logProb;
 		this.slotss = new Slot[2][];
 		initiateGroups(decl, indexScoress);
 	}
@@ -103,8 +103,8 @@ public class RichDeclarationStatistics implements Cloneable {
 		}
 	}
 
-	public double getDeclProb() {
-		return declProb;
+	public double getLogProb() {
+		return logProb;
 	}
 
 	public Slot[][] getSlots() {

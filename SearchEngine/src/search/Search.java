@@ -34,17 +34,12 @@ public class Search {
 
 	private void addAll(List<Declaration> decls) {
 		for (Declaration decl : decls) {
-			
-			if (decl.getSimpleName().equals("new BufferedInputStream")){
-				System.out.println("Found: "+ decl);
-			}
-			
 			add(decl);
 		}
 	}
 
 	public void add(Declaration decl){
-		table.add(new RichDeclaration(decl, fd.getFrequency(decl.getId()), scorer, listener, indexScoress));
+		table.add(new RichDeclaration(decl, fd.getLogFrequency(decl.getId()), scorer, listener, indexScoress));
 	}
 	
 	public List<RichDeclaration> search(Group searchKeyGroup){

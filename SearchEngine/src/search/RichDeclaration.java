@@ -17,11 +17,11 @@ public class RichDeclaration implements Cloneable {
 
 	private boolean hit;
 
-	public RichDeclaration(Declaration decl, double declProb, ScorerPipeline scorer, ScoreListener listener, int[][] indexScores) {
+	public RichDeclaration(Declaration decl, double logFreq, ScorerPipeline scorer, ScoreListener listener, int[][] indexScores) {
 		this.decl = decl;
 		this.scorer = scorer;
 		this.listener = listener;
-		this.statistics = new RichDeclarationStatistics(decl, declProb, indexScores);
+		this.statistics = new RichDeclarationStatistics(decl, logFreq, indexScores);
 		this.tokens = new LinkedList<Token>();
 
 		//First group

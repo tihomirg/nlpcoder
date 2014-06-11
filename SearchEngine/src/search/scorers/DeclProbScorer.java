@@ -4,9 +4,15 @@ import search.RichDeclarationStatistics;
 
 public class DeclProbScorer implements RichDeclarationScorer {
 
+	private double factor;
+
+	public DeclProbScorer(double factor) {
+		this.factor = factor;
+	}
+	
 	@Override
 	public double calculate(RichDeclarationStatistics rds) {
-		return rds.getDeclProb();
+		return factor * rds.getLogProb();
 	}
 
 }

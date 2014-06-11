@@ -47,7 +47,7 @@ public class Main {
 		setExprRelatedGroups(exprGroupss);
 		
 		
-		PartialExpressionScorer scorer = new PartialExpressionScorer();
+		PartialExpressionScorer scorer = new PartialExpressionScorer(5);
 		GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, scorer, 5, 20);
 		Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);
 		synthesis.run();

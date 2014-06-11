@@ -73,7 +73,7 @@ public class FrequencyDeserializer {
 		return Math.log(total);
 	}
 	
-	public double getFrequency(int id) {
+	public double getLogFrequency(int id) {
 		Integer integer = freq.get(id);
 		
 		if(integer != null){
@@ -84,5 +84,5 @@ public class FrequencyDeserializer {
 	@Override
 	public String toString() {
 		return "min = "+this.getMinimumLog() +", total = "+this.getTotalLog() +", smooth = "+getSmoothLog();
-	}	
+	}
 }

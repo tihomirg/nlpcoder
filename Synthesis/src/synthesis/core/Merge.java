@@ -97,7 +97,7 @@ public class Merge {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Time: "+ time+"ms\n");
 		sb.append("Completed:\n");
-		Pair<List<PartialExpression>, List<PartialExpression>> pair = filterConnected(this.completed);
+		Pair<List<PartialExpression>, List<PartialExpression>> pair = getResult();
 
 		sb.append("With connections:\n");
 		sb.append(pair.getFirst()+"\n\n");
@@ -116,6 +116,14 @@ public class Merge {
 //			sb.append(group+"\n\n");
 //		}
 		return sb.toString();
+	}
+
+	public List<PartialExpression> getCompletedResult() {
+		return filterConnected(this.completed).getSecond();
+	}
+	
+	public Pair<List<PartialExpression>, List<PartialExpression>> getResult() {
+		return filterConnected(this.completed);
 	}
 
 	private Pair<List<PartialExpression>, List<PartialExpression>> filterConnected(List<PartialExpression> pexprs) {
