@@ -4,6 +4,7 @@
     - Seems that word string is specific.
     - Include literals, merge with 
     - More sophisticated scoring algorith, that favors correct args.
+    - We need a mechanism that eliminates cycles :)
     
   Search:
    - Work on the parser processing more. Some words tokens should not appear twice in the groups.
