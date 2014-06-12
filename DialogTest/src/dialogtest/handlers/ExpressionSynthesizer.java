@@ -2,6 +2,10 @@ package dialogtest.handlers;
 
 public class ExpressionSynthesizer {
 
+	public ExpressionSynthesizer() {
+		
+	}
+	
 	public String[] run() {
 		return new String[]{
 				"new FileInputStream(new File(\"text.txt\"))", 

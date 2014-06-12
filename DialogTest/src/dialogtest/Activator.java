@@ -4,6 +4,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import search.SearchEngine;
 import dialogtest.handlers.ExpressionSynthesizer;
 
 /**
@@ -17,7 +18,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private ExpressionSynthesizer exprSynthesizer;
+	private SearchEngine searchEngine;
 	
 	/**
 	 * The constructor
@@ -33,7 +34,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		
-		this.exprSynthesizer = new ExpressionSynthesizer();
+		this.searchEngine = new SearchEngine(5);
 	}
 
 	/*
@@ -65,7 +66,7 @@ public class Activator extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-	public ExpressionSynthesizer getExprSynthesizer() {
-		return this.exprSynthesizer;
+	public SearchEngine getSearchEngine() {
+		return searchEngine;
 	}
 }

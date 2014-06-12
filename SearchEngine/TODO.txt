@@ -1,3 +1,6 @@
+0) One extra filed in PartialExpressionStatistics that denotes a number of connections. The closer to this number we are the better.
+If we have more connections in PartialExpression we start subtracting a reward.
+
 1) Tweaking:
   Now:
    Literals:

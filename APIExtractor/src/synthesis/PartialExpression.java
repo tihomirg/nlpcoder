@@ -1,8 +1,11 @@
 package synthesis;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
 import statistics.posttrees.Expr;
 import types.Substitution;
 import util.Pair;
@@ -15,6 +18,7 @@ public class PartialExpression implements Cloneable {
 	private double score;
 	private LinkedList<Connection> connections;
 	private ExprGroup egroup;
+	private HashSet<PartialExpression> connectedTo;
 
 	public PartialExpression(Param param, ExprGroup egroup) {
 		this.params = new LinkedList<Param>();
@@ -24,6 +28,7 @@ public class PartialExpression implements Cloneable {
 		this.connections = new LinkedList<Connection>();
 		this.egroup = egroup;
 		this.score = egroup.getInitialScore();
+		this.connectedTo = new HashSet<PartialExpression>();
 	}
 
 	public double getScore() {
@@ -47,6 +52,7 @@ public class PartialExpression implements Cloneable {
 			exp.params = (LinkedList<Param>) this.params.clone();
 			exp.connections = (LinkedList<Connection>) this.connections.clone();
 			exp.subs = (LinkedList<Substitution>) this.subs.clone();
+			exp.connectedTo = (HashSet<PartialExpression>) this.connectedTo.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -176,5 +182,9 @@ public class PartialExpression implements Cloneable {
 	public void prepareForMearging(){
 		this.rep = this.rep.asComplexRepresentation();
 		this.egroup.addCompletedExpr(this);
+	}
+
+	public HashSet<PartialExpression> getConnectedTo() {
+		return this.connectedTo;
 	}
 }

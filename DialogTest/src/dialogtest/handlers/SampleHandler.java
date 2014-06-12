@@ -94,7 +94,7 @@ public class SampleHandler extends AbstractHandler {
 				snippets.addKeyListener(resultListener);
 
 				//Setting listeners
-				SearchListener searchListener = new SearchListener(snippets, Activator.getDefault().getExprSynthesizer());
+				SearchListener searchListener = new SearchListener(snippets, Activator.getDefault().getSearchEngine());
 				searchInput.addListener(SWT.DefaultSelection, searchListener);
 
 				popupSearch.open();

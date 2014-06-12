@@ -5,20 +5,22 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import search.SearchEngine;
+
 public class SearchListener implements Listener {
 	
 	private List snippets;
-	private ExpressionSynthesizer synthesizer;
+	private SearchEngine searchEngine;
 
-	public SearchListener(List snippets, ExpressionSynthesizer synthesizer) {
+	public SearchListener(List snippets, SearchEngine searchEngine) {
 		this.snippets = snippets;
-		this.synthesizer = synthesizer;
+		this.searchEngine = searchEngine;
 	}
 
 	@Override
 	public void handleEvent(Event event) {
 		Text t = (Text) event.widget;
-		String[] selections = synthesizer.run();
+		String[] selections = searchEngine.run(t.getText());
 		
 		snippets.removeAll();
 		for (String string : selections) {

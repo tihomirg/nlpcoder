@@ -146,11 +146,11 @@ public class MainAll {
 
 					time = printMsgAndSetTime("Decl search time", time);
 
-					if (SYNTHESIS){
+					if (SYNTHESIS) {
 						List<List<ExprGroup>> exprGroupss = createExprGroupss(rdss);
 						setExprRelatedGroups(exprGroupss);
 
-						PartialExpressionScorer peScorer = new PartialExpressionScorer(5);
+						PartialExpressionScorer peScorer = new PartialExpressionScorer(5, 1);
 						GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, numOfSynthesisLevels, maxDeclarationPerLevel);
 						Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);
 						synthesis.run();
@@ -215,7 +215,7 @@ public class MainAll {
 			pexpr.prepareForMearging();
 		}
 	}
-
+	
 
 	private static List<List<ExprGroup>> createExprGroupss(List<List<RichDeclaration>> rdss) {
 		List<List<ExprGroup>> egroupss = new LinkedList<List<ExprGroup>>();
