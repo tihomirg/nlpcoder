@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import nlp.parser.Group;
+import search.nlp.parser.Group;
 import api.StabileAPI;
 import definitions.Declaration;
 import deserializers.FrequencyDeserializer;

@@ -13,7 +13,7 @@ public class Config {
 	private static final int maxFilesToScan = 100000;
 	
 	//serialization
-	private static final String storageLocation = "declarations.kryo";
+	private static final String storageLocation = "C:/Users/gvero/git/nlpcoder/resources/declarations.kryo";
 
 	//Sentence-Word Parser
 	private static final int levelNum = 2;
@@ -27,12 +27,12 @@ public class Config {
 	private static final String serializationVarPrefix = "SV";
 	private static final String deserializationVarPrefix = "DV";
 	private static final double smoothFactor = 0.2;
-	private static final String frequencyLocation = "frequences.txt";
-	private static final String synthesisStorageLocation = "declarations.kryo";
-	private static final String compositionStatisticStorageLocation = "stat.txt";
+	private static final String frequencyLocation = "C:/Users/gvero/git/nlpcoder/resources/frequences.txt";
+	private static final String synthesisStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/declarations.kryo";
+	private static final String compositionStatisticStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/stat.txt";
 	private static final String compositionCorpusLocation = "C:\\Users\\gvero\\java_projects\\java_projects";
-	private static final String stabileAPIStorageLocation = "stabile_api.kryo";
-	private static final String secondStorageLocation = "initial_api_with_tokens.kryo";	
+	private static final String stabileAPIStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/stabile_api.kryo";
+	private static final String secondStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/initial_api_with_tokens.kryo";	
 	
 	public static String getTaggerLocation(){
 		return tagger;
