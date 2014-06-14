@@ -1,3 +1,32 @@
+Title: "Programming using API keywords" (expression repair)
+
+0) Holes we solve with types:
+  - locals form the input (we may include literals as well here) 
+  - other locals
+  
+  Hole handler relays on types. Since we have a small number 
+  of locals we can form a data structure that collects them and 
+  store them based on their compatible types. Also variable type 
+  is compatible with all holes.
+  
+  if variable, than all locals are suitable, else, only some, from the
+  data structure. Watch out 
+  
+1) Literals:
+  - literal from the input
+  - from the model. We create them using extra information. *
+
+2) Tweaking:
+  - put into distinct groups
+  - tweaking more input parsing, sometimes duplicate tokens appear in the input, resolve this 
+  - try without pos
+  
+3) Solve arrays and numerals
+4) Collect new statistics
+5) print/println, and + operator, try to cover at least this one
+6) WordNet
+7) JavaDoc
+
 0) One extra filed in PartialExpressionStatistics that denotes a number of connections. The closer to this number we are the better.
 If we have more connections in PartialExpression we start subtracting a reward.
 

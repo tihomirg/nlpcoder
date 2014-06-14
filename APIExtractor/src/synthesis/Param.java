@@ -2,6 +2,7 @@ package synthesis;
 
 import statistics.posttrees.Expr;
 import synthesis.handlers.SearchKey;
+import types.Type;
 
 public class Param {
 	private SearchKey searchKey;
@@ -14,6 +15,11 @@ public class Param {
 	
 	public Param(Expr expr, int id) {
 		this.searchKey = new SearchKey(expr);
+		this.repKey = new RepKey(id);
+	}	
+	
+	public Param(Expr expr, Type type, int id) {
+		this.searchKey = new SearchKey(expr, type);
 		this.repKey = new RepKey(id);
 	}
 

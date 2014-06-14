@@ -14,17 +14,55 @@ public class ParserExtractLiterals implements IParser {
 		List<Sentence> sentences = input.getSentences();
 
 		for (Sentence sentence : sentences) {
-			List<Group> groups = extractStringLiterals(sentence);
-			
-			sentence.setStringLiterals(groups);
+			List<Group> strings = extractStringLiterals(sentence);
+			sentence.setStringLiterals(strings);
+
+			List<Group> numbers = extractNumberLiterals(sentence);
+			sentence.setNumberLiterals(numbers);			
 		}
 
 		return input;
 	}
 
+
+	private List<Group> extractNumberLiterals(Sentence sentence) {
+		List<Group> groups = transformToGroups(sentence.getGroupMap(), extractNumbers(sentence.getTokens()));
+
+		for (Group group : groups) {
+			group.setLiteral(true);
+			group.setLiteralTypeToken(new Token("Integer", "integer", "NN", 0));
+		}
+		return groups;
+	}
+
+	//TODO: Check other number types as well.
+	private List<Token> extractNumbers(List<Token> tokens) {
+		List<Token> numbers = new LinkedList<Token>();
+
+		for (Token token : tokens) {
+			String text = token.getText();
+			if(isInteger(text)){
+				numbers.add(token);
+			}
+		}
+
+		return numbers;
+	}
+
+
+	private boolean isInteger(String text) {
+		try{
+			Integer.parseInt(text);
+			return true;
+		} catch(NumberFormatException nfe) {
+			return false;
+		}
+	}
+
+
 	private List<Group> extractStringLiterals(Sentence sentence) {
 		List<Group> groups = transformToGroups(sentence.getGroupMap(), extractStrings(sentence.getTokens()));
-		
+
 		for (Group group : groups) {
 			group.setLiteral(true);
 			group.setLiteralTypeToken(new Token("String", "string", "NN", 0));
@@ -35,29 +73,44 @@ public class ParserExtractLiterals implements IParser {
 	private List<Group> transformToGroups(Map<Integer, Group> groupMap, List<Token> extractStrings) {
 		List<Group> groups = new LinkedList<Group>();
 		for (Token token : extractStrings) {
-			groups.add(groupMap.get(token.getIndex()));
+			int index = token.getIndex();
+			if (index == -1){
+				groups.add(new Group(token));
+			} else {
+				groups.add(groupMap.get(index));
+			}
 		}
 		return groups;
 	}
 
 	private List<Token> extractStrings(List<Token> tokens) {
 		List<Token> strings = new LinkedList<Token>();
-		
+
 		int size = tokens.size();
 
 		int i = 0;
 		while(i < size - 2) {
 			Token first = tokens.get(i);
-			Token last = tokens.get(i+2);
-			
-			if (first.isBeginingOfString() && last.isEndOfString()){
-				strings.add(tokens.get(i+1));
-				i+=3;
+
+			if (first.isBeginingOfString()){
+				Token second = tokens.get(i+1);			
+				if (second.isEndOfString()){
+					strings.add(new Token("", "", "NN", 0));
+					i+=2;
+				} else {
+					Token third = tokens.get(i+2);
+					if (third.isEndOfString()){
+						strings.add(tokens.get(i+1));
+						i+=3;
+					} else {
+						i++;
+					}
+				}
 			} else {
 				i++;
 			}
 		}
-		
+
 		return strings;
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Properties;
+import java.util.Scanner;
 
 import merging.CompositionStatistics;
 import merging.core.GroupBuilder;
@@ -36,11 +37,14 @@ import statistics.posttrees.ConstructorInvocation;
 import statistics.posttrees.Expr;
 import statistics.posttrees.InstanceFieldAccess;
 import statistics.posttrees.InstanceMethodInvocation;
+import statistics.posttrees.LocalExpr;
 import synthesis.ExprGroup;
 import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
 import synthesis.comparators.PartialExpressionComparatorDesc;
+import synthesis.handlers.HoleHandler;
 import types.NameGenerator;
+import types.StabileTypeFactory;
 import util.Pair;
 import util.UtilList;
 import api.StabileAPI;
@@ -64,7 +68,7 @@ public class SearchEngine {
 	private int numOfSynthesisLevels;
 	private HandlerTable handlerTable;
 	private int maxNumOfSolutions;
-	
+
 	public SearchEngine(int maxNumOfSolutions) {
 		this.maxNumOfSolutions = maxNumOfSolutions;
 		load();
@@ -81,13 +85,13 @@ public class SearchEngine {
 		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP);
 
 		pipeline = new ParserPipeline(
-				new IParser[]{ 
+				new IParser[]{
 						new ParserNLP(coreNLP),
 						new ParserGroupsAndDependencyRelations(),
 						new ParserExtractLiterals(),
-						new ParserIdentifyLocals(locals),					
+						new ParserIdentifyLocals(locals),
 						new ParserRightHandSideNeighbours(1),
-						new ParserSliceComplexTokens(decomposer),						
+						new ParserSliceComplexTokens(decomposer),
 						new ParserRelatedWords(),
 						new ParserWTokensAndLevels(),
 						new ParserAssignTokenScores(new double[]{1,0.5,1,0.5}, new int[]{0,0,1,1})});
@@ -127,7 +131,7 @@ public class SearchEngine {
 	public String[] run(String line){
 
 		PriorityQueue<PartialExpression> solutions = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
-		
+
 		time = System.currentTimeMillis();
 		Input input = pipeline.parse(new Input(line));
 
@@ -139,61 +143,102 @@ public class SearchEngine {
 		for (Sentence sentence : sentences) {
 			List<List<RichDeclaration>> rdss = new LinkedList<List<RichDeclaration>>();
 
+
 			for (Group group : sentence.getSearchKeyGroups()) {
 				rdss.add(search.search(group));
-			}	
+			}
 
 			time = printMsgAndSetTime("Decl search time", time);
 
 			if (SYNTHESIS) {
 				List<List<ExprGroup>> exprGroupss = createExprGroupss(rdss);
-				setExprRelatedGroups(exprGroupss);
 
-				PartialExpressionScorer peScorer = new PartialExpressionScorer(5, 1);
-				GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, numOfSynthesisLevels, maxDeclarationPerLevel);
-				Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);
-				synthesis.run();
+				if (!exprGroupss.isEmpty()) {
+					setExprRelatedGroups(exprGroupss);
 
-				System.out.println(synthesis);
+					HoleHandler hHandler = new HoleHandler();
+					hHandler.addAllLocals(createStringLiterals(sentence.getStringLiterals(), api.getStf()));
+					hHandler.addAllLocals(createNumberLiterals(sentence.getNumberLiterals(), api.getStf()));					
 
-				Pair<List<PartialExpression>, List<PartialExpression>> pexprs = synthesis.getPexprs();
+					handlerTable.setHoleHandler(hHandler);
 
-				final List<PartialExpression> withConnections = pexprs.getFirst();
-				List<PartialExpression> completed = pexprs.getSecond();
+					PartialExpressionScorer peScorer = new PartialExpressionScorer(5, 1);
+					GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, numOfSynthesisLevels, maxDeclarationPerLevel);
+					Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);
+					synthesis.run();
 
-				prepareForMearging(completed);
-				prepareForMearging(withConnections);
+					System.out.println(synthesis);
 
-				if (!withConnections.isEmpty()){
-					Merge merge = new Merge(withConnections, 4, numOfSynthesisLevels, maxDeclarationPerLevel, peScorer, false);
-					merge.run();
-					solutions.addAll(merge.getCompletedResult());
-				} 
-				solutions.addAll(completed);
+					Pair<List<PartialExpression>, List<PartialExpression>> pexprs = synthesis.getPexprs();
+
+					final List<PartialExpression> withConnections = pexprs.getFirst();
+					List<PartialExpression> completed = pexprs.getSecond();
+
+					prepareForMearging(completed);
+					prepareForMearging(withConnections);
+
+					if (!withConnections.isEmpty()){
+						Merge merge = new Merge(withConnections, 4, numOfSynthesisLevels, maxDeclarationPerLevel, peScorer, false);
+						merge.run();
+						solutions.addAll(merge.getCompletedResult());
+					} 
+					solutions.addAll(completed);
+
+				}
 			}
 
 			printMsgAndSetTime("Expression Synthesis time", time);
 		}
-		
+
 		return prepare(solutions);
 	}
+
+	private List<Expr> createStringLiterals(List<Group> stringLiterals, StabileTypeFactory stf) {
+
+		List<Expr> exprs = new LinkedList<Expr>();
+
+		for (Group literal : stringLiterals) {
+			String name = "\""+literal.getToken().getText()+"\"";
+			LocalExpr localExpr = new LocalExpr(name, stf.createConstType(java.lang.String.class.getName()));
+			localExpr.setLogProbability(2);
+
+			exprs.add(localExpr);
+		}
+
+		return exprs;
+	}
+
+	private List<Expr> createNumberLiterals(List<Group> stringLiterals, StabileTypeFactory stf) {
+
+		List<Expr> exprs = new LinkedList<Expr>();
+
+		for (Group literal : stringLiterals) {
+			String name = literal.getToken().getText();
+			LocalExpr localExpr = new LocalExpr(name, stf.createPrimitiveType("int"));
+			localExpr.setLogProbability(2);
+
+			exprs.add(localExpr);
+		}
+
+		return exprs;
+	}	
 
 	private String[] prepare(PriorityQueue<PartialExpression> solutions) {
 		List<String> results = new LinkedList<String>();
 		int i = 0;
-		
-		for (; i < maxNumOfSolutions || !solutions.isEmpty(); i++) {
+
+		for (; i < maxNumOfSolutions && !solutions.isEmpty(); i++) {
 			PartialExpression pexpr = solutions.remove();
-			results.add(pexpr.toString());
+			results.add(pexpr.repToString());
 		}
-		
+
 		for (;i < maxNumOfSolutions; i++){
 			results.add("");
 		}
-		
+
 		return results.toArray(new String[results.size()]);
 	}
-	
+
 	private static PriorityQueue<PartialExpression> mergeAndSort(List<PartialExpression> list, List<PartialExpression> completed) {
 		PriorityQueue<PartialExpression> pq = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
 
@@ -214,22 +259,21 @@ public class SearchEngine {
 		}
 	}
 
-
 	private static List<List<ExprGroup>> createExprGroupss(List<List<RichDeclaration>> rdss) {
 		List<List<ExprGroup>> egroupss = new LinkedList<List<ExprGroup>>();
 
-		for (List<RichDeclaration> rds : rdss) {
-			List<ExprGroup> egroups = createExprGroups(rds);
-			egroupss.add(egroups);
+		for(int i = 0; i < rdss.size(); i++){
+			List<RichDeclaration> rds = rdss.get(i);
+			egroupss.add(createExprGroups(rds, i));
 		}
 
 		return egroupss;
 	}
 
-	private static List<ExprGroup> createExprGroups(List<RichDeclaration> rds) {
+	private static List<ExprGroup> createExprGroups(List<RichDeclaration> rds, int index) {
 		List<ExprGroup> egroups = new LinkedList<ExprGroup>();
 		for (RichDeclaration rd : rds) {
-			egroups.add(new ExprGroup(createExpr(rd.getDecl()), rd.getScore().getSum()));				
+			egroups.add(new ExprGroup(createExpr(rd.getDecl()), index, rd.getScore().getSum()));				
 		}
 		return egroups;
 	}
@@ -257,5 +301,30 @@ public class SearchEngine {
 		} else {
 			return new InstanceFieldAccess(decl);			
 		}
-	}	
+	}
+
+	public static void main(String[] args) {
+		SearchEngine se = new SearchEngine(50);
+
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.print("Input: ");
+
+		String line = null;
+		while((line = scanner.nextLine()) != null){
+
+			if (scanner.equals("exitexit")) break;
+
+			String[] results = se.run(line);
+			System.out.println();
+			System.out.println();
+			for (String result: results) {
+				System.out.println(result);
+			}
+
+			System.out.print("Input: ");
+		}
+
+		scanner.close();
+	}
 }

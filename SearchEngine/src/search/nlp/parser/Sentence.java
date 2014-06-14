@@ -20,6 +20,7 @@ public class Sentence {
 	private List<Group> stringLiterals;
 	private LinkedList<Group> searchKeyGroups;
 	private LinkedList<Group> searchKeyGroupsAndLiterals;
+	private List<Group> numbers;
 
 	public Sentence(CoreMap map) {
 		this.map = map;
@@ -106,7 +107,7 @@ public class Sentence {
 	public List<Group> getStringLiterals() {
 		return this.stringLiterals;
 	}
-
+	
 	public List<Group> getSearchKeyAndLiteralGroups() {
 		if(this.searchKeyGroupsAndLiterals == null){
 			this.searchKeyGroupsAndLiterals = new LinkedList<Group>();
@@ -119,4 +120,11 @@ public class Sentence {
 		return this.searchKeyGroupsAndLiterals;
 	}
 
+	public void setNumberLiterals(List<Group> numbers) {
+		this.numbers = numbers;
+	}
+
+	public List<Group> getNumberLiterals() {
+		return this.numbers;
+	}
 }

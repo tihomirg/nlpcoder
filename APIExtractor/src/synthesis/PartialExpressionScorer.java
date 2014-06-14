@@ -22,11 +22,12 @@ public class PartialExpressionScorer {
 	public void calculetScore(PartialExpression newPexpr, PartialExpression pexpr) {
 //		newPexpr.setScore(newPexpr.getScore() + pexpr.getScore() + this.connectionReward);
 		
-		HashSet<PartialExpression> connectedTo = newPexpr.getConnectedTo();
-		if (connectedTo.contains(pexpr)){
+		HashSet<Integer> connectedTo = newPexpr.getConnectedTo();
+		int groupIndex = pexpr.getGroupIndex();
+		if (connectedTo.contains(groupIndex)){
 			newPexpr.setScore(newPexpr.getScore() - this.connectionPenalty);
 		} else {
-			connectedTo.add(pexpr);
+			connectedTo.add(groupIndex);
 			newPexpr.setScore(newPexpr.getScore() + pexpr.getScore() + this.connectionReward);
 		}
 	}

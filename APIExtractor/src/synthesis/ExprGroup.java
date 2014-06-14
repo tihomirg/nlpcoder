@@ -11,17 +11,19 @@ public class ExprGroup {
 
 	//TODO: Maybe it is better to have ExprGroup per one expr!
 	//Than we have way slower first stage of the algorithm.
+	private int index;
 	private Expr expr;
 	private List<ExprGroup> relatedGroups;
 	private double initialScore;
 	
 	private List<PartialExpression> completedExprs;
 
-	public ExprGroup(Expr expr) {
-		this(expr, 0.0);
+	public ExprGroup(Expr expr, int index) {
+		this(expr, index, 0.0);
 	}
 
-	public ExprGroup(Expr expr, double initialScore) {
+	public ExprGroup(Expr expr, int index, double initialScore) {
+		this.index = index;
 		this.expr = expr;
 		this.completedExprs = new LinkedList<PartialExpression>();
 		this.initialScore = initialScore;
@@ -69,5 +71,13 @@ public class ExprGroup {
 
 	public void setInitialScore(double initialScore) {
 		this.initialScore = initialScore;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

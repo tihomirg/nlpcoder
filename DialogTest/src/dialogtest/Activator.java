@@ -5,8 +5,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import search.SearchEngine;
-import dialogtest.handlers.ExpressionSynthesizer;
-
 /**
  * The activator class controls the plug-in life cycle
  */

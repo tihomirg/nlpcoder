@@ -13,6 +13,6 @@ public class Hole extends Expr {
 
 	@Override
 	public String toString(Representation rep) {
-		return "Hole";
+		return "<arg>";
 	}
 }

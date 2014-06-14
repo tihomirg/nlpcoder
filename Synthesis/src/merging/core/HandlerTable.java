@@ -4,7 +4,7 @@ import synthesis.handlers.DeclarationHandler;
 import synthesis.handlers.Handler;
 import synthesis.handlers.HandlerFactory;
 import synthesis.handlers.LiteralHandler;
-import synthesis.handlers.LocalsHandler;
+import synthesis.handlers.HoleHandler;
 import synthesis.handlers.OperatorHandler;
 import synthesis.handlers.SingleHandler;
 import synthesis.handlers.SingleTypedHandler;
@@ -33,8 +33,9 @@ public class HandlerTable extends HandlerFactory {
 	private Handler infixOperatorHandler = new TypedOperatorHandler();
 	private Handler prefixOperatorHandler = new TypedOperatorHandler();
 	private Handler postfixOperatorHandler = new TypedOperatorHandler();	
-	private Handler holeHandler = new LocalsHandler();
-	private Handler typeHandler = new TypeHandler();		
+	private Handler holeHandler = null;
+	private Handler typeHandler = new TypeHandler();
+	private Handler localHandler = new LocalHandler();	
 	
 	//Declaration handlers
 	public Handler getMethodInvocationHandler() {return methodInvocationHandler;}
@@ -63,4 +64,10 @@ public class HandlerTable extends HandlerFactory {
 	public Handler getHoleHandler(){return holeHandler;}
 
 	public Handler getTypeHandler(){return typeHandler;}
+	@Override
+	public Handler getLocalHandler() { return localHandler; }
+	
+	public void setHoleHandler(HoleHandler holeHandler) {
+		this.holeHandler = holeHandler;
+	}
 }

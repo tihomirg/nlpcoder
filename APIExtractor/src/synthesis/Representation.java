@@ -3,6 +3,10 @@ package synthesis;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.math3.analysis.function.Min;
+
+import types.Type;
+
 public abstract class Representation implements Cloneable {
 	protected static final int INITIAL_CAP = 20;
 	protected RepKey root;
@@ -34,11 +38,20 @@ public abstract class Representation implements Cloneable {
 		return (Representation) super.clone();
 	}
 	
-	protected List<Param> createParams(List<statistics.posttrees.Expr> args, List<Integer> ids) {
+	protected List<Param> createParams(List<statistics.posttrees.Expr> args, List<Type> argTypes, List<Integer> ids) {
 		List<Param> list = new LinkedList<Param>();
-		for (int i=0; i < args.size(); i++) {
+		
+		
+		//TODO: This ugly hack can be removed once we 
+		int size = Math.min(args.size(), argTypes.size());
+		for (int i=0; i < size; i++) {
+			list.add(new Param(args.get(i), argTypes.get(i), ids.get(i)));
+		}
+		
+		for (int i = size; i < args.size(); i++) {
 			list.add(new Param(args.get(i), ids.get(i)));
 		}
+		
 		return list;
 	}
 

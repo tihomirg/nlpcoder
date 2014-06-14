@@ -13,7 +13,7 @@ public class StringLiteral extends Expr {
 
 	@Override
 	public String toString(Representation rep) {
-		return "s?";
+		return "\"?\"";
 	}
 
 }

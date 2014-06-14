@@ -25,7 +25,9 @@ public abstract class HandlerFactory {
 	public abstract Handler getPrefixOperatorHandler();
 	public abstract Handler getPostfixOperatorHandler();
 	
+	
 	public abstract Handler getHoleHandler();
+	public abstract Handler getLocalHandler();
 
 	public abstract Handler getTypeHandler();
 }

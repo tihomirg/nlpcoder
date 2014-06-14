@@ -37,13 +37,14 @@ public class SimpleRepresentation extends Representation {
 	public List<Param> instantiate(Param param, statistics.posttrees.Expr expr) {
 		RepKey repKey = param.getRepKey();
 		List<statistics.posttrees.Expr> args = expr.getArgs();
+		
 		List<Integer> ids = allocate(args.size());
 
 		nodes[repKey.getId()] = expr.createRep(ids);
 
 		setRepHoles(ids);
 
-		return createParams(args, ids);
+		return createParams(args, expr.getArgTypes(), ids);
 	}
 
 	protected void setRepHoles(List<Integer> ids) {

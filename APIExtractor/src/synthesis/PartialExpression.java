@@ -18,7 +18,7 @@ public class PartialExpression implements Cloneable {
 	private double score;
 	private LinkedList<Connection> connections;
 	private ExprGroup egroup;
-	private HashSet<PartialExpression> connectedTo;
+	private HashSet<Integer> connectedTo;
 
 	public PartialExpression(Param param, ExprGroup egroup) {
 		this.params = new LinkedList<Param>();
@@ -28,7 +28,7 @@ public class PartialExpression implements Cloneable {
 		this.connections = new LinkedList<Connection>();
 		this.egroup = egroup;
 		this.score = egroup.getInitialScore();
-		this.connectedTo = new HashSet<PartialExpression>();
+		this.connectedTo = new HashSet<Integer>();
 	}
 
 	public double getScore() {
@@ -52,7 +52,7 @@ public class PartialExpression implements Cloneable {
 			exp.params = (LinkedList<Param>) this.params.clone();
 			exp.connections = (LinkedList<Connection>) this.connections.clone();
 			exp.subs = (LinkedList<Substitution>) this.subs.clone();
-			exp.connectedTo = (HashSet<PartialExpression>) this.connectedTo.clone();
+			exp.connectedTo = (HashSet<Integer>) this.connectedTo.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -70,6 +70,10 @@ public class PartialExpression implements Cloneable {
 	@Override
 	public String toString() {
 		return this.score+" "+rep.toString() +tryConnections();
+	}
+	
+	public String repToString(){
+		return rep.toString();
 	}
 
 	private String tryConnections() {
@@ -184,7 +188,11 @@ public class PartialExpression implements Cloneable {
 		this.egroup.addCompletedExpr(this);
 	}
 
-	public HashSet<PartialExpression> getConnectedTo() {
+	public HashSet<Integer> getConnectedTo() {
 		return this.connectedTo;
+	}
+
+	public int getGroupIndex() {
+		return this.egroup.getIndex();
 	}
 }
