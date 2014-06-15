@@ -1,5 +1,6 @@
 package search.nlp.parser;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class ParserWTokensAndLevels implements IParser{
 		return new WToken(token);
 	}
 
-	private List<WToken> getWTokens(List<Token> tokens) {
+	private List<WToken> getWTokens(Collection<Token> tokens) {
 		List<WToken> wtokens = new LinkedList<WToken>();
 		for (Token token : tokens) {
 			wtokens.add(getWToken(token));

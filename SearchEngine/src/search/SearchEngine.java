@@ -1,12 +1,14 @@
 package search;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Set;
 
 import merging.CompositionStatistics;
 import merging.core.GroupBuilder;
@@ -106,7 +108,7 @@ public class SearchEngine {
 		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 
-		scorer = new ScorerPipeline(new RichDeclarationScorer[]{new HitWeightScorer(), new DeclProbScorer(0.4)});
+		scorer = new ScorerPipeline(new RichDeclarationScorer[]{new HitWeightScorer(), new DeclProbScorer(0.5)});
 
 		maxDeclarationPerLevel = 10;
 		numOfSynthesisLevels = 5;
@@ -157,8 +159,10 @@ public class SearchEngine {
 					setExprRelatedGroups(exprGroupss);
 
 					HoleHandler hHandler = new HoleHandler();
-					hHandler.addAllLocals(createStringLiterals(sentence.getStringLiterals(), api.getStf()));
-					hHandler.addAllLocals(createNumberLiterals(sentence.getNumberLiterals(), api.getStf()));					
+					List<Expr> strings = createStringLiterals(sentence.getStringLiterals(), api.getStf());
+					hHandler.addAllLocals(strings);
+					List<Expr> numbers = createNumberLiterals(sentence.getNumberLiterals(), api.getStf());
+					hHandler.addAllLocals(numbers);					
 
 					handlerTable.setHoleHandler(hHandler);
 
@@ -180,8 +184,14 @@ public class SearchEngine {
 					if (!withConnections.isEmpty()){
 						Merge merge = new Merge(withConnections, 4, numOfSynthesisLevels, maxDeclarationPerLevel, peScorer, false);
 						merge.run();
-						solutions.addAll(merge.getCompletedResult());
-					} 
+						List<PartialExpression> completedResult = merge.getCompletedResult();
+
+						fixScore(completedResult, strings, numbers);
+
+						solutions.addAll(completedResult);
+					}
+
+					fixScore(completed, strings, numbers);
 					solutions.addAll(completed);
 
 				}
@@ -191,6 +201,66 @@ public class SearchEngine {
 		}
 
 		return prepare(solutions);
+	}
+
+	private void fixScore(List<PartialExpression> pexps, List<Expr> strings, List<Expr> numbers) {
+		if(!strings.isEmpty()){
+			for (PartialExpression pexp : pexps) {
+				String stringRep = pexp.repToString();
+
+				fix(strings, pexp, stringRep);
+
+			}
+		}
+
+		if(!numbers.isEmpty()){
+			for (PartialExpression pexp : pexps) {
+				String stringRep = pexp.repToString();
+
+				fix(numbers, pexp, stringRep);
+			}
+		}
+
+	}
+
+	private void fix(List<Expr> literals, PartialExpression pexp, String stringRep) {
+		int repetitions = numOfRepetitions(stringRep, literals);
+
+		if (repetitions > literals.size()){
+			System.out.println(stringRep+"  str: "+repetitions +"  "+literals);
+			pexp.setScore(pexp.getScore() - 2*(repetitions - literals.size()));
+		}
+	}
+
+	private int numOfRepetitions(String stringRep, List<Expr> exprs) {
+		int sum = 0;
+		Set<String> visited = new HashSet<String>();
+		for (Expr expr : exprs) {
+			String prefix = expr.getPrefix();
+			System.out.println("Prefix: "+prefix);
+			
+			if(!visited.contains(prefix)){
+				visited.add(prefix);
+				sum += numOfRepetitions(stringRep, prefix);
+			}
+		}
+
+		return sum;
+	}
+
+	private int numOfRepetitions(String stringRep, String prefix) {
+		String current = stringRep;
+
+		int sum = 0;
+		while(true){
+			int val = current.indexOf(prefix);
+			if (val != -1){
+				sum++;
+				current = current.substring(val+prefix.length());
+			} else break;
+		}
+
+		return sum;
 	}
 
 	private List<Expr> createStringLiterals(List<Group> stringLiterals, StabileTypeFactory stf) {
@@ -229,7 +299,7 @@ public class SearchEngine {
 
 		for (; i < maxNumOfSolutions && !solutions.isEmpty(); i++) {
 			PartialExpression pexpr = solutions.remove();
-			results.add(pexpr.repToString());
+			results.add(pexpr.toString());//.repToString());
 		}
 
 		for (;i < maxNumOfSolutions; i++){

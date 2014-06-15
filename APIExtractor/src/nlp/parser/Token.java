@@ -1,5 +1,7 @@
 package nlp.parser;
 
+import edu.mit.jwi.item.POS;
+
 public class Token {
 
 	private String text;
@@ -68,8 +70,26 @@ public class Token {
 	public String getText() {
 		return text;
 	}
+	
+	public POS toWordNetPos(){
+		if(pos.equals("N")){
+			return POS.NOUN;
+		} else if(pos.equals("V")){
+			return POS.VERB;
+		} else if(pos.equals("J")) {
+			return POS.ADJECTIVE;
+		} else if (pos.equals("R")){
+			return POS.ADVERB;
+		} else {
+			return POS.NOUN;
+		}
+	}
 
 	public boolean equalsByPosAndLemma(Token thatToken) {
 		return this.pos.equals(thatToken.pos) && this.lemma.equals(thatToken.lemma);
 	}
+	
+	public boolean equalsByLemma(Token thatToken) {
+		return this.lemma.equals(thatToken.lemma);
+	}	
 }

@@ -138,9 +138,9 @@ public class Group {
 		this.tokenRelatedTokens = tokenRelatedTokens;
 	}
 
-	public List<Token> getAllGraphTokens() {
-		List<Token> tokens = new LinkedList<Token>();
-
+	public Set<Token> getAllGraphTokens() {
+		Set<Token> tokens = new HashSet<Token>();
+		
 		tokens.addAll(graphDTokens());
 		tokens.addAll(graphRTokens());
 

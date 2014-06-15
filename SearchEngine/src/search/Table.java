@@ -9,6 +9,7 @@ import nlp.parser.Token;
 
 public class Table {
 
+	private static final String ALL = "All";
 	private Map<String, Map<String, Set<RichDeclaration>>> posToLemmaToRDs = new HashMap<String, Map<String, Set<RichDeclaration>>>();
 	
 	public void add(RichDeclaration rd){
