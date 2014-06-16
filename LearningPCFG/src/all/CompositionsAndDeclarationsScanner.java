@@ -26,7 +26,7 @@ public class CompositionsAndDeclarationsScanner extends BoundedScanner {
 		File compositionOutput = new File(Config.getCompositionStatisticLocation());
 		
 		File declOutput = new File(Config.getDeclarationFrequencyLocation());
-		scan(builder, input, compositionOutput, declOutput, 100000, 10, true);
+		scan(builder, input, compositionOutput, declOutput, 5000000, 10, true);
 		
 	}
 }

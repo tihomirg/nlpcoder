@@ -19,6 +19,7 @@ public class PartialExpression implements Cloneable {
 	private LinkedList<Connection> connections;
 	private ExprGroup egroup;
 	private HashSet<Integer> connectedTo;
+	private int size = 1;
 
 	public PartialExpression(Param param, ExprGroup egroup) {
 		this.params = new LinkedList<Param>();
@@ -194,5 +195,13 @@ public class PartialExpression implements Cloneable {
 
 	public int getGroupIndex() {
 		return this.egroup.getIndex();
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

@@ -38,7 +38,7 @@ public class Slot {
 	}
 	
 	public double getScore(){
-		if(!isOccupied()) return - (0.25 * indexScores[0]);
+		if(!isOccupied()) return - (0.10 * indexScores[0]);
 		else return getScore(this.wtoken);
 	}
 	

@@ -1,5 +1,14 @@
 Title: "Programming using API keywords" (expression repair)
 
+Using hints to program!
+
+-1) Check dose
+print "s"
+println "s"
+
+check literals better, including their order.
+
+
 0) Holes we solve with types:
   - locals form the input (we may include literals as well here) 
   - other locals
@@ -111,3 +120,7 @@ those selected with "file"
   - can be solver by getting a boxed type and its wordset.  
   
 15) Included declaration frequencies
+
+16) Some statistics:
+So far 14300 projects processed.
+Scanned 1823058 files in 8347751ms

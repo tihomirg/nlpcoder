@@ -116,7 +116,7 @@ public class SearchEngine {
 		listener = new ScoreListener(maxDeclarationPerLevel);
 
 		//Test matrix
-		indexScoress = new int[][]{{5, 3},{1, 2}};
+		indexScoress = new int[][]{{5, 1},{3, 3}};
 
 
 		//Up till now we loaded all
@@ -145,8 +145,9 @@ public class SearchEngine {
 		for (Sentence sentence : sentences) {
 			List<List<RichDeclaration>> rdss = new LinkedList<List<RichDeclaration>>();
 
+			List<Group> searchKeyGroups = sentence.getSearchKeyGroups();
 
-			for (Group group : sentence.getSearchKeyGroups()) {
+			for (Group group : searchKeyGroups) {
 				rdss.add(search.search(group));
 			}
 
@@ -164,9 +165,11 @@ public class SearchEngine {
 					List<Expr> numbers = createNumberLiterals(sentence.getNumberLiterals(), api.getStf());
 					hHandler.addAllLocals(numbers);					
 
+					int inputSize = searchKeyGroups.size() + strings.size() + numbers.size();
+					
 					handlerTable.setHoleHandler(hHandler);
 
-					PartialExpressionScorer peScorer = new PartialExpressionScorer(5, 1);
+					PartialExpressionScorer peScorer = new PartialExpressionScorer(3, 3, inputSize, 3);
 					GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, numOfSynthesisLevels, maxDeclarationPerLevel);
 					Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);
 					synthesis.run();
