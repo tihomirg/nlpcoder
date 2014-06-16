@@ -20,8 +20,8 @@ public class HandlerTable extends HandlerFactory {
 	private Handler booleanLiteralHandler = new LiteralHandler();
 	private Handler characterLiteralHandler = new LiteralHandler();
 	private Handler nullLiteralHandler = new LiteralHandler();
-	private Handler numberLiteralHandler = new LiteralHandler();
-	private Handler stringLiteralHandler = new LiteralHandler();
+	private Handler numberLiteralHandler = null;//new LiteralHandler();
+	private Handler stringLiteralHandler = null;//new LiteralHandler();
 	
 	private Handler assignmentHandler = new OperatorHandler();	
 	
@@ -69,5 +69,13 @@ public class HandlerTable extends HandlerFactory {
 	
 	public void setHoleHandler(HoleHandler holeHandler) {
 		this.holeHandler = holeHandler;
+	}
+	
+	public void setStringLiteralHandler(Handler stringLiteralHandler) {
+		this.stringLiteralHandler = stringLiteralHandler;
+	}
+	
+	public void setNumberLiteralHandler(Handler numberLiteralHandler) {
+		this.numberLiteralHandler = numberLiteralHandler;
 	}
 }

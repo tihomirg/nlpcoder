@@ -45,6 +45,7 @@ import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
 import synthesis.comparators.PartialExpressionComparatorDesc;
 import synthesis.handlers.HoleHandler;
+import synthesis.handlers.LiteralHandler;
 import types.NameGenerator;
 import types.StabileTypeFactory;
 import util.Pair;
@@ -165,10 +166,18 @@ public class SearchEngine {
 					List<Expr> numbers = createNumberLiterals(sentence.getNumberLiterals(), api.getStf());
 					hHandler.addAllLocals(numbers);					
 
+					handlerTable.setHoleHandler(hHandler);
+					
+					LiteralHandler sHandler = new LiteralHandler();
+					sHandler.addAllLocals(strings);
+					handlerTable.setStringLiteralHandler(sHandler);
+					
+					LiteralHandler nHandler = new LiteralHandler();
+					nHandler.addAllLocals(strings);					
+					handlerTable.setNumberLiteralHandler(nHandler);
+					
 					int inputSize = searchKeyGroups.size() + strings.size() + numbers.size();
 					
-					handlerTable.setHoleHandler(hHandler);
-
 					PartialExpressionScorer peScorer = new PartialExpressionScorer(3, 3, inputSize, 3);
 					GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, numOfSynthesisLevels, maxDeclarationPerLevel);
 					Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);

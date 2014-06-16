@@ -15,7 +15,7 @@ public class InstanceFieldAccess extends Expr {
 
 	@Override
 	public String toString(Representation rep) {
-		return (decl.isStatic() ? decl.getClazz(): rep.toString(recId))+"."+decl.getName();
+		return (decl.isStatic() ? shortName(decl.getClazz()): rep.toString(recId))+"."+decl.getName();
 	}
 
 }

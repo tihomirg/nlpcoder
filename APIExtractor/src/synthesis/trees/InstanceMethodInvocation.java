@@ -3,7 +3,6 @@ package synthesis.trees;
 import java.util.List;
 
 import synthesis.Representation;
-
 import definitions.Declaration;
 
 public class InstanceMethodInvocation extends Expr {
@@ -20,7 +19,6 @@ public class InstanceMethodInvocation extends Expr {
 
 	@Override
 	public String toString(Representation rep) {
-		return (decl.isStatic() ? decl.getClazz(): rep.toString(recId))+"."+decl.getName()+"("+rep.toString(argIds)+")";
+		return (decl.isStatic() ? shortName(decl.getClazz()): rep.toString(recId))+"."+decl.getName()+"("+rep.toString(argIds)+")";
 	}
-
 }
