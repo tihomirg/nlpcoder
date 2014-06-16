@@ -173,7 +173,7 @@ public class SearchEngine {
 					handlerTable.setStringLiteralHandler(sHandler);
 					
 					LiteralHandler nHandler = new LiteralHandler();
-					nHandler.addAllLocals(strings);					
+					nHandler.addAllLocals(numbers);					
 					handlerTable.setNumberLiteralHandler(nHandler);
 					
 					int inputSize = searchKeyGroups.size() + strings.size() + numbers.size();
@@ -311,7 +311,7 @@ public class SearchEngine {
 
 		for (; i < maxNumOfSolutions && !solutions.isEmpty(); i++) {
 			PartialExpression pexpr = solutions.remove();
-			results.add(pexpr.toString());//.repToString());
+			results.add(pexpr.repToString());
 		}
 
 		for (;i < maxNumOfSolutions; i++){
