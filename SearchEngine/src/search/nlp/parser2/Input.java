@@ -3,6 +3,7 @@ package search.nlp.parser2;
 import java.util.LinkedList;
 import java.util.List;
 
+import api.Local;
 import util.Pair;
 
 public class Input {
@@ -12,6 +13,9 @@ public class Input {
 	private List<Pair<Integer, String>> strings;
 	private List<Pair<Integer, String>> numbers;
 	private List<Pair<Integer, String>> bools;
+	private List<Pair<Integer, Local>> locals;
+	private String preprocessedText;
+	private List<Sentence> sentences;
 	
 	public Input(String originalText) {
 		this.originalText = originalText;
@@ -54,5 +58,29 @@ public class Input {
 	
 	public List<Pair<Integer, String>> getNumberLiterals() {
 		return numbers;
+	}
+
+	public void setLocals(List<Pair<Integer, Local>> locals) {
+		this.locals = locals;
+	}
+	
+	public List<Pair<Integer, Local>> getLocals() {
+		return locals;
+	}
+
+	public void setPreprocessedText(String preprocessedText) {
+		this.preprocessedText = preprocessedText;
+	}
+	
+	public String getPreprocessedText() {
+		return preprocessedText;
+	}
+
+	public void setSentences(List<Sentence> sentences) {
+		this.sentences = sentences;
+	}
+	
+	public List<Sentence> getSentences() {
+		return sentences;
 	}
 }

@@ -272,6 +272,29 @@ public class ParserForLiteralsTest {
 		assertEquals(1, strings.size());
 		checkPair(strings.get(0), "open file ".length(), "\"text.txt\"");
 	}
+	
+	@Test
+	public void testInput2(){
+		String text = "open file true false 90";
+		
+		Input input = parser.parse(new Input(text));
+		
+		assertEquals("open file Boolean Boolean Integer", input.getLiteralizedText());
+		
+		List<Pair<Integer, String>> bools = input.getBooleanLiterals();
+		List<Pair<Integer, String>> numbers = input.getNumberLiterals();
+		List<Pair<Integer, String>> strings = input.getStringLiterals();
+		
+		assertEquals(2, bools.size());
+		checkPair(bools.get(0), "open file ".length(), "true");
+		checkPair(bools.get(1), "open file Boolean ".length(), "false");
+		
+		assertEquals(1, numbers.size());
+		checkPair(numbers.get(0), "open file Boolean Boolean ".length(), "90");
+		
+		assertEquals(0, strings.size());
+		
+	}
 
 	private void checkPair(Pair<Integer, String> pair, int index, String string) {
 		int pairIndex = pair.getFirst();

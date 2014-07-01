@@ -40,8 +40,6 @@ public class ParserForLiterals implements IParser {
 		return curr;
 	}
 
-
-
 	public List<Pair<Integer, String>> extractBoolLiterals(String text) {
 		List<Pair<Integer, String>> bools = new LinkedList<Pair<Integer, String>>();
 		String current = text;
@@ -56,7 +54,7 @@ public class ParserForLiterals implements IParser {
 				} else {
 					char space = current.charAt(TRUE.length());
 					if (!Character.isLetter(space)){
-						bools.add(new Pair<Integer, String>(index, current.substring(0, TRUE.length())));						
+						bools.add(new Pair<Integer, String>(index, TRUE));						
 					}
 
 					index += TRUE.length();
@@ -71,7 +69,7 @@ public class ParserForLiterals implements IParser {
 					} else {
 						char space = current.charAt(FALSE.length());
 						if (!Character.isLetter(space)){
-							bools.add(new Pair<Integer, String>(index, current.substring(0, FALSE.length())));						
+							bools.add(new Pair<Integer, String>(index, FALSE));						
 						}
 
 						index += FALSE.length();
