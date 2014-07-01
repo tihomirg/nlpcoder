@@ -115,8 +115,7 @@ public class BoundedScanner {
 		}
 	}		
 	
-	public static void scanProjects(final File folder, IBuilder builder, boolean testCheck)
-			throws Throwable {
+	public static void scanProjects(final File folder, IBuilder builder, boolean testCheck) throws Throwable {
 		int projCount = 0;
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {

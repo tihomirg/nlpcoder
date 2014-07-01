@@ -71,6 +71,7 @@ public class SearchEngine {
 	private int numOfSynthesisLevels;
 	private HandlerTable handlerTable;
 	private int maxNumOfSolutions;
+	private ParserIdentifyLocals parserIdentifyLocals;
 
 	public SearchEngine(int maxNumOfSolutions) {
 		this.maxNumOfSolutions = maxNumOfSolutions;
@@ -84,15 +85,16 @@ public class SearchEngine {
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
 
-		Map<String, Local> locals = new HashMap<String, Local>();
 		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP);
 
+		parserIdentifyLocals = new ParserIdentifyLocals();
+		
 		pipeline = new ParserPipeline(
 				new IParser[]{
 						new ParserNLP(coreNLP),
 						new ParserGroupsAndDependencyRelations(),
 						new ParserExtractLiterals(),
-						new ParserIdentifyLocals(locals),
+						parserIdentifyLocals,
 						new ParserRightHandSideNeighbours(1),
 						new ParserSliceComplexTokens(decomposer),
 						new ParserRelatedWords(),
@@ -408,5 +410,13 @@ public class SearchEngine {
 		}
 
 		scanner.close();
+	}
+	
+	public StabileAPI getAPI() {
+		return api;
+	}
+	
+	public ParserIdentifyLocals getParserIdentifyLocals() {
+		return parserIdentifyLocals;
 	}
 }

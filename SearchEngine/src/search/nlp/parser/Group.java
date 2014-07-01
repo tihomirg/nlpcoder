@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import nlp.parser.Token;
-import search.Local;
+import api.Local;
 import search.WToken;
 import util.UtilList;
 

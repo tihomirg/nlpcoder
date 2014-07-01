@@ -32,7 +32,9 @@ public class Config {
 	private static final String compositionStatisticStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/stat.txt";
 	private static final String compositionCorpusLocation = "C:\\Users\\gvero\\java_projects\\java_projects";
 	private static final String stabileAPIStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/stabile_api.kryo";
-	private static final String secondStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/initial_api_with_tokens.kryo";	
+	private static final String secondStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/initial_api_with_tokens.kryo";
+	private static final String javaDocLocation = "C:/Users/gvero/javadoc";
+	private static final String javaDopOutputLocation = "C:/Users/gvero/git/nlpcoder/resources/java_doc.txt";	
 	
 	public static String getTaggerLocation(){
 		return tagger;
@@ -124,5 +126,12 @@ public class Config {
 	public static String getSecondStorageLocation() {
 		return secondStorageLocation;
 	}
-	
+
+	public static String getJavaDocLocation() {
+		return javaDocLocation;
+	}
+
+	public static String getJavaDocOutputLocation() {
+		return javaDopOutputLocation;
+	}
 }

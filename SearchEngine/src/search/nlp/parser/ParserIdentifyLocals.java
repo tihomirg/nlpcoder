@@ -1,18 +1,26 @@
 package search.nlp.parser;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import search.nlp.parser.IParser;
 import nlp.parser.Token;
-import search.Local;
+import api.Local;
 
 public class ParserIdentifyLocals implements IParser {
 
 	private Map<String, Local> locals;
-
-	public ParserIdentifyLocals(Map<String, Local> locals) {
-		this.locals = locals;
+	
+	public ParserIdentifyLocals() {
+		this.locals = new HashMap<String, Local>();
+	}
+	
+	public void setLocals(List<Local> list) {
+		this.locals = new HashMap<String, Local>();
+		for (Local local : list) {
+			this.locals.put(local.getName(), local);
+		}
 	}
 
 	@Override
