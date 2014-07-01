@@ -33,13 +33,16 @@ public class ParserForLiterals implements IParser {
 
 		curr.setStringLitersals(strings);
 		curr.setNumberLiterals(numbers);
+		curr.setBooleanLiterals(bools);
+		
+		curr.setLiteralizedText(literalizedText);
 
 		return curr;
 	}
 
 
 
-	private List<Pair<Integer, String>> extractBoolLiterals(String text) {
+	public List<Pair<Integer, String>> extractBoolLiterals(String text) {
 		List<Pair<Integer, String>> bools = new LinkedList<Pair<Integer, String>>();
 		String current = text;
 
@@ -53,7 +56,7 @@ public class ParserForLiterals implements IParser {
 				} else {
 					char space = current.charAt(TRUE.length());
 					if (!Character.isLetter(space)){
-						bools.add(new Pair<Integer, String>(index, current));						
+						bools.add(new Pair<Integer, String>(index, current.substring(0, TRUE.length())));						
 					}
 
 					index += TRUE.length();
@@ -68,7 +71,7 @@ public class ParserForLiterals implements IParser {
 					} else {
 						char space = current.charAt(FALSE.length());
 						if (!Character.isLetter(space)){
-							bools.add(new Pair<Integer, String>(index, current));						
+							bools.add(new Pair<Integer, String>(index, current.substring(0, FALSE.length())));						
 						}
 
 						index += FALSE.length();

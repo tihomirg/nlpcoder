@@ -41,6 +41,17 @@ public class ParserForLiteralsTest {
 	}	
 	
 	@Test
+	public void testBool1() {
+		List<Pair<Integer, String>> pairs = parser.extractBoolLiterals("file true open false");
+		
+		System.out.println(pairs);
+		
+		assertEquals(2, pairs.size());
+		checkPair(pairs.get(0), "file ".length(), "true");
+		checkPair(pairs.get(1), "file true open ".length(), "false");
+	}	
+	
+	@Test
 	public void testSubStr1() {
 		String text = "file \"my\" open \"rest\"";
 		List<Pair<Integer, String>> pairs = parser.extractStringLiterals(text);
@@ -74,6 +85,17 @@ public class ParserForLiteralsTest {
 		assertEquals(2, pairs.size());
 		checkPair(pairs.get(0), "leave me ".length(), "900");
 		checkPair(pairs.get(1), "leave me 900 cause we will ".length(), "500");
+	}
+	
+	@Test
+	public void testBool2() {
+		List<Pair<Integer, String>> pairs = parser.extractBoolLiterals("leave me true cause we will false");
+		
+		System.out.println(pairs);
+		
+		assertEquals(2, pairs.size());
+		checkPair(pairs.get(0), "leave me ".length(), "true");
+		checkPair(pairs.get(1), "leave me true cause we will ".length(), "false");
 	}	
 	
 	@Test
@@ -113,6 +135,17 @@ public class ParserForLiteralsTest {
 	}	
 	
 	@Test
+	public void testBool3() {
+		List<Pair<Integer, String>> pairs = parser.extractBoolLiterals("false and true");
+		
+		System.out.println(pairs);
+		
+		assertEquals(2, pairs.size());
+		checkPair(pairs.get(0), 0, "false");
+		checkPair(pairs.get(1), "false and ".length(), "true");
+	}	
+	
+	@Test
 	public void testSubStr3() {
 		String text = "\"start with zero\" and \"end with I don't know\"";
 		List<Pair<Integer, String>> pairs = parser.extractStringLiterals(text);
@@ -148,6 +181,43 @@ public class ParserForLiteralsTest {
 	}	
 	
 	@Test
+	public void testBool4() {
+		List<Pair<Integer, String>> pairs = parser.extractBoolLiterals("true");
+		
+		System.out.println(pairs);
+		
+		assertEquals(1, pairs.size());
+		checkPair(pairs.get(0), 0, "true");
+	}	
+	
+	@Test
+	public void testBool5() {
+		List<Pair<Integer, String>> pairs = parser.extractBoolLiterals("truef");
+		
+		System.out.println(pairs);
+		
+		assertEquals(0, pairs.size());
+	}	
+	
+	@Test
+	public void testBool6() {
+		List<Pair<Integer, String>> pairs = parser.extractBoolLiterals("ftrue");
+		
+		System.out.println(pairs);
+		
+		assertEquals(0, pairs.size());
+	}	
+	
+	@Test
+	public void testBool7() {
+		List<Pair<Integer, String>> pairs = parser.extractBoolLiterals("truefalsefalse");
+		
+		System.out.println(pairs);
+		
+		assertEquals(0, pairs.size());
+	}
+	
+	@Test
 	public void testNegNum1() {
 		List<Pair<Integer, String>> pairs = parser.extractNumberLiterals("-1");
 		
@@ -179,7 +249,29 @@ public class ParserForLiteralsTest {
 		assertEquals(2, pairs.size());
 		checkPair(pairs.get(0), 0, "\"starts\"");
 		checkPair(pairs.get(1), "String".length(), "\"together\"");
-	}	
+	}
+	
+	@Test
+	public void testInput1(){
+		String text = "open file \"text.txt\" false 90";
+		
+		Input input = parser.parse(new Input(text));
+		
+		assertEquals("open file String Boolean Integer", input.getLiteralizedText());
+		
+		List<Pair<Integer, String>> bools = input.getBooleanLiterals();
+		List<Pair<Integer, String>> numbers = input.getNumberLiterals();
+		List<Pair<Integer, String>> strings = input.getStringLiterals();
+		
+		assertEquals(1, bools.size());
+		checkPair(bools.get(0), "open file String ".length(), "false");
+		
+		assertEquals(1, numbers.size());
+		checkPair(numbers.get(0), "open file String Boolean ".length(), "90");
+		
+		assertEquals(1, strings.size());
+		checkPair(strings.get(0), "open file ".length(), "\"text.txt\"");
+	}
 
 	private void checkPair(Pair<Integer, String> pair, int index, String string) {
 		int pairIndex = pair.getFirst();
