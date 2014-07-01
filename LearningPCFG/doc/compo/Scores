@@ -1,0 +1,35 @@
+1) Declaration Scoring Model
+
+Declaration selection:
+  - declaration best fit score
+  - declaration frequency
+  
+Declaration words: w1 w2 w3 .... wn
+Each word has (0,1] weight. It reflects the word importance for a given declaration. 
+For instance, words that appear in the declaration name have higher weight that those 
+that appear as parameter and return types.
+
+Main model:
+
+score_{decl} = \log{\lambda_1 * hit_1 + \lambda_2 * hit_2 + ... \lambda_n * hit_n} + \log{p_{decl}},             \lambda_1 +....+ \lambda_n = 1   hit_i \leq 1
+
+Best fit maximizes this function.
+
+hit_i is the hit score of the i-th declaration word. The following contributes to hit_i:
+- Group hit. If the words from the same group hit than this hit is 1 otherwise it is 0.5
+- Related words. If a related word hits, than hit is 
+
+hit_i = hit_{group} * hit_{related}
+
+Lambda calculation:
+\lambda_i = w_i / \sum w_j
+
+
+p_{decl} is a declaration probability, a declaration invocation frequency.
+
+2) Partial Examples Scoring Model
+
+score_{expr} = \sum score_{lm} + \sum score_{decl} + \sum connections - \sum pexpr_{repetitions} - \sum literal_{repetitions}
+
+score_{lm} = log{p_{comp}}
+

@@ -1,0 +1,44 @@
+Input: A list of words, joint words and quotation marks.
+
+w1 w2 w3 .... wn
+
+1) We allow user to insert literals. A literal is a list of words between opening and closing quotation mark.
+We process input to find all literals. We substitute them with the corresponding types.
+
+2) We identify locals. We additionally allow a user to insert names of the local variables that are previously defined in a scope.
+We process input to identify all locals. We substitute them with the corresponding types.
+
+3) We call Stanford NL:
+   - tokenizer
+   - dependency graph parser
+
+4) We form groups:
+ - each literal is a singleton group
+    - literal is a leading word, and also the only word in the group
+ - each local is a singleton group
+    - local is a leading word, and also the only word in the group
+ - each word not literal or local forms a group:
+    - in this group the word becomes the leading word
+    - while the world's children that can be reached via word dependency are also added to the group.
+       - instead of words we keep pointers towards the groups. (more details later)
+    
+Last sort of a group is the most important since we use it to select declarations.
+
+The other two group are important for:
+   - obtaining the children of the last group
+   - to substitute local and literal holes in the partial expressions
+    
+5) Now we process single words and joint words in the groups:
+   - We take each leading joint word and:
+      - split it, but all constituent words are now leading words.
+   - We send a word to a spell-checker
+      - if a checker corrects a word we take a first correction
+      - if not we leave it as it is
+      
+Thus we will always invoke method correctedTokens(). It will return corrected tokens, if correction exists if not then,        
+      
+6) We find related words
+
+7) We assign scores to words
+ - leading words 1
+ - others 0.5
