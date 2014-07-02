@@ -17,6 +17,7 @@ public class RichToken {
 	private int index;
 	private List<RichToken> semanticNeighbours;
 	private List<RichToken> rightHandSideNeighbours;
+	private List<Token> decompositions;
 
 	public RichToken(Token originalToken, int index, int beginPosition, int endPosition) {
 		this.originalToken = originalToken;
@@ -96,5 +97,9 @@ public class RichToken {
 
 	public void setRightHandSideNeighbours(List<RichToken> rightHandSideNeighbours) {
 		this.rightHandSideNeighbours = rightHandSideNeighbours;
+	}
+
+	public void setTokenDecompositions(List<Token> decompositions) {
+		this.decompositions = decompositions;
 	}
 }
