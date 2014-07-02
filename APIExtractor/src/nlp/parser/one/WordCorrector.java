@@ -10,7 +10,7 @@ import com.swabunga.spell.event.SpellChecker;
 
 public class WordCorrector {
 
-	private static final String DICTIONARY = "C:/Users/gvero/git/dictionary/eng_com.dic";
+	private static final String DICTIONARY = "C:/Users/gvero/git/nlpcoder/resources/spellchecker/eng_com.dic";
 	private static final int THRESHOLD = 10;
 
 	private SpellChecker spellChecker;
