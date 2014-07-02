@@ -1,5 +1,7 @@
 package search.nlp.parser2;
 
+import java.util.List;
+
 import api.Local;
 import nlp.parser.Token;
 
@@ -12,9 +14,13 @@ public class RichToken {
 	private String stringLiteral;
 	private String numberLiteral;
 	private String booleanLiteral;
+	private int index;
+	private List<RichToken> semanticNeighbours;
+	private List<RichToken> rightHandSideNeighbours;
 
-	public RichToken(Token originalToken, int beginPosition, int endPosition) {
+	public RichToken(Token originalToken, int index, int beginPosition, int endPosition) {
 		this.originalToken = originalToken;
+		this.index = index;
 		this.beginPosition = beginPosition;
 		this.endPosition = endPosition;
 	}
@@ -69,5 +75,26 @@ public class RichToken {
 	
 	public boolean isSpecial(){
 		return isLiteral() || isLocal();
+	}
+	
+	//Means they are good to be a leading word
+	public boolean isNormal() {
+		return !isSpecial() && originalToken.isNormal();
+	}
+	
+	public int getIndex() {
+		return index;
+	}
+
+	public void setSemanticNeighbours(List<RichToken> semanticNeighbours) {
+		this.semanticNeighbours = semanticNeighbours;
+	}
+	
+	public boolean isGoodNeighbour(){
+		return this.originalToken.isGoodNeighbour();
+	}
+
+	public void setRightHandSideNeighbours(List<RichToken> rightHandSideNeighbours) {
+		this.rightHandSideNeighbours = rightHandSideNeighbours;
 	}
 }

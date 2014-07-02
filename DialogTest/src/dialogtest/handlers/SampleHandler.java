@@ -1,5 +1,7 @@
 package dialogtest.handlers;
 
+import java.util.Map;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -13,10 +15,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.text.BadLocationException;
@@ -64,7 +72,10 @@ public class SampleHandler extends AbstractHandler {
 			if (selection instanceof TextSelection) {
 				TextSelection textSelection = (TextSelection)selection;		    
 				int offset = textSelection.getOffset();
-
+				
+				//TODO: Locals
+				getLocals(viewer.getDocument(), offset);
+				
 				Point caretLocation = viewer.getTextWidget().getCaret().getLocation();
 				Point canvasLocation = viewer.getTextWidget().getCaret().getParent().toDisplay(5, -8);
 
@@ -104,6 +115,32 @@ public class SampleHandler extends AbstractHandler {
 
 
 		return null;
+	}
+
+	private void getLocals(IDocument document, int offset) {
+		ASTParser parser = ASTParser.newParser(AST.JLS3);
+		char[] fileContent = document.get().toCharArray();
+		
+		parser.setSource(fileContent);
+		Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
+		parser.setCompilerOptions(options);
+		
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setStatementsRecovery(true);	
+		
+		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);		
+	
+		//System.out.println("Compilation Unit: \n"+cu);
+		
+		System.out.println("Position: "+offset);
+		LocalsExtractor extractor = new LocalsExtractor(offset, Activator.getDefault().getSearchEngine().getAPI());
+		cu.accept(extractor);
+
+		System.out.println("Locals: ");
+		System.out.println(extractor.getLocals().getAll());
+		System.out.println();
+		
 	}
 
 	public Object execute2(ExecutionEvent event) throws ExecutionException {

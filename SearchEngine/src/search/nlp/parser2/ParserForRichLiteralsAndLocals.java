@@ -33,7 +33,7 @@ public class ParserForRichLiteralsAndLocals implements IParser {
 						if (number != null){
 							richToken.setNumberLiteral(number);
 						} else {
-							String bool = tryFindBool(numbers, position);
+							String bool = tryFindBool(bools, position);
 							if (bool != null){
 								richToken.setBooleanLiteral(bool);
 							}

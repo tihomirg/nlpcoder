@@ -1,7 +1,9 @@
 package search.nlp.parser2;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import nlp.parser.Token;
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations.CorefChainAnnotation;
@@ -40,14 +42,19 @@ public class ParserForNaturalLanguage implements IParser {
 			Sentence sentence = new Sentence(rawSentence);
 			
 			List<RichToken> richTokens = new LinkedList<RichToken>();
-			for (CoreLabel rawToken: rawSentence.get(TokensAnnotation.class)) {
-				Token token = new Token(rawToken.get(TextAnnotation.class), rawToken.get(LemmaAnnotation.class), rawToken.get(PartOfSpeechAnnotation.class), rawToken.index());
+			Map<Integer, RichToken> indexesToRichTokens = new HashMap<Integer, RichToken>();
 			
-				richTokens.add(new RichToken(token, rawToken.beginPosition(), rawToken.endPosition()));
+			for (CoreLabel rawToken: rawSentence.get(TokensAnnotation.class)) {
+				int index = rawToken.index();
+				Token token = new Token(rawToken.get(TextAnnotation.class), rawToken.get(LemmaAnnotation.class), rawToken.get(PartOfSpeechAnnotation.class), index);
+				RichToken richToken = new RichToken(token, index, rawToken.beginPosition(), rawToken.endPosition());
+				richTokens.add(richToken);
+				indexesToRichTokens.put(index, richToken);
 			}
 			
 			sentence.setRichTokens(richTokens);
-			sentence.setDependancyGraph(rawSentence.get(CollapsedCCProcessedDependenciesAnnotation.class));
+			sentence.setIndexesToRichTokens(indexesToRichTokens);
+			sentence.setSemanticGraph(rawSentence.get(CollapsedCCProcessedDependenciesAnnotation.class));
 
 			sentences.add(sentence);
 		}

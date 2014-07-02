@@ -54,6 +54,14 @@ public class Token {
 	public boolean shouldSkipAsNeighbour(){
 		return isVerb() || isArticle();
 	}
+	
+	public boolean isGoodNeighbour() {
+		return this.pos.equals("N") || this.pos.equals("J") || this.pos.equals("R");
+	}
+	
+	public boolean isNormal(){
+		return this.pos.equals("V") || isGoodNeighbour();
+	}
 
 	public boolean isBeginingOfString() {
 		return this.pos.equals("``");

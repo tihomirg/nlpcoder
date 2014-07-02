@@ -1,5 +1,16 @@
 package search.nlp.parser2;
 
+/**
+ * 1) ParserForLiterals
+ * 2) ParserForLocals
+ * 3) ParserForNaturalLanguage
+ * 4) ParserForRichLiteralsAndLocals
+ * 5) ParserForSemantincGraphRelations
+ * 6) ParserForRightHandSideNeighbours
+ * 7) ParserForComplexTokens
+ * @author gvero
+ *
+ */
 public class ParserPipeline {
 
 	private IParser[] parsers;
