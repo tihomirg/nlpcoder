@@ -3,6 +3,7 @@ package search.nlp.parser2;
 /**
  * 1) ParserForLiterals
  * 2) ParserForLocals
+ * 2/3) ParserForWordRepair //We do not repair locals and literals
  * 3) ParserForNaturalLanguage
  * 4) ParserForRichLiteralsAndLocals
  * 5) ParserForSemantincGraphRelations

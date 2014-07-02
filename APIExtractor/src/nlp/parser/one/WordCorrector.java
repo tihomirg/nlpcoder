@@ -12,7 +12,7 @@ public class WordCorrector {
 
 	private static final String DICTIONARY = "C:/Users/gvero/git/dictionary/eng_com.dic";
 	private static final int THRESHOLD = 10;
-	
+
 	private SpellChecker spellChecker;
 
 	public WordCorrector() {
@@ -26,7 +26,7 @@ public class WordCorrector {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String correct(String word) {
 		String newWord = word;
 		while(true){
@@ -37,5 +37,11 @@ public class WordCorrector {
 				newWord = newWord.substring(0, newWord.length()-1);
 			} else return null;
 		}
-    }
+	}
+
+	public String tryCorrect(String word) {
+		List suggestions = spellChecker.getSuggestions(word, THRESHOLD);
+		if (suggestions.size() > 0) return suggestions.get(0).toString();
+		else return null;
+	}
 }
