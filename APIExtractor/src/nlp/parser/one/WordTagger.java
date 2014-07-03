@@ -17,4 +17,8 @@ public class WordTagger {
 	public MaxentTagger getTagger() {
 		return tagger;
 	}
+	
+	public String[] tagSentence(String sentence){
+		return tagger.tagString(sentence).split(" ");
+	}
 }

@@ -29,7 +29,7 @@ public class Search {
 	}
 	
 	public void add(StabileAPI api){
-		addAll(api.getDecls());
+		addAll(api.getUniqueDecls());
 	}
 
 	private void addAll(List<Declaration> decls) {
