@@ -23,6 +23,7 @@ import wordnet.WordNet;
 public class Main {
 	private static Map<String, Map<String, Integer>> frequency = new HashMap<String, Map<String,Integer>>();
 	private static int treshold = 5;
+	private static int fTreshold;
 
 
 	public static void main(String[] args) {
@@ -55,10 +56,41 @@ public class Main {
 		//- set of their related words is empty
 		//- otherwise we just filter out the related words.
 
+		int makeFrequency = getFrequency(new Pair<String, String>("make", "V"));
+		int getFrequency = getFrequency(new Pair<String, String>("get", "V"));
+		int writeFrequency = getFrequency(new Pair<String, String>("write", "V"));
+		int copyFrequency = getFrequency(new Pair<String, String>("copy", "V"));
+		
+		int fileFrequency = getFrequency(new Pair<String, String>("file", "N"));
+		int lineFrequency = getFrequency(new Pair<String, String>("line", "N"));
+	
+		int inFrequency = getFrequency(new Pair<String, String>("in", "I"));
+		int toFrequency = getFrequency(new Pair<String, String>("to", "T"));	
+		int aFrequency = getFrequency(new Pair<String, String>("a", "D"));
+		int theFrequency = getFrequency(new Pair<String, String>("the", "D"));
+		int onFrequency = getFrequency(new Pair<String, String>("on", "O"));
+		int fromFrequency = getFrequency(new Pair<String, String>("from", "F"));	
+		
+		fTreshold = 500;//toFrequency;
+		
+		System.out.println("Frewquencies: ");
+		System.out.println("Make: "+makeFrequency);
+		System.out.println("Get: "+getFrequency);
+		System.out.println("Write: "+writeFrequency);
+		System.out.println("Copy: "+copyFrequency);
+		System.out.println("File: "+fileFrequency);
+		System.out.println("Line: "+lineFrequency);
+		
+		System.out.println("In: "+inFrequency);
+		System.out.println("To: "+toFrequency);
+		System.out.println("A: "+aFrequency);
+		System.out.println("The: "+theFrequency);
+		System.out.println("On: "+onFrequency);
+		System.out.println("From: "+fromFrequency);		
+		System.out.println();
+		
 		WordNet wordNet = new WordNet();
-
 		WordTagger tagger = new WordTagger();
-
 		IIndexWord word = wordNet.getWord("write", POS.VERB);
 
 		String lemma = word.getLemma();
@@ -87,65 +119,18 @@ public class Main {
 			System.out.println("Count Score: "+glossScore);
 			double glossFrequencyScore = glossFrequencyScore(processedTaggedGloss);
 			System.out.println("Freq. Score: "+glossFrequencyScore);
-			double glossInversFrequencyScore = glossInversFrequencyScore(processedTaggedGloss);
-			System.out.println("Invers Freq. Score: "+glossInversFrequencyScore);
 			
-			System.out.println("T Score: "+(glossScore *glossFrequencyScore * glossInversFrequencyScore));
+			System.out.println("T Score: "+(glossScore *glossFrequencyScore));
 
 			ISynset iSynset = pair.getSecond();
 			System.out.println("Synonyms: "+iSynset.getWords());
 			System.out.println();
-			
-			System.out.println("Hypernyms: ");
-			
-			for (ISynset hypernym : wordNet.getHypernyms(iSynset)) {
-				String hr_gloss = hypernym.getGloss();
-				System.out.println(hr_gloss);
-
-				String hr_firstGloss = getFirstGloss(hr_gloss);
-				String[] hr_taggedGloss = tagger.tagSentence(hr_firstGloss);
-
-				List<Pair<String, String>> hr_processedTaggedGloss = processTaggedGloss(hr_taggedGloss, wordNet);
-
-				System.out.println(Arrays.toString(hr_taggedGloss));
-				System.out.println(hr_processedTaggedGloss);
-
-				double hr_glossScore = glossScore(hr_processedTaggedGloss);
-				System.out.println("Count Score: "+hr_glossScore);
-				double hr_glossFrequencyScore = glossFrequencyScore(hr_processedTaggedGloss);
-				System.out.println("Freq. Score: "+hr_glossFrequencyScore);
-				double hr_glossInversFrequencyScore = glossInversFrequencyScore(hr_processedTaggedGloss);
-				System.out.println("Invers Freq. Score: "+hr_glossInversFrequencyScore);
-				System.out.println("T Score: "+(hr_glossScore *hr_glossFrequencyScore * hr_glossInversFrequencyScore));
-				System.out.println("Synonyms: "+hypernym.getWords());
-				System.out.println();
-			}
-			
-			System.out.println();
-			System.out.println("Hypernyms: ");
-			for (ISynset hypernym : wordNet.getHyponyms(iSynset)) {
-				String hr_gloss = hypernym.getGloss();
-				System.out.println(hr_gloss);
-
-				String hr_firstGloss = getFirstGloss(hr_gloss);
-				String[] hr_taggedGloss = tagger.tagSentence(hr_firstGloss);
-
-				List<Pair<String, String>> hr_processedTaggedGloss = processTaggedGloss(hr_taggedGloss, wordNet);
-
-				System.out.println(Arrays.toString(hr_taggedGloss));
-				System.out.println(hr_processedTaggedGloss);
-
-				double hr_glossScore = glossScore(hr_processedTaggedGloss);
-				System.out.println("Count Score: "+hr_glossScore);
-				double hr_glossFrequencyScore = glossFrequencyScore(hr_processedTaggedGloss);
-				System.out.println("Freq. Score: "+hr_glossFrequencyScore);
-				double hr_glossInversFrequencyScore = glossInversFrequencyScore(hr_processedTaggedGloss);
-				System.out.println("Invers Freq. Score: "+hr_glossInversFrequencyScore);
-				System.out.println("T Score: "+(hr_glossScore *hr_glossFrequencyScore * hr_glossInversFrequencyScore));
-				System.out.println("Synonyms: "+hypernym.getWords());
-				System.out.println();
-			}
-			
+//			
+//			hyponyms(wordNet, tagger, iSynset);
+//			
+//			System.out.println();
+//			hyperyms(wordNet, tagger, iSynset);
+//			
 			System.out.println("----------------------------------------------------------------------------------------------------------");
 			System.out.println();
 			System.out.println();
@@ -176,6 +161,56 @@ public class Main {
 
 	}
 
+	private static void hyperyms(WordNet wordNet, WordTagger tagger,
+			ISynset iSynset) {
+		System.out.println("Hypernyms: ");
+		for (ISynset hypernym : wordNet.getHyponyms(iSynset)) {
+			String hr_gloss = hypernym.getGloss();
+			System.out.println(hr_gloss);
+
+			String hr_firstGloss = getFirstGloss(hr_gloss);
+			String[] hr_taggedGloss = tagger.tagSentence(hr_firstGloss);
+
+			List<Pair<String, String>> hr_processedTaggedGloss = processTaggedGloss(hr_taggedGloss, wordNet);
+
+			System.out.println(Arrays.toString(hr_taggedGloss));
+			System.out.println(hr_processedTaggedGloss);
+
+			double hr_glossScore = glossScore(hr_processedTaggedGloss);
+			System.out.println("Count Score: "+hr_glossScore);
+			double hr_glossFrequencyScore = glossFrequencyScore(hr_processedTaggedGloss);
+			System.out.println("Freq. Score: "+hr_glossFrequencyScore);
+			System.out.println("T Score: "+(hr_glossScore *hr_glossFrequencyScore));
+			System.out.println("Synonyms: "+hypernym.getWords());
+			System.out.println();
+		}
+	}
+
+	private static void hyponyms(WordNet wordNet, WordTagger tagger, ISynset iSynset) {
+		System.out.println("Hypernyms: ");
+		
+		for (ISynset hypernym : wordNet.getHypernyms(iSynset)) {
+			String hr_gloss = hypernym.getGloss();
+			System.out.println(hr_gloss);
+
+			String hr_firstGloss = getFirstGloss(hr_gloss);
+			String[] hr_taggedGloss = tagger.tagSentence(hr_firstGloss);
+
+			List<Pair<String, String>> hr_processedTaggedGloss = processTaggedGloss(hr_taggedGloss, wordNet);
+
+			System.out.println(Arrays.toString(hr_taggedGloss));
+			System.out.println(hr_processedTaggedGloss);
+
+			double hr_glossScore = glossScore(hr_processedTaggedGloss);
+			System.out.println("Count Score: "+hr_glossScore);
+			double hr_glossFrequencyScore = glossFrequencyScore(hr_processedTaggedGloss);
+			System.out.println("Freq. Score: "+hr_glossFrequencyScore);
+			System.out.println("T Score: "+(hr_glossScore *hr_glossFrequencyScore));
+			System.out.println("Synonyms: "+hypernym.getWords());
+			System.out.println();
+		}
+	}
+
 	private static double glossScore(List<Pair<String, String>> processedTaggedGloss) {
 		double sum = 0;
 		for (Pair<String, String> pair : processedTaggedGloss) {
@@ -189,15 +224,22 @@ public class Main {
 	private static double glossFrequencyScore(List<Pair<String, String>> processedTaggedGloss) {
 		double sum = 0;
 		for (Pair<String, String> pair : processedTaggedGloss) {
-			sum += getFrequency(pair);
+			sum += getFrequencyBelowTreshold(pair);
 		}
 		return sum / processedTaggedGloss.size();
 	}
 	
+	private static double getFrequencyBelowTreshold(Pair<String, String> pair) {
+		double f = getFrequency(pair);
+		
+		if (f < fTreshold) return f;
+		else return 0;
+	}
+
 	private static double glossInversFrequencyScore(List<Pair<String, String>> processedTaggedGloss) {
 		double sum = 0;
 		for (Pair<String, String> pair : processedTaggedGloss) {
-			double f = getFrequency(pair);
+			double f = getFrequencyBelowTreshold(pair);
 			if (f > 0){
 				sum += 1 / f;
 			}
