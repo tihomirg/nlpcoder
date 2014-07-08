@@ -14,4 +14,28 @@ public class WordMeaning {
 		this.score = score;
 	}
 
+	public ISynset getSynset() {
+		return synset;
+	}
+
+	public void setSynset(ISynset synset) {
+		this.synset = synset;
+	}
+
+	public String getGloss() {
+		return gloss;
+	}
+
+	public void setGloss(String gloss) {
+		this.gloss = gloss;
+	}
+
+	public double getScore() {
+		return score;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
 }

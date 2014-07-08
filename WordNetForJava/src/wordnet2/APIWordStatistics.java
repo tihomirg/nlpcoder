@@ -13,10 +13,10 @@ import nlp.parser.Token;
 import types.NameGenerator;
 import edu.mit.jwi.item.IIndexWord;
 
-public class APIWordCountStatistics {
+public class APIWordStatistics {
 	private Map<String, Map<String, Integer>> posToLemmaToCount;
 	
-	public APIWordCountStatistics() {
+	public APIWordStatistics() {
 		this.posToLemmaToCount = new HashMap<String, Map<String,Integer>>();
 		load();
 	}

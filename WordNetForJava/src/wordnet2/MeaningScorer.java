@@ -1,23 +1,21 @@
 package wordnet2;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
 import nlp.parser.TaggedWord;
 import nlp.parser.one.WordTagger;
-import util.Pair;
-import wordnet2.WordNet;
 
-public class SenseScorer {
+public class MeaningScorer {
 
-	private static double fTreshold;
-	private APIWordCountStatistics wordCount;
+	private double fTreshold;
+	private APIWordStatistics stat;
 	private WordTagger tagger;
-	private WordNet wordNet;
+	private WordTransformator transformator;
 	
-	public SenseScorer() {
-		tagger = new WordTagger();
+	public MeaningScorer(APIWordStatistics stat, WordTransformator transformator) {
+		this.stat = stat;
+		this.tagger = new WordTagger();
+		this.transformator = transformator;
 	}
 	
 	public double getScore(String gloss) {
@@ -38,7 +36,7 @@ public class SenseScorer {
 
 			if (Character.isLetter(word.charAt(0))){
 
-				words.add(wordNet.getTransformStanfordTaggedWord(word, tag));
+				words.add(transformator.getTransformStanfordTaggedWord(word, tag));
 
 			}
 		}
@@ -48,7 +46,7 @@ public class SenseScorer {
 	private double apiWordCountScore(List<TaggedWord> processedTaggedGloss) {
 		double sum = 0;
 		for (TaggedWord word: processedTaggedGloss) {
-			if(wordCount.isAPIWord(word)){
+			if(stat.isAPIWord(word)){
 				sum++;
 			}
 		}
@@ -71,7 +69,7 @@ public class SenseScorer {
 	}
 	
 	private double getFrequencyBelowTreshold(TaggedWord word) {
-		double f = wordCount.getCount(word);
+		double f = stat.getCount(word);
 		
 		if (f < fTreshold) return f;
 		else return 0;
