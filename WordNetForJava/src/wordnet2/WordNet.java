@@ -79,6 +79,14 @@ public class WordNet {
 		return meanings;
 	}
 
+	public List<WordMeaning> getMeanings(IIndexWord idxWord){
+		return getMeanings(getSynsets(idxWord));
+	}
+	
+	public IIndexWord getWord(String lemma, POS pos) {
+		return dict.getIndexWord(lemma, pos);
+	}
+	
 	private WordMeaning getMeaning(ISynset synset) {
 		String gloss = synset.getGloss();
 		return new WordMeaning(synset, gloss, scorer.getScore(gloss));
@@ -122,6 +130,20 @@ public class WordNet {
 
 	public TaggedWord getTaggedWord(IIndexWord word) {
 		return  new TaggedWord(word.getLemma(), transformator.getShortStanfordTag(word.getPOS().toString()));
+	}
+
+	public List<TaggedWord> getTaggedWords(List<IWord> words) {
+		List<TaggedWord> taggedWords = new LinkedList<TaggedWord>();
+		
+		for (IWord word: words) {
+			taggedWords.add(getTaggedWord(word));
+		}
+		
+		return taggedWords;
+	}
+
+	public List<TaggedWord> getTaggedWords(ISynset synset) {
+		return getTaggedWords(synset.getWords());
 	}
 	
 }

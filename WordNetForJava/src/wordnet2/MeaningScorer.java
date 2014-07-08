@@ -7,26 +7,34 @@ import nlp.parser.one.WordTagger;
 
 public class MeaningScorer {
 
-	private double fTreshold;
+	private double fTreshold = 500;
 	private APIWordStatistics stat;
 	private WordTagger tagger;
 	private WordTransformator transformator;
-	
+
 	public MeaningScorer(APIWordStatistics stat, WordTransformator transformator) {
 		this.stat = stat;
 		this.tagger = new WordTagger();
 		this.transformator = transformator;
 	}
-	
+
 	public double getScore(String gloss) {
 		String firstGloss = getImportantPrefixOfGloss(gloss);
 		String[] taggedGloss = tagger.tagSentence(firstGloss);
 
 		List<TaggedWord> processedTaggedGloss = processTaggedGloss(taggedGloss);
+
+		double score = apiWordImportanceScore(processedTaggedGloss) * apiWordCountScore(processedTaggedGloss);
 		
-		return apiWordImportanceScore(processedTaggedGloss);
+		System.out.println();
+		System.out.println("MeaningScorer.getScore()");
+		System.out.println(processedTaggedGloss);
+		System.out.println(score);
+		System.out.println();
+
+		return score;
 	}
-	
+
 	private List<TaggedWord> processTaggedGloss(String[] gloss) {
 		List<TaggedWord> words = new LinkedList<TaggedWord>();
 		for (String string : gloss) {
@@ -52,7 +60,7 @@ public class MeaningScorer {
 		}
 		return sum / processedTaggedGloss.size();
 	}
-	
+
 	private String getImportantPrefixOfGloss(String gloss) {
 		int index = gloss.indexOf("\"");
 
@@ -67,10 +75,10 @@ public class MeaningScorer {
 		}
 		return sum / processedTaggedGloss.size();
 	}
-	
+
 	private double getFrequencyBelowTreshold(TaggedWord word) {
 		double f = stat.getCount(word);
-		
+
 		if (f < fTreshold) return f;
 		else return 0;
 	}
@@ -85,5 +93,5 @@ public class MeaningScorer {
 		}
 		return sum / processedTaggedGloss.size();
 	}	
-	
+
 }

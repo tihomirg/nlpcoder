@@ -38,4 +38,9 @@ public class WordMeaning {
 		this.score = score;
 	}
 
+	@Override
+	public String toString() {
+		return "WordMeaning [score=" + score + ", gloss=" + gloss + ", synset="+ synset + "]\n";
+	}
+
 }
