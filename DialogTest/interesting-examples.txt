@@ -1,0 +1,85 @@
+Interesting examples:
+
+1) open file "text.txt"
+
+2) read file "text.txt"
+
+3) parse 1
+
+4) substring "dfsfa" 1
+
+5) copy file "text1.txt" file "text2.txt"  //make it somehow work with "to" as well
+
+6) new buffered stream "text.txt" //fix this one as well
+
+7) Calendar get a current year
+
+8) Leap year
+
+9) Current time
+
+10) open connection
+
+11) new socket "local-host"
+
+12) put "key" "value" pair into a map
+
+13) set thread max priority
+
+14) get property "prop1"
+
+15) does a file "text.txt" exists
+
+16) min 1 3
+
+17) get thread id
+
+18) join threads
+
+19) delete file
+
+20) print exception / print exception stack trace
+
+21) is file "fdasf" directory
+
+22) get thread stack trace
+
+23) read file "fdsafd", line by line
+
+24) write "fdsafda" to a file "fdsafd"
+
+25) set time zone to "US/Arizona"
+
+26) empty map
+
+27) pi
+
+28) load class "mypkg.MyClass"    // Super nice example
+
+29) split "fdsafda" with "ds"
+
+30) memory / free memory/ total memory
+
+31) exec "javac.exe"
+
+32) new data stream "fdasfda"
+
+33) rename file "f1.txt" to "f2.txt"
+
+34) move file "f1.txt" to "f2.txt"
+
+35) write a string "dfasfdas" to a file "text"
+
+36) concat "EP" "FL"
+
+37) write a utf "fdsafd" to a file "dfafsd"
+
+38) java home
+
+39) "fdasfdas" lower case
+
+40) upper ("kfdjsakfdkfdsj")
+
+41) compare "fdsaf" "fdafd"
+
+42) BufferedInput "text"
