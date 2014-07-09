@@ -71,7 +71,7 @@ public class WordNet {
 		return getHypernyms(meaning.getSynset());
 	}	
 	
-	public List<WordMeaning> getMeanings(List<ISynset> synsets){
+	public List<WordMeaning> getMeanings(List<ISynset> synsets) {
 		List<WordMeaning> meanings = new LinkedList<WordMeaning>();
 		for (ISynset synset: synsets) {
 			meanings.add(getMeaning(synset));

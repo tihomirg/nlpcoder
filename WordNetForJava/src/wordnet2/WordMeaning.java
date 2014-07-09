@@ -40,7 +40,7 @@ public class WordMeaning {
 
 	@Override
 	public String toString() {
-		return "WordMeaning [score=" + score + ", gloss=" + gloss + ", synset="+ synset + "]\n";
+		return "WordMeaning [score=" + score + ", gloss=" + gloss + ", \nsynset="+ synset + "]";
 	}
 
 }

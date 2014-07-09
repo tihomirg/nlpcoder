@@ -12,6 +12,7 @@ import edu.mit.jwi.item.ISynset;
 import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.POS;
 import wordnet2.APIWordStatistics;
+import wordnet2.TaggedWordMeaning;
 import wordnet2.WordMeaning;
 import wordnet2.WordNet;
 
@@ -27,18 +28,62 @@ public class RelatedWordsMapGenerator {
 
 	public RelatedWordsMapGenerator() {
 		this.stat = new APIWordStatistics();
-		stat.printWords();
 		this.wordNet = new WordNet(stat);
 	}
 	
 	public static void main(String[] args) {
 		RelatedWordsMapGenerator rwGen = new RelatedWordsMapGenerator();
 		
-		IIndexWord word = rwGen.getWord("set", POS.VERB);
-		TaggedWord taggedWord = rwGen.getTaggedWord(word);
-		Set<TaggedWord> relatedWords = rwGen.getRelatedWords(word, taggedWord);
+		IIndexWord word = rwGen.getWord("join", POS.VERB);
 		
-		System.out.println(relatedWords);
+		TaggedWord taggedWord = rwGen.getTaggedWord(word);
+		PriorityQueue<WordMeaning> sortedMeanings = rwGen.getSortedMeanings(word, taggedWord);
+		
+		List<TaggedWordMeaning> taggedWordMeanings = rwGen.getTaggedWordMeanings(sortedMeanings, taggedWord);
+		printTaggedMeanings(taggedWord, taggedWordMeanings);
+	}
+
+	private static void printTaggedMeanings(TaggedWord taggedWord,
+			List<TaggedWordMeaning> taggedWordMeanings) {
+		System.out.println(taggedWord);
+		for (TaggedWordMeaning taggedWordMeaning : taggedWordMeanings) {
+			System.out.println(taggedWordMeaning);
+		}
+	}
+
+	private static void printSorted(PriorityQueue<WordMeaning> sortedMeanings) {
+		while (!sortedMeanings.isEmpty()) {
+			WordMeaning meaning = sortedMeanings.remove();
+			System.out.println(meaning);
+		}
+	}
+	
+	private List<TaggedWordMeaning> getTaggedWordMeanings(PriorityQueue<WordMeaning> sortedMeanings, TaggedWord taggedWord) {
+		List<TaggedWordMeaning> taggedWordMeanings = new LinkedList<TaggedWordMeaning>();
+		Set<TaggedWord> visited = new HashSet<TaggedWord>();
+		visited.add(taggedWord);
+		while (!sortedMeanings.isEmpty()) {
+			WordMeaning meaning = sortedMeanings.remove();
+			TaggedWordMeaning taggedMeaning = toTaggedMeaning(meaning, visited);
+			
+			if (taggedMeaning != null) {
+				taggedWordMeanings.add(taggedMeaning);
+				visited.addAll(taggedMeaning.getWords());
+			}
+		}
+		
+		return taggedWordMeanings;
+	}
+
+	private TaggedWordMeaning toTaggedMeaning(WordMeaning meaning, Set<TaggedWord> visited) {
+		List<TaggedWord> taggedWords = getTaggedWords(meaning);
+		List<TaggedWord> onlyAPIWords = leaveOnlyAPIWords(taggedWords);
+		
+		onlyAPIWords.removeAll(visited);
+		
+		if (!onlyAPIWords.isEmpty()) {
+			return new TaggedWordMeaning(meaning.getGloss(), meaning.getScore(), onlyAPIWords);
+		} else return null;
 	}
 
 	private RelatedWordsMap serialize() {
@@ -56,9 +101,10 @@ public class RelatedWordsMapGenerator {
 		
 		while(words.hasNext()){
 			IIndexWord word = words.next();
-			TaggedWord taggedWord = wordNet.getTaggedWord(word);
+			TaggedWord taggedWord = getTaggedWord(word);
+			PriorityQueue<WordMeaning> sortedMeanings = getSortedMeanings(word, taggedWord);
 			
-			rwm.put(taggedWord, getRelatedWords(word, taggedWord));
+			rwm.put(taggedWord, getTaggedWordMeanings(sortedMeanings, taggedWord));
 		}
 	}
 	
@@ -76,26 +122,58 @@ public class RelatedWordsMapGenerator {
 		Set<TaggedWord> originalWordSingleton = new HashSet<TaggedWord>();
 		originalWordSingleton.add(taggedWord);
 		
-		List<WordMeaning> bestMeanings = best(wordNet.getMeanings(word), originalWordSingleton);
+		List<WordMeaning> bestMeanings = best(wordNet.getMeanings(word), new HashSet<TaggedWord>());//originalWordSingleton);
 		
 		System.out.println(bestMeanings);
 		
 		for (WordMeaning meaning : bestMeanings) {
-			List<TaggedWord> synonyms = getTaggedWords(meaning);
-			
-			List<ISynset> hyponymsAndHypernyms = wordNet.getHyponymsAndHypernyms(meaning);
-			List<WordMeaning> hyponymsAndHypernymsMeanings = wordNet.getMeanings(hyponymsAndHypernyms);
-			Set<TaggedWord> secondLevelVisited = new HashSet<TaggedWord>();
-			secondLevelVisited.addAll(originalWordSingleton);
-			secondLevelVisited.addAll(synonyms);
-			
-			List<WordMeaning> bestHyponymsAndHypernymsMeanings = best(hyponymsAndHypernymsMeanings, secondLevelVisited);
-			
-			relatedWords.addAll(leaveOnlyAPIWords(filterWords(synonyms, originalWordSingleton)));
-			relatedWords.addAll(leaveOnlyAPIWords(filterWords(getWords(bestHyponymsAndHypernymsMeanings), secondLevelVisited)));
+			List<TaggedWord> synonyms = addSynonyms(relatedWords, originalWordSingleton, meaning);
+			//addHyponymsAndHypernyms(relatedWords, originalWordSingleton, meaning, synonyms);
 		}
 		
 		return relatedWords;
+	}
+	
+	public PriorityQueue<WordMeaning> getSortedMeanings(IIndexWord word, TaggedWord taggedWord) {
+		PriorityQueue<WordMeaning> pq = new PriorityQueue<WordMeaning>(CAPACITY, WORD_MEANING_COMPARATOR);
+		
+		Set<TaggedWord> originalWordSingleton = new HashSet<TaggedWord>();
+		originalWordSingleton.add(taggedWord);
+		
+		List<WordMeaning> bestMeanings = wordNet.getMeanings(word);
+		pq.addAll(filter(bestMeanings, originalWordSingleton));
+		
+		for (WordMeaning meaning : bestMeanings) {
+			List<WordMeaning> hyponymsAndHypernyms = filter(wordNet.getMeanings(wordNet.getHyponymsAndHypernyms(meaning)), originalWordSingleton);
+			fixScore(hyponymsAndHypernyms, meaning.getScore());
+			pq.addAll(hyponymsAndHypernyms);
+		}
+		
+		return pq;
+	}	
+
+	private void fixScore(List<WordMeaning> hyponymsAndHypernyms, double score) {
+		for (WordMeaning meaning: hyponymsAndHypernyms) {
+			meaning.setScore(score * meaning.getScore()); 
+		}
+	}
+
+	private List<TaggedWord> addSynonyms(Set<TaggedWord> relatedWords, Set<TaggedWord> originalWordSingleton, WordMeaning meaning) {
+		List<TaggedWord> synonyms = getTaggedWords(meaning);
+		relatedWords.addAll(leaveOnlyAPIWords(filterWords(synonyms, originalWordSingleton)));
+		return synonyms;
+	}
+
+	private void addHyponymsAndHypernyms(Set<TaggedWord> relatedWords, Set<TaggedWord> originalWordSingleton, WordMeaning meaning, List<TaggedWord> synonyms) {
+		List<ISynset> hyponymsAndHypernyms = wordNet.getHyponymsAndHypernyms(meaning);
+		List<WordMeaning> hyponymsAndHypernymsMeanings = wordNet.getMeanings(hyponymsAndHypernyms);
+		Set<TaggedWord> secondLevelVisited = new HashSet<TaggedWord>();
+		secondLevelVisited.addAll(originalWordSingleton);
+		secondLevelVisited.addAll(synonyms);
+		
+		List<WordMeaning> bestHyponymsAndHypernymsMeanings = best(hyponymsAndHypernymsMeanings, secondLevelVisited);
+		
+		relatedWords.addAll(leaveOnlyAPIWords(filterWords(getWords(bestHyponymsAndHypernymsMeanings), secondLevelVisited)));
 	}
 
 	private List<TaggedWord> filterWords(List<TaggedWord> words, Set<TaggedWord> visited) {
@@ -132,6 +210,21 @@ public class RelatedWordsMapGenerator {
 			
 			if (!taggedWords.isEmpty()){
 				//System.out.println("RelatedWordsMapGenerator.filter()");
+				filtered.add(meaning);
+			}
+		}
+		
+		return filtered;
+	}
+	
+	private List<WordMeaning> filter(List<WordMeaning> meanings) {
+		List<WordMeaning> filtered = new LinkedList<WordMeaning>();
+		
+		for (WordMeaning meaning : meanings) {
+			List<TaggedWord> taggedWords = wordNet.getTaggedWords(meaning);
+			taggedWords = leaveOnlyAPIWords(taggedWords);
+			
+			if (!taggedWords.isEmpty()){
 				filtered.add(meaning);
 			}
 		}

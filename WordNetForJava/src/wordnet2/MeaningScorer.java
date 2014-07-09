@@ -24,15 +24,7 @@ public class MeaningScorer {
 
 		List<TaggedWord> processedTaggedGloss = processTaggedGloss(taggedGloss);
 
-		double score = apiWordImportanceScore(processedTaggedGloss) * apiWordCountScore(processedTaggedGloss);
-		
-		System.out.println();
-		System.out.println("MeaningScorer.getScore()");
-		System.out.println(processedTaggedGloss);
-		System.out.println(score);
-		System.out.println();
-
-		return score;
+		return apiWordCountScore(processedTaggedGloss);
 	}
 
 	private List<TaggedWord> processTaggedGloss(String[] gloss) {

@@ -91,7 +91,7 @@ public class Main {
 		
 		WordNet wordNet = new WordNet();
 		WordTagger tagger = new WordTagger();
-		IIndexWord word = wordNet.getWord("write", POS.VERB);
+		IIndexWord word = wordNet.getWord("create", POS.VERB);
 
 		String lemma = word.getLemma();
 		String pos = transformPos(word.getPOS().toString());
@@ -125,12 +125,12 @@ public class Main {
 			ISynset iSynset = pair.getSecond();
 			System.out.println("Synonyms: "+iSynset.getWords());
 			System.out.println();
-//			
-//			hyponyms(wordNet, tagger, iSynset);
-//			
-//			System.out.println();
-//			hyperyms(wordNet, tagger, iSynset);
-//			
+			
+			hyponyms(wordNet, tagger, iSynset);
+			
+			System.out.println();
+			hyperyms(wordNet, tagger, iSynset);
+			
 			System.out.println("----------------------------------------------------------------------------------------------------------");
 			System.out.println();
 			System.out.println();
@@ -267,9 +267,9 @@ public class Main {
 					words.add(new Pair<String, String>(steam, newPos));
 				} 
 				
-//				else {
-//					words.add(new Pair<String, String>(word, newPos));
-//				}
+				else {
+					words.add(new Pair<String, String>(word, newPos));
+				}
 			}
 		}
 		return words;
