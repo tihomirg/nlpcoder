@@ -17,5 +17,8 @@ public class RelatedWordsMap {
 	public void put(TaggedWord leftHSWord, List<TaggedWordMeaning> list) {
 		this.map.put(leftHSWord, list);
 	}
-
+	
+	public List<TaggedWordMeaning> get(TaggedWord leftHSWord){
+		return this.map.get(leftHSWord);
+	}
 }

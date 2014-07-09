@@ -4,6 +4,8 @@ public class TaggedWord {
 	private String lemma;
 	private String pos;
 
+	public TaggedWord() {}
+	
 	public TaggedWord(String lemma, String pos) {
 		this.lemma = lemma;
 		this.pos = pos;

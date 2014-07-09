@@ -34,7 +34,8 @@ public class Config {
 	private static final String stabileAPIStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/stabile_api.kryo";
 	private static final String secondStorageLocation = "C:/Users/gvero/git/nlpcoder/resources/initial_api_with_tokens.kryo";
 	private static final String javaDocLocation = "C:/Users/gvero/javadoc";
-	private static final String javaDopOutputLocation = "C:/Users/gvero/git/nlpcoder/resources/java_doc.txt";	
+	private static final String javaDopOutputLocation = "C:/Users/gvero/git/nlpcoder/resources/java_doc.txt";
+	private static final String relatedWordsMapLocation = "C:/Users/gvero/git/nlpcoder/resources/related_words.kryo";	
 	
 	public static String getTaggerLocation(){
 		return tagger;
@@ -133,5 +134,9 @@ public class Config {
 
 	public static String getJavaDocOutputLocation() {
 		return javaDopOutputLocation;
+	}
+
+	public static String getRelatedWordsMapLocation() {
+		return relatedWordsMapLocation;
 	}
 }

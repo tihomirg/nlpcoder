@@ -9,6 +9,8 @@ public class TaggedWordMeaning {
 	private double score;
 	private List<TaggedWord> words;
 	
+	public TaggedWordMeaning() {}
+	
 	public TaggedWordMeaning(String gloss, double score, List<TaggedWord> words) {
 		this.gloss = gloss;
 		this.score = score;

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import config.Config;
+import deserializers.KryoDeserializer;
+import serializers.KryoSerializer;
 import nlp.parser.TaggedWord;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.ISynset;
@@ -31,20 +34,42 @@ public class RelatedWordsMapGenerator {
 		this.wordNet = new WordNet(stat);
 	}
 	
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 		RelatedWordsMapGenerator rwGen = new RelatedWordsMapGenerator();
-		
 		IIndexWord word = rwGen.getWord("join", POS.VERB);
-		
 		TaggedWord taggedWord = rwGen.getTaggedWord(word);
 		PriorityQueue<WordMeaning> sortedMeanings = rwGen.getSortedMeanings(word, taggedWord);
 		
 		List<TaggedWordMeaning> taggedWordMeanings = rwGen.getTaggedWordMeanings(sortedMeanings, taggedWord);
 		printTaggedMeanings(taggedWord, taggedWordMeanings);
+		
 	}
+	
+	public static void main2(String[] args) {
+		RelatedWordsMapGenerator rwGen = new RelatedWordsMapGenerator();
+		RelatedWordsMap relatedWordsMap = rwGen.createRelatedWordsMap();
+		KryoSerializer serializer = new KryoSerializer();
+		serializer.writeObject(Config.getRelatedWordsMapLocation(), relatedWordsMap);
+	}
+	
+	public static void main(String[] args) {
+		KryoDeserializer deserializer = new KryoDeserializer();
+		
+		RelatedWordsMap map = (RelatedWordsMap) deserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
+		
+		long time = System.currentTimeMillis();
+		
+		TaggedWord leftHSWord = new TaggedWord("file", "N");
+		List<TaggedWordMeaning> list = map.get(leftHSWord);
+		
+		System.out.println(leftHSWord);
+		System.out.println("Time: "+(System.currentTimeMillis() - time) +" ms");
+		for (TaggedWordMeaning taggedWordMeaning : list) {
+			System.out.println(taggedWordMeaning);
+		}
+	}	
 
-	private static void printTaggedMeanings(TaggedWord taggedWord,
-			List<TaggedWordMeaning> taggedWordMeanings) {
+	private static void printTaggedMeanings(TaggedWord taggedWord, List<TaggedWordMeaning> taggedWordMeanings) {
 		System.out.println(taggedWord);
 		for (TaggedWordMeaning taggedWordMeaning : taggedWordMeanings) {
 			System.out.println(taggedWordMeaning);
@@ -86,7 +111,7 @@ public class RelatedWordsMapGenerator {
 		} else return null;
 	}
 
-	private RelatedWordsMap serialize() {
+	private RelatedWordsMap createRelatedWordsMap() {
 		RelatedWordsMap rwm = new RelatedWordsMap();
 		POS[] poss = new POS[]{POS.NOUN, POS.VERB, POS.ADJECTIVE, POS.ADVERB};
 		
