@@ -66,7 +66,7 @@ public class DeclarationParser implements IDeclarationParser {
 
 	private void simpleNameTokenization(Declaration decl) {
 		String simpleName = decl.getSimpleNameTextualForm();
-		List<Token> simpleNameTokens = decomposer.decomposeString(simpleName);
+		List<Token> simpleNameTokens = decomposer.decomposeSimpleNameString(simpleName);
 		decl.setSimpleNameTokens(simpleNameTokens);
 	}
 

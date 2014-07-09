@@ -72,6 +72,59 @@ public class ComplexWordDecomposer {
 		return newTokens;
 	}
 
+	public List<Token> decomposeSimpleNameString(String lemma) {
+		List<Token> newTokens = new LinkedList<Token>();
+		List<String> initialLemmas = slice(lemma);
+		List<String> newLemmas = transformToSentenceWords(initialLemmas);
+
+		String text = concatenate(newLemmas, " ");
+
+		Annotation document = new Annotation(text);
+
+		pipeline.annotate(document);
+
+		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+
+		for(CoreMap sentence: sentences) {
+			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
+				newTokens.add(new Token(token.get(TextAnnotation.class),  token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
+			}
+		}
+
+		return removeLastIfNeeded(newTokens, initialLemmas.size());
+	}	
+
+	private List<Token> removeLastIfNeeded(List<Token> newTokens, int size) {
+		if (newTokens.size() > 0){
+			if (size == 1){
+				newTokens.remove(newTokens.size()-1);
+			}
+		}
+		return newTokens;
+	}
+
+	private List<String> transformToSentenceWords(List<String> words) {
+		List<String> list = new LinkedList<String>();
+
+		if (words.size() > 0){
+			String leadingWord = words.get(0);
+			list.add(capitalizeFirstLetter(leadingWord));
+			if (words.size() == 1){
+				list.add("noun");
+			} else {
+				for (int i=1; i < words.size(); i++) {
+					list.add(words.get(i));
+				}
+			}
+		}
+
+		return list;
+	}
+
+	private String capitalizeFirstLetter(String leadingWord) {
+		return Character.toUpperCase(leadingWord.charAt(0)) + leadingWord.substring(1);
+	}
+
 	private String concatenate(List<String> lemmas, String separator){
 		StringBuffer sb = new StringBuffer("");
 		if (lemmas.size() > 0){

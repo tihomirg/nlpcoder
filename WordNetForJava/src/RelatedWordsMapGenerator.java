@@ -27,13 +27,14 @@ public class RelatedWordsMapGenerator {
 
 	public RelatedWordsMapGenerator() {
 		this.stat = new APIWordStatistics();
+		stat.printWords();
 		this.wordNet = new WordNet(stat);
 	}
 	
 	public static void main(String[] args) {
 		RelatedWordsMapGenerator rwGen = new RelatedWordsMapGenerator();
 		
-		IIndexWord word = rwGen.getWord("file", POS.NOUN);
+		IIndexWord word = rwGen.getWord("set", POS.VERB);
 		TaggedWord taggedWord = rwGen.getTaggedWord(word);
 		Set<TaggedWord> relatedWords = rwGen.getRelatedWords(word, taggedWord);
 		

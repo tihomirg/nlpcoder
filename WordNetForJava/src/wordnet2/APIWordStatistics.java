@@ -3,6 +3,7 @@ package wordnet2;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import api.StabileAPI;
 import config.Config;
@@ -99,5 +100,18 @@ public class APIWordStatistics {
 		} else {
 			map.put(lemma, map.get(lemma) + 1);
 		}
+	}
+	
+	public void printWords() {
+		int count = 0;
+		for (Entry<String, Map<String, Integer>> entry : posToLemmaToCount.entrySet()) {
+			String pos = entry.getKey();
+			Map<String, Integer> lemmaToCount = entry.getValue();
+			for (String lemma : lemmaToCount.keySet()) {
+				count++;
+				System.out.println("("+lemma+", "+pos+")");
+			}
+		}
+		System.out.println("Words: "+count);
 	}
 }
