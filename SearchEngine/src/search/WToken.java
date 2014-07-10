@@ -5,7 +5,12 @@ import nlp.parser.Token;
 public class WToken {
 	private Token token;
 	private double score;
-	private int index;
+	
+	//whether it belongs to a leading word or not.
+	private int importanceIndex;
+	
+	//An index of subgroup in a group of words.
+	private int subgroupIndex;
 	
 	public WToken(Token token) {
 		this(token, 0);
@@ -17,7 +22,7 @@ public class WToken {
 	
 	public WToken(Token token, int index, double score) {
 		this.token = token;
-		this.index = index;
+		this.importanceIndex = index;
 		this.score = score;
 	}
 
@@ -39,14 +44,22 @@ public class WToken {
 	
 	@Override
 	public String toString() {
-		return "WToken [token=" + token + ", score=" + score + ", index="+ index + "]";
+		return "WToken [token=" + token + ", score=" + score + ", index="+ importanceIndex + "]";
 	}
 
-	public int getIndex() {
-		return this.index;
+	public int getImportanceIndex() {
+		return this.importanceIndex;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	public void setImportanceIndex(int index) {
+		this.importanceIndex = index;
+	}
+	
+	public int getSubgroupIndex() {
+		return subgroupIndex;
+	}
+	
+	public void setSubgroupIndex(int subgroupIndex) {
+		this.subgroupIndex = subgroupIndex;
 	}
 }

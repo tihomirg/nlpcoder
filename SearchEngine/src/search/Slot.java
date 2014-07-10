@@ -43,7 +43,7 @@ public class Slot {
 	}
 	
 	public double getScore(WToken wtoken){
-		return wtoken.getScore() * 	indexScores[wtoken.getIndex()];
+		return wtoken.getScore() * 	indexScores[wtoken.getImportanceIndex()];
 	}
 
 	public WToken substitute(WToken wtoken) {

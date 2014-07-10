@@ -70,7 +70,7 @@ public class RichDeclarationStatistics implements Cloneable {
 
 	private void fit(WToken wtoken) {
 		WToken current = wtoken;
-		int currentIndex = wtoken.getIndex();
+		int currentIndex = wtoken.getImportanceIndex();
 
 		while(true){
 			Slot[] slots = slotss[currentIndex];
@@ -88,7 +88,7 @@ public class RichDeclarationStatistics implements Cloneable {
 			}
 
 			//if these are the same we need to check different group
-			if (currentIndex == current.getIndex()){
+			if (currentIndex == current.getImportanceIndex()){
 				currentIndex = (currentIndex + 1) % 2;
 			} else return;
 		}

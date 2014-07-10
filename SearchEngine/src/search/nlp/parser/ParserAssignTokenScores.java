@@ -32,7 +32,7 @@ public class ParserAssignTokenScores implements IParser {
 	private void assign(List<WToken> list, double score, int index) {
 		for (WToken wToken : list) {
 			wToken.setScore(score);
-			wToken.setIndex(index);
+			wToken.setImportanceIndex(index);
 		}
 	}
 }
