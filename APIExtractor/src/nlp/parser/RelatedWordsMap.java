@@ -1,10 +1,7 @@
+package nlp.parser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import wordnet2.TaggedWordMeaning;
-import nlp.parser.TaggedWord;
 
 public class RelatedWordsMap {
 

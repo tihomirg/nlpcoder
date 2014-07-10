@@ -83,4 +83,18 @@ public class Input {
 	public List<Sentence> getSentences() {
 		return sentences;
 	}
+
+	@Override
+	public String toString() {
+		return "originalText=" + originalText + 
+				"\nliteralizedText="+ literalizedText +
+				"\nstrings=" + strings + 
+				"\nnumbers="+ numbers + 
+				"\nbools=" + bools + 
+				"\nlocals=" + locals+
+				"\npreprocessedText=" + preprocessedText + 
+				"\nsentences="+ sentences;
+	}
+	
+	
 }

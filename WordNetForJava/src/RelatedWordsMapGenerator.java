@@ -1,4 +1,3 @@
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,13 +8,13 @@ import java.util.Set;
 import config.Config;
 import deserializers.KryoDeserializer;
 import serializers.KryoSerializer;
+import nlp.parser.RelatedWordsMap;
 import nlp.parser.TaggedWord;
+import nlp.parser.TaggedWordMeaning;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.item.ISynset;
-import edu.mit.jwi.item.IWord;
 import edu.mit.jwi.item.POS;
 import wordnet2.APIWordStatistics;
-import wordnet2.TaggedWordMeaning;
 import wordnet2.WordMeaning;
 import wordnet2.WordNet;
 
@@ -45,14 +44,14 @@ public class RelatedWordsMapGenerator {
 		
 	}
 	
-	public static void main2(String[] args) {
+	public static void main(String[] args) {
 		RelatedWordsMapGenerator rwGen = new RelatedWordsMapGenerator();
 		RelatedWordsMap relatedWordsMap = rwGen.createRelatedWordsMap();
 		KryoSerializer serializer = new KryoSerializer();
 		serializer.writeObject(Config.getRelatedWordsMapLocation(), relatedWordsMap);
 	}
 	
-	public static void main(String[] args) {
+	public static void main2(String[] args) {
 		KryoDeserializer deserializer = new KryoDeserializer();
 		
 		RelatedWordsMap map = (RelatedWordsMap) deserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);

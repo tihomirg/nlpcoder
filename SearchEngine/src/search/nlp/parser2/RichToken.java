@@ -102,4 +102,41 @@ public class RichToken {
 	public void setTokenDecompositions(List<Token> decompositions) {
 		this.decompositions = decompositions;
 	}
+	
+	private String semanticNeighboursToString(){
+		String s = "";
+		for (RichToken rt : this.semanticNeighbours) {
+			s+= rt.getOriginalToken()+" ";
+		}
+		
+		return s;
+	}
+	
+	private String rightHandSideNeighboursToString(){
+		String s = "";
+		for (RichToken rt : this.rightHandSideNeighbours) {
+			s+= rt.getOriginalToken()+" ";
+		}
+		
+		return s;
+	}
+
+	@Override
+	public String toString() {
+		return "RichToken ["
+				+ "\noriginalToken=" + originalToken
+				+ "\ndecompositions="+ decompositions
+				+ "\nbeginPosition="+ beginPosition 
+				+ "\nendPosition=" + endPosition
+				+ "\nlocal="+ local
+				+ "\nstringLiteral=" + stringLiteral
+				+ "\nnumberLiteral=" + numberLiteral
+				+ "\nbooleanLiteral="+ booleanLiteral 
+				+ "\nindex=" + index
+				+ "\nsemanticNeighbours="+ semanticNeighboursToString()
+				+ "\nrightHandSideNeighbours=" + rightHandSideNeighboursToString() +"]\n";
+	}
+	
+	
+	
 }

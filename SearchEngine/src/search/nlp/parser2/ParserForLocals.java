@@ -11,7 +11,9 @@ public class ParserForLocals implements IParser {
 
 	private List<Local> locals;
 
-	public ParserForLocals() {}
+	public ParserForLocals() {
+		this.locals = new LinkedList<Local>();
+	}
 
 	public void setLocals(List<Local> locals) {
 		this.locals = locals;

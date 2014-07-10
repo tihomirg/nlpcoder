@@ -41,4 +41,11 @@ public class Sentence {
 		return indexesToRichTokens;
 	}
 
+	@Override
+	public String toString() {
+		return "Sentence ["
+				+ "\nrawSentence=" + rawSentence
+				+ "\nsemanticGraph=" + semanticGraph
+				+ "\nrichTokens="+ richTokens+ "]\n";
+	}
 }

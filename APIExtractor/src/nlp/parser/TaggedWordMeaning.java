@@ -1,7 +1,6 @@
-package wordnet2;
+package nlp.parser;
 
 import java.util.List;
-import nlp.parser.TaggedWord;
 
 public class TaggedWordMeaning {
 
