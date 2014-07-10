@@ -8,11 +8,13 @@ import nlp.parser.TaggedWordMeaning;
 import nlp.parser.Token;
 import search.WToken;
 
-public class ParserForRelatedWords implements IParser{
+public class ParserForRelatedAndLeadingWords implements IParser{
 
+	private static final double LEADING_WTOKEN_SCORE = 1.0;
+	
 	private RelatedWordsMap relatedWords;
 
-	public ParserForRelatedWords(RelatedWordsMap relatedWords) {
+	public ParserForRelatedAndLeadingWords(RelatedWordsMap relatedWords) {
 		this.relatedWords = relatedWords;
 	}
 
@@ -20,16 +22,29 @@ public class ParserForRelatedWords implements IParser{
 	public Input parse(Input input) {
 		for (Sentence sentence : input.getSentences()) {
 			for (RichToken richToken : sentence.getRichTokens()) {
-				List<Token> tokens = richToken.getTokens();
+				List<Token> tokens = richToken.getLeadingTokens();
 				List<WToken> relatedWords = new LinkedList<WToken>();
 				for (Token token : tokens) {
 					List<TaggedWordMeaning> meanings = this.relatedWords.get(toTaggedWord(token));
 					relatedWords.addAll(toWTokens(meanings));
 				}
+				
+				richToken.setRelatedWTokens(relatedWords);
+				richToken.setLeadingWTokens(tokensToWTokens(tokens));
 			}
 		}
 
 		return input;
+	}
+
+	private List<WToken> tokensToWTokens(List<Token> tokens) {
+		List<WToken> wTokens = new LinkedList<WToken>();
+		
+		for (Token token : tokens) {
+			wTokens.add(new WToken(token, 0, LEADING_WTOKEN_SCORE));
+		}
+		
+		return wTokens;
 	}
 
 	private List<WToken> toWTokens(List<TaggedWordMeaning> meanings) {

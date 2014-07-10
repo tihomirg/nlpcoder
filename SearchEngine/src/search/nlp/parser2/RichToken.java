@@ -20,7 +20,8 @@ public class RichToken {
 	private List<RichToken> semanticNeighbours;
 	private List<RichToken> rightHandSideNeighbours;
 	private List<Token> decompositions;
-	private List<WToken> relatedWords;
+	private List<WToken> relatedWTokens;
+	private List<WToken> leadingWTokens;
 
 	public RichToken(Token originalToken, int index, int beginPosition, int endPosition) {
 		this.originalToken = originalToken;
@@ -132,9 +133,25 @@ public class RichToken {
 		return s;
 	}
 
-	public List<Token> getTokens() {
+	public List<Token> getLeadingTokens() {
 		if(hasDecompositions()) return this.decompositions;
 		else return new LinkedList<Token>(){{add(RichToken.this.originalToken);}}; 
+	}
+	
+	public void setRelatedWTokens(List<WToken> relatedWTokens) {
+		this.relatedWTokens = relatedWTokens;
+	}
+	
+	public List<WToken> getRelatedWTokens() {
+		return relatedWTokens;
+	}
+	
+	public List<WToken> getLeadingWTokens() {
+		return leadingWTokens;
+	}
+	
+	public void setLeadingWTokens(List<WToken> leadingWTokens) {
+		this.leadingWTokens = leadingWTokens;
 	}
 	
 	@Override
@@ -152,5 +169,6 @@ public class RichToken {
 				+ "\nsemanticNeighbours="+ semanticNeighboursToString()
 				+ "\nrightHandSideNeighbours=" + rightHandSideNeighboursToString() +"]\n";
 	}
+	
 
 }
