@@ -26,7 +26,7 @@ public class RichToken {
 	private List<RichToken> semanticNeighbours;
 	private List<RichToken> rightHandSideNeighbours;
 	
-	private List<WToken> relatedWTokens;
+	private List<List<WToken>> relatedWTokens;
 	private List<WToken> leadingWTokens;
 	private List<WToken> secondaryWTokens;
 	
@@ -145,11 +145,11 @@ public class RichToken {
 		else return new LinkedList<Token>(){{add(RichToken.this.originalToken);}}; 
 	}
 	
-	public void setRelatedWTokens(List<WToken> relatedWTokens) {
+	public void setRelatedWTokens(List<List<WToken>> relatedWTokens) {
 		this.relatedWTokens = relatedWTokens;
 	}
 	
-	public List<WToken> getRelatedWTokens() {
+	public List<List<WToken>> getRelatedWTokens() {
 		return relatedWTokens;
 	}
 	

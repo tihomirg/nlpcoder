@@ -28,10 +28,10 @@ public class ParserForWTokens implements IParser {
 		for (Sentence sentence : input.getSentences()) {
 			for (RichToken richToken : sentence.getRichTokens()) {
 				List<Token> tokens = richToken.getLeadingTokens();
-				List<WToken> relatedWords = new LinkedList<WToken>();
+				List<List<WToken>> relatedWords = new LinkedList<List<WToken>>();
 				for (Token token : tokens) {
 					List<TaggedWordMeaning> meanings = this.relatedWords.get(toTaggedWord(token));
-					relatedWords.addAll(relatedMeaningsToWTokens(meanings));
+					relatedWords.add(relatedMeaningsToWTokens(meanings));
 				}
 				
 				richToken.setRelatedWTokens(relatedWords);

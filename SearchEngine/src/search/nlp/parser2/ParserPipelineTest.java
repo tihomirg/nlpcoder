@@ -25,9 +25,8 @@ public class ParserPipelineTest {
 	 * 6) ParserForSemantincGraphRelations
 	 * 7) ParserForRightHandSideNeighbours
 	 * 8) ParserForComplexTokens
-	 * 9) ParserForRelatedWords
+	 * 9) ParserForWTokens
 	 * 10) ParserForIndexes
-	 * 11) ParserForScores
 	 */
 	@Before
 	public void before(){
