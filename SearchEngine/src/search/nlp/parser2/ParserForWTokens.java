@@ -52,6 +52,16 @@ public class ParserForWTokens implements IParser {
 		
 		return wTokens;
 	}
+	
+	private List<WToken> copyTokensToWTokens(List<Token> tokens, double score) {
+		List<WToken> wTokens = new LinkedList<WToken>();
+		
+		for (Token token : tokens) {
+			wTokens.add(new WToken(new Token(token.getText(), token.getLemma(), token.getPos(), token.getIndex()), 0, score));
+		}
+		
+		return wTokens;
+	}
 
 	private List<WToken> relatedMeaningsToWTokens(List<TaggedWordMeaning> meanings) {
 		List<WToken> wTokens = new LinkedList<WToken>();
