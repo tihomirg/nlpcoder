@@ -1,7 +1,9 @@
 package search.nlp.parser2;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import search.WToken;
 import api.Local;
@@ -10,19 +12,24 @@ import nlp.parser.Token;
 public class RichToken {
 
 	private Token originalToken;
+	private List<Token> decompositions;
+
+	private int index;
 	private int beginPosition;
 	private int endPosition;
+	
 	private Local local;
 	private String stringLiteral;
 	private String numberLiteral;
 	private String booleanLiteral;
-	private int index;
+	
 	private List<RichToken> semanticNeighbours;
 	private List<RichToken> rightHandSideNeighbours;
-	private List<Token> decompositions;
+	
 	private List<WToken> relatedWTokens;
 	private List<WToken> leadingWTokens;
-
+	private List<WToken> secondaryWTokens;
+	
 	public RichToken(Token originalToken, int index, int beginPosition, int endPosition) {
 		this.originalToken = originalToken;
 		this.index = index;
@@ -169,6 +176,26 @@ public class RichToken {
 				+ "\nsemanticNeighbours="+ semanticNeighboursToString()
 				+ "\nrightHandSideNeighbours=" + rightHandSideNeighboursToString() +"]\n";
 	}
-	
 
+	public List<WToken> getSecondaryWTokens() {
+		return secondaryWTokens;
+	}
+
+	public void setSecondaryWTokens(List<WToken> secondaryWTokens) {
+		this.secondaryWTokens = secondaryWTokens;
+	}
+	
+	public List<Token> getSecondaryTokens(){
+		Set<RichToken> rTokens = new HashSet<RichToken>();
+		rTokens.addAll(this.semanticNeighbours);
+		rTokens.addAll(this.rightHandSideNeighbours);
+		
+		List<Token> tokens = new LinkedList<Token>();
+		
+		for (RichToken rToken : rTokens) {
+			tokens.addAll(rToken.getLeadingTokens());
+		}
+		
+		return tokens;
+	}
 }

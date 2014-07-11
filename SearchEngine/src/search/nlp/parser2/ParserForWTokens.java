@@ -8,14 +8,19 @@ import nlp.parser.TaggedWordMeaning;
 import nlp.parser.Token;
 import search.WToken;
 
-public class ParserForRelatedAndLeadingWords implements IParser{
+public class ParserForWTokens implements IParser {
 
-	private static final double LEADING_WTOKEN_SCORE = 1.0;
 	
 	private RelatedWordsMap relatedWords;
+	private double leadingWTokenScore;
+	private double secondaryWTokenScore;
+	private double relatedWTokenFactor;
 
-	public ParserForRelatedAndLeadingWords(RelatedWordsMap relatedWords) {
+	public ParserForWTokens(RelatedWordsMap relatedWords, double leadingWTokenScore, double secondaryWTokenScore, double relatedWTokenFactor) {
 		this.relatedWords = relatedWords;
+		this.leadingWTokenScore = leadingWTokenScore;
+		this.secondaryWTokenScore = secondaryWTokenScore;
+		this.relatedWTokenFactor = relatedWTokenFactor;
 	}
 
 	@Override
@@ -26,46 +31,45 @@ public class ParserForRelatedAndLeadingWords implements IParser{
 				List<WToken> relatedWords = new LinkedList<WToken>();
 				for (Token token : tokens) {
 					List<TaggedWordMeaning> meanings = this.relatedWords.get(toTaggedWord(token));
-					relatedWords.addAll(toWTokens(meanings));
+					relatedWords.addAll(relatedMeaningsToWTokens(meanings));
 				}
 				
 				richToken.setRelatedWTokens(relatedWords);
-				richToken.setLeadingWTokens(tokensToWTokens(tokens));
+				richToken.setLeadingWTokens(tokensToWTokens(tokens, leadingWTokenScore));
+				richToken.setSecondaryWTokens(tokensToWTokens(richToken.getSecondaryTokens(), secondaryWTokenScore));
 			}
 		}
 
 		return input;
 	}
 
-	private List<WToken> tokensToWTokens(List<Token> tokens) {
+	private List<WToken> tokensToWTokens(List<Token> tokens, double score) {
 		List<WToken> wTokens = new LinkedList<WToken>();
 		
 		for (Token token : tokens) {
-			wTokens.add(new WToken(token, 0, LEADING_WTOKEN_SCORE));
+			wTokens.add(new WToken(token, 0, score));
 		}
 		
 		return wTokens;
 	}
 
-	private List<WToken> toWTokens(List<TaggedWordMeaning> meanings) {
+	private List<WToken> relatedMeaningsToWTokens(List<TaggedWordMeaning> meanings) {
 		List<WToken> wTokens = new LinkedList<WToken>();
 		
 		for (TaggedWordMeaning meaning: meanings) {
-			wTokens.addAll(toWTokens(meaning));
+			wTokens.addAll(relatedMeaningToWTokens(meaning));
 		}
 		
 		return wTokens;
 	}
 
-	private List<WToken> toWTokens(TaggedWordMeaning meaning) {
+	private List<WToken> relatedMeaningToWTokens(TaggedWordMeaning meaning) {
 		List<WToken> wTokens = new LinkedList<WToken>();
 		
 		List<TaggedWord> taggedWords = meaning.getWords();
 		double score = meaning.getScore();
 		
-		for (TaggedWord taggedWord : taggedWords) {
-			wTokens.addAll(taggedWordsToWTokens(taggedWords, score));
-		}
+		wTokens.addAll(taggedWordsToWTokens(taggedWords, score * relatedWTokenFactor));
 		
 		return wTokens;
 	}

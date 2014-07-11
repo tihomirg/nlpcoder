@@ -11,9 +11,9 @@ public class ParserForIndexes implements IParser {
 		for (Sentence sentence : input.getSentences()) {
 			for (RichToken richToken : sentence.getRichTokens()) {
 				List<WToken> relatedWords = richToken.getRelatedWTokens();
-				List<WToken> tokens = richToken.getLeadingWTokens();
+				List<WToken> leadingTokens = richToken.getLeadingWTokens();
+				List<WToken> secondaryTokens = richToken.getSecondaryWTokens();
 				
-				//TODO: Set indexes
 			}
 		}
 
