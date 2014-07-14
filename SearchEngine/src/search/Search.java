@@ -1,11 +1,13 @@
 package search;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
 import search.nlp.parser.Group;
+import search.nlp.parser2.RichToken;
 import api.StabileAPI;
 import definitions.Declaration;
 import deserializers.FrequencyDeserializer;
@@ -67,7 +69,7 @@ public class Search {
 	}
 	
 	//For testing purpose
-	private void publish(Set<WToken> searchKeys, PriorityQueue<RichDeclaration> bestRDs) {
+	private void publish(Collection<WToken> searchKeys, PriorityQueue<RichDeclaration> bestRDs) {
 		System.out.println("For words: "+ searchKeys);
 		
 		while(!bestRDs.isEmpty()) {
@@ -75,5 +77,20 @@ public class Search {
 		}
 		
 		System.out.println();
+	}
+	
+	public List<RichDeclaration> search(RichToken richToken) {
+		List<WToken> searchKeys = richToken.getAllTokens();
+		
+		for (WToken searchKey : searchKeys) {
+			table.search(searchKey);
+		}
+		
+		PriorityQueue<RichDeclaration> bestRDs = listener.getBestRDs();
+		List<RichDeclaration> rds = cloneBestRDs(bestRDs);
+		
+		publish(searchKeys, bestRDs);
+		listener.clear();
+		return rds;
 	}
 }

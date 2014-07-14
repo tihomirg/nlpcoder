@@ -39,11 +39,8 @@ public class ParserPipelineTest {
 		//props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
 		
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
-
 		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP);
-		
 		KryoDeserializer deserializer = new KryoDeserializer();
-		
 		RelatedWordsMap rwm = (RelatedWordsMap) deserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
 		
 		parser = new ParserPipeline(new IParser[]{

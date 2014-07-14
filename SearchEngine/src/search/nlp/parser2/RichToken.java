@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import search.WToken;
+import util.UtilList;
 import api.Local;
 import nlp.parser.Token;
 
@@ -64,6 +65,10 @@ public class RichToken {
 	public boolean isLocal() {
 		return this.local != null;
 	}
+	
+	public Local getLocal() {
+		return local;
+	}
 
 	public void setStringLiteral(String string) {
 		this.stringLiteral = string;
@@ -71,6 +76,10 @@ public class RichToken {
 
 	public boolean isStringLiteral(){
 		return this.stringLiteral != null;
+	}
+	
+	public String getStringLiteral() {
+		return stringLiteral;
 	}
 
 	public void setNumberLiteral(String number) {
@@ -80,6 +89,10 @@ public class RichToken {
 	public boolean isNumberLiteral(){
 		return this.numberLiteral != null;
 	}
+	
+	public String getNumberLiteral() {
+		return numberLiteral;
+	}
 
 	public void setBooleanLiteral(String bool) {
 		this.booleanLiteral = bool;
@@ -87,6 +100,10 @@ public class RichToken {
 
 	public boolean isBooleanLiteral(){
 		return this.booleanLiteral != null;
+	}
+	
+	public String getBooleanLiteral() {
+		return booleanLiteral;
 	}
 
 	public boolean isLiteral(){
@@ -201,5 +218,9 @@ public class RichToken {
 		}
 		
 		return tokens;
+	}
+	
+	public List<WToken> getAllTokens(){
+		return UtilList.merge(UtilList.merge(this.leadingWTokens, UtilList.flatten(this.relatedWTokens)), this.secondaryWTokens);
 	}
 }

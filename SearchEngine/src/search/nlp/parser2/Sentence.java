@@ -1,5 +1,6 @@
 package search.nlp.parser2;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,4 +49,44 @@ public class Sentence {
 				+ "\nsemanticGraph=" + semanticGraph
 				+ "\nrichTokens="+ richTokens+ "]\n";
 	}
+
+	public List<RichToken> getSearchKeyRichTokens() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isNormal()) tokens.add(richToken);
+		}
+		
+		return tokens;
+	}
+
+	public List<RichToken> getStringLiteralRichTokens() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isStringLiteral()) tokens.add(richToken);
+		}
+		
+		return tokens;
+	}
+	
+	public List<RichToken> getNumberLiteralRichTokens() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isNumberLiteral()) tokens.add(richToken);
+		}
+		
+		return tokens;
+	}	
+	
+	public List<RichToken> getBooleanLiteralRichTokens() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isBooleanLiteral()) tokens.add(richToken);
+		}
+		
+		return tokens;
+	}	
 }
