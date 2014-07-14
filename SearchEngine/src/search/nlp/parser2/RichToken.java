@@ -174,7 +174,11 @@ public class RichToken {
 				+ "\nbooleanLiteral="+ booleanLiteral 
 				+ "\nindex=" + index
 				+ "\nsemanticNeighbours="+ semanticNeighboursToString()
-				+ "\nrightHandSideNeighbours=" + rightHandSideNeighboursToString() +"]\n";
+				+ "\nrightHandSideNeighbours=" + rightHandSideNeighboursToString() 
+				+"\nleadingTokens="+ this.leadingWTokens
+				+"\nrelatedTokens="+ this.relatedWTokens
+				+"\nsecondaryTokens="+ this.secondaryWTokens 
+				+"]\n";
 	}
 
 	public List<WToken> getSecondaryWTokens() {

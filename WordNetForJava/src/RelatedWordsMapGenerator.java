@@ -44,21 +44,21 @@ public class RelatedWordsMapGenerator {
 		
 	}
 	
-	public static void main(String[] args) {
+	public static void main2(String[] args) {
 		RelatedWordsMapGenerator rwGen = new RelatedWordsMapGenerator();
 		RelatedWordsMap relatedWordsMap = rwGen.createRelatedWordsMap();
 		KryoSerializer serializer = new KryoSerializer();
 		serializer.writeObject(Config.getRelatedWordsMapLocation(), relatedWordsMap);
 	}
 	
-	public static void main2(String[] args) {
+	public static void main(String[] args) {
 		KryoDeserializer deserializer = new KryoDeserializer();
 		
 		RelatedWordsMap map = (RelatedWordsMap) deserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
 		
 		long time = System.currentTimeMillis();
 		
-		TaggedWord leftHSWord = new TaggedWord("file", "N");
+		TaggedWord leftHSWord = new TaggedWord("copy", "N");
 		List<TaggedWordMeaning> list = map.get(leftHSWord);
 		
 		System.out.println(leftHSWord);

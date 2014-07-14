@@ -41,10 +41,12 @@ public class WToken {
 	public void setScore(double score) {
 		this.score = score;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "WToken [token=" + token + ", score=" + score + ", index="+ importanceIndex + "]";
+		return "WToken [token=" + token + ", score=" + score
+				+ ", importanceIndex=" + importanceIndex + ", subgroupIndex="
+				+ subgroupIndex + "]";
 	}
 
 	public int getImportanceIndex() {

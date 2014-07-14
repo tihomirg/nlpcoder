@@ -51,6 +51,10 @@ public class ParserForCorrectingWords implements IParser{
 			String correction = corrector.tryCorrect(word);
 			
 			if (correction != null){
+				if (startPos == 0){
+					correction = firstCharToUpperCase(correction);
+				}
+				
 				localizedText = substituteWords(word, correction, startPos, localizedText);
 
 				int fix = word.length() - correction.length();
@@ -65,6 +69,10 @@ public class ParserForCorrectingWords implements IParser{
 		return localizedText;		
 	}
 	
+	private String firstCharToUpperCase(String correction) {
+		return Character.toUpperCase(correction.charAt(0)) + correction.substring(1);
+	}
+
 	private String substituteWords(String word, String correction, int startPos, String text) {
 		String prefix = text.substring(0, startPos);
 		String postFix = text.substring(startPos + word.length());

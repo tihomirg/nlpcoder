@@ -10,7 +10,7 @@ import search.WToken;
 
 public class ParserForWTokens implements IParser {
 
-	
+
 	private RelatedWordsMap relatedWords;
 	private double leadingWTokenScore;
 	private double secondaryWTokenScore;
@@ -31,9 +31,10 @@ public class ParserForWTokens implements IParser {
 				List<List<WToken>> relatedWords = new LinkedList<List<WToken>>();
 				for (Token token : tokens) {
 					List<TaggedWordMeaning> meanings = this.relatedWords.get(toTaggedWord(token));
-					relatedWords.add(relatedMeaningsToWTokens(meanings));
+					if (meanings != null) relatedWords.add(relatedMeaningsToWTokens(meanings));
+					else relatedWords.add(new LinkedList<WToken>());
 				}
-				
+
 				richToken.setRelatedWTokens(relatedWords);
 				richToken.setLeadingWTokens(tokensToWTokens(tokens, leadingWTokenScore));
 				richToken.setSecondaryWTokens(tokensToWTokens(richToken.getSecondaryTokens(), secondaryWTokenScore));
@@ -45,42 +46,42 @@ public class ParserForWTokens implements IParser {
 
 	private List<WToken> tokensToWTokens(List<Token> tokens, double score) {
 		List<WToken> wTokens = new LinkedList<WToken>();
-		
+
 		for (Token token : tokens) {
 			wTokens.add(new WToken(token, 0, score));
 		}
-		
+
 		return wTokens;
 	}
-	
+
 	private List<WToken> copyTokensToWTokens(List<Token> tokens, double score) {
 		List<WToken> wTokens = new LinkedList<WToken>();
-		
+
 		for (Token token : tokens) {
 			wTokens.add(new WToken(new Token(token.getText(), token.getLemma(), token.getPos(), token.getIndex()), 0, score));
 		}
-		
+
 		return wTokens;
 	}
 
 	private List<WToken> relatedMeaningsToWTokens(List<TaggedWordMeaning> meanings) {
 		List<WToken> wTokens = new LinkedList<WToken>();
-		
+
 		for (TaggedWordMeaning meaning: meanings) {
 			wTokens.addAll(relatedMeaningToWTokens(meaning));
 		}
-		
+
 		return wTokens;
 	}
 
 	private List<WToken> relatedMeaningToWTokens(TaggedWordMeaning meaning) {
 		List<WToken> wTokens = new LinkedList<WToken>();
-		
+
 		List<TaggedWord> taggedWords = meaning.getWords();
 		double score = meaning.getScore();
-		
+
 		wTokens.addAll(taggedWordsToWTokens(taggedWords, score * relatedWTokenFactor));
-		
+
 		return wTokens;
 	}
 
