@@ -30,6 +30,7 @@ public class RichToken {
 	private List<List<WToken>> relatedWTokens;
 	private List<WToken> leadingWTokens;
 	private List<WToken> secondaryWTokens;
+	private List<DisjointSubgroups> disjointSubgroups;
 	
 	public RichToken(Token originalToken, int index, int beginPosition, int endPosition) {
 		this.originalToken = originalToken;
@@ -222,5 +223,14 @@ public class RichToken {
 	
 	public List<WToken> getAllTokens(){
 		return UtilList.merge(UtilList.merge(this.leadingWTokens, UtilList.flatten(this.relatedWTokens)), this.secondaryWTokens);
+	}
+
+	//TODO: Implement this phase of parsing
+	public List<DisjointSubgroups> getDisjointSubgroups() {
+		return this.disjointSubgroups;
+	}
+	
+	public void setDisjointSubgroups(List<DisjointSubgroups> disjointSubgroups) {
+		this.disjointSubgroups = disjointSubgroups;
 	}
 }

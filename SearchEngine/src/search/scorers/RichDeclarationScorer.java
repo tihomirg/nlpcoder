@@ -1,9 +1,11 @@
 package search.scorers;
 
-import search.RichDeclarationStatistics;
+import search.DeclarationSelectionEntry;
+import search.nlp.parser2.RichToken;
 
 public interface RichDeclarationScorer {
 
-	public double calculate(RichDeclarationStatistics rds);
+	public double calculate(DeclarationSelectionEntry rd, RichToken richToken);
+	
 }
 

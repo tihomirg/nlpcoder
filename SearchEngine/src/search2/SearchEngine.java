@@ -1,10 +1,8 @@
 package search2;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Scanner;
@@ -19,8 +17,9 @@ import merging.core.Merge;
 import merging.core.SaturationGroupBuilder;
 import merging.core.SaturationSynthesisGroup;
 import merging.core.Synthesis;
+import search.DeclarationSelectionEntry;
 import search.RichDeclaration;
-import search.ScoreListener;
+import search.SelectListener;
 import search.ScorerPipeline;
 import search.Search;
 import search.nlp.parser.ComplexWordDecomposer;
@@ -39,8 +38,8 @@ import search.nlp.parser2.ParserForWTokens;
 import search.nlp.parser2.ParserPipeline;
 import search.nlp.parser2.RichToken;
 import search.nlp.parser2.Sentence;
-import search.scorers.DeclProbScorer;
-import search.scorers.HitWeightScorer;
+import search.scorers.UnigramScorer;
+import search.scorers.HungarianScorer;
 import search.scorers.RichDeclarationScorer;
 import statistics.posttrees.ConstructorInvocation;
 import statistics.posttrees.Expr;
@@ -67,19 +66,20 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class SearchEngine {
 
-	private static final boolean SYNTHESIS = true;
+	private static final boolean SYNTHESIS = false;
 	private long time;
 	private ParserPipeline pipeline;
 	private StabileAPI api;
 	private ScorerPipeline scorer;
-	private int[][] indexScoress;
-	private ScoreListener listener;
+	private double[][] kindMatrix;
+	private SelectListener listener;
 	private FrequencyDeserializer frequencies;
 	private int maxDeclarationPerLevel;
 	private int numOfSynthesisLevels;
 	private HandlerTable handlerTable;
 	private int maxNumOfSolutions;
 	private ParserForLocals parserForLocals;
+	private Search search;
 
 	public SearchEngine(int maxNumOfSolutions) {
 		this.maxNumOfSolutions = maxNumOfSolutions;
@@ -123,26 +123,20 @@ public class SearchEngine {
 		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 
-		scorer = new ScorerPipeline(new RichDeclarationScorer[]{new HitWeightScorer(), new DeclProbScorer(0.5)});
 
 		maxDeclarationPerLevel = 10;
 		numOfSynthesisLevels = 5;
 
-		listener = new ScoreListener(maxDeclarationPerLevel);
+		listener = new SelectListener();
 
-		//Test matrix
-		indexScoress = new int[][]{{5, 1},{3, 3}};
-
-
-		//Up till now we loaded all
-
-		//Input input = pipeline.parse(new Input("open(file(\"text.txt\"), make)"));
-		//Input input = pipeline.parse(new Input("open read close a file \"text.txt\""));
+		kindMatrix = new double[][]{{1, 0.5},{0.5, 1}};
+		scorer = new ScorerPipeline(new RichDeclarationScorer[]{new HungarianScorer(kindMatrix), new UnigramScorer(0.5)});
 
 		frequencies = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());
 
 		System.out.println(frequencies);
 
+		this.search = new Search(scorer, listener, api, frequencies, maxDeclarationPerLevel);
 	}
 
 	public String[] run(String line){
@@ -152,7 +146,6 @@ public class SearchEngine {
 		time = System.currentTimeMillis();
 		Input input = pipeline.parse(new Input(line));
 
-		Search search = new Search(scorer, listener, api, indexScoress, frequencies);
 		printMsgAndSetTime("Input parsing time",time);
 
 		List<Sentence> sentences = input.getSentences();
@@ -162,8 +155,8 @@ public class SearchEngine {
 
 			List<RichToken> searchKeyGroups = sentence.getSearchKeyRichTokens();
 
-			for (RichToken group : searchKeyGroups) {
-				rdss.add(search.search(group));
+			for (RichToken richToken : searchKeyGroups) {
+				rdss.add(search.search(richToken));
 			}
 
 			time = printMsgAndSetTime("Decl search time", time);

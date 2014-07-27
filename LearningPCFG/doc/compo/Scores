@@ -1,35 +1,32 @@
-1) Declaration Scoring Model
+1. Declaration Score
 
 Declaration selection:
   - declaration best fit score
   - declaration frequency
-  
-Declaration words: w1 w2 w3 .... wn
-Each word has (0,1] weight. It reflects the word importance for a given declaration. 
+
+Each input word has importance, a value form interval (0,1]. It reflects the word importance for a given declaration. 
 For instance, words that appear in the declaration name have higher weight that those 
 that appear as parameter and return types.
 
-Main model:
+Each declaration slot has importance, a value form interval (0,1]. We denote it with: \imp_{slot_i}.
 
-score_{decl} = \log{\lambda_1 * hit_1 + \lambda_2 * hit_2 + ... \lambda_n * hit_n} + \log{p_{decl}},             \lambda_1 +....+ \lambda_n = 1   hit_i \leq 1
+score_{decl} = score_{best-fit} */+ score_{frequency}
+score_{fit} = \log{\imp_{slot_1} * hit_1 + \imp_{slot_n} * hit_2 + ... \imp_{slot_n} * hit_n},             \imp_{slot_1} +....+ \imp_{slot_n} = 1   hit_i \leq 1
 
-Best fit maximizes this function.
 
+1.1. 
+Best fit maximizes score_{best-fit}.
 hit_i is the hit score of the i-th declaration word. The following contributes to hit_i:
-- Group hit. If the words from the same group hit than this hit is 1 otherwise it is 0.5
-- Related words. If a related word hits, than hit is 
+- Group hit. If the words from the same group hit then this hit is 1 otherwise it is 0.5
+- Word importance. For leading words it is 1, for others, related and supplementary (secondary) words it is less than 1.
 
-hit_i = hit_{group} * hit_{related}
+hit_i = hit_{group} * imp_{word}
 
-Lambda calculation:
-\lambda_i = w_i / \sum w_j
-
-
+1.2.
+score_{frequency} = \log{p_{decl}}
 p_{decl} is a declaration probability, a declaration invocation frequency.
 
-2) Partial Examples Scoring Model
+2. Partial Expression Score
 
 score_{expr} = \sum score_{lm} + \sum score_{decl} + \sum connections - \sum pexpr_{repetitions} - \sum literal_{repetitions}
-
 score_{lm} = log{p_{comp}}
-

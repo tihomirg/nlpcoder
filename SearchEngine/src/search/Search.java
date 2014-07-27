@@ -6,27 +6,30 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import search.comparators.RichDeclarationComparatorDesc;
 import search.nlp.parser.Group;
 import search.nlp.parser2.RichToken;
+import search.scorers.Score;
 import api.StabileAPI;
 import definitions.Declaration;
 import deserializers.FrequencyDeserializer;
 
 public class Search {
 
+	private static final int INITIAL_CAP = 100;
+	private static final RichDeclarationComparatorDesc COMPARATOR_DESC = new RichDeclarationComparatorDesc();
 	private Table table;
 	private ScorerPipeline scorer;
-	private ScoreListener listener;
-	private int[][] indexScoress;
-	
+	private SelectListener listener;
 	private FrequencyDeserializer fd;
+	private int maxDecls;
 	
-	public Search(ScorerPipeline scorer, ScoreListener listener, StabileAPI api, int[][] indexScoress, FrequencyDeserializer fd) {
+	public Search(ScorerPipeline scorer, SelectListener listener, StabileAPI api, FrequencyDeserializer fd, int maxDecls) {
 		this.table = new Table();
 		this.scorer = scorer;
 		this.listener = listener;
-		this.indexScoress = indexScoress;
 		this.fd = fd;
+		this.maxDecls = maxDecls;
 		add(api);
 	}
 	
@@ -41,42 +44,7 @@ public class Search {
 	}
 
 	public void add(Declaration decl){
-		table.add(new RichDeclaration(decl, fd.getLogFrequency(decl.getId()), scorer, listener, indexScoress));
-	}
-	
-	public List<RichDeclaration> search(Group searchKeyGroup){
-		Set<WToken> searchKeys = searchKeyGroup.getSearchKeys();
-		
-		for (WToken searchKey : searchKeys) {
-			table.search(searchKey);
-		}
-		
-		PriorityQueue<RichDeclaration> bestRDs = listener.getBestRDs();
-		List<RichDeclaration> rds = cloneBestRDs(bestRDs);
-		
-		publish(searchKeys, bestRDs);
-		listener.clear();
-
-		return rds;
-	}
-
-	private List<RichDeclaration> cloneBestRDs(PriorityQueue<RichDeclaration> bestRDs) {
-		List<RichDeclaration>  rds = new LinkedList<RichDeclaration>();
-		for (RichDeclaration rd : bestRDs) {
-			rds.add(rd.clone());
-		}
-		return rds;
-	}
-	
-	//For testing purpose
-	private void publish(Collection<WToken> searchKeys, PriorityQueue<RichDeclaration> bestRDs) {
-		System.out.println("For words: "+ searchKeys);
-		
-		while(!bestRDs.isEmpty()) {
-			System.out.println(bestRDs.remove());
-		}
-		
-		System.out.println();
+		table.add(new DeclarationSelectionEntry(decl, fd.getLogFrequency(decl.getId()), listener));
 	}
 	
 	public List<RichDeclaration> search(RichToken richToken) {
@@ -86,11 +54,27 @@ public class Search {
 			table.search(searchKey);
 		}
 		
-		PriorityQueue<RichDeclaration> bestRDs = listener.getBestRDs();
-		List<RichDeclaration> rds = cloneBestRDs(bestRDs);
+		List<DeclarationSelectionEntry> selected = listener.getSelected();
+		PriorityQueue<RichDeclaration> rds = rank(selected, richToken);
 		
-		publish(searchKeys, bestRDs);
 		listener.clear();
+		return keepBest(rds);
+	}
+
+	private List<RichDeclaration> keepBest(PriorityQueue<RichDeclaration> rds) {
+		List<RichDeclaration> filtered = new LinkedList<RichDeclaration>();
+		for (int i=0; i<maxDecls && !rds.isEmpty(); i++) {
+			filtered.add(rds.remove());
+		}
+		return filtered;
+	}
+
+	private PriorityQueue<RichDeclaration> rank(List<DeclarationSelectionEntry> selectedEntries, RichToken richToken) {
+		PriorityQueue<RichDeclaration> rds = new PriorityQueue<RichDeclaration>(INITIAL_CAP, COMPARATOR_DESC);
+		for (DeclarationSelectionEntry selectedEntry: selectedEntries) {
+			rds.add(new RichDeclaration(selectedEntry.getDecl(), scorer.calculate(selectedEntry, richToken)));
+		}
+		
 		return rds;
 	}
 }

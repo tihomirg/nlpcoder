@@ -2,7 +2,7 @@ package search.comparators;
 
 import java.util.Comparator;
 
-import search.RichDeclaration;
+import search.DeclarationSelectionEntry;
 import search.WToken;
 
 public class WTokenComparatorAsce implements Comparator<WToken>{

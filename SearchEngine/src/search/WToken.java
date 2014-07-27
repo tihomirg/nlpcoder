@@ -6,11 +6,13 @@ public class WToken {
 	private Token token;
 	private double score;
 	
-	//whether it belongs to a leading word or not.
+	//whether it belongs primary or a secondary word.
 	private int importanceIndex;
 	
 	//An index of subgroup in a group of words.
 	private int subgroupIndex;
+	private double importanceWeight;
+	private double relatednessWeight;
 	
 	public WToken(Token token) {
 		this(token, 0);
@@ -63,5 +65,17 @@ public class WToken {
 	
 	public void setSubgroupIndex(int subgroupIndex) {
 		this.subgroupIndex = subgroupIndex;
+	}
+	
+	public boolean equalsByPosAndLemma(WToken thatWToken){
+		return this.token.equalsByPosAndLemma(thatWToken.token);
+	}
+
+	public double getImportanceWeight() {
+		return importanceWeight;
+	}
+
+	public double getRelatednessWeight() {
+		return relatednessWeight;
 	}
 }

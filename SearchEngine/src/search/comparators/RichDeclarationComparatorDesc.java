@@ -2,6 +2,7 @@ package search.comparators;
 
 import java.util.Comparator;
 
+import search.DeclarationSelectionEntry;
 import search.RichDeclaration;
 
 public class RichDeclarationComparatorDesc implements Comparator<RichDeclaration>{

@@ -1,5 +1,6 @@
 package search;
 
+import search.nlp.parser2.RichToken;
 import search.scorers.RichDeclarationScorer;
 import search.scorers.Score;
 
@@ -11,11 +12,11 @@ public class ScorerPipeline {
 		this.scorers = scorers;
 	}
 	
-	public Score calculate(RichDeclarationStatistics rds) {
+	public Score calculate(DeclarationSelectionEntry rd, RichToken richToken) {
 		Score score = new Score();
 		
 		for (RichDeclarationScorer scorer : scorers) {
-			score.add(scorer.calculate(rds));
+			score.add(scorer.calculate(rd, richToken));
 		}
 		
 		return score;

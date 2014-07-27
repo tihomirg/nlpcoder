@@ -10,21 +10,21 @@ import nlp.parser.Token;
 public class Table {
 
 	private static final String ALL = "All";
-	private Map<String, Map<String, Set<RichDeclaration>>> posToLemmaToRDs = new HashMap<String, Map<String, Set<RichDeclaration>>>();
+	private Map<String, Map<String, Set<DeclarationSelectionEntry>>> posToLemmaToRDs = new HashMap<String, Map<String, Set<DeclarationSelectionEntry>>>();
 	
-	public void add(RichDeclaration rd){
+	public void add(DeclarationSelectionEntry rd){
 		for (Token token : rd.getTokens()) {
 			add(token, rd);
 		}
 	}
 
-	private void add(Token token, RichDeclaration rd) {
+	private void add(Token token, DeclarationSelectionEntry rd) {
 		String pos = token.getPos();
 		
-		Map<String, Set<RichDeclaration>> lemmaToRDs = null;
+		Map<String, Set<DeclarationSelectionEntry>> lemmaToRDs = null;
 		
 		if(!posToLemmaToRDs.containsKey(pos)){
-			lemmaToRDs = new HashMap<String, Set<RichDeclaration>>();
+			lemmaToRDs = new HashMap<String, Set<DeclarationSelectionEntry>>();
 			posToLemmaToRDs.put(pos, lemmaToRDs);
 		} else {
 			lemmaToRDs = posToLemmaToRDs.get(pos);
@@ -32,9 +32,9 @@ public class Table {
 		
 		String lemma = token.getLemma();
 		
-		Set<RichDeclaration> rds = null;
+		Set<DeclarationSelectionEntry> rds = null;
 		if(!lemmaToRDs.containsKey(lemma)){
-			rds = new HashSet<RichDeclaration>();
+			rds = new HashSet<DeclarationSelectionEntry>();
 			lemmaToRDs.put(lemma, rds);
 		} else {
 			rds = lemmaToRDs.get(lemma);
@@ -45,14 +45,14 @@ public class Table {
 
 	public void search(WToken searchKey) {
 		Token token = searchKey.getToken();
-		Map<String, Set<RichDeclaration>> lemmaToRDs = posToLemmaToRDs.get(token.getPos());
+		Map<String, Set<DeclarationSelectionEntry>> lemmaToRDs = posToLemmaToRDs.get(token.getPos());
 		
 		if (lemmaToRDs != null){
-			Set<RichDeclaration> rds = lemmaToRDs.get(token.getLemma());
+			Set<DeclarationSelectionEntry> rds = lemmaToRDs.get(token.getLemma());
 			
 			if(rds != null){
-				for (RichDeclaration rd : rds) {
-					rd.hit(searchKey);
+				for (DeclarationSelectionEntry rd : rds) {
+					rd.hit();
 				}
 			}
 		}
