@@ -56,6 +56,7 @@ import types.NameGenerator;
 import types.StabileTypeFactory;
 import util.Pair;
 import util.UtilList;
+import api.Local;
 import api.StabileAPI;
 import config.Config;
 import definitions.Declaration;
@@ -139,11 +140,12 @@ public class SearchEngine {
 		this.search = new Search(scorer, listener, api, frequencies, maxDeclarationPerLevel);
 	}
 
-	public String[] run(String line){
-
+	public String[] run(String line, List<Local> locals){
 		PriorityQueue<PartialExpression> solutions = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
 
 		time = System.currentTimeMillis();
+		
+		this.parserForLocals.setLocals(locals);
 		Input input = pipeline.parse(new Input(line));
 
 		printMsgAndSetTime("Input parsing time",time);
@@ -169,18 +171,21 @@ public class SearchEngine {
 
 					HoleHandler hHandler = new HoleHandler();
 					List<Expr> strings = createStringLiterals(sentence.getStringLiteralRichTokens(), api.getStf());
-					hHandler.addAllLocals(strings);
+					hHandler.addAllHoleReplacements(strings);
 					List<Expr> numbers = createNumberLiterals(sentence.getNumberLiteralRichTokens(), api.getStf());
-					hHandler.addAllLocals(numbers);					
+					hHandler.addAllHoleReplacements(numbers);
+					
+					List<Expr> localExprs = createLocals(sentence.getLocals());
+					hHandler.addAllHoleReplacements(localExprs);
 
 					handlerTable.setHoleHandler(hHandler);
 					
 					LiteralHandler sHandler = new LiteralHandler();
-					sHandler.addAllLocals(strings);
+					sHandler.addAllLiterals(strings);
 					handlerTable.setStringLiteralHandler(sHandler);
 					
 					LiteralHandler nHandler = new LiteralHandler();
-					nHandler.addAllLocals(numbers);					
+					nHandler.addAllLiterals(numbers);					
 					handlerTable.setNumberLiteralHandler(nHandler);
 					
 					int inputSize = searchKeyGroups.size() + strings.size() + numbers.size();
@@ -220,6 +225,21 @@ public class SearchEngine {
 		}
 
 		return prepare(solutions);
+	}
+
+	private List<Expr> createLocals(List<RichToken> locals) {
+		List<Expr> exprs = new LinkedList<Expr>();
+
+		for (RichToken local : locals) {
+			Local iLocal = local.getLocal();
+			String name = iLocal.getName();
+			LocalExpr localExpr = new LocalExpr(name, iLocal.getType());
+			localExpr.setLogProbability(2);
+
+			exprs.add(localExpr);
+		}
+
+		return exprs;
 	}
 
 	private void fixScore(List<PartialExpression> pexps, List<Expr> strings, List<Expr> numbers) {
@@ -404,7 +424,7 @@ public class SearchEngine {
 
 			if (scanner.equals("exitexit")) break;
 
-			String[] results = se.run(line);
+			String[] results = se.run(line, new LinkedList<Local>());
 			System.out.println();
 			System.out.println();
 			for (String result: results) {

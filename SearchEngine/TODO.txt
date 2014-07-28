@@ -2,9 +2,13 @@ Title: "Programming using API keywords" (expression repair)
 
 Using hints to program!
 
+-2) Put all weights into one config file.
+
 -1) Check dose
 print "s"
 println "s"
+
+
 
 check literals better, including their order.
 

@@ -88,5 +88,15 @@ public class Sentence {
 		}
 		
 		return tokens;
+	}
+	
+	public List<RichToken> getLocals() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isLocal()) tokens.add(richToken);
+		}
+		
+		return tokens;
 	}	
 }

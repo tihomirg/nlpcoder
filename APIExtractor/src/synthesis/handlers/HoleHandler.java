@@ -55,8 +55,8 @@ public class HoleHandler extends Handler {
 	public void add(Expr expr) {
 	}
 
-	public void addAllLocals(List<Expr> locals) {
-		for (Expr expr : locals) {
+	public void addAllHoleReplacements(List<Expr> holeReplacements) {
+		for (Expr expr : holeReplacements) {
 			addLocal(expr);
 		}
 	}

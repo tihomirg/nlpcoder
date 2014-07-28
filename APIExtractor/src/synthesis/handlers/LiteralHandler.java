@@ -22,7 +22,7 @@ public class LiteralHandler extends Handler {
 		return priorityQueue;
 	}
 
-	public void addLocal(Expr expr) {
+	public void addLiteral(Expr expr) {
 		literals.add(expr);
 	}
 
@@ -30,9 +30,9 @@ public class LiteralHandler extends Handler {
 	public void add(Expr expr) {
 	}
 
-	public void addAllLocals(List<Expr> locals) {
-		for (Expr expr : locals) {
-			addLocal(expr);
+	public void addAllLiterals(List<Expr> literal) {
+		for (Expr expr : literal) {
+			addLiteral(expr);
 		}
 	}
 }
