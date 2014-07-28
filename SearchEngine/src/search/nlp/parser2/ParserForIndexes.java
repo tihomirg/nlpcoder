@@ -24,20 +24,31 @@ public class ParserForIndexes implements IParser {
 				setImportanceIndex(secondaryWTokens, 1);
 				
 				//Subgroup index
-				setSubgroupIndexess(merge(mergePrimaryWTokens(leadingWTokens, relatedWTokens), secondaryWTokens));
+				List<Subgroup> subgroups = setSubgroupIndexess(merge(mergePrimaryWTokens(leadingWTokens, relatedWTokens), secondaryWTokens));
+				richToken.setDisjointSubgroups(calculateDisjointSubgroups(subgroups));
 			}
 		}
 
 		return input;
 	}
 
-	private void setSubgroupIndexess(List<List<WToken>> wTokenSubgroups) {
+	private List<DisjointSubgroups> calculateDisjointSubgroups(List<Subgroup> subgroups) {
+		UnionFind uf = new UnionFind();
+		uf.addAll(subgroups);
+		return uf.getDisjoints();
+	}
+
+	private List<Subgroup> setSubgroupIndexess(List<List<WToken>> wTokenSubgroups) {
+		List<Subgroup> subgroups = new LinkedList<Subgroup>();
 		int size = wTokenSubgroups.size();
 		
 		for (int i = 0; i < size; i++) {
-			setSubgroupIndexes(wTokenSubgroups.get(i), i);
+			List<WToken> wTokens = wTokenSubgroups.get(i);
+			setSubgroupIndexes(wTokens, i);
+			subgroups.add(new Subgroup(wTokens));
 		}
 		
+		return subgroups;
 	}
 
 	private void setSubgroupIndexes(List<WToken> list, int index) {

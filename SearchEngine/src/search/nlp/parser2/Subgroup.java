@@ -8,6 +8,10 @@ public class Subgroup {
 
 	private List<WToken> wTokens;
 
+	public Subgroup(List<WToken> wTokens) {
+		this.wTokens = wTokens;
+	}
+	
 	public List<WToken> getWTokens() {
 		return this.wTokens;
 	}
