@@ -68,11 +68,8 @@ public class SearchEngine {
 	private ParserPipeline pipeline;
 	private StabileAPI api;
 	private ScorerPipeline scorer;
-	private double[][] kindMatrix;
 	private SelectListener listener;
 	private FrequencyDeserializer frequencies;
-	private int maxDeclarationPerLevel;
-	private int numOfSynthesisLevels;
 	private HandlerTable handlerTable;
 	private int maxNumOfSolutions;
 	private ParserForLocals parserForLocals;
@@ -105,7 +102,7 @@ public class SearchEngine {
 				new ParserForNaturalLanguage(coreNLP),
 				new ParserForRichLiteralsAndLocals(),
 				new ParserForSemanticGraphNeighbours(),
-				new ParserForRightHandSideNeighbours(1),
+				new ParserForRightHandSideNeighbours(SearchConfig.getInputParserRighHandSideNeighbourNumber()),
 				new ParserForComplexTokens(decomposer),
 				new ParserForWTokens(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
 				new ParserForIndexes()});
@@ -120,20 +117,14 @@ public class SearchEngine {
 		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 
-
-		maxDeclarationPerLevel = 10;
-		numOfSynthesisLevels = 5;
-
 		listener = new SelectListener();
 
-		kindMatrix = new double[][]{{1, 0.5},{0.5, 1}};
-		scorer = new ScorerPipeline(new RichDeclarationScorer[]{new HungarianScorer(kindMatrix), new UnigramScorer(0.5)});
-
+		scorer = new ScorerPipeline(new RichDeclarationScorer[]{new HungarianScorer(SearchConfig.getDeclarationInputKindMatrix()), new UnigramScorer(SearchConfig.getDeclarationUnigramFactor())});
 		frequencies = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());
 
 		System.out.println(frequencies);
 
-		this.search = new Search(scorer, listener, api, frequencies, maxDeclarationPerLevel, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight());
+		this.search = new Search(scorer, listener, api, frequencies, SearchConfig.getMaxSelectedDeclarations(), SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight());
 	}
 
 	public String[] run(String line, List<Local> locals){
@@ -186,9 +177,9 @@ public class SearchEngine {
 					
 					int inputSize = searchKeyGroups.size() + strings.size() + numbers.size();
 					
-					PartialExpressionScorer peScorer = new PartialExpressionScorer(3, 3, inputSize, 3);
-					GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, numOfSynthesisLevels, maxDeclarationPerLevel);
-					Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, false);
+					PartialExpressionScorer peScorer = new PartialExpressionScorer(SearchConfig.getPartialExpressionConnectorReward(), SearchConfig.getPartialExpressionConnectorPenalty(), inputSize,  SearchConfig.getPartialExpressionSizePenalty());
+					GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, SearchConfig.getNumberOfSynthesisLevels(), SearchConfig.getMaxPartialExpressionsPerSynthesisLevel());
+					Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, SearchConfig.isParallelSynthesis());
 					synthesis.run();
 
 					System.out.println(synthesis);
@@ -202,7 +193,7 @@ public class SearchEngine {
 					prepareForMearging(withConnections);
 
 					if (!withConnections.isEmpty()){
-						Merge merge = new Merge(withConnections, 4, numOfSynthesisLevels, maxDeclarationPerLevel, peScorer, false);
+						Merge merge = new Merge(withConnections, SearchConfig.getNumberOfMergeGroups(), SearchConfig.getNumberOfSynthesisLevels(), SearchConfig.getMaxPartialExpressionsPerSynthesisLevel(), peScorer, SearchConfig.isParallelSynthesis());
 						merge.run();
 						List<PartialExpression> completedResult = merge.getCompletedResult();
 
@@ -230,7 +221,7 @@ public class SearchEngine {
 			Local iLocal = local.getLocal();
 			String name = iLocal.getName();
 			LocalExpr localExpr = new LocalExpr(name, iLocal.getType());
-			localExpr.setLogProbability(2);
+			localExpr.setLogProbability(SearchConfig.getLocalVariableWeight());
 
 			exprs.add(localExpr);
 		}
@@ -263,7 +254,7 @@ public class SearchEngine {
 
 		if (repetitions > literals.size()){
 			System.out.println(stringRep+"  str: "+repetitions +"  "+literals);
-			pexp.setScore(pexp.getScore() - 2*(repetitions - literals.size()));
+			pexp.setScore(pexp.getScore() - SearchConfig.getLiteralRepetitionPenalty()*(repetitions - literals.size()));
 		}
 	}
 
@@ -305,7 +296,7 @@ public class SearchEngine {
 		for (RichToken literal : stringLiterals) {
 			String name = literal.getStringLiteral();
 			LocalExpr localExpr = new LocalExpr(name, stf.createConstType(java.lang.String.class.getName()));
-			localExpr.setLogProbability(2);
+			localExpr.setLogProbability(SearchConfig.getStringLiteralWeight());
 
 			exprs.add(localExpr);
 		}
@@ -320,7 +311,7 @@ public class SearchEngine {
 		for (RichToken literal : stringLiterals) {
 			String name = literal.getNumberLiteral();
 			LocalExpr localExpr = new LocalExpr(name, stf.createPrimitiveType("int"));
-			localExpr.setLogProbability(2);
+			localExpr.setLogProbability(SearchConfig.getNumberLiteralWeight());
 
 			exprs.add(localExpr);
 		}
