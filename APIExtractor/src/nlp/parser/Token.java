@@ -7,15 +7,13 @@ public class Token {
 	private String text;
 	private String lemma;
 	private String pos;
-	private int index;
 	
 	public Token(){}
 	
-	public Token(String text, String lemma, String pos, int index) {
+	public Token(String text, String lemma, String pos) {
 		this.text = text;
 		this.lemma = lemma.toLowerCase();
 		this.pos = Character.isLetter(pos.charAt(0)) ? Character.toString(pos.charAt(0)) : pos;
-		this.index = getIndex(index);
 	}
 
 	public void setLemma(String word) {
@@ -33,14 +31,6 @@ public class Token {
 
 	public String getLemma() {
 		return this.lemma;
-	}
-	
-	public int getIndex() {
-		return index;
-	}
-
-	private int getIndex(int index) {
-		return index - 1;
 	}
 
 	public boolean isVerb() {

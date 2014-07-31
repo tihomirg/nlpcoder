@@ -1,7 +1,17 @@
 package search.nlp.parser;
 
-import search.nlp.parser.IParser;
-
+/**
+ * 1) ParserForLiterals
+ * 2) ParserForLocals
+ * 3) ParserForCorrectingWords //We do not repair locals and literals
+ * 4) ParserForNaturalLanguage
+ * 5) ParserForRichLiteralsAndLocals
+ * 6) ParserForSemantincGraphRelations
+ * 7) ParserForRightHandSideNeighbours
+ * 8) ParserForComplexTokens
+ * 9) ParserForWTokens
+ * 10) ParserForIndexes
+ */
 public class ParserPipeline {
 
 	private IParser[] parsers;

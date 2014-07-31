@@ -6,9 +6,9 @@ import java.util.List;
 import nlp.parser.Token;
 import search.DeclarationSelectionEntry;
 import search.WToken;
-import search.nlp.parser2.DisjointSubgroups;
-import search.nlp.parser2.RichToken;
-import search.nlp.parser2.Subgroup;
+import search.nlp.parser.DisjointSubgroups;
+import search.nlp.parser.RichToken;
+import search.nlp.parser.Subgroup;
 
 public class HungarianScorer implements RichDeclarationScorer {
 
@@ -62,7 +62,7 @@ public class HungarianScorer implements RichDeclarationScorer {
 		List<WToken> filtered = new LinkedList<WToken>();
 		for (WToken wToken : declWTokens) {
 			if(disjointSubgroups.hasWTokenWithSameLemmaAndPos(wToken)){
-				
+				filtered.add(wToken);
 			}
 		}
 		return filtered;

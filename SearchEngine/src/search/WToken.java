@@ -4,8 +4,7 @@ import nlp.parser.Token;
 
 public class WToken {
 	private Token token;
-	private double score;
-	
+
 	//whether it belongs primary or a secondary word.
 	private int importanceIndex;
 	
@@ -14,18 +13,18 @@ public class WToken {
 	private double importanceWeight;
 	private double relatednessWeight;
 	
-	public WToken(Token token) {
+	public WToken(Token token){
 		this(token, 0);
 	}
 	
-	public WToken(Token token, int index) {
-		this(token, index, 0);
+	public WToken(Token token, int importanceIndex) {
+		this(token, importanceIndex, 0.0);
 	}	
 	
-	public WToken(Token token, int index, double score) {
+	public WToken(Token token, int importanceIndex, double importanceWeight) {
 		this.token = token;
-		this.importanceIndex = index;
-		this.score = score;
+		this.importanceIndex = importanceIndex;
+		this.importanceWeight = importanceWeight;
 	}
 
 	public Token getToken() {
@@ -36,17 +35,9 @@ public class WToken {
 		this.token = token;
 	}
 
-	public double getScore() {
-		return score;
-	}
-
-	public void setScore(double score) {
-		this.score = score;
-	}
-
 	@Override
 	public String toString() {
-		return "WToken [token=" + token + ", score=" + score
+		return "WToken [token=" + token
 				+ ", importanceIndex=" + importanceIndex + ", subgroupIndex="
 				+ subgroupIndex + "]";
 	}
@@ -57,6 +48,10 @@ public class WToken {
 
 	public void setImportanceIndex(int index) {
 		this.importanceIndex = index;
+	}
+	
+	public void setImportanceWeight(double importanceWeight) {
+		this.importanceWeight = importanceWeight;
 	}
 	
 	public int getSubgroupIndex() {

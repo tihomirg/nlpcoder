@@ -2,61 +2,99 @@ package search.nlp.parser;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import edu.stanford.nlp.dcoref.CorefChain;
+import api.Local;
+import util.Pair;
 
 public class Input {
 
-	private String text;
+	private String originalText;
+	private String literalizedText;
+	private List<Pair<Integer, String>> strings;
+	private List<Pair<Integer, String>> numbers;
+	private List<Pair<Integer, String>> bools;
+	private List<Pair<Integer, Local>> locals;
+	private String preprocessedText;
 	private List<Sentence> sentences;
-	private Map<Integer, CorefChain> corefGraph;
 	
-	public Input(String text) {
-		this.text = text;
+	public Input(String originalText) {
+		this.originalText = originalText;
+		this.strings = new LinkedList<Pair<Integer, String>>();
+		this.numbers = new LinkedList<Pair<Integer, String>>();
+		this.bools = new LinkedList<Pair<Integer, String>>();
 	}
 	
-	public String getText() {
-		return text;
+	public String getOriginalText() {
+		return originalText;
+	}
+
+	public String getLiteralizedText() {
+		return literalizedText;
+	}
+
+	public void setLiteralizedText(String literalizedText) {
+		this.literalizedText = literalizedText;
+	}
+
+	public void setStringLitersals(List<Pair<Integer, String>> strings) {
+		this.strings = strings;
+	}
+	
+	public void setBooleanLiterals(List<Pair<Integer, String>> bools) {
+		this.bools = bools;
+	}
+	
+	public void setNumberLiterals(List<Pair<Integer, String>> numbers) {
+		this.numbers = numbers;
+	}
+	
+	public List<Pair<Integer, String>> getBooleanLiterals() {
+		return bools;
+	}
+	
+	public List<Pair<Integer, String>> getStringLiterals() {
+		return strings;
+	}
+	
+	public List<Pair<Integer, String>> getNumberLiterals() {
+		return numbers;
+	}
+
+	public void setLocals(List<Pair<Integer, Local>> locals) {
+		this.locals = locals;
+	}
+	
+	public List<Pair<Integer, Local>> getLocals() {
+		return locals;
+	}
+
+	public void setPreprocessedText(String preprocessedText) {
+		this.preprocessedText = preprocessedText;
+	}
+	
+	public String getPreprocessedText() {
+		return preprocessedText;
 	}
 
 	public void setSentences(List<Sentence> sentences) {
 		this.sentences = sentences;
 	}
-
-	public void setCorefGraph(Map<Integer, CorefChain> corefGraph) {
-		this.corefGraph = corefGraph;
-	}
 	
 	public List<Sentence> getSentences() {
 		return sentences;
 	}
-	
-	public Map<Integer, CorefChain> getCorefGraph() {
-		return corefGraph;
-	}
 
-	public List<Group> getSearchKeyGorups(){
-		List<Group> list = new LinkedList<Group>();
-		for (Sentence sentence : sentences) {
-			list.addAll(sentence.getSearchKeyGroups());
-		}
-		return list;
-	}
-	
-	public List<Group> getRemainingGorups(){
-		List<Group> list = new LinkedList<Group>();
-		for (Sentence sentence : sentences) {
-			list.addAll(sentence.getRemainingGroups());
-		}
-		return list;		
-	}	
-	
 	@Override
 	public String toString() {
-		return "text = " + text + "\n"+
-	           "sentences = " + sentences+"\n"+
-			   "corefGraph = " + corefGraph + "\n";
+		return "originalText=" + originalText + 
+				"\nliteralizedText="+ literalizedText +
+				"\nstrings=" + strings + 
+				"\nnumbers="+ numbers + 
+				"\nbools=" + bools + 
+				"\nlocals=" + locals+
+				"\npreprocessedText=" + preprocessedText + 
+				"\nsentences="+ sentences;
 	}
+	
 	
 }

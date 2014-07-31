@@ -1,4 +1,4 @@
-package search.nlp.parser2;
+package search.nlp.parser;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -46,7 +46,7 @@ public class ParserForNaturalLanguage implements IParser {
 			
 			for (CoreLabel rawToken: rawSentence.get(TokensAnnotation.class)) {
 				int index = rawToken.index();
-				Token token = new Token(rawToken.get(TextAnnotation.class), rawToken.get(LemmaAnnotation.class), rawToken.get(PartOfSpeechAnnotation.class), index);
+				Token token = new Token(rawToken.get(TextAnnotation.class), rawToken.get(LemmaAnnotation.class), rawToken.get(PartOfSpeechAnnotation.class));
 				RichToken richToken = new RichToken(token, index, rawToken.beginPosition(), rawToken.endPosition());
 				richTokens.add(richToken);
 				indexesToRichTokens.put(index, richToken);

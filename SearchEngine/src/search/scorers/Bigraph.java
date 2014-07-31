@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import search.WToken;
-import search.nlp.parser2.Subgroup;
+import search.nlp.parser.Subgroup;
 
 public class Bigraph {
 

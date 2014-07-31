@@ -1,15 +1,11 @@
 package search;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 import search.comparators.RichDeclarationComparatorDesc;
-import search.nlp.parser.Group;
-import search.nlp.parser2.RichToken;
-import search.scorers.Score;
+import search.nlp.parser.RichToken;
 import api.StabileAPI;
 import definitions.Declaration;
 import deserializers.FrequencyDeserializer;
@@ -23,13 +19,21 @@ public class Search {
 	private SelectListener listener;
 	private FrequencyDeserializer fd;
 	private int maxDecls;
+	private int primaryIndex;
+	private double initialPrimaryWeight;
+	private int secondaryIndex;
+	private double initialSecondaryWeight;
 	
-	public Search(ScorerPipeline scorer, SelectListener listener, StabileAPI api, FrequencyDeserializer fd, int maxDecls) {
+	public Search(ScorerPipeline scorer, SelectListener listener, StabileAPI api, FrequencyDeserializer fd, int maxDecls, int primaryIndex, double initialPrimaryWeight, int secondaryIndex, double initialSecondaryWeight) {
 		this.table = new Table();
 		this.scorer = scorer;
 		this.listener = listener;
 		this.fd = fd;
 		this.maxDecls = maxDecls;
+		this.primaryIndex = primaryIndex;
+		this.initialPrimaryWeight = initialPrimaryWeight;
+		this.secondaryIndex = secondaryIndex;
+		this.initialSecondaryWeight = initialSecondaryWeight;
 		add(api);
 	}
 	
@@ -44,7 +48,7 @@ public class Search {
 	}
 
 	public void add(Declaration decl){
-		table.add(new DeclarationSelectionEntry(decl, fd.getLogFrequency(decl.getId()), listener));
+		table.add(new DeclarationSelectionEntry(decl, fd.getLogFrequency(decl.getId()), listener, primaryIndex, initialPrimaryWeight, secondaryIndex, initialSecondaryWeight));
 	}
 	
 	public List<RichDeclaration> search(RichToken richToken) {

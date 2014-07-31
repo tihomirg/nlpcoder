@@ -1,4 +1,4 @@
-package search.nlp.parser2;
+package search.nlp.parser;
 
 import static org.junit.Assert.*;
 
@@ -10,9 +10,9 @@ import nlp.parser.one.WordCorrector;
 import org.junit.Before;
 import org.junit.Test;
 
+import search.config.SearchConfig;
 import config.Config;
 import deserializers.KryoDeserializer;
-import search.nlp.parser.ComplexWordDecomposer;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class ParserPipelineTest {
@@ -52,7 +52,7 @@ public class ParserPipelineTest {
 				new ParserForSemanticGraphNeighbours(),
 				new ParserForRightHandSideNeighbours(1),
 				new ParserForComplexTokens(decomposer),
-				new ParserForWTokens(rwm, 1.0, 0.5, 1.0),
+				new ParserForWTokens(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
 				new ParserForIndexes()});
 	}
 	

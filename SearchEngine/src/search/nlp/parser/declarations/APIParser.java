@@ -2,8 +2,8 @@ package search.nlp.parser.declarations;
 
 import java.util.Properties;
 
-import search.nlp.parser.declarations.IDeclarationParser;
 import search.nlp.parser.ComplexWordDecomposer;
+import search.nlp.parser.declarations.IDeclarationParser;
 import serializers.KryoSerializer;
 import types.NameGenerator;
 import config.Config;

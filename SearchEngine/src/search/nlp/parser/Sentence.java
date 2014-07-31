@@ -1,130 +1,102 @@
 package search.nlp.parser;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import nlp.parser.Token;
 import edu.stanford.nlp.semgraph.SemanticGraph;
-import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 
 public class Sentence {
 
-	private CoreMap map;
-	private List<Token> tokens;
-	private SemanticGraph dependancyGraph;
-	private Map<Integer, Group> groups;
-	private Tree tree;
-	private List<Group> stringLiterals;
-	private LinkedList<Group> searchKeyGroups;
-	private LinkedList<Group> searchKeyGroupsAndLiterals;
-	private List<Group> numbers;
+	private CoreMap rawSentence;
+	private List<RichToken> richTokens;
+	private SemanticGraph semanticGraph;
+	private Map<Integer, RichToken> indexesToRichTokens;
 
-	public Sentence(CoreMap map) {
-		this.map = map;
+	public Sentence(CoreMap rawSentence) {
+		this.rawSentence = rawSentence;
 	}
 
-	public void setTokens(List<Token> tokens) {
-		this.tokens = tokens;
+	public void setRichTokens(List<RichToken> richTokens) {
+		this.richTokens = richTokens;
 	}
 
-	public List<Token> getTokens() {
-		return tokens;
+	public void setSemanticGraph(SemanticGraph semanticGraph) {
+		this.semanticGraph = semanticGraph;
+	}
+	
+	public List<RichToken> getRichTokens() {
+		return richTokens;
+	}
+	
+	public SemanticGraph getSemanticGraph() {
+		return semanticGraph;
 	}
 
-	public Token getToken(int i){
-		return tokens.get(i);
+	public void setIndexesToRichTokens(Map<Integer, RichToken> indexesToRichTokens) {
+		this.indexesToRichTokens = indexesToRichTokens;
 	}
-
-	public void setDependancyGraph(SemanticGraph dependancyGraph) {
-		this.dependancyGraph = dependancyGraph;
-	}
-
-	public SemanticGraph getDependancyGraph() {
-		return dependancyGraph;
+	
+	public Map<Integer, RichToken> getIndexesToRichTokens() {
+		return indexesToRichTokens;
 	}
 
 	@Override
 	public String toString() {
-		return "Sentence[\n"+
-				"tokens = " + tokens + "\n"+
-				"string-L = "+stringLiterals+"\n"+
-				"groups = " + groups + "\n"+
-				"map = "+ map + "\n"+
-				"dependancyGraph = " + dependancyGraph + "\n"+
-				"tree = " + tree+ "\n"+
-				"]\n";
+		return "Sentence ["
+				+ "\nrawSentence=" + rawSentence
+				+ "\nsemanticGraph=" + semanticGraph
+				+ "\nrichTokens="+ richTokens+ "]\n";
 	}
 
-	public void setTree(Tree tree) {
-		this.tree = tree;
-	}
-
-	public void addGroupMap(Map<Integer, Group> groups) {
-		this.groups = groups;
-	}
-
-	public Map<Integer, Group> getGroupMap() {
-		return this.groups;
-	}
-
-	public int size() {
-		return this.tokens.size();
-	}
-
-	public void setStringLiterals(List<Group> strings) {
-		this.stringLiterals = strings;
-	}
-
-	public List<Group> getSearchKeyGroups(){
-		if(this.searchKeyGroups == null){
-			this.searchKeyGroups = new LinkedList<Group>();
-			for(Group group : getGroups()){
-				if (group.isSearchKey()){
-					this.searchKeyGroups.add(group);
-				}
-			}
+	public List<RichToken> getSearchKeyRichTokens() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isNormal()) tokens.add(richToken);
 		}
-		return this.searchKeyGroups;
+		
+		return tokens;
 	}
 
-	public Collection<Group> getGroups() {
-		return groups.values();
-	}
-
-	public List<Group> getRemainingGroups(){
-		List<Group> list = new LinkedList<Group>();
-		for(Group group : getGroups()){
-			if (!group.isSearchKey()){
-				list.add(group);
-			}
+	public List<RichToken> getStringLiteralRichTokens() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isStringLiteral()) tokens.add(richToken);
 		}
-		return list;		
-	}
-
-	public List<Group> getStringLiterals() {
-		return this.stringLiterals;
+		
+		return tokens;
 	}
 	
-	public List<Group> getSearchKeyAndLiteralGroups() {
-		if(this.searchKeyGroupsAndLiterals == null){
-			this.searchKeyGroupsAndLiterals = new LinkedList<Group>();
-			for(Group group : getGroups()){
-				if (group.isSearchKeyOrLiteral()){
-					this.searchKeyGroupsAndLiterals.add(group);
-				}
-			}
+	public List<RichToken> getNumberLiteralRichTokens() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isNumberLiteral()) tokens.add(richToken);
 		}
-		return this.searchKeyGroupsAndLiterals;
+		
+		return tokens;
+	}	
+	
+	public List<RichToken> getBooleanLiteralRichTokens() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isBooleanLiteral()) tokens.add(richToken);
+		}
+		
+		return tokens;
 	}
-
-	public void setNumberLiterals(List<Group> numbers) {
-		this.numbers = numbers;
-	}
-
-	public List<Group> getNumberLiterals() {
-		return this.numbers;
-	}
+	
+	public List<RichToken> getLocals() {
+		List<RichToken> tokens = new LinkedList<RichToken>();
+		
+		for (RichToken richToken : richTokens) {
+			if(richToken.isLocal()) tokens.add(richToken);
+		}
+		
+		return tokens;
+	}	
 }

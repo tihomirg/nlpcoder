@@ -1,4 +1,4 @@
-package search.nlp.parser2;
+package search.nlp.parser;
 
 import java.util.HashMap;
 import java.util.LinkedList;

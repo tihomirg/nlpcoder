@@ -1,6 +1,6 @@
 package search;
 
-import search.nlp.parser2.RichToken;
+import search.nlp.parser.RichToken;
 import search.scorers.RichDeclarationScorer;
 import search.scorers.Score;
 

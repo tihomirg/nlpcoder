@@ -3,9 +3,9 @@ package search.nlp.parser.declarations;
 import java.util.LinkedList;
 import java.util.List;
 
-import search.nlp.parser.ComplexWordDecomposer;
 import types.InitialTypeFactory;
 import nlp.parser.Token;
+import search.nlp.parser.ComplexWordDecomposer;
 import search.nlp.parser.declarations.IDeclarationParser;
 import definitions.Declaration;
 

@@ -43,7 +43,7 @@ public class ComplexWordDecomposer {
 
 			for(CoreMap sentence: sentences) {
 				for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-					newTokens.add(new Token(token.get(TextAnnotation.class), token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
+					newTokens.add(new Token(token.get(TextAnnotation.class), token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class)));
 				}
 			}
 		}
@@ -65,7 +65,7 @@ public class ComplexWordDecomposer {
 
 		for(CoreMap sentence: sentences) {
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				newTokens.add(new Token(token.get(TextAnnotation.class),  token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
+				newTokens.add(new Token(token.get(TextAnnotation.class),  token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class)));
 			}
 		}
 
@@ -87,7 +87,7 @@ public class ComplexWordDecomposer {
 
 		for(CoreMap sentence: sentences) {
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				newTokens.add(new Token(token.get(TextAnnotation.class),  token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class), token.index()));
+				newTokens.add(new Token(token.get(TextAnnotation.class),  token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class)));
 			}
 		}
 

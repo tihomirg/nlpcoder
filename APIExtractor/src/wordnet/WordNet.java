@@ -71,7 +71,7 @@ public class WordNet {
 		List<IWord> wordsI = synset.getWords();
 		for (IWord iWord : wordsI) {
 			String lemma = iWord.getLemma();
-			words.add(new Token(lemma, lemma, iWord.getPOS().toString(), -1));
+			words.add(new Token(lemma, lemma, iWord.getPOS().toString()));
 		}
 		return words;
 	}

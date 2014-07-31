@@ -1,7 +1,6 @@
-package search.nlp.parser2;
+package search.nlp.parser;
 
 import nlp.parser.Token;
-import search.nlp.parser.ComplexWordDecomposer;
 
 public class ParserForComplexTokens implements IParser{
 
