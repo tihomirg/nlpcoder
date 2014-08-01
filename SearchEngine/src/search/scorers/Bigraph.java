@@ -78,7 +78,7 @@ public class Bigraph {
 		return sum;
 	}	
 
-	private double findMaxElement(double[][] costMatrix) {
+	private static double findMaxElement(double[][] costMatrix) {
 		double max = -1;
 
 		for (double[] row : costMatrix) {
@@ -91,7 +91,7 @@ public class Bigraph {
 		return max;
 	}
 
-	private double maxNToOneScore(List<Subgroup> subgorups, WToken wToken) {
+	public double maxNToOneScore(List<Subgroup> subgorups, WToken wToken) {
 		List<Double> scores = new LinkedList<Double>();
 		for (Subgroup subgroup : subgorups) {
 			scores.add(findMaxEdge(subgroup, wToken));
@@ -100,7 +100,7 @@ public class Bigraph {
 		return Collections.max(scores);
 	}
 
-	private double maxOneToNScore(Subgroup subgroup, List<WToken> declWTokens) {
+	public double maxOneToNScore(Subgroup subgroup, List<WToken> declWTokens) {
 		List<Double> scores = new LinkedList<Double>();
 		for (WToken wToken : declWTokens) {
 			scores.add(findMaxEdge(subgroup, wToken));
@@ -108,26 +108,18 @@ public class Bigraph {
 		return Collections.max(scores);
 	}
 
-	private double findMaxEdge(Subgroup subgroup, WToken declWToken) {
+	public double findMaxEdge(Subgroup subgroup, WToken declWToken) {
 		List<Double> scores = new LinkedList<Double>();
 		for (WToken wToken : subgroup.getWTokens()) {
 			scores.add(edgeWeight(wToken, declWToken));
-
 		}
 		return Collections.max(scores);
 	}
 
-	private double edgeWeight(WToken inputWToken, WToken declWToken) {
+	public double edgeWeight(WToken inputWToken, WToken declWToken) {
 		if(inputWToken.equalsByPosAndLemma(declWToken)){
-			double kindWeight = kindWeight(inputWToken.getSubgroupIndex(), declWToken.getSubgroupIndex());
-
 			//We should keep related score here.
-			double inputImportanceWeight = inputWToken.getImportanceWeight();
-			double inputRelatednessWeight = inputWToken.getRelatednessWeight();
-
-			double declImportanceWeight = declWToken.getImportanceWeight();
-
-			return inputImportanceWeight * declImportanceWeight * kindWeight * inputRelatednessWeight;
+			return inputWToken.getImportanceWeight() * declWToken.getImportanceWeight() * kindWeight(inputWToken.getImportanceIndex(), declWToken.getImportanceIndex()) * inputWToken.getRelatednessWeight();
 		} else return 0;
 	}
 

@@ -5,7 +5,7 @@ import nlp.parser.Token;
 public class WToken {
 	private Token token;
 
-	//whether it belongs primary or a secondary word.
+	//whether it belongs to primary or a secondary word.
 	private int importanceIndex;
 	
 	//An index of subgroup in a group of words.
@@ -22,10 +22,16 @@ public class WToken {
 	}	
 	
 	public WToken(Token token, int importanceIndex, double importanceWeight) {
+		this(token, importanceIndex, importanceWeight, 0, 1.0);
+	}
+	
+	public WToken(Token token, int importanceIndex, double importanceWeight, int subgroupIndex, double relatednessWeight) {
 		this.token = token;
 		this.importanceIndex = importanceIndex;
 		this.importanceWeight = importanceWeight;
-	}
+		this.subgroupIndex = subgroupIndex;
+		this.relatednessWeight = relatednessWeight;
+	}	
 
 	public Token getToken() {
 		return token;

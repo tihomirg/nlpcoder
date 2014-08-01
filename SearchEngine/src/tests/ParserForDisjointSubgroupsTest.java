@@ -1,8 +1,7 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static tests.TestUtil.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import nlp.parser.Token;
@@ -30,30 +29,6 @@ public class ParserForDisjointSubgroupsTest {
 		System.out.println();
 		System.out.println("Test --------------------------------------------------------------------------------");
 		System.out.println();
-	}	
-
-	private static Subgroup createSubgroup(Token[] tokens) {
-		List<WToken> wTokens = new LinkedList<WToken>();
-		for (Token token: tokens) {
-			wTokens.add(new WToken(token));
-		}
-		return new Subgroup(wTokens);
-	}
-
-	private static Token createNounT(String lemma) {
-		return new Token(lemma, lemma, "N");
-	}
-
-	private Token createVerbT(String lemma) {
-		return new Token(lemma, lemma, "V");
-	}	
-
-	private List<Subgroup> createSubgorups(Token[][] tokenss) {
-		List<Subgroup> subgroups = new LinkedList<Subgroup>();	
-		for (Token[] tokens : tokenss) {
-			subgroups.add(createSubgroup(tokens));
-		}
-		return subgroups;
 	}
 
 	@Test
