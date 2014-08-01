@@ -23,14 +23,14 @@ import search.nlp.parser.IParser;
 import search.nlp.parser.Input;
 import search.nlp.parser.ParserForComplexTokens;
 import search.nlp.parser.ParserForCorrectingWords;
-import search.nlp.parser.ParserForIndexes;
+import search.nlp.parser.ParserForDisjointSubgroups;
 import search.nlp.parser.ParserForLiterals;
 import search.nlp.parser.ParserForLocals;
 import search.nlp.parser.ParserForNaturalLanguage;
 import search.nlp.parser.ParserForRichLiteralsAndLocals;
 import search.nlp.parser.ParserForRightHandSideNeighbours;
 import search.nlp.parser.ParserForSemanticGraphNeighbours;
-import search.nlp.parser.ParserForWTokens;
+import search.nlp.parser.ParserForWeightsAndImportanceIndexes;
 import search.nlp.parser.ParserPipeline;
 import search.nlp.parser.RichToken;
 import search.nlp.parser.Sentence;
@@ -104,8 +104,8 @@ public class SearchEngine {
 				new ParserForSemanticGraphNeighbours(),
 				new ParserForRightHandSideNeighbours(SearchConfig.getInputParserRighHandSideNeighbourNumber()),
 				new ParserForComplexTokens(decomposer),
-				new ParserForWTokens(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
-				new ParserForIndexes()});
+				new ParserForWeightsAndImportanceIndexes(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
+				new ParserForDisjointSubgroups()});
 
 
 		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());

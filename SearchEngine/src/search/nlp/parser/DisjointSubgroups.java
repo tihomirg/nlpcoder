@@ -32,4 +32,8 @@ public class DisjointSubgroups {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "DisjointSubgroups [subroups=" + subroups + "]";
+	}
 }

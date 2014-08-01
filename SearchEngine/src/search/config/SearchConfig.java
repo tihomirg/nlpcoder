@@ -25,8 +25,9 @@ public class SearchConfig {
 
 	//Token weights (for both: input text and declarations)
 	private static final int primaryIndex = 0;
-	private static final double primaryWeight = 1.0;
 	private static final int secondaryIndex = 1;
+
+	private static final double primaryWeight = 1.0;
 	private static final double secondaryWeight = 0.5;
 	private static final double relatedWeigthFactor = 1.0;
 	

@@ -9,8 +9,8 @@ package search.nlp.parser;
  * 6) ParserForSemantincGraphRelations
  * 7) ParserForRightHandSideNeighbours
  * 8) ParserForComplexTokens
- * 9) ParserForWTokens
- * 10) ParserForIndexes
+ * 9) ParserForWeightsAndImportanceIndexes
+ * 10) ParserForDisjointSubgroups
  */
 public class ParserPipeline {
 

@@ -10,7 +10,7 @@ import nlp.parser.TaggedWordMeaning;
 import nlp.parser.Token;
 import search.WToken;
 
-public class ParserForWTokens implements IParser {
+public class ParserForWeightsAndImportanceIndexes implements IParser {
 
 	private RelatedWordsMap wordMap;
 	private double primaryWeight;
@@ -19,7 +19,7 @@ public class ParserForWTokens implements IParser {
 	private int primaryIndex;
 	private int secondaryIndex;
 
-	public ParserForWTokens(RelatedWordsMap wordMap, int primaryIndex, double primaryWeight, int secondaryIndex, double secondaryWeight, double relatedWeightFactor) {
+	public ParserForWeightsAndImportanceIndexes(RelatedWordsMap wordMap, int primaryIndex, double primaryWeight, int secondaryIndex, double secondaryWeight, double relatedWeightFactor) {
 		this.wordMap = wordMap;
 		this.primaryIndex = primaryIndex;
 		this.primaryWeight = primaryWeight;

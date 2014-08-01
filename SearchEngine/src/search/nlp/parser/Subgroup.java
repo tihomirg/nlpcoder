@@ -35,4 +35,9 @@ public class Subgroup {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Subgroup [wTokens=" + wTokens + "]";
+	}
 }

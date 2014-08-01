@@ -6,7 +6,7 @@ import java.util.List;
 import search.WToken;
 import util.UtilList;
 
-public class ParserForIndexes implements IParser {
+public class ParserForDisjointSubgroups implements IParser {
 
 	@Override
 	public Input parse(Input input) {
@@ -16,13 +16,13 @@ public class ParserForIndexes implements IParser {
 				List<WToken> leadingWTokens = richToken.getLeadingWTokens();
 				List<WToken> secondaryWTokens = richToken.getSecondaryWTokens();
 				
-				List<WToken> primaryWTokens = new LinkedList<WToken>();				
-				primaryWTokens.addAll(leadingWTokens);
-				primaryWTokens.addAll(UtilList.flatten(relatedWTokens));
-				
-				setImportanceIndex(primaryWTokens, 0);
-				setImportanceIndex(secondaryWTokens, 1);
-				
+//				List<WToken> primaryWTokens = new LinkedList<WToken>();				
+//				primaryWTokens.addAll(leadingWTokens);
+//				primaryWTokens.addAll(UtilList.flatten(relatedWTokens));
+//				
+//				setImportanceIndex(primaryWTokens, 0);
+//				setImportanceIndex(secondaryWTokens, 1);
+//				
 				//Subgroup index
 				List<Subgroup> subgroups = setSubgroupIndexess(merge(mergePrimaryWTokens(leadingWTokens, relatedWTokens), secondaryWTokens));
 				richToken.setDisjointSubgroups(calculateDisjointSubgroups(subgroups));
@@ -32,13 +32,13 @@ public class ParserForIndexes implements IParser {
 		return input;
 	}
 
-	private List<DisjointSubgroups> calculateDisjointSubgroups(List<Subgroup> subgroups) {
+	public List<DisjointSubgroups> calculateDisjointSubgroups(List<Subgroup> subgroups) {
 		UnionFind uf = new UnionFind();
 		uf.addAll(subgroups);
 		return uf.getDisjoints();
 	}
 
-	private List<Subgroup> setSubgroupIndexess(List<List<WToken>> wTokenSubgroups) {
+	public List<Subgroup> setSubgroupIndexess(List<List<WToken>> wTokenSubgroups) {
 		List<Subgroup> subgroups = new LinkedList<Subgroup>();
 		int size = wTokenSubgroups.size();
 		

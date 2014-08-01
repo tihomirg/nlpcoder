@@ -38,8 +38,8 @@ public class WToken {
 	@Override
 	public String toString() {
 		return "WToken [token=" + token
-				+ ", importanceIndex=" + importanceIndex + ", subgroupIndex="
-				+ subgroupIndex + "]";
+				+ ", importanceIndex=" + importanceIndex 
+				+ ", subgroupIndex="+ subgroupIndex + "]";
 	}
 
 	public int getImportanceIndex() {

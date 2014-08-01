@@ -1,4 +1,4 @@
-package search.nlp.parser;
+package tests;
 
 import static org.junit.Assert.*;
 
@@ -8,16 +8,31 @@ import nlp.parser.RelatedWordsMap;
 import nlp.parser.one.WordCorrector;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import search.config.SearchConfig;
+import search.nlp.parser.ComplexWordDecomposer;
+import search.nlp.parser.IParser;
+import search.nlp.parser.Input;
+import search.nlp.parser.ParserForComplexTokens;
+import search.nlp.parser.ParserForCorrectingWords;
+import search.nlp.parser.ParserForDisjointSubgroups;
+import search.nlp.parser.ParserForLiterals;
+import search.nlp.parser.ParserForLocals;
+import search.nlp.parser.ParserForNaturalLanguage;
+import search.nlp.parser.ParserForRichLiteralsAndLocals;
+import search.nlp.parser.ParserForRightHandSideNeighbours;
+import search.nlp.parser.ParserForSemanticGraphNeighbours;
+import search.nlp.parser.ParserForWeightsAndImportanceIndexes;
+import search.nlp.parser.ParserPipeline;
 import config.Config;
 import deserializers.KryoDeserializer;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class ParserPipelineTest {
     
-	private ParserPipeline parser;
+	private static ParserPipeline parser;
 
 	/**
 	 * 1) ParserForLiterals
@@ -31,8 +46,8 @@ public class ParserPipelineTest {
 	 * 9) ParserForWTokens
 	 * 10) ParserForIndexes
 	 */
-	@Before
-	public void before(){
+	@BeforeClass
+	public static void before(){
 		Properties props = new Properties();
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 		props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-bidirectional/english-bidirectional-distsim.tagger");
@@ -52,8 +67,8 @@ public class ParserPipelineTest {
 				new ParserForSemanticGraphNeighbours(),
 				new ParserForRightHandSideNeighbours(1),
 				new ParserForComplexTokens(decomposer),
-				new ParserForWTokens(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
-				new ParserForIndexes()});
+				new ParserForWeightsAndImportanceIndexes(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
+				new ParserForDisjointSubgroups()});
 	}
 	
 	@Test
