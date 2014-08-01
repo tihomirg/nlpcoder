@@ -62,8 +62,6 @@ import deserializers.KryoDeserializer;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class SearchEngine {
-
-	private static final boolean SYNTHESIS = false;
 	private long time;
 	private ParserPipeline pipeline;
 	private StabileAPI api;
@@ -107,7 +105,6 @@ public class SearchEngine {
 				new ParserForWeightsAndImportanceIndexes(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
 				new ParserForDisjointSubgroups()});
 
-
 		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
 		Deserializer deserializer = new Deserializer();
 		api = new StabileAPI(deserializer.deserialize(Config.getSecondStorageLocation()), nameGen);	
@@ -150,7 +147,7 @@ public class SearchEngine {
 
 			time = printMsgAndSetTime("Decl search time", time);
 
-			if (SYNTHESIS) {
+			if (SearchConfig.isSynthesis()) {
 				List<List<ExprGroup>> exprGroupss = createExprGroupss(rdss);
 
 				if (!exprGroupss.isEmpty()) {

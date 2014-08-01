@@ -12,6 +12,7 @@ public class SearchConfig {
 	private static final int literalRepetitionPenalty = 2;
 	
 	//Synthesis params
+	private static final boolean synthesis = false;
 	private static final boolean parallelSynthesis = false;
 	private static final int numberOfMergeGroups = 4;
 	private static final int numberOfSynthesisLevels = 5;
@@ -115,4 +116,7 @@ public class SearchConfig {
 		return numberLiteralWeight;
 	}
 
+	public static boolean isSynthesis() {
+		return synthesis;
+	}
 }
