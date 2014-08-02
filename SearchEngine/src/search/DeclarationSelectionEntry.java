@@ -12,18 +12,18 @@ public class DeclarationSelectionEntry implements Cloneable {
 	private Declaration decl;
 	private SelectListener listener;
 	private boolean hit;
-	private double unigramScore;
+	private double unigramProbability;
 	private List<WToken> primaryWTokens;
 	private List<WToken> secondaryWTokens;
 	private LinkedList<Token> tokens;
 
-	public DeclarationSelectionEntry(Declaration decl, double unigramScore, SelectListener listener, int primaryIndex, double initialPrimaryWeight, int secondaryIndex, double initialSecondaryWeight) {
+	public DeclarationSelectionEntry(Declaration decl, double unigramProbability, SelectListener listener, int primaryIndex, double initialPrimaryWeight, int secondaryIndex, double initialSecondaryWeight) {
 		this.decl = decl;
 		this.listener = listener;
 		this.tokens = new LinkedList<Token>();
 		this.primaryWTokens = new LinkedList<WToken>();
 		this.secondaryWTokens = new LinkedList<WToken>();
-		this.unigramScore  = unigramScore;
+		this.unigramProbability  = unigramProbability;
 		
 		//First group
 		addAllToPrimary(decl.getSimpleNameTokens());
@@ -127,9 +127,8 @@ public class DeclarationSelectionEntry implements Cloneable {
 	public void clear() {
 		this.hit = false;
 	}
-	
-	public double getUnigramScore() {
-		return unigramScore;
+	public double getUnigramProbability() {		
+		return unigramProbability;
 	}
 
 	public List<WToken> getWTokens() {

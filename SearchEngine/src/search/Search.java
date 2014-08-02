@@ -8,7 +8,7 @@ import search.comparators.RichDeclarationComparatorDesc;
 import search.nlp.parser.RichToken;
 import api.StabileAPI;
 import definitions.Declaration;
-import deserializers.FrequencyDeserializer;
+import deserializers.Unigram;
 
 public class Search {
 
@@ -17,18 +17,28 @@ public class Search {
 	private Table table;
 	private ScorerPipeline scorer;
 	private SelectListener listener;
-	private FrequencyDeserializer fd;
+	private Unigram unigram;
 	private int maxDecls;
 	private int primaryIndex;
 	private double initialPrimaryWeight;
 	private int secondaryIndex;
 	private double initialSecondaryWeight;
-	
-	public Search(ScorerPipeline scorer, SelectListener listener, StabileAPI api, FrequencyDeserializer fd, int maxDecls, int primaryIndex, double initialPrimaryWeight, int secondaryIndex, double initialSecondaryWeight) {
+
+	public Search(
+			ScorerPipeline scorer, 
+			SelectListener listener, 
+			StabileAPI api, 
+			Unigram unigram, 
+			int maxDecls, 
+			int primaryIndex,
+			double initialPrimaryWeight,
+			int secondaryIndex,
+			double initialSecondaryWeight) {
+		
 		this.table = new Table();
 		this.scorer = scorer;
 		this.listener = listener;
-		this.fd = fd;
+		this.unigram = unigram;
 		this.maxDecls = maxDecls;
 		this.primaryIndex = primaryIndex;
 		this.initialPrimaryWeight = initialPrimaryWeight;
@@ -36,8 +46,8 @@ public class Search {
 		this.initialSecondaryWeight = initialSecondaryWeight;
 		add(api);
 	}
-	
-	public void add(StabileAPI api){
+
+	private void add(StabileAPI api){
 		addAll(api.getUniqueDecls());
 	}
 
@@ -47,27 +57,34 @@ public class Search {
 		}
 	}
 
-	public void add(Declaration decl){
-		table.add(new DeclarationSelectionEntry(decl, fd.getLogFrequency(decl.getId()), listener, primaryIndex, initialPrimaryWeight, secondaryIndex, initialSecondaryWeight));
+	private void add(Declaration decl){
+		table.add(new DeclarationSelectionEntry(
+						decl, 
+						unigram.getProbability(decl.getId()), 
+						listener, 
+						primaryIndex, 
+						initialPrimaryWeight, 
+						secondaryIndex, 
+						initialSecondaryWeight));
 	}
-	
+
 	public List<RichDeclaration> search(RichToken richToken) {
 		List<WToken> searchKeys = richToken.getAllTokens();
-		
+
 		for (WToken searchKey : searchKeys) {
 			table.search(searchKey);
 		}
-		
+
 		List<DeclarationSelectionEntry> selected = listener.getSelected();
 		PriorityQueue<RichDeclaration> rds = rank(selected, richToken);
-		
+
 		listener.clear();
 		return keepBest(rds);
 	}
 
 	private List<RichDeclaration> keepBest(PriorityQueue<RichDeclaration> rds) {
 		List<RichDeclaration> filtered = new LinkedList<RichDeclaration>();
-		for (int i=0; i<maxDecls && !rds.isEmpty(); i++) {
+		for (int i=0; i< maxDecls && !rds.isEmpty(); i++) {
 			filtered.add(rds.remove());
 		}
 		return filtered;
@@ -78,7 +95,7 @@ public class Search {
 		for (DeclarationSelectionEntry selectedEntry: selectedEntries) {
 			rds.add(new RichDeclaration(selectedEntry.getDecl(), scorer.calculate(selectedEntry, richToken)));
 		}
-		
+
 		return rds;
 	}
 }

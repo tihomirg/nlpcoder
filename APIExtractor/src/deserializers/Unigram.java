@@ -8,14 +8,14 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FrequencyDeserializer {
+public class Unigram {
 
 	private Map<Integer, Integer> freq;
 	
 	private double minimum;
 	private double total;
 
-	public FrequencyDeserializer(String fileName) {
+	public Unigram(String fileName) {
 		this.minimum = Integer.MAX_VALUE;
 		this.total = 0;
 		this.freq = loadMap(fileName);
@@ -36,7 +36,7 @@ public class FrequencyDeserializer {
 			int freq = Integer.parseInt(splits[0]);
 			map.put(declID, freq);
 			
-			trySetMinimum(freq);
+			this.minimum = Math.min(minimum, freq);
 			total += freq;
 		  }
 		
@@ -52,37 +52,16 @@ public class FrequencyDeserializer {
 		
 		return map;
 	}
-
-	private void trySetMinimum(int freq) {
-		this.minimum = Math.min(minimum, freq);
-	}
-
-	public Map<Integer, Integer> getFreq() {
-		return freq;
-	}
 	
-	public double getMinimumLog() {
-		return Math.log(minimum);
-	}
-
-	public double getSmoothLog(){
-		return Math.log(minimum) - Math.log(total);
-	}
-	
-	public double getTotalLog(){
-		return Math.log(total);
-	}
-	
-	public double getLogFrequency(int id) {
-		Integer integer = freq.get(id);
-		
+	public double getProbability(int declID) {
+		Integer integer = freq.get(declID);	
 		if(integer != null){
-			return Math.log(integer) - Math.log(total);
-		} else return Math.log(minimum) - Math.log(total);
+			return integer / total;
+		} else return minimum / total;
 	}		
 	
 	@Override
 	public String toString() {
-		return "min = "+this.getMinimumLog() +", total = "+this.getTotalLog() +", smooth = "+getSmoothLog();
+		return "min = "+ minimum+", total = "+total +", smooth = "+(minimum/total);
 	}
 }

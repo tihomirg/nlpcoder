@@ -52,22 +52,23 @@ import types.NameGenerator;
 import types.StabileTypeFactory;
 import util.Pair;
 import util.UtilList;
+import util.time.TimeStatistics;
 import api.Local;
 import api.StabileAPI;
 import config.Config;
 import definitions.Declaration;
 import deserializers.Deserializer;
-import deserializers.FrequencyDeserializer;
+import deserializers.Unigram;
 import deserializers.KryoDeserializer;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class SearchEngine {
-	private long time;
+	private TimeStatistics time;
 	private ParserPipeline pipeline;
 	private StabileAPI api;
 	private ScorerPipeline scorer;
 	private SelectListener listener;
-	private FrequencyDeserializer frequencies;
+	private Unigram frequencies;
 	private HandlerTable handlerTable;
 	private int maxNumOfSolutions;
 	private ParserForLocals parserForLocals;
@@ -75,22 +76,23 @@ public class SearchEngine {
 
 	public SearchEngine(int maxNumOfSolutions) {
 		this.maxNumOfSolutions = maxNumOfSolutions;
+		this.time = new TimeStatistics();
 		load();
 	}
 
 	private void load() {
-		time = System.currentTimeMillis();
+		this.time.startMeasuringTime("Loading time");
 
 		Properties props = new Properties();
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 		props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-bidirectional/english-bidirectional-distsim.tagger");
 		//props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
-		
+
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
 		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP);
 		KryoDeserializer rwmDeserializer = new KryoDeserializer();
 		RelatedWordsMap rwm = (RelatedWordsMap) rwmDeserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
-		
+
 		parserForLocals = new ParserForLocals();
 
 		pipeline = new ParserPipeline(new IParser[]{
@@ -116,24 +118,38 @@ public class SearchEngine {
 
 		listener = new SelectListener();
 
-		scorer = new ScorerPipeline(new RichDeclarationScorer[]{new HungarianScorer(SearchConfig.getDeclarationInputKindMatrix()), new UnigramScorer(SearchConfig.getDeclarationUnigramFactor())});
-		frequencies = new FrequencyDeserializer(Config.getDeclarationFrequencyLocation());
-
+		scorer = new ScorerPipeline(
+					new RichDeclarationScorer[]{
+						new HungarianScorer(SearchConfig.getDeclarationInputKindMatrix()), 
+						new UnigramScorer()},
+						SearchConfig.getDeclarationScorerCoefs());
+		
+		frequencies = new Unigram(Config.getDeclarationFrequencyLocation());
 		System.out.println(frequencies);
 
-		this.search = new Search(scorer, listener, api, frequencies, SearchConfig.getMaxSelectedDeclarations(), SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight());
+		this.search = new Search(
+				             scorer, 
+				             listener, 
+				             api, 
+				             frequencies, 
+				             SearchConfig.getMaxSelectedDeclarations(), 
+				             SearchConfig.getPrimaryIndex(), 
+				             SearchConfig.getPrimaryWeight(), 
+				             SearchConfig.getSecondaryIndex(), 
+				             SearchConfig.getSecondaryWeight());
+		
+		time.stopMeasuringTime();
 	}
 
-	public String[] run(String line, List<Local> locals){
+	public String[] run(String line, List<Local> locals) {
+		
 		PriorityQueue<PartialExpression> solutions = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
 
-		time = System.currentTimeMillis();
-		
+		time.startMeasuringTime("Input Parsing time");
 		this.parserForLocals.setLocals(locals);
 		Input input = pipeline.parse(new Input(line));
-
-		printMsgAndSetTime("Input parsing time",time);
-
+		time.stopMeasuringTime();
+		
 		List<Sentence> sentences = input.getSentences();
 
 		for (Sentence sentence : sentences) {
@@ -141,16 +157,17 @@ public class SearchEngine {
 
 			List<RichToken> searchKeyGroups = sentence.getSearchKeyRichTokens();
 
+			this.time.startMeasuringTime("Declaration Search time");
 			for (RichToken richToken : searchKeyGroups) {
 				rdss.add(search.search(richToken));
 			}
-
-			time = printMsgAndSetTime("Decl search time", time);
+			this.time.stopMeasuringTime();
 
 			if (SearchConfig.isSynthesis()) {
 				List<List<ExprGroup>> exprGroupss = createExprGroupss(rdss);
 
 				if (!exprGroupss.isEmpty()) {
+					this.time.startMeasuringTime("PCFG Syntehsis time");
 					setExprRelatedGroups(exprGroupss);
 
 					HoleHandler hHandler = new HoleHandler();
@@ -158,29 +175,32 @@ public class SearchEngine {
 					hHandler.addAllHoleReplacements(strings);
 					List<Expr> numbers = createNumberLiterals(sentence.getNumberLiteralRichTokens(), api.getStf());
 					hHandler.addAllHoleReplacements(numbers);
-					
+
 					List<Expr> localExprs = createLocals(sentence.getLocals());
 					hHandler.addAllHoleReplacements(localExprs);
 
 					handlerTable.setHoleHandler(hHandler);
-					
+
 					LiteralHandler sHandler = new LiteralHandler();
 					sHandler.addAllLiterals(strings);
 					handlerTable.setStringLiteralHandler(sHandler);
-					
+
 					LiteralHandler nHandler = new LiteralHandler();
 					nHandler.addAllLiterals(numbers);					
 					handlerTable.setNumberLiteralHandler(nHandler);
-					
+
 					int inputSize = searchKeyGroups.size() + strings.size() + numbers.size();
-					
+
 					PartialExpressionScorer peScorer = new PartialExpressionScorer(SearchConfig.getPartialExpressionConnectorReward(), SearchConfig.getPartialExpressionConnectorPenalty(), inputSize,  SearchConfig.getPartialExpressionSizePenalty());
 					GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, SearchConfig.getNumberOfSynthesisLevels(), SearchConfig.getMaxPartialExpressionsPerSynthesisLevel());
 					Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, SearchConfig.isParallelSynthesis());
 					synthesis.run();
-
+					
+					this.time.stopMeasuringTime();
+					
 					System.out.println(synthesis);
 
+					this.time.startMeasuringTime("Merging Syntesis time");
 					Pair<List<PartialExpression>, List<PartialExpression>> pexprs = synthesis.getPexprs();
 
 					final List<PartialExpression> withConnections = pexprs.getFirst();
@@ -201,13 +221,13 @@ public class SearchEngine {
 
 					fixScore(completed, strings, numbers);
 					solutions.addAll(completed);
-
+					this.time.stopMeasuringTime();
 				}
 			}
-
-			printMsgAndSetTime("Expression Synthesis time", time);
 		}
 
+		System.out.println(this.time);
+		
 		return prepare(solutions);
 	}
 
@@ -261,7 +281,7 @@ public class SearchEngine {
 		for (Expr expr : exprs) {
 			String prefix = expr.getPrefix();
 			System.out.println("Prefix: "+prefix);
-			
+
 			if(!visited.contains(prefix)){
 				visited.add(prefix);
 				sum += numOfRepetitions(stringRep, prefix);
@@ -341,11 +361,6 @@ public class SearchEngine {
 		return pq;
 	}
 
-	private static long printMsgAndSetTime(String msg, long time) {
-		System.out.println(msg+": "+(System.currentTimeMillis() - time)+" ms");
-		return System.currentTimeMillis();
-	}
-
 	private static void prepareForMearging(List<PartialExpression> pexprs) {
 		for (PartialExpression pexpr : pexprs) {
 			pexpr.prepareForMearging();
@@ -406,7 +421,7 @@ public class SearchEngine {
 		String line = null;
 		while((line = scanner.nextLine()) != null){
 
-			if (scanner.equals("exitexit")) break;
+			if (scanner.equals("exit exit")) break;
 
 			String[] results = se.run(line, new LinkedList<Local>());
 			System.out.println();
@@ -420,11 +435,11 @@ public class SearchEngine {
 
 		scanner.close();
 	}
-	
+
 	public StabileAPI getAPI() {
 		return api;
 	}
-	
+
 	public ParserForLocals getParserForLocals() {
 		return parserForLocals;
 	}

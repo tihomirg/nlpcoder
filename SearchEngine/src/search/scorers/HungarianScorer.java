@@ -2,8 +2,6 @@ package search.scorers;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import nlp.parser.Token;
 import search.DeclarationSelectionEntry;
 import search.WToken;
 import search.nlp.parser.DisjointSubgroups;
@@ -12,15 +10,9 @@ import search.nlp.parser.Subgroup;
 
 public class HungarianScorer implements RichDeclarationScorer {
 
-	private double factor;
 	private double[][] kindMatrix;
 
 	public HungarianScorer(double[][] kindMatrix) {
-		this(1.0, kindMatrix);
-	}
-
-	public HungarianScorer(double factor, double[][] kindMatrix) {
-		this.factor = factor;
 		this.kindMatrix = kindMatrix;
 	}
 

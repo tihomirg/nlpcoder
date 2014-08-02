@@ -33,8 +33,8 @@ public class SearchConfig {
 	private static final double relatedWeigthFactor = 1.0;
 	
 	//Declaration Selection weights
-	private static final double declarationUnigramFactor = 0.5;
 	private static final double[][] kindMatrix = new double[][]{{1, 0.5},{0.5, 1}};
+	private static final Double[] declarationScorerCoefs = new Double[]{0.5, 0.5};
 
 	public static int getPrimaryIndex() {
 		return primaryIndex;
@@ -54,10 +54,6 @@ public class SearchConfig {
 
 	public static double getRelatedWeightFactor() {
 		return relatedWeigthFactor;
-	}
-
-	public static double getDeclarationUnigramFactor() {
-		return declarationUnigramFactor;
 	}
 
 	public static double[][] getDeclarationInputKindMatrix() {
@@ -118,5 +114,9 @@ public class SearchConfig {
 
 	public static boolean isSynthesis() {
 		return synthesis;
+	}
+
+	public static Double[] getDeclarationScorerCoefs() {
+		return declarationScorerCoefs;
 	}
 }

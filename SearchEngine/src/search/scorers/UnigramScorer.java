@@ -5,15 +5,9 @@ import search.nlp.parser.RichToken;
 
 public class UnigramScorer implements RichDeclarationScorer {
 
-	private double factor;
-
-	public UnigramScorer(double factor) {
-		this.factor = factor;
-	}
-
 	@Override
 	public double calculate(DeclarationSelectionEntry rd, RichToken richToken) {
-		return this.factor * rd.getUnigramScore();
+		return rd.getUnigramProbability();
 	}
 
 }

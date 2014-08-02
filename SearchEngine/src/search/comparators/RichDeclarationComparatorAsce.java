@@ -9,8 +9,8 @@ public class RichDeclarationComparatorAsce implements Comparator<RichDeclaration
 
 	@Override
 	public int compare(RichDeclaration rd1, RichDeclaration rd2) {
-		double score1 = rd1.getScore().getSum();
-		double score2 = rd2.getScore().getSum();
+		double score1 = rd1.getScore().getCoefSum();
+		double score2 = rd2.getScore().getCoefSum();
 		
 		if (score1 > score2) return 1;
 		else if (score1 < score2) return -1;
