@@ -10,7 +10,7 @@ import api.StabileAPI;
 import definitions.Declaration;
 import deserializers.Unigram;
 
-public class Search {
+public class DeclarationSearchEngine {
 
 	private static final int INITIAL_CAP = 100;
 	private static final RichDeclarationComparatorDesc COMPARATOR_DESC = new RichDeclarationComparatorDesc();
@@ -24,7 +24,7 @@ public class Search {
 	private int secondaryIndex;
 	private double initialSecondaryWeight;
 
-	public Search(
+	public DeclarationSearchEngine(
 			ScorerPipeline scorer, 
 			SelectListener listener, 
 			StabileAPI api, 

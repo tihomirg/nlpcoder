@@ -62,7 +62,7 @@ import deserializers.Unigram;
 import deserializers.KryoDeserializer;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
-public class SearchEngine {
+public class ISText {
 	private TimeStatistics time;
 	private ParserPipeline pipeline;
 	private StabileAPI api;
@@ -72,9 +72,9 @@ public class SearchEngine {
 	private HandlerTable handlerTable;
 	private int maxNumOfSolutions;
 	private ParserForLocals parserForLocals;
-	private Search search;
+	private DeclarationSearchEngine search;
 
-	public SearchEngine(int maxNumOfSolutions) {
+	public ISText(int maxNumOfSolutions) {
 		this.maxNumOfSolutions = maxNumOfSolutions;
 		this.time = new TimeStatistics();
 		load();
@@ -127,7 +127,7 @@ public class SearchEngine {
 		frequencies = new Unigram(Config.getDeclarationFrequencyLocation());
 		System.out.println(frequencies);
 
-		this.search = new Search(
+		this.search = new DeclarationSearchEngine(
 				             scorer, 
 				             listener, 
 				             api, 
@@ -412,7 +412,7 @@ public class SearchEngine {
 	}
 
 	public static void main(String[] args) {
-		SearchEngine se = new SearchEngine(50);
+		ISText se = new ISText(50);
 
 		Scanner scanner = new Scanner(System.in);
 
