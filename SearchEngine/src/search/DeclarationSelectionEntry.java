@@ -48,7 +48,7 @@ public class DeclarationSelectionEntry implements Cloneable {
 		double secondaryWeight = initialSecondaryWeight / (initialWeight * secondarySize);
 		
 		setIndexAndWeight(this.primaryWTokens, primaryIndex, primaryWeight);
-		setIndexAndWeight(secondaryWTokens, secondaryIndex, secondaryWeight);
+		setIndexAndWeight(this.secondaryWTokens, secondaryIndex, secondaryWeight);
 	}
 
 	private void setIndexAndWeight(List<WToken> wTokens, int importanceIndex, double weight) {		
@@ -72,14 +72,14 @@ public class DeclarationSelectionEntry implements Cloneable {
 
 	public void addAllToPrimary(Collection<Token> declTokens) {
 		for (Token token : declTokens) {
-			addWToken(new WToken(token));
+			addWTokenPrimary(new WToken(token));
 			addToken(token);
 		}
 	}
 
 	public void addAllToSecondary(Collection<Token> declTokens) {
 		for (Token token : declTokens) {
-			addWToken(new WToken(token));
+			addWTokenSecondary(new WToken(token));
 			addToken(token);
 		}
 	}
@@ -88,9 +88,13 @@ public class DeclarationSelectionEntry implements Cloneable {
 		this.tokens.add(token);
 	}
 
-	private void addWToken(WToken wToken) {
+	private void addWTokenPrimary(WToken wToken) {
 		this.primaryWTokens.add(wToken);
 	}
+	
+	private void addWTokenSecondary(WToken wToken) {
+		this.secondaryWTokens.add(wToken);
+	}	
 
 	public void hit() {
 		if (!hit){

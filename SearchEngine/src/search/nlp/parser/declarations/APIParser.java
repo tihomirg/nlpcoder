@@ -3,6 +3,7 @@ package search.nlp.parser.declarations;
 import java.util.Properties;
 
 import search.nlp.parser.ComplexWordDecomposer;
+import search.nlp.parser.WordPosCorrector;
 import search.nlp.parser.declarations.IDeclarationParser;
 import serializers.KryoSerializer;
 import types.NameGenerator;
@@ -40,7 +41,7 @@ public class APIParser {
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
 		
-		APIParser parser = new APIParser(new DeclarationParser(new ComplexWordDecomposer(coreNLP), api.getFactory()));
+		APIParser parser = new APIParser(new DeclarationParser(new ComplexWordDecomposer(coreNLP, new WordPosCorrector()), api.getFactory()));
 		
 		KryoSerializer serializer = new KryoSerializer();
 		InitialAPI parse = parser.parse(api);

@@ -44,7 +44,15 @@ public class Score {
 
 	@Override
 	public String toString() {
-		return "Score[ total = "+getSum()+", single = "+scores.toString()+"]";
+		return "Score[ total = "+getCoefSum()+", single = "+scores.toString()+"]";
+	}
+	
+	public String scoresToString(){
+		String s = "[";
+		for (int i=0; i< this.scores.size(); i++) {
+			s += " "+(coefs.get(i) * scores.get(i));
+		}
+		return s+" ]";
 	}
 	
 }

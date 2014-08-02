@@ -16,8 +16,8 @@ public class SelectListener {
 	}
 
 	public void clear(){
-		for (DeclarationSelectionEntry rd: this.selected) {
-			rd.clear();
+		for (DeclarationSelectionEntry entry: this.selected) {
+			entry.clear();
 		}
 		selected.clear();
 	}

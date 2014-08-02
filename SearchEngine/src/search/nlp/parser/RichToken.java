@@ -198,6 +198,14 @@ public class RichToken {
 				+"\nsecondaryTokens="+ this.secondaryWTokens 
 				+"]\n";
 	}
+	
+	public String tokensToString(){
+		return "RichToken [" 
+				+"\nleadingTokens="+ this.leadingWTokens
+				+"\nrelatedTokens="+ this.relatedWTokens
+				+"\nsecondaryTokens="+ this.secondaryWTokens 
+				+"]";		
+	}
 
 	public List<WToken> getSecondaryWTokens() {
 		return secondaryWTokens;

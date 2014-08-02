@@ -34,6 +34,7 @@ import search.nlp.parser.ParserForWeightsAndImportanceIndexes;
 import search.nlp.parser.ParserPipeline;
 import search.nlp.parser.RichToken;
 import search.nlp.parser.Sentence;
+import search.nlp.parser.WordPosCorrector;
 import search.scorers.UnigramScorer;
 import search.scorers.HungarianScorer;
 import search.scorers.RichDeclarationScorer;
@@ -89,7 +90,9 @@ public class ISText {
 		//props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
 
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
-		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP);
+		WordPosCorrector posCorrector = new WordPosCorrector();
+
+		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP, posCorrector);
 		KryoDeserializer rwmDeserializer = new KryoDeserializer();
 		RelatedWordsMap rwm = (RelatedWordsMap) rwmDeserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
 
@@ -99,7 +102,7 @@ public class ISText {
 				new ParserForLiterals(),
 				parserForLocals,
 				new ParserForCorrectingWords(new WordCorrector()),
-				new ParserForNaturalLanguage(coreNLP),
+				new ParserForNaturalLanguage(coreNLP, posCorrector),
 				new ParserForRichLiteralsAndLocals(),
 				new ParserForSemanticGraphNeighbours(),
 				new ParserForRightHandSideNeighbours(SearchConfig.getInputParserRighHandSideNeighbourNumber()),
@@ -119,52 +122,54 @@ public class ISText {
 		listener = new SelectListener();
 
 		scorer = new ScorerPipeline(
-					new RichDeclarationScorer[]{
+				new RichDeclarationScorer[]{
 						new HungarianScorer(SearchConfig.getDeclarationInputKindMatrix()), 
 						new UnigramScorer()},
 						SearchConfig.getDeclarationScorerCoefs());
-		
+
 		frequencies = new Unigram(Config.getDeclarationFrequencyLocation());
 		System.out.println(frequencies);
 
 		this.search = new DeclarationSearchEngine(
-				             scorer, 
-				             listener, 
-				             api, 
-				             frequencies, 
-				             SearchConfig.getMaxSelectedDeclarations(), 
-				             SearchConfig.getPrimaryIndex(), 
-				             SearchConfig.getPrimaryWeight(), 
-				             SearchConfig.getSecondaryIndex(), 
-				             SearchConfig.getSecondaryWeight());
-		
+				scorer, 
+				listener, 
+				api, 
+				frequencies, 
+				SearchConfig.getMaxSelectedDeclarations(), 
+				SearchConfig.getPrimaryIndex(), 
+				SearchConfig.getPrimaryWeight(), 
+				SearchConfig.getSecondaryIndex(), 
+				SearchConfig.getSecondaryWeight());
+
 		time.stopMeasuringTime();
 	}
 
 	public String[] run(String line, List<Local> locals) {
-		
+
 		PriorityQueue<PartialExpression> solutions = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
 
 		time.startMeasuringTime("Input Parsing time");
 		this.parserForLocals.setLocals(locals);
 		Input input = pipeline.parse(new Input(line));
 		time.stopMeasuringTime();
-		
+
 		List<Sentence> sentences = input.getSentences();
 
 		for (Sentence sentence : sentences) {
-			List<List<RichDeclaration>> rdss = new LinkedList<List<RichDeclaration>>();
+			List<SearchReport> reports = new LinkedList<SearchReport>();
 
 			List<RichToken> searchKeyGroups = sentence.getSearchKeyRichTokens();
 
 			this.time.startMeasuringTime("Declaration Search time");
 			for (RichToken richToken : searchKeyGroups) {
-				rdss.add(search.search(richToken));
-			}
+				reports.add(search.search(richToken));
+			}			
 			this.time.stopMeasuringTime();
 
+			printSearchReports(reports);
+
 			if (SearchConfig.isSynthesis()) {
-				List<List<ExprGroup>> exprGroupss = createExprGroupss(rdss);
+				List<List<ExprGroup>> exprGroupss = createExprGroupss(reports);
 
 				if (!exprGroupss.isEmpty()) {
 					this.time.startMeasuringTime("PCFG Syntehsis time");
@@ -195,9 +200,9 @@ public class ISText {
 					GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, SearchConfig.getNumberOfSynthesisLevels(), SearchConfig.getMaxPartialExpressionsPerSynthesisLevel());
 					Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, SearchConfig.isParallelSynthesis());
 					synthesis.run();
-					
+
 					this.time.stopMeasuringTime();
-					
+
 					System.out.println(synthesis);
 
 					this.time.startMeasuringTime("Merging Syntesis time");
@@ -227,8 +232,16 @@ public class ISText {
 		}
 
 		System.out.println(this.time);
-		
+
 		return prepare(solutions);
+	}
+
+	private void printSearchReports(List<SearchReport> reports) {
+		for (SearchReport report : reports) {
+			System.out.println();
+			System.out.println(report);
+			System.out.println();
+		}
 	}
 
 	private List<Expr> createLocals(List<RichToken> locals) {
@@ -367,11 +380,11 @@ public class ISText {
 		}
 	}
 
-	private static List<List<ExprGroup>> createExprGroupss(List<List<RichDeclaration>> rdss) {
+	private static List<List<ExprGroup>> createExprGroupss(List<SearchReport> reports) {
 		List<List<ExprGroup>> egroupss = new LinkedList<List<ExprGroup>>();
 
-		for(int i = 0; i < rdss.size(); i++){
-			List<RichDeclaration> rds = rdss.get(i);
+		for(int i = 0; i < reports.size(); i++){
+			List<RichDeclaration> rds = reports.get(i).getResults();
 			egroupss.add(createExprGroups(rds, i));
 		}
 
@@ -381,7 +394,7 @@ public class ISText {
 	private static List<ExprGroup> createExprGroups(List<RichDeclaration> rds, int index) {
 		List<ExprGroup> egroups = new LinkedList<ExprGroup>();
 		for (RichDeclaration rd : rds) {
-			egroups.add(new ExprGroup(createExpr(rd.getDecl()), index, rd.getScore().getSum()));				
+			egroups.add(new ExprGroup(createExpr(rd.getDecl()), index, rd.getScore().getCoefSum()));				
 		}
 		return egroups;
 	}

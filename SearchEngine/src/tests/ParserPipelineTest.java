@@ -26,6 +26,7 @@ import search.nlp.parser.ParserForRightHandSideNeighbours;
 import search.nlp.parser.ParserForSemanticGraphNeighbours;
 import search.nlp.parser.ParserForWeightsAndImportanceIndexes;
 import search.nlp.parser.ParserPipeline;
+import search.nlp.parser.WordPosCorrector;
 import config.Config;
 import deserializers.KryoDeserializer;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -54,7 +55,9 @@ public class ParserPipelineTest {
 		//props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
 		
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
-		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP);
+		WordPosCorrector posCorrector = new WordPosCorrector();		
+		
+		ComplexWordDecomposer decomposer = new ComplexWordDecomposer(coreNLP, posCorrector);
 		KryoDeserializer deserializer = new KryoDeserializer();
 		RelatedWordsMap rwm = (RelatedWordsMap) deserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
 		
@@ -62,7 +65,7 @@ public class ParserPipelineTest {
 				new ParserForLiterals(),
 				new ParserForLocals(),
 				new ParserForCorrectingWords(new WordCorrector()),
-				new ParserForNaturalLanguage(coreNLP),
+				new ParserForNaturalLanguage(coreNLP, posCorrector),
 				new ParserForRichLiteralsAndLocals(),
 				new ParserForSemanticGraphNeighbours(),
 				new ParserForRightHandSideNeighbours(1),

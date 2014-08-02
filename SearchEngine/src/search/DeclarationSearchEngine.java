@@ -68,7 +68,7 @@ public class DeclarationSearchEngine {
 						initialSecondaryWeight));
 	}
 
-	public List<RichDeclaration> search(RichToken richToken) {
+	public SearchReport search(RichToken richToken) {
 		List<WToken> searchKeys = richToken.getAllTokens();
 
 		for (WToken searchKey : searchKeys) {
@@ -79,7 +79,7 @@ public class DeclarationSearchEngine {
 		PriorityQueue<RichDeclaration> rds = rank(selected, richToken);
 
 		listener.clear();
-		return keepBest(rds);
+		return new SearchReport(keepBest(rds), richToken);
 	}
 
 	private List<RichDeclaration> keepBest(PriorityQueue<RichDeclaration> rds) {

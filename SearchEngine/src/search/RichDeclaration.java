@@ -20,4 +20,9 @@ public class RichDeclaration {
 	public Declaration getDecl() {
 		return decl;
 	}
+
+	@Override
+	public String toString() {
+		return "Score = " + score + "  " +decl+ "]";
+	}
 }

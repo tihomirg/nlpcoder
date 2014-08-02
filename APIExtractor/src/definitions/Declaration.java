@@ -363,8 +363,12 @@ public class Declaration implements Serializable, Cloneable {
 				+ Arrays.toString(argTypes) + ", ret=" + retType
 				+ ", pkg=" + packageName
 				+", unique="+ (unique != null ? unique.getLongName() : null)+"\n"
-				+", add s.n. tokens=" + this.simpleNameTokens + "\n"
-				+", add tokens=" + this.additionalReceiverTokens + "\n";
+				+", add name tokens=" + this.simpleNameTokens + "\n"
+				+", add receiver tokens=" + this.receiverTokens + "\n"
+				+", add arg tokens=" + this.argTokens + "\n"
+				+", add retType tokens=" + this.returnTypeTokens + "\n"
+				+", add class tokens=" + this.clazzTokens + "\n"				
+				+", add add. receiver tokens=" + this.additionalReceiverTokens + "\n";
 	}
 
 	public boolean isCompatible(Type[] argTypes, StabileTypeFactory factory) {

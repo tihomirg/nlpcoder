@@ -18,10 +18,12 @@ import edu.stanford.nlp.util.CoreMap;
 public class ComplexWordDecomposer {
 
 	private StanfordCoreNLP pipeline;
-
-	public ComplexWordDecomposer(StanfordCoreNLP pipeline) {
+	private WordPosCorrector posCorrector;
+	
+	public ComplexWordDecomposer(StanfordCoreNLP pipeline, WordPosCorrector posCorrector) {
 		this.pipeline = pipeline;
-	}	
+		this.posCorrector = posCorrector;
+	}
 
 	public List<Token> decomposeTokenIfNeeded(Token oldToken) {
 		return decomposeStringIfNeeded(oldToken.getText());
@@ -43,7 +45,8 @@ public class ComplexWordDecomposer {
 
 			for(CoreMap sentence: sentences) {
 				for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-					newTokens.add(new Token(token.get(TextAnnotation.class), token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class)));
+					String newLemma = token.get(LemmaAnnotation.class);
+					newTokens.add(new Token(token.get(TextAnnotation.class), newLemma, posCorrector.correctPOS(newLemma, token.get(PartOfSpeechAnnotation.class))));
 				}
 			}
 		}
@@ -65,7 +68,8 @@ public class ComplexWordDecomposer {
 
 		for(CoreMap sentence: sentences) {
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				newTokens.add(new Token(token.get(TextAnnotation.class),  token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class)));
+				String newLemma = token.get(LemmaAnnotation.class);
+				newTokens.add(new Token(token.get(TextAnnotation.class),  newLemma, posCorrector.correctPOS(newLemma, token.get(PartOfSpeechAnnotation.class))));
 			}
 		}
 
@@ -87,7 +91,8 @@ public class ComplexWordDecomposer {
 
 		for(CoreMap sentence: sentences) {
 			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				newTokens.add(new Token(token.get(TextAnnotation.class),  token.get(LemmaAnnotation.class), token.get(PartOfSpeechAnnotation.class)));
+				String newLemma = token.get(LemmaAnnotation.class);
+				newTokens.add(new Token(token.get(TextAnnotation.class),  newLemma, posCorrector.correctPOS(newLemma, token.get(PartOfSpeechAnnotation.class))));
 			}
 		}
 

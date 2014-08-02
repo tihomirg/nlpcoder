@@ -30,10 +30,10 @@ public class SearchConfig {
 
 	private static final double primaryWeight = 1.0;
 	private static final double secondaryWeight = 0.5;
-	private static final double relatedWeigthFactor = 1.0;
+	private static final double relatedWeigthFactor = 0.5;
 	
 	//Declaration Selection weights
-	private static final double[][] kindMatrix = new double[][]{{1, 0.5},{0.5, 1}};
+	private static final double[][] kindMatrix = new double[][]{{1, 0.5},{0.5, 1.0}};
 	private static final Double[] declarationScorerCoefs = new Double[]{0.5, 0.5};
 
 	public static int getPrimaryIndex() {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import nlp.parser.Token;
+import nlp.parser.one.WordCorrector;
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations.CorefChainAnnotation;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.CoreAnnotations.LemmaAnnotation;
@@ -22,9 +23,11 @@ import edu.stanford.nlp.util.CoreMap;
 public class ParserForNaturalLanguage implements IParser {
 
 	private StanfordCoreNLP pipeline;
+	private WordPosCorrector posCorrector;
 	
-	public ParserForNaturalLanguage(StanfordCoreNLP pipeline) {
+	public ParserForNaturalLanguage(StanfordCoreNLP pipeline, WordPosCorrector posCorrector) {
 		this.pipeline = pipeline;
+		this.posCorrector = posCorrector;
 	}
 
 	@Override
@@ -46,7 +49,8 @@ public class ParserForNaturalLanguage implements IParser {
 			
 			for (CoreLabel rawToken: rawSentence.get(TokensAnnotation.class)) {
 				int index = rawToken.index();
-				Token token = new Token(rawToken.get(TextAnnotation.class), rawToken.get(LemmaAnnotation.class), rawToken.get(PartOfSpeechAnnotation.class));
+				String lemma = rawToken.get(LemmaAnnotation.class);
+				Token token = new Token(rawToken.get(TextAnnotation.class), lemma, posCorrector.correctPOS(lemma, rawToken.get(PartOfSpeechAnnotation.class)));
 				RichToken richToken = new RichToken(token, index, rawToken.beginPosition(), rawToken.endPosition());
 				richTokens.add(richToken);
 				indexesToRichTokens.put(index, richToken);
