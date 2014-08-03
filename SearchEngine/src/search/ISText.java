@@ -18,6 +18,7 @@ import merging.core.SaturationGroupBuilder;
 import merging.core.SaturationSynthesisGroup;
 import merging.core.Synthesis;
 import search.config.SearchConfig;
+import search.nlp.parser.APIWords;
 import search.nlp.parser.ComplexWordDecomposer;
 import search.nlp.parser.IParser;
 import search.nlp.parser.Input;
@@ -96,12 +97,15 @@ public class ISText {
 		KryoDeserializer rwmDeserializer = new KryoDeserializer();
 		RelatedWordsMap rwm = (RelatedWordsMap) rwmDeserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
 
-		parserForLocals = new ParserForLocals();
+		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
+		Deserializer deserializer = new Deserializer();
+		api = new StabileAPI(deserializer.deserialize(Config.getSecondStorageLocation()), nameGen);	
 
+		parserForLocals = new ParserForLocals();
 		pipeline = new ParserPipeline(new IParser[]{
 				new ParserForLiterals(),
 				parserForLocals,
-				new ParserForCorrectingWords(new WordCorrector()),
+				new ParserForCorrectingWords(new WordCorrector(), new APIWords(api)),
 				new ParserForNaturalLanguage(coreNLP, posCorrector),
 				new ParserForRichLiteralsAndLocals(),
 				new ParserForSemanticGraphNeighbours(),
@@ -109,10 +113,6 @@ public class ISText {
 				new ParserForComplexTokens(decomposer),
 				new ParserForWeightsAndImportanceIndexes(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
 				new ParserForDisjointSubgroups()});
-
-		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
-		Deserializer deserializer = new Deserializer();
-		api = new StabileAPI(deserializer.deserialize(Config.getSecondStorageLocation()), nameGen);	
 
 		//Loading statistics
 		handlerTable = new HandlerTable();		
@@ -123,7 +123,7 @@ public class ISText {
 
 		scorer = new ScorerPipeline(
 				new RichDeclarationScorer[]{
-						new HungarianScorer(SearchConfig.getDeclarationInputKindMatrix()), 
+						new HungarianScorer(SearchConfig.getDeclarationInputKindMatrix(), SearchConfig.getDeclarationInputUnmatchingWeight()), 
 						new UnigramScorer()},
 						SearchConfig.getDeclarationScorerCoefs());
 

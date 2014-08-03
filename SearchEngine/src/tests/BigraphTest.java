@@ -35,7 +35,7 @@ public class BigraphTest {
 		
 		Bigraph bigraph = new Bigraph(subgroups, Arrays.asList(declWTokens), kindMatrix);
 		
-		assertEquals(0.25, bigraph.calculate(), 0.0);
+		assertEquals(0.25, bigraph.calculate().getFirst(), 0.0);
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ public class BigraphTest {
 		
 		Bigraph bigraph = new Bigraph(subgroups, Arrays.asList(declWTokens), kindMatrix);
 		
-		assertEquals(0.35, bigraph.calculate(), 0.0);
+		assertEquals(0.35, bigraph.calculate().getFirst(), 0.0);
 	}	
 
 	@Test
@@ -69,7 +69,7 @@ public class BigraphTest {
 		
 		Bigraph bigraph = new Bigraph(subgroups, Arrays.asList(declWTokens), kindMatrix);
 		
-		assertEquals(1.0, bigraph.calculate(), 0.0);
+		assertEquals(1.0, bigraph.calculate().getFirst(), 0.0);
 	}
 	
 	@Test
@@ -89,7 +89,7 @@ public class BigraphTest {
 		
 		Bigraph bigraph = new Bigraph(subgroups, Arrays.asList(declWTokens), kindMatrix);
 		
-		assertEquals(6.0, bigraph.calculate(), 0.0);
+		assertEquals(6.0, bigraph.calculate().getFirst(), 0.0);
 	}	
 	
 	@Test
@@ -109,7 +109,7 @@ public class BigraphTest {
 		
 		Bigraph bigraph = new Bigraph(subgroups, Arrays.asList(declWTokens), kindMatrix);
 		
-		assertEquals(11.0, bigraph.calculate(), 0.0);
+		assertEquals(11.0, bigraph.calculate().getFirst(), 0.0);
 	}
 	
 }

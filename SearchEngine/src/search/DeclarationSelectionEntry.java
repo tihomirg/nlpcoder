@@ -16,6 +16,7 @@ public class DeclarationSelectionEntry implements Cloneable {
 	private List<WToken> primaryWTokens;
 	private List<WToken> secondaryWTokens;
 	private LinkedList<Token> tokens;
+	private int numberOfWTokensWithoutAdditionalReceiverTokens;
 
 	public DeclarationSelectionEntry(Declaration decl, double unigramProbability, SelectListener listener, int primaryIndex, double initialPrimaryWeight, int secondaryIndex, double initialSecondaryWeight) {
 		this.decl = decl;
@@ -32,11 +33,18 @@ public class DeclarationSelectionEntry implements Cloneable {
 		addAllToSecondary(decl.getReceiverTokens());
 		addAllToSecondary(decl.getArgTokens());
 		addAllToSecondary(decl.getClazzTokens());
-		addAllToSecondary(decl.getAdditionalReceiverTokens());
 		addAllToSecondary(decl.getReturnTypeTokens());
+
+		setNumberOfWTokensWithoutAdditionalReceiverTokens();
+		
+		addAllToSecondary(decl.getAdditionalReceiverTokens());
 		
 		//Setting additional parameters
 		setIndexesAndWeights(primaryIndex, initialPrimaryWeight, secondaryIndex, initialSecondaryWeight);
+	}
+
+	private void setNumberOfWTokensWithoutAdditionalReceiverTokens() {
+		this.numberOfWTokensWithoutAdditionalReceiverTokens = this.primaryWTokens.size() + this.secondaryWTokens.size();
 	}
 
 	private void setIndexesAndWeights(int primaryIndex, double initialPrimaryWeight, int secondaryIndex, double initialSecondaryWeight) {
@@ -44,8 +52,8 @@ public class DeclarationSelectionEntry implements Cloneable {
 		int secondarySize = this.secondaryWTokens.size();
 		
 		double initialWeight = initialPrimaryWeight + initialSecondaryWeight;
-		double primaryWeight = initialPrimaryWeight / (initialWeight * primarySize);
-		double secondaryWeight = initialSecondaryWeight / (initialWeight * secondarySize);
+		double primaryWeight = initialPrimaryWeight;// (initialWeight * primarySize);
+		double secondaryWeight = initialSecondaryWeight; // (initialWeight * secondarySize);
 		
 		setIndexAndWeight(this.primaryWTokens, primaryIndex, primaryWeight);
 		setIndexAndWeight(this.secondaryWTokens, secondaryIndex, secondaryWeight);
@@ -137,5 +145,9 @@ public class DeclarationSelectionEntry implements Cloneable {
 
 	public List<WToken> getWTokens() {
 		return this.primaryWTokens;
+	}
+
+	public int getNumberOfWTokensWithoutAdditionalReceiverTokens() {
+		return this.numberOfWTokensWithoutAdditionalReceiverTokens;
 	}
 }

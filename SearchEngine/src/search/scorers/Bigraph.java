@@ -6,6 +6,7 @@ import java.util.List;
 
 import search.WToken;
 import search.nlp.parser.Subgroup;
+import util.Pair;
 
 public class Bigraph {
 
@@ -19,17 +20,21 @@ public class Bigraph {
 		this.kindWeight = kindWeight;
 	}
 
-	public double calculate(){
+	public Pair<Double, Integer> calculate() {
 		if (this.subgroups.size() == 1){
-			return maxOneToNScore(this.subgroups.get(0), declWTokens);
+			double score = maxOneToNScore(this.subgroups.get(0), declWTokens);
+			int numOfMatchings = score > 0 ? 1 : 0;
+			return new Pair<Double, Integer>(score, numOfMatchings);
 		} else {
 			if (this.declWTokens.size() == 1){
-				return maxNToOneScore(this.subgroups, declWTokens.get(0));
+				double score = maxNToOneScore(this.subgroups, declWTokens.get(0));
+				int numOfMatchings = score > 0 ? 1 : 0;
+				return new Pair<Double, Integer>(score, numOfMatchings);
 			} else return maxNToMScore(this.subgroups, this.declWTokens);
 		}
 	}
 
-	private double maxNToMScore(List<Subgroup> subgroups, List<WToken> declWTokens) {
+	private Pair<Double, Integer> maxNToMScore(List<Subgroup> subgroups, List<WToken> declWTokens) {
 		int subgroupSize = subgroups.size();		
 		int declSize = declWTokens.size();
 
@@ -67,15 +72,18 @@ public class Bigraph {
 		return originalMatrix;
 	}
 
-	private static double getWeight(double[][] costMatrix, int[] indexes) {
+	private static Pair<Double, Integer> getWeight(double[][] costMatrix, int[] indexes) {
 		double sum = 0;
+		int numOfMatchings = 0;
 		for (int i = 0; i < costMatrix.length; i++) {
 			int index = indexes[i];
 			if (index != -1){
-				sum += costMatrix[i][index];
+				double score = costMatrix[i][index];
+				if (score > 0) numOfMatchings++;
+				sum += score;
 			}
 		}
-		return sum;
+		return new Pair<Double, Integer>(sum, numOfMatchings);
 	}	
 
 	private static double findMaxElement(double[][] costMatrix) {

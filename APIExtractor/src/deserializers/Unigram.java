@@ -53,15 +53,19 @@ public class Unigram {
 		return map;
 	}
 	
-	public double getProbability(int declID) {
+	public double getScore(int declID) {
+		return (1 + Math.log10(baseProbability(declID))/10);
+	}
+
+	private double baseProbability(int declID) {
 		Integer integer = freq.get(declID);	
 		if(integer != null){
 			return integer / total;
 		} else return minimum / total;
-	}		
+	}
 	
 	@Override
 	public String toString() {
-		return "min = "+ minimum+", total = "+total +", smooth = "+(minimum/total);
+		return "min = "+ minimum+", total = "+total +", smooth = "+(minimum/total) +"  score = "+(1 + Math.log10(minimum/total)/10);
 	}
 }

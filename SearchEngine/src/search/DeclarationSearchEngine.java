@@ -60,7 +60,7 @@ public class DeclarationSearchEngine {
 	private void add(Declaration decl){
 		table.add(new DeclarationSelectionEntry(
 						decl, 
-						unigram.getProbability(decl.getId()), 
+						unigram.getScore(decl.getId()), 
 						listener, 
 						primaryIndex, 
 						initialPrimaryWeight, 

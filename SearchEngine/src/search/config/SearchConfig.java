@@ -28,13 +28,14 @@ public class SearchConfig {
 	private static final int primaryIndex = 0;
 	private static final int secondaryIndex = 1;
 
-	private static final double primaryWeight = 1.0;
-	private static final double secondaryWeight = 0.5;
-	private static final double relatedWeigthFactor = 0.5;
+	private static final double primaryWeight = 0.6;
+	private static final double secondaryWeight = 0.4;
+	private static final double relatedWeigthFactor = 1.0;
 	
 	//Declaration Selection weights
-	private static final double[][] kindMatrix = new double[][]{{1, 0.5},{0.5, 1.0}};
-	private static final Double[] declarationScorerCoefs = new Double[]{0.5, 0.5};
+	private static final double[][] kindMatrix = new double[][]{{1.0, 0.75},{0.25, 0.75}};
+	private static double declarationInputUnmatchingWeight = 0.02;
+	private static final Double[] declarationScorerCoefs = new Double[]{0.80, 0.20};
 
 	public static int getPrimaryIndex() {
 		return primaryIndex;
@@ -118,5 +119,9 @@ public class SearchConfig {
 
 	public static Double[] getDeclarationScorerCoefs() {
 		return declarationScorerCoefs;
+	}
+
+	public static double getDeclarationInputUnmatchingWeight() {
+		return declarationInputUnmatchingWeight;
 	}
 }

@@ -11,7 +11,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import api.StabileAPI;
 import search.config.SearchConfig;
+import search.nlp.parser.APIWords;
 import search.nlp.parser.ComplexWordDecomposer;
 import search.nlp.parser.IParser;
 import search.nlp.parser.Input;
@@ -27,7 +29,9 @@ import search.nlp.parser.ParserForSemanticGraphNeighbours;
 import search.nlp.parser.ParserForWeightsAndImportanceIndexes;
 import search.nlp.parser.ParserPipeline;
 import search.nlp.parser.WordPosCorrector;
+import types.NameGenerator;
 import config.Config;
+import deserializers.Deserializer;
 import deserializers.KryoDeserializer;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
@@ -61,10 +65,14 @@ public class ParserPipelineTest {
 		KryoDeserializer deserializer = new KryoDeserializer();
 		RelatedWordsMap rwm = (RelatedWordsMap) deserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
 		
+		NameGenerator nameGen = new NameGenerator(Config.getDeserializerVariablePrefix());
+		Deserializer apideserializer = new Deserializer();
+		StabileAPI api = new StabileAPI(apideserializer.deserialize(Config.getSecondStorageLocation()), nameGen);		
+		
 		parser = new ParserPipeline(new IParser[]{
 				new ParserForLiterals(),
 				new ParserForLocals(),
-				new ParserForCorrectingWords(new WordCorrector()),
+				new ParserForCorrectingWords(new WordCorrector(), new APIWords(api)),
 				new ParserForNaturalLanguage(coreNLP, posCorrector),
 				new ParserForRichLiteralsAndLocals(),
 				new ParserForSemanticGraphNeighbours(),

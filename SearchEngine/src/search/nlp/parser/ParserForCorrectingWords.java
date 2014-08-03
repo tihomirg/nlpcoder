@@ -12,9 +12,11 @@ import api.Local;
 public class ParserForCorrectingWords implements IParser{
 
 	private WordCorrector corrector;
+	private APIWords apiWords;
 
-	public ParserForCorrectingWords(WordCorrector corrector) {
+	public ParserForCorrectingWords(WordCorrector corrector, APIWords apiWords) {
 		this.corrector = corrector;
+		this.apiWords = apiWords;
 	}
 	
 	@Override
@@ -48,7 +50,7 @@ public class ParserForCorrectingWords implements IParser{
 			int startPos = pair.getFirst();
 			String word = pair.getSecond();
 
-			String correction = corrector.tryCorrect(word);
+			String correction = tryCorrect(word);
 			
 			if (correction != null){
 				if (startPos == 0){
@@ -67,6 +69,11 @@ public class ParserForCorrectingWords implements IParser{
 		}
 
 		return localizedText;		
+	}
+
+	private String tryCorrect(String word) {
+		if(apiWords.isAPIWord(word)) return word;
+		else return corrector.tryCorrect(word);
 	}
 	
 	private String firstCharToUpperCase(String correction) {

@@ -79,4 +79,8 @@ public class WToken {
 	public double getRelatednessWeight() {
 		return relatednessWeight;
 	}
+	
+	public void setRelatednessWeight(double relatednessWeight) {
+		this.relatednessWeight = relatednessWeight;
+	}
 }
