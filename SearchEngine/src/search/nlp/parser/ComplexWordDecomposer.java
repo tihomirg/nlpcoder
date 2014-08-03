@@ -26,7 +26,8 @@ public class ComplexWordDecomposer {
 	}
 
 	public List<Token> decomposeTokenIfNeeded(Token oldToken) {
-		return decomposeStringIfNeeded(oldToken.getText());
+		//return decomposeStringIfNeeded(oldToken.getText());
+		return decomposeStringIfNeededByTurningIntoSentence(oldToken.getText());
 	}
 
 	public List<Token> decomposeStringIfNeeded(String lemma) {
@@ -76,7 +77,7 @@ public class ComplexWordDecomposer {
 		return newTokens;
 	}
 
-	public List<Token> decomposeSimpleNameString(String lemma) {
+	public List<Token> decomposeStringByTurningIntoSentence(String lemma) {
 		List<Token> newTokens = new LinkedList<Token>();
 		List<String> initialLemmas = slice(lemma);
 		List<String> newLemmas = transformToSentenceWords(initialLemmas);
@@ -97,6 +98,32 @@ public class ComplexWordDecomposer {
 		}
 
 		return removeLastIfNeeded(newTokens, initialLemmas.size());
+	}
+	
+	public List<Token> decomposeStringIfNeededByTurningIntoSentence(String lemma) {
+		List<Token> newTokens = new LinkedList<Token>();
+		List<String> initialLemmas = slice(lemma);
+
+		if (initialLemmas.size() > 1){
+		List<String> newLemmas = transformToSentenceWords(initialLemmas);
+
+		String text = concatenate(newLemmas, " ");
+
+		Annotation document = new Annotation(text);
+
+		pipeline.annotate(document);
+
+		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+
+		for(CoreMap sentence: sentences) {
+			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
+				String newLemma = token.get(LemmaAnnotation.class);
+				newTokens.add(new Token(token.get(TextAnnotation.class),  newLemma, posCorrector.correctPOS(newLemma, token.get(PartOfSpeechAnnotation.class))));
+			}
+		}
+
+		return removeLastIfNeeded(newTokens, initialLemmas.size());
+		} else return newTokens;
 	}	
 
 	private List<Token> removeLastIfNeeded(List<Token> newTokens, int size) {

@@ -46,7 +46,7 @@ public class DeclarationParser implements IDeclarationParser {
 		for (List<String> arg : args) {
 			List<Token> tokens = new LinkedList<Token>();
 			for (String name : arg) {
-				tokens.addAll(decomposer.decomposeString(name));
+				tokens.addAll(decomposer.decomposeStringByTurningIntoSentence(name));
 			}			
 			argTokens.add(tokens);
 		}
@@ -59,14 +59,14 @@ public class DeclarationParser implements IDeclarationParser {
 		List<Token> receiverTokens = new LinkedList<Token>();		
 		List<String> receiver = decl.getReceiverTypeTextualForm(tf);
 		for (String name : receiver) {
-			receiverTokens.addAll(decomposer.decomposeString(name));
+			receiverTokens.addAll(decomposer.decomposeStringByTurningIntoSentence(name));
 		}
 		decl.setReceiverTokens(receiverTokens);
 	}
 
 	private void simpleNameTokenization(Declaration decl) {
 		String simpleName = decl.getSimpleNameTextualForm();
-		List<Token> simpleNameTokens = decomposer.decomposeSimpleNameString(simpleName);
+		List<Token> simpleNameTokens = decomposer.decomposeStringByTurningIntoSentence(simpleName);
 		decl.setSimpleNameTokens(simpleNameTokens);
 	}
 
@@ -74,7 +74,7 @@ public class DeclarationParser implements IDeclarationParser {
 		List<Token> clazzTokens = new LinkedList<Token>();	
 		List<String> clazzName = decl.getClassTextualForm();
 		for (String name : clazzName) {
-			clazzTokens.addAll(decomposer.decomposeString(name));
+			clazzTokens.addAll(decomposer.decomposeStringByTurningIntoSentence(name));
 		}
 		decl.setClassTokens(clazzTokens);
 	}
@@ -83,7 +83,7 @@ public class DeclarationParser implements IDeclarationParser {
 		List<Token> returnTypeTokens = new LinkedList<Token>();	
 		List<String> returnTypeName = decl.getReturnTypeTextualForm(tf);
 		for (String name : returnTypeName) {
-			returnTypeTokens.addAll(decomposer.decomposeString(name));
+			returnTypeTokens.addAll(decomposer.decomposeStringByTurningIntoSentence(name));
 		}
 		decl.setReturnTypeTokens(returnTypeTokens);
 	}	

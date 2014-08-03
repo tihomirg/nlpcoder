@@ -44,14 +44,14 @@ public class RelatedWordsMapGenerator {
 		
 	}
 	
-	public static void main2(String[] args) {
+	public static void main(String[] args) {
 		RelatedWordsMapGenerator rwGen = new RelatedWordsMapGenerator();
 		RelatedWordsMap relatedWordsMap = rwGen.createRelatedWordsMap();
 		KryoSerializer serializer = new KryoSerializer();
 		serializer.writeObject(Config.getRelatedWordsMapLocation(), relatedWordsMap);
 	}
 	
-	public static void main(String[] args) {
+	public static void main2(String[] args) {
 		KryoDeserializer deserializer = new KryoDeserializer();
 		
 		RelatedWordsMap map = (RelatedWordsMap) deserializer.readObject(Config.getRelatedWordsMapLocation(), RelatedWordsMap.class);
