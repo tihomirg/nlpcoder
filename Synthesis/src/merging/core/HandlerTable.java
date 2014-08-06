@@ -17,11 +17,11 @@ public class HandlerTable extends HandlerFactory {
 	private Handler fieldAccessHandler = new DeclarationHandler();
 	private Handler constructorInvocationHandler = new DeclarationHandler();
 	
-	private Handler booleanLiteralHandler = new LiteralHandler();
 	private Handler characterLiteralHandler = new LiteralHandler();
 	private Handler nullLiteralHandler = new LiteralHandler();
 	private Handler numberLiteralHandler = null;//new LiteralHandler();
 	private Handler stringLiteralHandler = null;//new LiteralHandler();
+	private Handler booleanLiteralHandler = null;
 	
 	private Handler assignmentHandler = new OperatorHandler();	
 	
@@ -77,5 +77,8 @@ public class HandlerTable extends HandlerFactory {
 	
 	public void setNumberLiteralHandler(Handler numberLiteralHandler) {
 		this.numberLiteralHandler = numberLiteralHandler;
+	}
+	public void setBooleanLiteralHandler(LiteralHandler bHandler) {
+		this.booleanLiteralHandler = bHandler;
 	}
 }

@@ -43,7 +43,7 @@ import statistics.posttrees.ConstructorInvocation;
 import statistics.posttrees.Expr;
 import statistics.posttrees.InstanceFieldAccess;
 import statistics.posttrees.InstanceMethodInvocation;
-import statistics.posttrees.LocalExpr;
+import statistics.posttrees.InputExpr;
 import synthesis.ExprGroup;
 import synthesis.PartialExpression;
 import synthesis.PartialExpressionScorer;
@@ -116,8 +116,10 @@ public class ISText {
 
 		//Loading statistics
 		handlerTable = new HandlerTable();		
-		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
+		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable, SearchConfig.getCompositionWeightFactor());
 		stat.read();
+		
+		System.out.println(stat);
 
 		listener = new SelectListener();
 
@@ -166,44 +168,55 @@ public class ISText {
 			}			
 			this.time.stopMeasuringTime();
 
-			printSearchReports(reports);
+			//printSearchReports(reports);
 
 			if (SearchConfig.isSynthesis()) {
+				//Main expressions
 				List<List<ExprGroup>> exprGroupss = createExprGroupss(reports);
 
 				if (!exprGroupss.isEmpty()) {
 					this.time.startMeasuringTime("PCFG Syntehsis time");
+					
 					setExprRelatedGroups(exprGroupss);
 
-					HoleHandler hHandler = new HoleHandler();
+					//Additional expressions
 					List<Expr> strings = createStringLiterals(sentence.getStringLiteralRichTokens(), api.getStf());
-					hHandler.addAllHoleReplacements(strings);
 					List<Expr> numbers = createNumberLiterals(sentence.getNumberLiteralRichTokens(), api.getStf());
-					hHandler.addAllHoleReplacements(numbers);
-
+					List<Expr> booleans = createBooleanLiterals(sentence.getBooleanLiteralRichTokens(), api.getStf());					
 					List<Expr> localExprs = createLocals(sentence.getLocals());
+
+					//Dealing with holes
+					HoleHandler hHandler = new HoleHandler(SearchConfig.getHoleWeight());
+					hHandler.addAllHoleReplacements(strings);
+					hHandler.addAllHoleReplacements(numbers);
 					hHandler.addAllHoleReplacements(localExprs);
-
 					handlerTable.setHoleHandler(hHandler);
-
+					
+					//Dealing with string literals
 					LiteralHandler sHandler = new LiteralHandler();
 					sHandler.addAllLiterals(strings);
 					handlerTable.setStringLiteralHandler(sHandler);
 
+					//Dealing with number literals;
 					LiteralHandler nHandler = new LiteralHandler();
-					nHandler.addAllLiterals(numbers);					
+					nHandler.addAllLiterals(numbers);
 					handlerTable.setNumberLiteralHandler(nHandler);
 
+					//Dealing with boolean literals;
+					LiteralHandler bHandler = new LiteralHandler();
+					bHandler.addAllLiterals(booleans);
+					handlerTable.setBooleanLiteralHandler(bHandler);				
+					
 					int inputSize = searchKeyGroups.size() + strings.size() + numbers.size();
 
-					PartialExpressionScorer peScorer = new PartialExpressionScorer(SearchConfig.getPartialExpressionConnectorReward(), SearchConfig.getPartialExpressionConnectorPenalty(), inputSize,  SearchConfig.getPartialExpressionSizePenalty());
+					PartialExpressionScorer peScorer = new PartialExpressionScorer(inputSize);
 					GroupBuilder<SaturationSynthesisGroup> builder = new SaturationGroupBuilder(handlerTable, peScorer, SearchConfig.getNumberOfSynthesisLevels(), SearchConfig.getMaxPartialExpressionsPerSynthesisLevel());
 					Synthesis<SaturationSynthesisGroup> synthesis = new Synthesis<SaturationSynthesisGroup>(exprGroupss, builder, SearchConfig.isParallelSynthesis());
 					synthesis.run();
 
 					this.time.stopMeasuringTime();
 
-					System.out.println(synthesis);
+					//System.out.println(synthesis);
 
 					this.time.startMeasuringTime("Merging Syntesis time");
 					Pair<List<PartialExpression>, List<PartialExpression>> pexprs = synthesis.getPexprs();
@@ -217,23 +230,32 @@ public class ISText {
 					if (!withConnections.isEmpty()){
 						Merge merge = new Merge(withConnections, SearchConfig.getNumberOfMergeGroups(), SearchConfig.getNumberOfSynthesisLevels(), SearchConfig.getMaxPartialExpressionsPerSynthesisLevel(), peScorer, SearchConfig.isParallelSynthesis());
 						merge.run();
-						List<PartialExpression> completedResult = merge.getCompletedResult();
-
-						fixScore(completedResult, strings, numbers);
-
-						solutions.addAll(completedResult);
+						solutions.addAll(merge.getCompletedResult());
 					}
 
-					fixScore(completed, strings, numbers);
 					solutions.addAll(completed);
 					this.time.stopMeasuringTime();
 				}
 			}
 		}
 
-		System.out.println(this.time);
+		//System.out.println(this.time);
 
 		return prepare(solutions);
+	}
+
+	private List<Expr> createBooleanLiterals(List<RichToken> booleanLiterals, StabileTypeFactory stf) {		
+		List<Expr> exprs = new LinkedList<Expr>();
+
+			for (RichToken literal : booleanLiterals) {
+				String name = literal.getNumberLiteral();
+				InputExpr localExpr = new InputExpr(name, stf.createPrimitiveType("boolean"));
+				localExpr.setScore(SearchConfig.getBooleanLiteralWeight());
+
+				exprs.add(localExpr);
+			}
+
+			return exprs;
 	}
 
 	private void printSearchReports(List<SearchReport> reports) {
@@ -250,42 +272,13 @@ public class ISText {
 		for (RichToken local : locals) {
 			Local iLocal = local.getLocal();
 			String name = iLocal.getName();
-			LocalExpr localExpr = new LocalExpr(name, iLocal.getType());
-			localExpr.setLogProbability(SearchConfig.getLocalVariableWeight());
+			InputExpr localExpr = new InputExpr(name, iLocal.getType());
+			localExpr.setScore(SearchConfig.getLocalVariableWeight());
 
 			exprs.add(localExpr);
 		}
 
 		return exprs;
-	}
-
-	private void fixScore(List<PartialExpression> pexps, List<Expr> strings, List<Expr> numbers) {
-		if(!strings.isEmpty()){
-			for (PartialExpression pexp : pexps) {
-				String stringRep = pexp.repToString();
-
-				fix(strings, pexp, stringRep);
-
-			}
-		}
-
-		if(!numbers.isEmpty()){
-			for (PartialExpression pexp : pexps) {
-				String stringRep = pexp.repToString();
-
-				fix(numbers, pexp, stringRep);
-			}
-		}
-
-	}
-
-	private void fix(List<Expr> literals, PartialExpression pexp, String stringRep) {
-		int repetitions = numOfRepetitions(stringRep, literals);
-
-		if (repetitions > literals.size()){
-			System.out.println(stringRep+"  str: "+repetitions +"  "+literals);
-			pexp.setScore(pexp.getScore() - SearchConfig.getLiteralRepetitionPenalty()*(repetitions - literals.size()));
-		}
 	}
 
 	private int numOfRepetitions(String stringRep, List<Expr> exprs) {
@@ -325,8 +318,8 @@ public class ISText {
 
 		for (RichToken literal : stringLiterals) {
 			String name = literal.getStringLiteral();
-			LocalExpr localExpr = new LocalExpr(name, stf.createConstType(java.lang.String.class.getName()));
-			localExpr.setLogProbability(SearchConfig.getStringLiteralWeight());
+			InputExpr localExpr = new InputExpr(name, stf.createConstType(java.lang.String.class.getName()));
+			localExpr.setScore(SearchConfig.getStringLiteralWeight());
 
 			exprs.add(localExpr);
 		}
@@ -340,8 +333,8 @@ public class ISText {
 
 		for (RichToken literal : stringLiterals) {
 			String name = literal.getNumberLiteral();
-			LocalExpr localExpr = new LocalExpr(name, stf.createPrimitiveType("int"));
-			localExpr.setLogProbability(SearchConfig.getNumberLiteralWeight());
+			InputExpr localExpr = new InputExpr(name, stf.createPrimitiveType("int"));
+			localExpr.setScore(SearchConfig.getNumberLiteralWeight());
 
 			exprs.add(localExpr);
 		}
@@ -355,12 +348,11 @@ public class ISText {
 
 		for (; i < maxNumOfSolutions && !solutions.isEmpty(); i++) {
 			PartialExpression pexpr = solutions.remove();
-			results.add(pexpr.repToString());
+			results.add(pexpr.repToString()); //pexpr.getStatistics());
 		}
-
-		for (;i < maxNumOfSolutions; i++){
-			results.add("");
-		}
+		
+		System.out.println();
+		System.out.println();
 
 		return results.toArray(new String[results.size()]);
 	}
@@ -406,8 +398,9 @@ public class ISText {
 			relatedGroupss.addAll(exprGroupss);
 			relatedGroupss.remove(eGroups);
 
+			List<ExprGroup> relatedGroups = UtilList.flatten(relatedGroupss);
 			for (ExprGroup eGroup : eGroups) {
-				eGroup.setRelatedGroups(UtilList.flatten(relatedGroupss));
+				eGroup.setRelatedGroups(relatedGroups);
 			}
 		}
 	}

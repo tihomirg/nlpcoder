@@ -10,7 +10,7 @@ import types.Type;
 public abstract class Expr {
 
 	public static final List<Expr> EMPTY_EXPR_LIST = new LinkedList<Expr>();
-	private double logProbability;
+	private double score;
 
 	public abstract void addArgs(List<Expr> args);
 
@@ -28,16 +28,16 @@ public abstract class Expr {
 		throw new UnsupportedOperationException();
 	}
 
-	public void setLogProbability(double logProbability) {
-		this.logProbability = logProbability;
+	public void setScore(double score) {
+		this.score = score;
 	}
 
-	public double getLogProbability() {
-		return logProbability;
+	public double getScore() {
+		return score;
 	}
 
 	public String toString(){
-		return logProbability+" : "+shortReadableRep();
+		return score+" : "+shortReadableRep();
 	}
 
 	public static String shortReps(Expr... args){
@@ -68,6 +68,14 @@ public abstract class Expr {
 	public boolean isLiteral(){
 		return false;
 	}
+	
+	public boolean isInputExpr(){
+		return false;
+	}
+
+	public InputExpr asInputExpr() {
+		return null;
+	}
 
 	public Declaration getDecl(){
 		return null;
@@ -78,4 +86,5 @@ public abstract class Expr {
 	public abstract synthesis.trees.Expr createRep(List<Integer> ids);
 
 	public abstract Handler getHandler(HandlerFactory hf);
+
 }

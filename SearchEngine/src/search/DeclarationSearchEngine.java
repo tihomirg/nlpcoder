@@ -85,7 +85,10 @@ public class DeclarationSearchEngine {
 	private List<RichDeclaration> keepBest(PriorityQueue<RichDeclaration> rds) {
 		List<RichDeclaration> filtered = new LinkedList<RichDeclaration>();
 		for (int i=0; i< maxDecls && !rds.isEmpty(); i++) {
-			filtered.add(rds.remove());
+			RichDeclaration rd = rds.remove();
+			rd.setOrdinlaNum(i);
+			rd.setMaxRD(maxDecls);
+			filtered.add(rd);
 		}
 		return filtered;
 	}

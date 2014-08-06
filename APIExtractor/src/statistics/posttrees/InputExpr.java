@@ -6,12 +6,12 @@ import synthesis.handlers.Handler;
 import synthesis.handlers.HandlerFactory;
 import types.Type;
 
-public class LocalExpr extends Expr {
+public class InputExpr extends Expr {
 
 	private String name;
 	private Type type;
 	
-	public LocalExpr(String name, Type type) {
+	public InputExpr(String name, Type type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -48,6 +48,16 @@ public class LocalExpr extends Expr {
 	@Override
 	public List<Expr> getArgs() {
 		return EMPTY_EXPR_LIST;
+	}
+	
+	@Override
+	public boolean isInputExpr() {
+		return true;
+	}
+	
+	@Override
+	public InputExpr asInputExpr() {
+		return this;
 	}
 
 	@Override

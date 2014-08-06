@@ -30,8 +30,16 @@ public class WordPosCorrector {
 	public String correctPOS(String lemma, String pos){
 		String newPos = Character.isLetter(pos.charAt(0)) ? Character.toString(pos.charAt(0)) : pos;
 		if (newPos.equals("N")){
-			if(isAjective(lemma)) return "J";
-			else if(isAdverb(lemma)) return "R";
+			if(isAjective(lemma)){
+				if (isVerb(lemma)) return "V";
+				else return "J";
+			}
+			if(isAdverb(lemma)) {
+				if (isVerb(lemma)) return "V";
+				else return "R";
+			}
+		} else if(newPos.equals("J") || newPos.equals("R")){
+			if (isVerb(lemma)) return "V";			
 		}
 		
 		return newPos;

@@ -26,8 +26,8 @@ public class ComplexWordDecomposer {
 	}
 
 	public List<Token> decomposeTokenIfNeeded(Token oldToken) {
-		//return decomposeStringIfNeeded(oldToken.getText());
-		return decomposeStringIfNeededByTurningIntoSentence(oldToken.getText());
+		return decomposeStringIfNeeded(oldToken.getText());
+		//return decomposeStringIfNeededByTurningIntoSentence(oldToken.getText());
 	}
 
 	public List<Token> decomposeStringIfNeeded(String lemma) {

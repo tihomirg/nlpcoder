@@ -11,10 +11,12 @@ import types.Type;
 
 public class HoleHandler extends Handler {
 
-	private Map<String, PriorityQueue<Expr>> pqs; 
+	private Map<String, PriorityQueue<Expr>> pqs;
+	private double holeWeight; 
 
-	public HoleHandler() {
+	public HoleHandler(double holeWeight) {
 		this.pqs = new HashMap<String, PriorityQueue<Expr>>();
+		this.holeWeight = holeWeight;
 	}
 
 	@Override
@@ -22,7 +24,9 @@ public class HoleHandler extends Handler {
 		Type retType = key.getType();
 
 		PriorityQueue<Expr> priorityQueue = new PriorityQueue<Expr>(DEFAULT_CAPACITY, COMPARATOR);
-		priorityQueue.add(key.getExpr());		
+		Expr expr = key.getExpr();
+		expr.setScore(holeWeight);
+		priorityQueue.add(expr);		
 
 		if (retType != null){
 			PriorityQueue<Expr> pq = pqs.get(retType.getPrefix());

@@ -69,7 +69,7 @@ public class ComplexRepresentation extends Representation {
 		int index = allocate(1).get(0);
 		SimpleRepresentation simpleRepresentation = rep.asSimpleRepresentation();
 		this.nodes[index] = simpleRepresentation.clone();
-		simpleRepresentation.setParent(this);
+		this.nodes[index].setParent(this);
 		
 		//Set pointer
 		this.nodes[connection.getIndex()].setExpr(connection.getParam().getRepKey().getId(), new RepPointer(index));

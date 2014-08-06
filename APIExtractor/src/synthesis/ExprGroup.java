@@ -14,7 +14,7 @@ public class ExprGroup {
 	private int index;
 	private Expr expr;
 	private List<ExprGroup> relatedGroups;
-	private double initialScore;
+	private double declarationScore;
 	
 	private List<PartialExpression> completedExprs;
 
@@ -22,11 +22,11 @@ public class ExprGroup {
 		this(expr, index, 0.0);
 	}
 
-	public ExprGroup(Expr expr, int index, double initialScore) {
+	public ExprGroup(Expr expr, int index, double declScore) {
 		this.index = index;
 		this.expr = expr;
 		this.completedExprs = new LinkedList<PartialExpression>();
-		this.initialScore = initialScore;
+		this.declarationScore = declScore;
 	}
 	
 	public void addCompletedExpr(PartialExpression pexpr){
@@ -64,13 +64,13 @@ public class ExprGroup {
 		
 		return rgroups;
 	}
-
-	public double getInitialScore() {
-		return initialScore;
+	
+	public double getDeclarationScore() {
+		return declarationScore;
 	}
-
-	public void setInitialScore(double initialScore) {
-		this.initialScore = initialScore;
+	
+	public void setDeclarationScore(double declarationScore) {
+		this.declarationScore = declarationScore;
 	}
 
 	public int getIndex() {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import statistics.posttrees.Expr;
+import statistics.posttrees.InputExpr;
 import types.Substitution;
 import util.Pair;
 
@@ -15,11 +16,12 @@ public class PartialExpression implements Cloneable {
 	private LinkedList<Param> params;
 	private LinkedList<Substitution> subs;
 	private Representation rep;
-	private double score;
+	private PartialExpressionScore score;
 	private LinkedList<Connection> connections;
 	private ExprGroup egroup;
-	private HashSet<Integer> connectedTo;
-	private int size = 1;
+	private LinkedList<Integer> connectedTo;
+	private int size;
+	private LinkedList<InputExpr> inputExprs;
 
 	public PartialExpression(Param param, ExprGroup egroup) {
 		this.params = new LinkedList<Param>();
@@ -28,18 +30,17 @@ public class PartialExpression implements Cloneable {
 		this.rep = new SimpleRepresentation();
 		this.connections = new LinkedList<Connection>();
 		this.egroup = egroup;
-		this.score = egroup.getInitialScore();
-		this.connectedTo = new HashSet<Integer>();
+		this.score = new PartialExpressionScore();
+		this.score.addDeclarationScore(egroup.getDeclarationScore());
+		this.connectedTo = new LinkedList<Integer>();
+		this.inputExprs = new LinkedList<InputExpr>();
+		this.size = 1;
 	}
 
-	public double getScore() {
+	public PartialExpressionScore getScore() {
 		return score;
 	}
-
-	public void setScore(double score) {
-		this.score = score;
-	}
-
+	
 	public Param getParam() {
 		return params.element();
 	}
@@ -53,7 +54,9 @@ public class PartialExpression implements Cloneable {
 			exp.params = (LinkedList<Param>) this.params.clone();
 			exp.connections = (LinkedList<Connection>) this.connections.clone();
 			exp.subs = (LinkedList<Substitution>) this.subs.clone();
-			exp.connectedTo = (HashSet<Integer>) this.connectedTo.clone();
+			exp.connectedTo = (LinkedList<Integer>) this.connectedTo.clone();
+			exp.inputExprs = (LinkedList<InputExpr>) this.getInputExprs().clone();
+			exp.score = this.score.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -70,7 +73,7 @@ public class PartialExpression implements Cloneable {
 
 	@Override
 	public String toString() {
-		return this.score+" "+rep.toString() +tryConnections();
+		return this.score+"   size="+size+"    "+rep.toString() +tryConnections();
 	}
 	
 	public String repToString(){
@@ -107,9 +110,20 @@ public class PartialExpression implements Cloneable {
 		List<Param> params = connectionsAndParams.getSecond();
 		newPexpr.addAllParams(params);
 
+		
 		scorer.calculetScore(newPexpr, expr, param, connections, params);
 
+		//Parameters used for scoring
+		newPexpr.incSize();
+		if(expr.isInputExpr()){
+			newPexpr.addInputExpr(expr.asInputExpr());
+		}
+		
 		return newPexpr;
+	}
+
+	private void addInputExpr(InputExpr expr) {
+		this.getInputExprs().add(expr);
 	}
 
 	private void addAllConnections(List<Connection> connections) {
@@ -168,6 +182,11 @@ public class PartialExpression implements Cloneable {
 		
 		scorer.calculetScore(newPexpr, pexpr);
 		
+		//parameters used for scoring
+		newPexpr.size = newPexpr.size + pexpr.size;
+		newPexpr.connectedTo.add(pexpr.getGroupIndex());
+		newPexpr.inputExprs.addAll(pexpr.inputExprs);
+		
 		return newPexpr;
 	}
 
@@ -189,7 +208,7 @@ public class PartialExpression implements Cloneable {
 		this.egroup.addCompletedExpr(this);
 	}
 
-	public HashSet<Integer> getConnectedTo() {
+	public LinkedList<Integer> getConnectedTo() {
 		return this.connectedTo;
 	}
 
@@ -197,11 +216,32 @@ public class PartialExpression implements Cloneable {
 		return this.egroup.getIndex();
 	}
 
-	public int getSize() {
-		return size;
+	public void setScore(PartialExpressionScore score) {
+		this.score = score;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public String getStatistics() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(this.repToString()+"\n");
+		sb.append("                                                                    ");
+		sb.append(this.score +"    connectedTo: "+this.connectedTo);
+		sb.append("\n");
+		return sb.toString();
+	}
+
+	public void incSize() {
+		this.size++;
+	}
+	
+	public int getSize(){
+		return this.size;
+	}
+
+	public LinkedList<InputExpr> getInputExprs() {
+		return inputExprs;
+	}
+
+	public void setInputExprs(LinkedList<InputExpr> inputExprs) {
+		this.inputExprs = inputExprs;
 	}
 }
