@@ -19,15 +19,23 @@ public class ComplexWordDecomposer {
 
 	private StanfordCoreNLP pipeline;
 	private WordPosCorrector posCorrector;
-	
+
 	public ComplexWordDecomposer(StanfordCoreNLP pipeline, WordPosCorrector posCorrector) {
 		this.pipeline = pipeline;
 		this.posCorrector = posCorrector;
 	}
 
 	public List<Token> decomposeTokenIfNeeded(Token oldToken) {
-		return decomposeStringIfNeeded(oldToken.getText());
-		//return decomposeStringIfNeededByTurningIntoSentence(oldToken.getText());
+		//return decomposeStringIfNeeded(oldToken.getText());
+		return decomposeStringIfNeededByTurningIntoSentence(oldToken.getText());
+	}
+	
+	public List<Token> decomposeToken(Token oldToken) {
+		//return decomposeString(oldToken.getText());
+		List<Token> decomposition = decomposeStringByTurningIntoSentence(oldToken.getText());
+		
+		if(decomposition.size() > 1) return decomposition;
+		else return new LinkedList<Token>();
 	}
 
 	public List<Token> decomposeStringIfNeeded(String lemma) {
@@ -99,30 +107,30 @@ public class ComplexWordDecomposer {
 
 		return removeLastIfNeeded(newTokens, initialLemmas.size());
 	}
-	
+
 	public List<Token> decomposeStringIfNeededByTurningIntoSentence(String lemma) {
 		List<Token> newTokens = new LinkedList<Token>();
 		List<String> initialLemmas = slice(lemma);
 
 		if (initialLemmas.size() > 1){
-		List<String> newLemmas = transformToSentenceWords(initialLemmas);
+			List<String> newLemmas = transformToSentenceWords(initialLemmas);
 
-		String text = concatenate(newLemmas, " ");
+			String text = concatenate(newLemmas, " ");
 
-		Annotation document = new Annotation(text);
+			Annotation document = new Annotation(text);
 
-		pipeline.annotate(document);
+			pipeline.annotate(document);
 
-		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+			List<CoreMap> sentences = document.get(SentencesAnnotation.class);
 
-		for(CoreMap sentence: sentences) {
-			for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-				String newLemma = token.get(LemmaAnnotation.class);
-				newTokens.add(new Token(token.get(TextAnnotation.class),  newLemma, posCorrector.correctPOS(newLemma, token.get(PartOfSpeechAnnotation.class))));
+			for(CoreMap sentence: sentences) {
+				for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
+					String newLemma = token.get(LemmaAnnotation.class);
+					newTokens.add(new Token(token.get(TextAnnotation.class),  newLemma, posCorrector.correctPOS(newLemma, token.get(PartOfSpeechAnnotation.class))));
+				}
 			}
-		}
 
-		return removeLastIfNeeded(newTokens, initialLemmas.size());
+			return removeLastIfNeeded(newTokens, initialLemmas.size());
 		} else return newTokens;
 	}	
 
@@ -174,9 +182,7 @@ public class ComplexWordDecomposer {
 		List<String> words = new ArrayList<String>();
 
 		boolean prevSep = true;
-
 		boolean prevLower = true;
-
 		boolean lastAdded = true;
 		for(char c: sentence.toCharArray()){
 

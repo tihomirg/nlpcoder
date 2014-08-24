@@ -1,5 +1,6 @@
 package search;
 
+import search.config.SearchConfig;
 import search.nlp.parser.RichToken;
 import search.scorers.RichDeclarationScorer;
 import search.scorers.Score;
@@ -7,16 +8,13 @@ import search.scorers.Score;
 public class ScorerPipeline {
 
 	private RichDeclarationScorer[] scorers;
-	private Double[] coefs;
 	
-	public ScorerPipeline(RichDeclarationScorer[] scorers, Double[] coefs) {
-		assert this.scorers.length == coefs.length;
+	public ScorerPipeline(RichDeclarationScorer[] scorers) {
 		this.scorers = scorers;
-		this.coefs = coefs;
 	}
 	
 	public Score calculate(DeclarationSelectionEntry rd, RichToken richToken) {
-		Score score = new Score(coefs);
+		Score score = new Score(SearchConfig.getDeclarationScorerCoefs());
 		
 		for (RichDeclarationScorer scorer : scorers) {
 			score.add(scorer.calculate(rd, richToken));

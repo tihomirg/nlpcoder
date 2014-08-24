@@ -15,7 +15,7 @@ public class ParserForComplexTokens implements IParser{
 		for (Sentence sentence : input.getSentences()) {
 			for (RichToken richToken : sentence.getRichTokens()) {
 				Token token = richToken.getOriginalToken();
-				richToken.setTokenDecompositions(decomposer.decomposeTokenIfNeeded(token));
+				richToken.setTokenDecompositions(decomposer.decomposeToken(token));
 			}
 		}
 

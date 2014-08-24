@@ -7,6 +7,15 @@ public class TargetConfig {
 		"java.io",
 		"java.util",
 		"java.net",
+		"java.text",
+		"java.awt",
+		"java.awt.event",
+		"java.security",
+		"javax.swing",
+		"javax.swing.event",
+		"javax.swing.border",
+		"javax.swing.text",
+
 		"org.apache.commons.io",
 		"org.apache.commons.io.comparator", 
 		"org.apache.commons.io.filefilter",
@@ -38,7 +47,7 @@ public class TargetConfig {
 		"org.apache.commons.collections.keyvalue", 
 		"org.apache.commons.collections.list", 
 		"org.apache.commons.collections.map", 
-		"org.apache.commons.collections.set" 
+		"org.apache.commons.collections.set"
 		
 	};
 

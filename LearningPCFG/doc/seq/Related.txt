@@ -2,10 +2,16 @@
 
 http://www.wisdom.weizmann.ac.il/~harel/papers/NLProgrammingGordonHarel_ETAPS_llncs.pdf
 
-2) Sumit's work
+2) Sumit's work http://research.microsoft.com/en-us/um/people/sumitg/pubs/mobisys13.pdf
 
-3) Up to some extent Vechev's and Eran's work.
+3) Up to some extent Vechev's and Eran's work. http://www.cs.technion.ac.il/~yahave/papers/pldi14-statistical.pdf
 
 4) http://www.adampease.org/professional/CELT.pdf
 
 5) http://arxiv.org/pdf/1401.0514.pdf
+
+6) http://pagesperso-systeme.lip6.fr/Julia.Lawall/Tian_WCRE14.pdf
+
+7) http://dl.acm.org/citation.cfm?doid=2509136.2509523
+
+8) 

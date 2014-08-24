@@ -16,8 +16,8 @@ public class Token {
 		this.pos = Character.isLetter(pos.charAt(0)) ? Character.toString(pos.charAt(0)) : pos;
 	}
 
-	public void setLemma(String word) {
-		this.lemma = word;
+	public void setLemma(String lemma) {
+		this.lemma = lemma;
 	}
 
 	public void setPos(String pos) {
@@ -89,5 +89,6 @@ public class Token {
 	
 	public boolean equalsByLemma(Token thatToken) {
 		return this.lemma.equals(thatToken.lemma);
-	}	
+	}
+	
 }

@@ -24,8 +24,6 @@ public class Merge {
 		this.groups = createGroups(withConnections, numOfGroups, numOfLevels, maxNumOfPexprPerLevel, scorer);
 		this.parallel = parallel;
 		this.completed = new LinkedList<PartialExpression>();
-		
-		System.out.println(this.groups.size());
 		this.service = Executors.newFixedThreadPool(this.groups.size());
 	}
 

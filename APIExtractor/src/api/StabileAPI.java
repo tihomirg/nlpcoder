@@ -91,7 +91,7 @@ public class StabileAPI {
 		return new HashSet<Declaration>(Arrays.asList(clazz.getUniqueDeclarations()));
 	}
 	
-	private ClassInfo getClass(String className){
+	public ClassInfo getClass(String className){
 		Set<ClassInfo> classes = getClasses(className, false);
 		if(classes.isEmpty()) return null;
 		else return classes.toArray(new ClassInfo[1])[0];

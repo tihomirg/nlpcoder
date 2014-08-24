@@ -5,21 +5,14 @@ import java.util.List;
 
 import search.DeclarationSelectionEntry;
 import search.WToken;
+import search.config.SearchConfig;
 import search.nlp.parser.DisjointSubgroups;
 import search.nlp.parser.RichToken;
 import search.nlp.parser.Subgroup;
 import util.Pair;
 
 public class HungarianScorer implements RichDeclarationScorer {
-
-	private double[][] kindMatrix;
-	private double unmatchingWeight;
-
-	public HungarianScorer(double[][] kindMatrix, double unmatchingWeight) {
-		this.kindMatrix = kindMatrix;
-		this.unmatchingWeight = unmatchingWeight;
-	}
-
+	
 	@Override
 	public double calculate(DeclarationSelectionEntry rd, RichToken richToken) {
 		List<Bigraph> bigraphs = new LinkedList<Bigraph>();
@@ -33,7 +26,7 @@ public class HungarianScorer implements RichDeclarationScorer {
 				List<Subgroup> allSubgroups = disjointSubgroups.getSubgroups();
 				List<Subgroup> subgroups = filterSubgorups(allSubgroups, declWTokens);
 				if (!subgroups.isEmpty()){
-					bigraphs.add(new Bigraph(subgroups, declWTokens, kindMatrix));
+					bigraphs.add(new Bigraph(subgroups, declWTokens, SearchConfig.getDeclarationInputKindMatrix()));
 				}
 			}
 		}
@@ -45,7 +38,7 @@ public class HungarianScorer implements RichDeclarationScorer {
 	private double calculateUnmatchedPenalty(DeclarationSelectionEntry rd, RichToken richToken, int numOfMatchings) {
 		int maxNumOfMatchings = Math.min(rd.getNumberOfWTokensWithoutAdditionalReceiverTokens(), richToken.getAllTokens().size());
 		int numOfUnmatchings = Math.max(0, maxNumOfMatchings - numOfMatchings); 
-		return unmatchingWeight * numOfUnmatchings;
+		return SearchConfig.getDeclarationInputUnmatchingWeight() * numOfUnmatchings;
 	}
 
 	private Pair<Double, Integer> calculateMaxMatchingScore(List<Bigraph> bigraphs) {

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.dom.TypeParameter;
 
+import definitions.ArrayClassInfo;
 import definitions.ClassInfo;
 
 public abstract class TypeFactory {
@@ -200,6 +201,10 @@ public abstract class TypeFactory {
 			return createConstType(name);
 		}		
 	}	
+	
+	public ReferenceType createMonomorphicReferenceType(Class<?> clazz) {
+		return createMonomorphicReferenceType(clazz.getName());
+	}	
 
 	public ReferenceType createMonomorphicReferenceAndPrimitiveToBoxedType(String name) {
 		if (isPrimitiveType(name)){
@@ -314,5 +319,13 @@ public abstract class TypeFactory {
 
 	public void setRefToClasses(Map<String, ClassInfo> refToClasses) {
 		this.refToClasses = refToClasses;
-	}	
+	}
+	
+	public PolymorphicType createArrayType(String name){
+		return createPolymorphicType(ArrayClassInfo.LONG_NAME, new ReferenceType[]{createMonomorphicReferenceAndPrimitiveToBoxedType(name)});
+	}
+	
+	public PolymorphicType createArrayType(Class<?> clazz){
+		return createPolymorphicType(ArrayClassInfo.LONG_NAME, new ReferenceType[]{createMonomorphicReferenceAndPrimitiveToBoxedType(clazz.getName())});
+	}
 }

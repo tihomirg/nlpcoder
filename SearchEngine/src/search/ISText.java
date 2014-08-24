@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import nlp.parser.RelatedWordsMap;
+import nlp.parser.Token;
 import nlp.parser.one.WordCorrector;
 import merging.CompositionStatistics;
 import merging.core.GroupBuilder;
@@ -87,7 +88,7 @@ public class ISText {
 
 		Properties props = new Properties();
 		props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
-		props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-bidirectional/english-bidirectional-distsim.tagger");
+		//props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-bidirectional/english-bidirectional-distsim.tagger");
 		//props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
 
 		StanfordCoreNLP coreNLP = new StanfordCoreNLP(props);
@@ -125,9 +126,8 @@ public class ISText {
 
 		scorer = new ScorerPipeline(
 				new RichDeclarationScorer[]{
-						new HungarianScorer(SearchConfig.getDeclarationInputKindMatrix(), SearchConfig.getDeclarationInputUnmatchingWeight()), 
-						new UnigramScorer()},
-						SearchConfig.getDeclarationScorerCoefs());
+						new HungarianScorer(), 
+						new UnigramScorer()});
 
 		frequencies = new Unigram(Config.getDeclarationFrequencyLocation());
 		System.out.println(frequencies);
@@ -145,9 +145,28 @@ public class ISText {
 
 		time.stopMeasuringTime();
 	}
+	
+	public List<Token> runForLeadingTokens(String line, List<Local> locals){
+		this.parserForLocals.setLocals(locals);
+		Input input = pipeline.parse(new Input(line));
+		
+		List<Sentence> sentences = input.getSentences();
+		List<Token> leadingTokens = new LinkedList<Token>();
+		for (Sentence sentence : sentences) {
+			List<SearchReport> reports = new LinkedList<SearchReport>();
+
+			List<RichToken> searchKeyGroups = sentence.getSearchKeyRichTokens();
+			
+			for (RichToken richToken : searchKeyGroups) {
+				leadingTokens.addAll(richToken.getLeadingTokens());
+			}
+		}
+		
+		return leadingTokens;
+	}
 
 	public String[] run(String line, List<Local> locals) {
-
+		
 		PriorityQueue<PartialExpression> solutions = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
 
 		time.startMeasuringTime("Input Parsing time");
@@ -351,8 +370,8 @@ public class ISText {
 			results.add(pexpr.repToString()); //pexpr.getStatistics());
 		}
 		
-		System.out.println();
-		System.out.println();
+		//System.out.println();
+		//System.out.println();
 
 		return results.toArray(new String[results.size()]);
 	}
