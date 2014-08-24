@@ -1,0 +1,5 @@
+1) Declaration
+ - APIParser -> DeclarationParser -> ComplexWordDecomposer.decomposeStringByTurningIntoSentence ->
+ 
+ Note: Simple name for constructors include "new". Thus in such expressions where we expect constructor at the top level we should add "new" (somehow)
+ Maybe "newInputStream", also "AWTPermission" to "Adpromission" should remain one word.
