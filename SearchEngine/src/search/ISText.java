@@ -153,8 +153,6 @@ public class ISText {
 		List<Sentence> sentences = input.getSentences();
 		List<Token> leadingTokens = new LinkedList<Token>();
 		for (Sentence sentence : sentences) {
-			List<SearchReport> reports = new LinkedList<SearchReport>();
-
 			List<RichToken> searchKeyGroups = sentence.getSearchKeyRichTokens();
 			
 			for (RichToken richToken : searchKeyGroups) {
@@ -164,7 +162,24 @@ public class ISText {
 		
 		return leadingTokens;
 	}
-
+	
+	public List<Token> runForAllRichTokens(String line, List<Local> locals){
+		this.parserForLocals.setLocals(locals);
+		Input input = pipeline.parse(new Input(line));
+		
+		List<Sentence> sentences = input.getSentences();
+		List<Token> leadingTokens = new LinkedList<Token>();
+		for (Sentence sentence : sentences) {
+			List<RichToken> allRichTokens = sentence.getRichTokens();
+			
+			for (RichToken richToken : allRichTokens) {
+				leadingTokens.addAll(richToken.getLeadingTokens());
+			}
+		}
+		
+		return leadingTokens;
+	}	
+	
 	public String[] run(String line, List<Local> locals) {
 		
 		PriorityQueue<PartialExpression> solutions = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
