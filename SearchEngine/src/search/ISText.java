@@ -110,9 +110,9 @@ public class ISText {
 				new ParserForNaturalLanguage(coreNLP, posCorrector),
 				new ParserForRichLiteralsAndLocals(),
 				new ParserForSemanticGraphNeighbours(),
-				new ParserForRightHandSideNeighbours(SearchConfig.getInputParserRighHandSideNeighbourNumber()),
+				new ParserForRightHandSideNeighbours(),
 				new ParserForComplexTokens(decomposer),
-				new ParserForWeightsAndImportanceIndexes(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
+				new ParserForWeightsAndImportanceIndexes(rwm),
 				new ParserForDisjointSubgroups()});
 
 		//Loading statistics
@@ -148,13 +148,23 @@ public class ISText {
 	
 	public List<SearchReport> runForDeclarationSearch(String line, List<Local> locals) {
 		this.parserForLocals.setLocals(locals);
-		Input input = pipeline.parse(new Input(line));
 
+		this.search = new DeclarationSearchEngine(
+				scorer, 
+				listener, 
+				api, 
+				frequencies, 
+				SearchConfig.getMaxSelectedDeclarations(), 
+				SearchConfig.getPrimaryIndex(), 
+				SearchConfig.getPrimaryWeight(), 
+				SearchConfig.getSecondaryIndex(), 
+				SearchConfig.getSecondaryWeight());
+		
+		Input input = pipeline.parse(new Input(line));
 		List<Sentence> sentences = input.getSentences();
 
 		List<SearchReport> reports = new LinkedList<SearchReport>();
 		for (Sentence sentence : sentences) {
-
 			List<RichToken> searchKeyGroups = sentence.getSearchKeyRichTokens();
 
 			for (RichToken richToken : searchKeyGroups) {

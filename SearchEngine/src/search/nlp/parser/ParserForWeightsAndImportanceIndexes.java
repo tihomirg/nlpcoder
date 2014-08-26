@@ -1,31 +1,20 @@
 package search.nlp.parser;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
 import nlp.parser.RelatedWordsMap;
 import nlp.parser.TaggedWord;
 import nlp.parser.TaggedWordMeaning;
 import nlp.parser.Token;
 import search.WToken;
+import search.config.SearchConfig;
 
 public class ParserForWeightsAndImportanceIndexes implements IParser {
 
 	private RelatedWordsMap wordMap;
-	private double initialPrimaryWeight;
-	private double initialSecondaryWeight;
-	private double relatedWeightFactor;
-	private int primaryIndex;
-	private int secondaryIndex;
 
-	public ParserForWeightsAndImportanceIndexes(RelatedWordsMap wordMap, int primaryIndex, double primaryWeight, int secondaryIndex, double secondaryWeight, double relatedWeightFactor) {
+	public ParserForWeightsAndImportanceIndexes(RelatedWordsMap wordMap) {
 		this.wordMap = wordMap;
-		this.primaryIndex = primaryIndex;
-		this.initialPrimaryWeight = primaryWeight;
-		this.secondaryIndex = secondaryIndex;
-		this.initialSecondaryWeight = secondaryWeight;
-		this.relatedWeightFactor = relatedWeightFactor;
 	}
 
 	@Override
@@ -35,18 +24,11 @@ public class ParserForWeightsAndImportanceIndexes implements IParser {
 				List<Token> primaryTokens = richToken.getLeadingTokens();
 				List<Token> secondaryTokens = richToken.getSecondaryTokens();
 
-				double initialWeight = initialPrimaryWeight + initialSecondaryWeight;
-				int primarySize = primaryTokens.size();
-				int secondarySize = secondaryTokens.size();
-
-				double primaryWeight = initialPrimaryWeight; /// (initialWeight * primarySize);
-				double secondaryWeight = initialSecondaryWeight;
-//				if (secondarySize != 0) {
-//				    secondaryWeight = initialSecondaryWeight / (initialWeight * secondarySize);
-//				}
+				double primaryWeight = SearchConfig.getPrimaryWeight();
+				double secondaryWeight = SearchConfig.getSecondaryWeight();
 				
-				richToken.setLeadingWTokens(tokensToWTokens(primaryTokens, primaryIndex, primaryWeight));
-				richToken.setSecondaryWTokens(tokensToWTokens(secondaryTokens, secondaryIndex, secondaryWeight));
+				richToken.setLeadingWTokens(tokensToWTokens(primaryTokens, SearchConfig.getPrimaryIndex(), primaryWeight));
+				richToken.setSecondaryWTokens(tokensToWTokens(secondaryTokens, SearchConfig.getSecondaryIndex(), secondaryWeight));
 				
 				List<List<WToken>> relatedWTokens = new LinkedList<List<WToken>>();
 				for (Token token : primaryTokens) {
@@ -87,7 +69,7 @@ public class ParserForWeightsAndImportanceIndexes implements IParser {
 		List<TaggedWord> taggedWords = meaning.getWords();
 		double score = meaning.getScore();
 
-		wTokens.addAll(taggedWordsToWTokens(taggedWords, primaryIndex, importanceWeigh, score * relatedWeightFactor));
+		wTokens.addAll(taggedWordsToWTokens(taggedWords, SearchConfig.getPrimaryIndex(), importanceWeigh, score * SearchConfig.getRelatedWeightFactor()));
 
 		return wTokens;
 	}

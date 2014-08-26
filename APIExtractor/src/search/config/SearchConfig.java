@@ -23,14 +23,14 @@ public class SearchConfig {
 	private static double booleanLiteralWeight = 0.6;
 	
 	//Synthesis params
-	private static boolean synthesis = true;
+	private static boolean synthesis = false;
 	private static boolean parallelSynthesis = false;
 	private static int numberOfMergeGroups = 4;
 	private static int numberOfSynthesisLevels = 5;
 	private static int maxPartialExpressionsPerSynthesisLevel = 10;
 
 	//Declaration Selection and Synthesis params
-	private static int maxSelectedDeclarations = 10;
+	private static int maxSelectedDeclarations = 5;
 
 	//Parser params
 	private static int inputParserRighHandSideNeighbourNumber = 1;

@@ -76,9 +76,9 @@ public class ParserPipelineTest {
 				new ParserForNaturalLanguage(coreNLP, posCorrector),
 				new ParserForRichLiteralsAndLocals(),
 				new ParserForSemanticGraphNeighbours(),
-				new ParserForRightHandSideNeighbours(1),
+				new ParserForRightHandSideNeighbours(), //should be 1
 				new ParserForComplexTokens(decomposer),
-				new ParserForWeightsAndImportanceIndexes(rwm, SearchConfig.getPrimaryIndex(), SearchConfig.getPrimaryWeight(), SearchConfig.getSecondaryIndex(), SearchConfig.getSecondaryWeight(), SearchConfig.getRelatedWeightFactor()),
+				new ParserForWeightsAndImportanceIndexes(rwm),
 				new ParserForDisjointSubgroups()});
 	}
 	

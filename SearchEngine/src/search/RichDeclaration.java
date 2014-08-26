@@ -37,7 +37,7 @@ public class RichDeclaration {
 
 	@Override
 	public String toString() {
-		return "Score = " + score + "  " +decl+ "]";
+		return "Score = " + score + "  " +decl;
 	}
 
 }
