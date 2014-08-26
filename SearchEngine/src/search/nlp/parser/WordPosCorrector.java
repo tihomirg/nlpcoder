@@ -7,6 +7,7 @@ import java.net.URL;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.item.POS;
+import edu.stanford.nlp.ling.CoreLabel;
 
 public class WordPosCorrector {
 
@@ -56,4 +57,5 @@ public class WordPosCorrector {
 	private boolean isVerb(String lemma) {
 		return dict.getIndexWord(lemma, POS.VERB) != null;
 	}
+
 }

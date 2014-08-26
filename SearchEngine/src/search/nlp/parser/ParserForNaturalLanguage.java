@@ -35,9 +35,9 @@ public class ParserForNaturalLanguage implements IParser {
 		String text = curr.getPreprocessedText();
 		
 		Annotation document = new Annotation(text);
-
+		
 		pipeline.annotate(document);
-
+		
 		List<CoreMap> rawSentences = document.get(SentencesAnnotation.class);
 		List<Sentence> sentences = new LinkedList<Sentence>();
 
@@ -67,5 +67,4 @@ public class ParserForNaturalLanguage implements IParser {
 		
 		return curr;
 	}
-
 }

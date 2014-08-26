@@ -146,6 +146,26 @@ public class ISText {
 		time.stopMeasuringTime();
 	}
 	
+	public List<SearchReport> runForDeclarationSearch(String line, List<Local> locals) {
+		this.parserForLocals.setLocals(locals);
+		Input input = pipeline.parse(new Input(line));
+
+		List<Sentence> sentences = input.getSentences();
+
+		List<SearchReport> reports = new LinkedList<SearchReport>();
+		for (Sentence sentence : sentences) {
+
+			List<RichToken> searchKeyGroups = sentence.getSearchKeyRichTokens();
+
+			for (RichToken richToken : searchKeyGroups) {
+				reports.add(search.search(richToken));
+			}
+		}
+		
+		return reports;
+	}
+	
+	
 	public List<Token> runForLeadingTokens(String line, List<Local> locals){
 		this.parserForLocals.setLocals(locals);
 		Input input = pipeline.parse(new Input(line));
@@ -483,4 +503,5 @@ public class ISText {
 	public ParserForLocals getParserForLocals() {
 		return parserForLocals;
 	}
+
 }
