@@ -12,7 +12,7 @@ public class SearchConfig {
 	private static int partialExpressionIndividualSize = 2; 
 
 	//Compositions
-	private static double compositionWeightFactor = 0.4;
+	private static double compositionWeightFactor = 0.75;
 	private static double holeWeight = 0.2;
 	
 	//Input Exprs
@@ -23,14 +23,14 @@ public class SearchConfig {
 	private static double booleanLiteralWeight = 0.6;
 	
 	//Synthesis params
-	private static boolean synthesis = false;
-	private static boolean parallelSynthesis = false;
+	private static boolean synthesis = true;
+	private static boolean parallelSynthesis = true;
 	private static int numberOfMergeGroups = 4;
 	private static int numberOfSynthesisLevels = 5;
-	private static int maxPartialExpressionsPerSynthesisLevel = 10;
+	private static int maxPartialExpressionsPerSynthesisLevel = 5;
 
 	//Declaration Selection and Synthesis params
-	private static int maxSelectedDeclarations = 5;
+	private static int maxSelectedDeclarations = 10;
 
 	//Parser params
 	private static int inputParserRighHandSideNeighbourNumber = 1;
@@ -39,14 +39,14 @@ public class SearchConfig {
 	private static int primaryIndex = 0;
 	private static int secondaryIndex = 1;
 
-	private static double primaryWeight = 0.6;
-	private static double secondaryWeight = 0.4;
+	private static double primaryWeight = 0.7;
+	private static double secondaryWeight = 0.3;
 	private static double relatedWeigthFactor = 1.0;
 	
 	//Declaration Selection weights
-	private static double[][] kindMatrix = new double[][]{{1.0, 0.75},{0.25, 0.75}};
+	private static double[][] kindMatrix = new double[][]{{1.0, 0.5},{0.25, 0.5}};
 	private static double declarationInputUnmatchingWeight = 0.02;
-	private static Double[] declarationScorerCoefs = new Double[]{0.80, 0.20};
+	private static Double[] declarationScorerCoefs = new Double[]{0.50, 0.50};
 
 	public static int getPrimaryIndex() {
 		return primaryIndex;

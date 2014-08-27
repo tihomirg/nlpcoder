@@ -46,7 +46,7 @@ public class Token {
 	}
 	
 	public boolean isGoodNeighbour() {
-		return this.pos.equals("N") || this.pos.equals("J") || this.pos.equals("R") || this.pos.equals("T") || this.pos.equals("I");
+		return this.pos.equals("N") || this.pos.equals("J") || this.pos.equals("R");// || this.pos.equals("T") || this.pos.equals("I");
 	}
 	
 	public boolean isNormal(){
