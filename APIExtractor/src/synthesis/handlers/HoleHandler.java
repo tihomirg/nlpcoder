@@ -1,22 +1,28 @@
 package synthesis.handlers;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import definitions.Declaration;
 import statistics.posttrees.Expr;
+import types.StabileTypeFactory;
 import types.Type;
+import types.Unifier;
 
 public class HoleHandler extends Handler {
 
-	private Map<String, PriorityQueue<Expr>> pqs;
+	private List<Expr> exprs;
 	private double holeWeight; 
+	private StabileTypeFactory stf;
 
-	public HoleHandler(double holeWeight) {
-		this.pqs = new HashMap<String, PriorityQueue<Expr>>();
+	public HoleHandler(double holeWeight, StabileTypeFactory stf) {
 		this.holeWeight = holeWeight;
+		this.stf = stf;
+		this.exprs = new LinkedList<Expr>();
 	}
 
 	@Override
@@ -26,33 +32,22 @@ public class HoleHandler extends Handler {
 		PriorityQueue<Expr> priorityQueue = new PriorityQueue<Expr>(DEFAULT_CAPACITY, COMPARATOR);
 		Expr expr = key.getExpr();
 		expr.setScore(holeWeight);
-		priorityQueue.add(expr);		
+		priorityQueue.add(expr);
 
 		if (retType != null){
-			PriorityQueue<Expr> pq = pqs.get(retType.getPrefix());
-			if (pq != null){
-				priorityQueue.addAll(pq);
-			}
+			priorityQueue.addAll(findAllCompatible(retType));
 		}
 
 		return priorityQueue;
 	}
 
-	private PriorityQueue<Expr> getEnsure(Expr expr) {
-		Type retType = expr.getReturnType();
-
-		String prefix = retType.getPrefix();
-
-		if(!pqs.containsKey(prefix)){
-			pqs.put(prefix, new PriorityQueue<Expr>(DEFAULT_CAPACITY, COMPARATOR));
+	private List<Expr> findAllCompatible(Type retType) {
+		List<Expr> list = new LinkedList<Expr>();
+		for (Expr expr: exprs) {
+			Unifier unifier = retType.checkCompatible(expr.getReturnType(), stf);
+			if(unifier.isSuccess()) list.add(expr);
 		}
-
-		return pqs.get(prefix);
-	}
-
-	public void addLocal(Expr expr) {
-		PriorityQueue<Expr> pq = getEnsure(expr);
-		pq.add(expr);
+		return list;
 	}
 
 	@Override
@@ -60,8 +55,6 @@ public class HoleHandler extends Handler {
 	}
 
 	public void addAllHoleReplacements(List<Expr> holeReplacements) {
-		for (Expr expr : holeReplacements) {
-			addLocal(expr);
-		}
+		exprs.addAll(holeReplacements);
 	}
 }

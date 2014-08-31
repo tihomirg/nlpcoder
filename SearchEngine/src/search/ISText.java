@@ -250,7 +250,7 @@ public class ISText {
 					List<Expr> localExprs = createLocals(sentence.getLocals());
 
 					//Dealing with holes
-					HoleHandler hHandler = new HoleHandler(SearchConfig.getHoleWeight());
+					HoleHandler hHandler = new HoleHandler(SearchConfig.getHoleWeight(), api.getStf());
 					hHandler.addAllHoleReplacements(strings);
 					hHandler.addAllHoleReplacements(numbers);
 					hHandler.addAllHoleReplacements(localExprs);
