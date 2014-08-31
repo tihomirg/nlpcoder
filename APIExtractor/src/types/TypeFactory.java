@@ -163,6 +163,10 @@ public abstract class TypeFactory {
 		return nullType.getPrefix().equals(typePrefix);
 	}
 	
+	public PolymorphicType createPolymorphicType(Class<?> type, Type[] params) {
+	    return createPolymorphicType(type.getName(), params);
+	}
+	
 	public PolymorphicType createPolymorphicType(String name, Type[] params) {
 	    return createPolymorphicType(name, null, params);
 	}

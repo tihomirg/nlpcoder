@@ -35,6 +35,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.window.Window;
 
+import api.Local;
 import dialogtest.Activator;
 
 /**
@@ -74,7 +75,7 @@ public class SampleHandler extends AbstractHandler {
 				int offset = textSelection.getOffset();
 				
 				//TODO: Locals
-				getLocals(viewer.getDocument(), offset);
+				java.util.List<Local> locals = getLocals(viewer.getDocument(), offset);
 				
 				Point caretLocation = viewer.getTextWidget().getCaret().getLocation();
 				Point canvasLocation = viewer.getTextWidget().getCaret().getParent().toDisplay(5, -8);
@@ -105,7 +106,7 @@ public class SampleHandler extends AbstractHandler {
 				snippets.addKeyListener(resultListener);
 
 				//Setting listeners
-				SearchListener searchListener = new SearchListener(snippets, Activator.getDefault().getSearchEngine());
+				SearchListener searchListener = new SearchListener(snippets, Activator.getDefault().getISText(), locals);
 				searchInput.addListener(SWT.DefaultSelection, searchListener);
 
 				popupSearch.open();
@@ -117,7 +118,7 @@ public class SampleHandler extends AbstractHandler {
 		return null;
 	}
 
-	private void getLocals(IDocument document, int offset) {
+	private java.util.List<Local> getLocals(IDocument document, int offset) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		char[] fileContent = document.get().toCharArray();
 		
@@ -134,13 +135,14 @@ public class SampleHandler extends AbstractHandler {
 		//System.out.println("Compilation Unit: \n"+cu);
 		
 		System.out.println("Position: "+offset);
-		LocalsExtractor extractor = new LocalsExtractor(offset, Activator.getDefault().getSearchEngine().getAPI());
+		LocalsExtractor extractor = new LocalsExtractor(offset, Activator.getDefault().getISText().getAPI());
 		cu.accept(extractor);
 
 		System.out.println("Locals: ");
 		System.out.println(extractor.getLocals().getAll());
 		System.out.println();
 		
+		return extractor.getLocals().getAll();
 	}
 
 	public Object execute2(ExecutionEvent event) throws ExecutionException {

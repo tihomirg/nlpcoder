@@ -3,6 +3,8 @@ package synthesis;
 import java.util.LinkedList;
 import java.util.List;
 
+import search.config.SearchConfig;
+
 public class PartialExpressionScore implements Cloneable {
 	private LinkedList<Double> compositionScores;
 	private LinkedList<Double> declarationScores;
@@ -54,7 +56,7 @@ public class PartialExpressionScore implements Cloneable {
 	}
 	
 	public double getValue(){
-		return (sum(this.compositionScores) 
+		return (sum(this.compositionScores) * SearchConfig.getCompositionWeightFactor()
 				+ sum(this.declarationScores) 
 				+ sum(this.mergeScores) 
 				+ sum(this.individualSizeScores) 

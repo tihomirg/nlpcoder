@@ -1,7 +1,7 @@
 package search.config;
 
-public class SearchConfig {
 	
+public class SearchConfig {
 	//Synthesis weights
 	private static double partialExpressionBadMergePenalty = 1.0;
 	private static double partialExpressionMergeSizePenalty = 0.4;
@@ -12,7 +12,7 @@ public class SearchConfig {
 	private static int partialExpressionIndividualSize = 2; 
 
 	//Compositions
-	private static double compositionWeightFactor = 0.75;
+	private static double compositionWeightFactor = 0.5;
 	private static double holeWeight = 0.2;
 	
 	//Input Exprs
@@ -30,7 +30,7 @@ public class SearchConfig {
 	private static int maxPartialExpressionsPerSynthesisLevel = 5;
 
 	//Declaration Selection and Synthesis params
-	private static int maxSelectedDeclarations = 10;
+	private static int maxSelectedDeclarations = 5;
 
 	//Parser params
 	private static int inputParserRighHandSideNeighbourNumber = 1;

@@ -25,14 +25,12 @@ public class CompositionStatistics {
 	
 	private double min = Double.MAX_VALUE;
 	private double max = Double.MIN_VALUE;
-	private double compositionWeightFactor;
 
-	public CompositionStatistics(StabileTypeFactory tf, Map<Integer, Declaration> decls, String fileName, HandlerTable table, double compositionWeightFactor) {
+	public CompositionStatistics(StabileTypeFactory tf, Map<Integer, Declaration> decls, String fileName, HandlerTable table) {
 		this.tf = tf;
 		this.decls = decls;
 		this.fileName = fileName;
 		this.table = table;
-		this.compositionWeightFactor = compositionWeightFactor;
 
 		Parser.setDecls(decls);
 		Parser.setTf(tf);
@@ -75,7 +73,7 @@ public class CompositionStatistics {
 
 			Expr expr = Parser.parse(result.getRest());
 
-			double score = this.compositionWeightFactor * (1 + Math.log10(value)/10);
+			double score = (1 + Math.log10(value)/10);
 			
 			trySetMin(score);
 			trySetMax(score);

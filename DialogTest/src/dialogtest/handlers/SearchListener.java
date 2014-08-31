@@ -1,27 +1,32 @@
 package dialogtest.handlers;
 
+import java.util.LinkedList;
+
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import search.SearchEngine;
+import api.Local;
+import search.ISText;
 
 public class SearchListener implements Listener {
 	
 	private List snippets;
-	private SearchEngine searchEngine;
+	private ISText iSText;
+	private java.util.List<Local> locals;
 
-	public SearchListener(List snippets, SearchEngine searchEngine) {
+	public SearchListener(List snippets, ISText iSText, java.util.List<Local> locals) {
 		this.snippets = snippets;
-		this.searchEngine = searchEngine;
+		this.iSText = iSText;
+		this.locals = locals;
 	}
 
 	@Override
 	public void handleEvent(Event event) {
 		Text t = (Text) event.widget;
-		String[] selections = searchEngine.run(t.getText());
-		
+		String[] selections = iSText.run(t.getText(), this.locals);
+						
 		snippets.removeAll();
 		for (String string : selections) {
 			snippets.add(string);

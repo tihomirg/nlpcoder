@@ -117,7 +117,7 @@ public class ISText {
 
 		//Loading statistics
 		handlerTable = new HandlerTable();		
-		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable, SearchConfig.getCompositionWeightFactor());
+		CompositionStatistics stat = new CompositionStatistics(api.getStf(), api.getDeclsMap(), Config.getCompositionStatisticLocation(), handlerTable);
 		stat.read();
 		
 		System.out.println(stat);
