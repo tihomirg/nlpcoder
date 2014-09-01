@@ -39,40 +39,18 @@ public class Activator extends AbstractUIPlugin {
 		SearchConfig.setRelatedWeigthFactor(0.5);
 		SearchConfig.setDeclarationScorerCoefs(new Double[]{0.8, 0.2});
 		SearchConfig.setKindMatrix(new double[][]{{0.5, 0.2},{0.2, 0.5}});
-
-		/*
-		 * 
-PartialExpressionBadMergePenalty : 1.2
-PartialExpressionMergeSizePenalty : 0.5
-PartialExpressionMergeReward : 0.09999999999999998
-PartialExpressionIndividualSize : 3
-PartialExpressionIndividualSizePenalty : 0.3
-
-CompositionWeightFactor : 0.4
-InputExprRepetitionPenalty : 0.9999999999999999
-HoleWeight : 0.09999999999999998
-
-InputExprWeight : 0.7
-		 * 
-		 * 	private static double localVariableWeight = 0.6;
-	private static double numberLiteralWeight = 0.6;
-	private static double stringLiteralWeight = 0.6;
-	private static double booleanLiteralWeight = 0.6;
-		 * 
-		 * 
-		 */
 		
-		SearchConfig.setPartialExpressionBadMergePenalty(1.2);
+		SearchConfig.setPartialExpressionBadMergePenalty(1.275);
 		SearchConfig.setPartialExpressionMergeSizePenalty(0.5);
-		SearchConfig.setPartialExpressionMergeReward(0.1);
+		SearchConfig.setPartialExpressionMergeReward(0.05);
 		SearchConfig.setPartialExpressionIndividualSize(3);
-		SearchConfig.setPartialExpressionIndividualSizePenalty(0.3);
+		SearchConfig.setPartialExpressionIndividualSizePenalty(0.55);
 
-		SearchConfig.setHoleWeight(0.1);
-		SearchConfig.setInputExprRepetitionPenalty(1.0);
-		SearchConfig.setCompositionWeightFactor(0.4);
+		SearchConfig.setHoleWeight(0.05);
+		SearchConfig.setInputExprRepetitionPenalty(1.05);
+		SearchConfig.setCompositionWeightFactor(0.45);
 		
-		double inputExprWeight = 0.7;
+		double inputExprWeight = 1.35;
 		SearchConfig.setLocalVariableWeight(inputExprWeight);
 		SearchConfig.setNumberLiteralWeight(inputExprWeight);
 		SearchConfig.setStringLiteralWeight(inputExprWeight);
