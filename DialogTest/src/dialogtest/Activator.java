@@ -1,5 +1,8 @@
 package dialogtest;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -33,28 +36,70 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 	
-		SearchConfig.setDeclarationInputUnmatchingWeight(0.01);
-		SearchConfig.setPrimaryWeight(0.6);
-		SearchConfig.setSecondaryWeight(0.4);
-		SearchConfig.setRelatedWeigthFactor(0.5);
-		SearchConfig.setDeclarationScorerCoefs(new Double[]{0.8, 0.2});
-		SearchConfig.setKindMatrix(new double[][]{{0.5, 0.2},{0.2, 0.5}});
+//		SearchConfig.setDeclarationInputUnmatchingWeight(0.01);
+//		SearchConfig.setPrimaryWeight(0.6);
+//		SearchConfig.setSecondaryWeight(0.4);
+//		SearchConfig.setRelatedWeigthFactor(0.5);
+//		SearchConfig.setDeclarationScorerCoefs(new Double[]{0.8, 0.2});
+//		SearchConfig.setKindMatrix(new double[][]{{0.5, 0.2},{0.2, 0.5}});
 		
-		SearchConfig.setPartialExpressionBadMergePenalty(1.275);
-		SearchConfig.setPartialExpressionMergeSizePenalty(0.5);
-		SearchConfig.setPartialExpressionMergeReward(0.05);
-		SearchConfig.setPartialExpressionIndividualSize(3);
-		SearchConfig.setPartialExpressionIndividualSizePenalty(0.55);
+//		SearchConfig.setPartialExpressionBadMergePenalty(1.1);
+//		SearchConfig.setPartialExpressionMergeSizePenalty(0.5);
+//		SearchConfig.setPartialExpressionMergeReward(0.1);
+//		SearchConfig.setPartialExpressionIndividualSize(3);
+//		SearchConfig.setPartialExpressionIndividualSizePenalty(0.75);
+//
+//		SearchConfig.setHoleWeight(0.05);
+//		SearchConfig.setInputExprRepetitionPenalty(1.0);
+//		SearchConfig.setCompositionWeightFactor(0.475);
+//		
+//		double inputExprWeight = 1.05;
+//		SearchConfig.setLocalVariableWeight(inputExprWeight);
+//		SearchConfig.setNumberLiteralWeight(inputExprWeight);
+//		SearchConfig.setStringLiteralWeight(inputExprWeight);
+//		SearchConfig.setBooleanLiteralWeight(inputExprWeight);
+		
+//		SearchConfig.setPartialExpressionBadMergePenalty(1.275);
+//		SearchConfig.setPartialExpressionMergeSizePenalty(0.5);
+//		SearchConfig.setPartialExpressionMergeReward(0.05);
+//		SearchConfig.setPartialExpressionIndividualSize(3);
+//		SearchConfig.setPartialExpressionIndividualSizePenalty(0.55);
+//
+//		SearchConfig.setHoleWeight(0.05);
+//		SearchConfig.setInputExprRepetitionPenalty(1.05);
+//		SearchConfig.setCompositionWeightFactor(0.45);
+//		
+//		double inputExprWeight = 1.35;
+//		SearchConfig.setLocalVariableWeight(inputExprWeight);
+//		SearchConfig.setNumberLiteralWeight(inputExprWeight);
+//		SearchConfig.setStringLiteralWeight(inputExprWeight);
+//		SearchConfig.setBooleanLiteralWeight(inputExprWeight);
+		
 
-		SearchConfig.setHoleWeight(0.05);
-		SearchConfig.setInputExprRepetitionPenalty(1.05);
-		SearchConfig.setCompositionWeightFactor(0.45);
+		SearchConfig.setPartialExpressionBadMergePenalty(1.6);
+		SearchConfig.setPartialExpressionMergeSizePenalty(0.5);
+		SearchConfig.setPartialExpressionMergeReward(0.0);
+		SearchConfig.setPartialExpressionIndividualSize(2);
+		SearchConfig.setPartialExpressionIndividualSizePenalty(0.3);
+
+		SearchConfig.setHoleWeight(0.00);
+		SearchConfig.setInputExprRepetitionPenalty(0.9);
+		SearchConfig.setCompositionWeightFactor(0.6);
 		
-		double inputExprWeight = 1.35;
+		double inputExprWeight = 1.9;
 		SearchConfig.setLocalVariableWeight(inputExprWeight);
 		SearchConfig.setNumberLiteralWeight(inputExprWeight);
 		SearchConfig.setStringLiteralWeight(inputExprWeight);
 		SearchConfig.setBooleanLiteralWeight(inputExprWeight);
+		
+		SearchConfig.setDeclarationInputUnmatchingWeight(0.0);
+		SearchConfig.setPrimaryWeight(0.7);
+		SearchConfig.setSecondaryWeight(0.3);
+		SearchConfig.setRelatedWeigthFactor(0.9);
+		SearchConfig.setDeclarationScorerCoefs(new Double[]{0.7, 0.3});
+		SearchConfig.setKindMatrix(new double[][]{{0.7, 0.3},{0.4, 0.5}});		
+		
+		SearchConfig.setMaxSelectedDeclarations(10);
 		
 		this.iSText = new ISText(10);
 	}
