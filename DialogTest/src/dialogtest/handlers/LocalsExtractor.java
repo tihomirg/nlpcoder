@@ -136,6 +136,21 @@ public class LocalsExtractor extends ASTVisitor {
 	
 	public boolean visit(MethodDeclaration node){
 		locals.push();
+		List<ASTNode> parameters = node.parameters();
+		
+		for (ASTNode param : parameters) {
+			if (param instanceof SingleVariableDeclaration){
+				SingleVariableDeclaration var = (SingleVariableDeclaration) param;
+
+				String name = var.getName().getIdentifier();
+				
+				int dimensions = var.getExtraDimensions();
+				types.Type type = typeBuilder.createArrayType(var.getType(), dimensions);
+				
+				locals.add(new Local(name, type));						
+			}
+		}
+		
 		return true;
 	}
 
