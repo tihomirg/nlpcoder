@@ -12,6 +12,7 @@ public class PartialExpressionScore implements Cloneable {
 	private LinkedList<Double> mergeSizeScores;
 	private LinkedList<Double> inputExprsScores;
 	private LinkedList<Double> mergeScores;
+	private LinkedList<Double> orderingScores;
 
 	public PartialExpressionScore() {
 		this.compositionScores = new LinkedList<Double>();
@@ -20,6 +21,7 @@ public class PartialExpressionScore implements Cloneable {
 		this.inputExprsScores = new LinkedList<Double>();
 		this.mergeSizeScores = new LinkedList<Double>();
 		this.mergeScores = new LinkedList<Double>();
+		this.orderingScores = new LinkedList<Double>();
 	}
 	
 	public void add(PartialExpressionScore score) {
@@ -29,6 +31,7 @@ public class PartialExpressionScore implements Cloneable {
 		this.inputExprsScores.addAll(score.inputExprsScores);
 		this.mergeSizeScores.addAll(score.mergeSizeScores);
 		this.mergeScores.addAll(score.mergeScores);
+		this.orderingScores.addAll(score.orderingScores);
 	}
 
 	public void addCompositionScore(double score){
@@ -55,13 +58,18 @@ public class PartialExpressionScore implements Cloneable {
 		this.mergeScores.add(score);
 	}
 	
+	public void addOrderingScore(double score) {
+		this.orderingScores.add(score);
+	}	
+	
 	public double getValue(){
 		return (sum(this.compositionScores) * SearchConfig.getCompositionWeightFactor()
 				+ sum(this.declarationScores) 
 				+ sum(this.mergeScores) 
 				+ sum(this.individualSizeScores) 
 				+ sum(this.inputExprsScores) 
-				+ sum(this.mergeSizeScores));
+				+ sum(this.mergeSizeScores)
+				+ sum(this.orderingScores));
 	}
 
 	private double sum(List<Double> scores) {
@@ -83,6 +91,7 @@ public class PartialExpressionScore implements Cloneable {
 			clone.inputExprsScores = (LinkedList<Double>) this.inputExprsScores.clone();
 			clone.mergeSizeScores = (LinkedList<Double>) this.mergeSizeScores.clone();
 			clone.mergeScores = (LinkedList<Double>) this.mergeScores.clone();
+			clone.orderingScores = (LinkedList<Double>) this.orderingScores.clone();
 			
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
@@ -98,6 +107,7 @@ public class PartialExpressionScore implements Cloneable {
 				+ ", individualSizeScores=" + individualSizeScores
 				+ ", mergeSizeScores=" + mergeSizeScores
 				+ ", inputExprsScores=" + inputExprsScores 
-				+ ", mergeScore="+mergeScores+"]";
+				+ ", mergeScore="+mergeScores
+          		+ ", orderingScore="+orderingScores+"]";
 	}
 }

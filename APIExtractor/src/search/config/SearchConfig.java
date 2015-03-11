@@ -2,6 +2,9 @@ package search.config;
 
 	
 public class SearchConfig {
+	//Ordering weights
+	private static double orderingWeightPenalty = 0.000001;
+	
 	//Synthesis weights
 	private static double partialExpressionBadMergePenalty = 1.0;
 	private static double partialExpressionMergeSizePenalty = 0.4;
@@ -270,6 +273,14 @@ public class SearchConfig {
 
 	public static void setDeclarationScorerCoefs(Double[] declarationScorerCoefs) {
 		SearchConfig.declarationScorerCoefs = declarationScorerCoefs;
+	}
+
+	public static double getOrderingWeightPenalty() {
+		return orderingWeightPenalty;
+	}
+
+	public static void setOrderingWeightPenalty(double orderingWeightPenalty) {
+		SearchConfig.orderingWeightPenalty = orderingWeightPenalty;
 	}
 	
 	

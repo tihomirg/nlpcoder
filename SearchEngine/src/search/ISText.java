@@ -66,6 +66,7 @@ import deserializers.KryoDeserializer;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class ISText {
+	private static final PartialExpressionComparatorDesc PARTIAL_EXPRESSION_COMPARATOR_DESC = new PartialExpressionComparatorDesc();
 	private TimeStatistics time;
 	private ParserPipeline pipeline;
 	private StabileAPI api;
@@ -212,8 +213,10 @@ public class ISText {
 	
 	public String[] run(String line, List<Local> locals) {
 		
-		PriorityQueue<PartialExpression> solutions = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
+		PriorityQueue<PartialExpression> solutions = new PriorityQueue<PartialExpression>(100, PARTIAL_EXPRESSION_COMPARATOR_DESC);
 
+		List<RichToken> inputLocalss = new LinkedList<RichToken>();
+		
 		time.startMeasuringTime("Input Parsing time");
 		this.parserForLocals.setLocals(locals);
 		Input input = pipeline.parse(new Input(line));
@@ -247,7 +250,11 @@ public class ISText {
 					List<Expr> strings = createStringLiterals(sentence.getStringLiteralRichTokens(), api.getStf());
 					List<Expr> numbers = createNumberLiterals(sentence.getNumberLiteralRichTokens(), api.getStf());
 					List<Expr> booleans = createBooleanLiterals(sentence.getBooleanLiteralRichTokens(), api.getStf());					
-					List<Expr> localExprs = createLocals(sentence.getLocals());
+					List<RichToken> inputLocals = sentence.getLocals();
+					inputLocalss.addAll(inputLocals);
+					
+					
+					List<Expr> localExprs = createLocals(inputLocals);
 
 					//Dealing with holes
 					HoleHandler hHandler = new HoleHandler(SearchConfig.getHoleWeight(), api.getStf());
@@ -305,7 +312,7 @@ public class ISText {
 
 		//System.out.println(this.time);
 
-		return prepare(solutions);
+		return prepare(solutions, inputLocalss);
 	}
 
 	private List<Expr> createBooleanLiterals(List<RichToken> booleanLiterals, StabileTypeFactory stf) {		
@@ -406,23 +413,94 @@ public class ISText {
 		return exprs;
 	}	
 
-	private String[] prepare(PriorityQueue<PartialExpression> solutions) {
-		List<String> results = new LinkedList<String>();
-		int i = 0;
+	private String[] prepare(PriorityQueue<PartialExpression> solutions, List<RichToken> locals) {
+		
+		PriorityQueue<PartialExpression> finalSolutions = updateWeightsWithOrderings(filterDuplicates(solutions), locals);
 
-		for (; i < maxNumOfSolutions && !solutions.isEmpty(); i++) {
-			PartialExpression pexpr = solutions.remove();
-			results.add(pexpr.repToString()); //pexpr.getStatistics());
+		List<String> results = new LinkedList<String>();
+		for(int i = 0; i < maxNumOfSolutions && !finalSolutions.isEmpty(); i++) {
+			results.add(finalSolutions.remove().repToString());
 		}
 		
-		//System.out.println();
-		//System.out.println();
-
 		return results.toArray(new String[results.size()]);
 	}
 
+	private PriorityQueue<PartialExpression> updateWeightsWithOrderings(PriorityQueue<PartialExpression> solutions, List<RichToken> locals) {
+		PriorityQueue<PartialExpression> finalSolutions = new PriorityQueue<PartialExpression>(100, PARTIAL_EXPRESSION_COMPARATOR_DESC);		
+		
+		List<String> localNames = toNames(locals);
+		
+		for (PartialExpression partialExpression : solutions) {
+			updateWeightsWithOrderings(partialExpression, localNames);
+			finalSolutions.add(partialExpression);
+		}
+		
+		return finalSolutions;
+	}
+
+	private void updateWeightsWithOrderings(PartialExpression partialExpression, List<String> localNames) {
+		String representation = partialExpression.repToString();
+		
+		List<String> localsInRepresentation = findLocalsInRepresentation(representation, localNames);
+		
+		for (String localName : localNames) {
+			int swaps = 0;
+			int size = localsInRepresentation.size();
+			for(;swaps < size; swaps++){
+				String localInRepresentation = localsInRepresentation.get(swaps);
+				if (localInRepresentation.equals(localName)){
+					break;
+				}
+			}
+			
+			if (size > 0 && swaps < size){
+				partialExpression.getScore().addOrderingScore(-swaps*SearchConfig.getOrderingWeightPenalty());
+				localsInRepresentation.remove(swaps);
+			}
+		}
+		
+	}
+
+	private List<String> findLocalsInRepresentation(String representation, List<String> localNames) {
+		List<String> localsInRepresentation = new LinkedList<String>();
+		String[] splits = representation.split("[ ,()]");
+		
+		for (String split : splits) {
+			if(localNames.contains(split)){
+				localsInRepresentation.add(split);
+			}
+		}
+		
+		return localsInRepresentation;
+	}
+
+	private List<String> toNames(List<RichToken> locals) {
+		List<String> localNames = new LinkedList<String>();
+		
+		for (RichToken richToken : locals) {
+			localNames.add(richToken.getLocal().getName());
+		}
+		
+		return localNames;
+	}
+
+	private PriorityQueue<PartialExpression> filterDuplicates(PriorityQueue<PartialExpression> solutions) {
+		PriorityQueue<PartialExpression> finalSolutions = new PriorityQueue<PartialExpression>(100, PARTIAL_EXPRESSION_COMPARATOR_DESC);
+
+		Set<String> representations = new HashSet<String>();
+		while(!solutions.isEmpty()) {
+			PartialExpression pexpr = solutions.remove();
+			String rep = pexpr.repToString();
+			if(!representations.contains(rep)){
+				representations.add(rep);
+				finalSolutions.add(pexpr);
+			}
+		}
+		return finalSolutions;
+	}
+
 	private static PriorityQueue<PartialExpression> mergeAndSort(List<PartialExpression> list, List<PartialExpression> completed) {
-		PriorityQueue<PartialExpression> pq = new PriorityQueue<PartialExpression>(100, new PartialExpressionComparatorDesc());
+		PriorityQueue<PartialExpression> pq = new PriorityQueue<PartialExpression>(100, PARTIAL_EXPRESSION_COMPARATOR_DESC);
 
 		pq.addAll(list);
 		pq.addAll(completed);

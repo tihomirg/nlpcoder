@@ -85,19 +85,20 @@ public class Activator extends AbstractUIPlugin {
 		SearchConfig.setHoleWeight(0.00);
 		SearchConfig.setInputExprRepetitionPenalty(0.9);
 		SearchConfig.setCompositionWeightFactor(0.6);
-		
+
 		double inputExprWeight = 1.9;
 		SearchConfig.setLocalVariableWeight(inputExprWeight);
 		SearchConfig.setNumberLiteralWeight(inputExprWeight);
 		SearchConfig.setStringLiteralWeight(inputExprWeight);
 		SearchConfig.setBooleanLiteralWeight(inputExprWeight);
-		
+
 		SearchConfig.setDeclarationInputUnmatchingWeight(0.0);
 		SearchConfig.setPrimaryWeight(0.7);
 		SearchConfig.setSecondaryWeight(0.3);
 		SearchConfig.setRelatedWeigthFactor(0.9);
 		SearchConfig.setDeclarationScorerCoefs(new Double[]{0.7, 0.3});
-		SearchConfig.setKindMatrix(new double[][]{{0.7, 0.3},{0.4, 0.5}});		
+		SearchConfig.setKindMatrix(new double[][]{{0.7, 0.3},{0.4, 0.5}});				
+					
 		
 		SearchConfig.setMaxSelectedDeclarations(10);
 		

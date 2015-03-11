@@ -84,6 +84,7 @@ public class SampleHandler extends AbstractHandler {
 
 				Shell popupSearch = new Shell(window.getShell(), SWT.ON_TOP);
 				popupSearch.setSize(600, 150);
+				//popupSearch.setSize(1000, 300);
 				popupSearch.setAlpha(200);
 				popupSearch.setText("Expression Search");
 				popupSearch.setLocation(location);
